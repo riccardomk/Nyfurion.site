@@ -142,17 +142,18 @@
                  style="width:44px;height:44px;border-radius:50%;object-fit:cover;display:block;transition:transform 0.22s,box-shadow 0.22s;">
         </a>
     </div>
-    <!-- Bottone hamburger mobile (più piccolo) -->
-    <button id="navbar-hamburger" aria-label="Apri menu" style="display:none;position:fixed;top:18px;right:22px;z-index:200;background:none;border:none;padding:4px;cursor:pointer;width:34px;height:34px;">
-        <span style="display:block;width:20px;height:3px;background:#bafff7;border-radius:2px;margin-bottom:4px;"></span>
-        <span style="display:block;width:20px;height:3px;background:#bafff7;border-radius:2px;margin-bottom:4px;"></span>
-        <span style="display:block;width:20px;height:3px;background:#bafff7;border-radius:2px;"></span>
+    <!-- Bottone hamburger mobile -->
+    <button id="navbar-hamburger" aria-label="Apri menu" style="display:none;position:fixed;top:18px;right:22px;z-index:200;background:none;border:none;padding:8px;cursor:pointer;">
+        <span style="display:block;width:28px;height:4px;background:#bafff7;border-radius:2px;margin-bottom:5px;"></span>
+        <span style="display:block;width:28px;height:4px;background:#bafff7;border-radius:2px;margin-bottom:5px;"></span>
+        <span style="display:block;width:28px;height:4px;background:#bafff7;border-radius:2px;"></span>
     </button>
-    <!-- Menu mobile interattivo: scritte animate, nessun grande riquadro -->
-    <div id="navbar-mobile-menu" style="display:none;position:fixed;top:12px;right:12px;z-index:300;background:transparent;box-shadow:none;flex-direction:column;align-items:flex-end;padding:0;">
-        <nav id="navbar-mobile-list" style="display:flex;flex-direction:column;align-items:flex-end;gap:0.7em;">
-            <a href="#nuova-sezione" class="navbar-mobile-link" style="font-family:'Cinzel',serif;font-size:1.13em;color:#bafff7;text-shadow:0 0 12px #5fffd7,0 0 24px #00eaff;font-weight:bold;letter-spacing:0.04em;text-decoration:none;padding:7px 18px 7px 18px;border-radius:8px;transition:background 0.18s,color 0.18s,transform 0.18s;opacity:0;transform:translateY(-10px) scale(0.95);">Series Nyfurion</a>
-            <a href="#contatti-section" class="navbar-mobile-link" style="font-family:'Cinzel',serif;font-size:1.13em;color:#bafff7;text-shadow:0 0 12px #5fffd7,0 0 24px #00eaff;font-weight:bold;letter-spacing:0.04em;text-decoration:none;padding:7px 18px 7px 18px;border-radius:8px;transition:background 0.18s,color 0.18s,transform 0.18s;opacity:0;transform:translateY(-10px) scale(0.95);">Contacts</a>
+    <!-- Menu mobile a comparsa -->
+    <div id="navbar-mobile-menu" style="display:none;position:fixed;top:0;right:0;width:100vw;max-width:320px;height:100vh;background:rgba(24,26,34,0.98);z-index:300;box-shadow:-2px 0 24px #1bff6a22;flex-direction:column;align-items:flex-end;padding:0;">
+        <button id="navbar-mobile-close" aria-label="Chiudi menu" style="background:none;border:none;color:#bafff7;font-size:2.2em;padding:18px 22px 0 0;cursor:pointer;align-self:flex-end;">&times;</button>
+        <nav style="width:100%;display:flex;flex-direction:column;align-items:flex-end;padding:2em 2em 0 0;gap:1.5em;">
+            <a href="#nuova-sezione" class="navbar-mobile-link" style="font-family:'Cinzel',serif;font-size:1.25em;color:#bafff7;text-shadow:0 0 16px #5fffd7,0 0 32px #00eaff;font-weight:bold;letter-spacing:0.04em;text-decoration:none;padding:8px 0;">Series Nyfurion</a>
+            <a href="#contatti-section" class="navbar-mobile-link" style="font-family:'Cinzel',serif;font-size:1.25em;color:#bafff7;text-shadow:0 0 16px #5fffd7,0 0 32px #00eaff;font-weight:bold;letter-spacing:0.04em;text-decoration:none;padding:8px 0;">Contacts</a>
         </nav>
     </div>
     <style>
@@ -177,44 +178,26 @@
             }
             #navbar-hamburger {
                 display: block !important;
-                width: 34px !important;
-                height: 34px !important;
-                padding: 4px !important;
             }
             /* Menu mobile overlay */
             #navbar-mobile-menu {
                 display: none;
-                background: transparent !important;
-                box-shadow: none !important;
-                width: auto !important;
-                max-width: none !important;
-                height: auto !important;
-                top: 12px !important;
-                right: 12px !important;
-                padding: 0 !important;
             }
             #navbar-mobile-menu.active {
                 display: flex !important;
             }
-            #navbar-mobile-list .navbar-mobile-link {
-                background: rgba(24,26,34,0.98);
-                margin-bottom: 0.2em;
-                opacity: 1 !important;
-                transform: translateY(0) scale(1) !important;
-                box-shadow: 0 2px 12px #1bff6a22;
-            }
             .navbar-mobile-link {
                 color: #bafff7 !important;
-                font-size: 1.13em !important;
+                font-size: 1.18em !important;
+                padding: 10px 0 !important;
                 border-radius: 8px !important;
-                transition: background 0.18s, color 0.18s, transform 0.18s;
+                transition: background 0.18s, color 0.18s;
             }
             .navbar-mobile-link:active,
             .navbar-mobile-link:focus,
             .navbar-mobile-link:hover {
                 background: #232a3a !important;
                 color: #ffe87c !important;
-                transform: scale(1.06) !important;
             }
             /* Blocca scroll quando menu mobile aperto */
             body.menu-open {
@@ -227,63 +210,26 @@
         // ...existing code...
         window.addEventListener('DOMContentLoaded', function() {
             // ...existing code...
-            // Hamburger menu mobile animato
+            // Hamburger menu mobile
             var hamburger = document.getElementById('navbar-hamburger');
             var mobileMenu = document.getElementById('navbar-mobile-menu');
-            var mobileLinks = document.querySelectorAll('.navbar-mobile-link');
-
-            // Inizializza i link come nascosti
-            function resetMobileLinks() {
-                mobileLinks.forEach(function(link) {
-                    link.style.opacity = '0';
-                    link.style.transform = 'translateY(-10px) scale(0.95)';
-                });
-            }
-            resetMobileLinks();
-
-            if (hamburger && mobileMenu) {
-                hamburger.addEventListener('click', function(e) {
-                    e.stopPropagation();
+            var closeBtn = document.getElementById('navbar-mobile-close');
+            if (hamburger && mobileMenu && closeBtn) {
+                hamburger.addEventListener('click', function() {
                     mobileMenu.classList.add('active');
                     document.body.classList.add('menu-open');
-                    // Animazione comparsa link
-                    setTimeout(function() {
-                        mobileLinks.forEach(function(link, i) {
-                            setTimeout(function() {
-                                link.style.opacity = '1';
-                                link.style.transform = 'translateY(0) scale(1)';
-                            }, 80 * i);
-                        });
-                    }, 60);
                 });
-
+                closeBtn.addEventListener('click', function() {
+                    mobileMenu.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                });
                 // Chiudi menu al click su link
+                var mobileLinks = mobileMenu.querySelectorAll('.navbar-mobile-link');
                 mobileLinks.forEach(function(link) {
-                    link.addEventListener('click', function(e) {
-                        e.stopPropagation();
+                    link.addEventListener('click', function() {
                         mobileMenu.classList.remove('active');
                         document.body.classList.remove('menu-open');
-                        resetMobileLinks();
                     });
-                });
-
-                // Chiudi menu cliccando fuori dal menu
-                document.addEventListener('click', function(e) {
-                    if (
-                        mobileMenu.classList.contains('active') &&
-                        !mobileMenu.contains(e.target) &&
-                        e.target !== hamburger &&
-                        !hamburger.contains(e.target)
-                    ) {
-                        mobileMenu.classList.remove('active');
-                        document.body.classList.remove('menu-open');
-                        resetMobileLinks();
-                    }
-                });
-
-                // Previeni chiusura immediata se si clicca sul menu stesso
-                mobileMenu.addEventListener('click', function(e) {
-                    e.stopPropagation();
                 });
             }
             // ...existing code...
@@ -1034,7 +980,7 @@ This PDF file was created by Riccardo Duca. Unauthorized reproduction, distribut
         }
         @media (max-width: 700px) {
             #nft-overview-img {
-                max-width:  98vw;
+                max-width: 98vw;
                 max-height: 70vh;
             }
             #nft-overview-modal .nft-overview-close {
@@ -1042,7 +988,6 @@ This PDF file was created by Riccardo Duca. Unauthorized reproduction, distribut
                 right: 18px;
                 font-size: 2em;
             }
-
         }
     </style>
     <!-- ROADMAP INTERATTIVA FLUIDA E MODERNA -->
