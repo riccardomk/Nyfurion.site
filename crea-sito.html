@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Nyfurion</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --nyfurion-bg: #181a22;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            min-height: 100vh;
+            height: auto;
+            /* background: #000; */
+            background: var(--nyfurion-bg, #181a22); /* Uniforma il colore di background */
+            border: none;
+            box-shadow: none;
+        }
+        body {
+            width: 100vw;
+            min-height: 100vh;
+            height: auto;
+            overflow-x: hidden;
+            overflow-y: auto;
+            /* background: #000; */
+            background: var(--nyfurion-bg, #181a22); /* Uniforma il colore di background */
+        }
+        .bg-fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: 0;
+            pointer-events: auto; /* Cambiato per permettere l'interazione */
+            user-select: none;
+            background: #000;
+            transition: top 0.7s cubic-bezier(.4,1.6,.4,1), opacity 0.7s cubic-bezier(.4,1.6,.4,1), transform 0.5s cubic-bezier(.4,1.6,.4,1);
+            will-change: transform, opacity;
+            /* ...eventuali altri effetti... */
+        }
+        .navbar-mystic {
+            background: transparent !important;
+            border-bottom: none;
+            box-shadow: none;
+            backdrop-filter: none;
+            opacity: 1;
+        }
+        .navbar-mystic .navbar-brand {
+            font-family: 'Orbitron', 'Cinzel', serif;
+            font-size: 2.2rem;
+            letter-spacing: 0.12em;
+            color: #39ff14 !important;
+            text-shadow: 0 0 12px #39ff14, 0 0 32px #00eaff, 0 2px 8px #000a;
+            transition: color 0.3s;
+            background: none !important;
+        }
+        .navbar-mystic .nav-link {
+            font-family: 'Orbitron', 'Cinzel', serif;
+            color: #fff !important;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.08em;
+            text-shadow: 0 0 8px #00eaff, 0 0 18px #39ff14;
+            background: none !important;
+            border: none !important;
+            position: relative;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+        .navbar-mystic .nav-link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #39ff14 0%, #00eaff 100%);
+            transition: width 0.3s;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            box-shadow: 0 0 8px #39ff14;
+        }
+        .navbar-mystic .nav-link:hover, .navbar-mystic .nav-link.active {
+            color: #ffe87c !important;
+            text-shadow: 0 0 16px #ffe87c, 0 0 32px #39ff14;
+        }
+        .navbar-mystic .nav-link:hover::after, .navbar-mystic .nav-link.active::after {
+            width: 100%;
+        }
+        .navbar-mystic .navbar-toggler {
+            background: none !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        /* Cerchio interattivo per tornare alla home */
+        .navbar-home-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 0 8px #39ff14;
+            margin-left: 34px;
+            margin-top: 30px;
+        }
+        .navbar-home-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.1s;
+        }
+        .navbar-home-circle:hover .navbar-home-img {
+            transform: scale(1.1);
+        }
+        /* Responsive brand size */
+        @media (max-width: 600px) {
+            .navbar-mystic .navbar-brand { font-size: 1.3rem; }
+        }
+        /* Google Fonts for mystical effect */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Cinzel:wght@700&display=swap');
+    </style>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-ENjdO4Dr2bkBIFxQpeoA6DQD5l5yQ9M9s4B2l9gZl5F5Q5Q5Q5Q5Q5Q5Q5Q5"
+          crossorigin="anonymous">
+    <!-- Tutti i meta di sicurezza rimossi per garantire il funzionamento normale -->
+</head>
+<body>
+    <!-- Logo interattivo a sinistra in alto, non troppo al margine -->
+    <div style="position:fixed;top:22px;left:28px;z-index:100;display:flex;align-items:center;">
+        <a href="#main-section" id="logo-link"
+           style="display:flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:50%;box-shadow:0 0 18px #39ff14;transition:box-shadow 0.22s,transform 0.22s;background:transparent;border:none;cursor:pointer;outline:none;">
+            <img src="https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafkreica2ztb5hkeyfccacirac4dmc7sqbiinddynxkp5v4db5ieclerai"
+                 alt="Logo Nyfurion"
+                 id="logo-img"
+                 style="width:44px;height:44px;border-radius:50%;object-fit:cover;display:block;transition:transform 0.22s,box-shadow 0.22s;">
+        </a>
+    </div>
+    <style>
+        /* ...existing code... */
+        #logo-link:hover, #logo-link:focus {
+            box-shadow: 0 0 40px #39ff14, 0 0 60px #00eaff, 0 0 32px #fff;
+            transform: scale(1.18) rotate(-3deg);
+            outline: none;
+        }
+        #logo-link:hover #logo-img, #logo-link:focus #logo-img {
+            transform: scale(1.23) rotate(-6deg);
+            box-shadow: 0 0 40px #1bff6a, 0 0 80px #00eaff, 0 0 32px #fff;
+        }
+        #logo-link:active {
+            transform: scale(0.96) rotate(0deg);
+        }
+        #logo-link:active #logo-img {
+            transform: scale(1.05) rotate(0deg);
+        }
+        /* ...existing code... */
+    </style>
+    <script>
+        // ...existing code...
+        window.addEventListener('DOMContentLoaded', function() {
+            // ...existing code...
+
+            // Interattività logo: scroll morbido alla sezione principale
+            var logoLink = document.getElementById('logo-link');
+            if (logoLink) {
+                logoLink.addEventListener('click', function(e) {
+                    var target = document.getElementById('main-section');
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({behavior: 'smooth'});
+                    }
+                });
+            }
+            // ...existing code...
+        });
+        // ...existing code...
+    </script>
+    <!-- Logo interattivo a sinistra in alto, non troppo al margine -->
+    <div style="position:fixed;top:22px;left:28px;z-index:100;display:flex;align-items:center;">
+        <a href="#main-section" style="display:flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:50%;box-shadow:0 0 18px #39ff14;transition:box-shadow 0.2s,transform 0.2s;background:transparent;border:none;cursor:pointer;">
+            <img src="https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafkreica2ztb5hkeyfccacirac4dmc7sqbiinddynxkp5v4db5ieclerai"
+                 alt="Logo Nyfurion"
+                 style="width:44px;height:44px;border-radius:50%;object-fit:cover;display:block;transition:transform 0.18s;">
+        </a>
+    </div>
+    <!-- Link interattivi a destra -->
+    <div id="navbar-links-right" style="position:fixed;top:32px;right:38px;z-index:100;display:flex;gap:38px;align-items:center;">
+        <a href="#nuova-sezione" id="series-link"
+           class="navbar-link-anim"
+           style="font-family:'Cinzel',serif;font-size:1.32em;color:#bafff7;text-shadow:0 0 16px #5fffd7,0 0 32px #00eaff;font-weight:bold;letter-spacing:0.04em;text-decoration:none;position:relative;outline:none;background:none;padding:4px 12px;border-radius:8px;transition:color 0.18s,text-shadow 0.18s;">
+            Series Nyfurion
+            <span class="navbar-link-bar"></span>
+        </a>
+        <a href="#contatti-section" id="contatti-link"
+           class="navbar-link-anim"
+           style="font-family:'Cinzel',serif;font-size:1.32em;color:#bafff7;text-shadow:0 0 16px #5fffd7,0 0 32px #00eaff;font-weight:bold;letter-spacing:0.04em;text-decoration:none;position:relative;outline:none;background:none;padding:4px 12px;border-radius:8px;transition:color 0.18s,text-shadow 0.18s;">
+            Contacts
+            <span class="navbar-link-bar"></span>
+        </a>
+    </div>
+    <style>
+        /* ...existing code... */
+        .navbar-link-anim {
+            position: relative;
+            overflow: visible;
+            cursor: pointer;
+            transition: color 0.18s, text-shadow 0.18s;
+        }
+        .navbar-link-anim .navbar-link-bar {
+            display: block;
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            height: 3px;
+            width: 0;
+            background: linear-gradient(90deg,#39ff14 0%,#00eaff 100%);
+            border-radius: 2px;
+            box-shadow: 0 0 8px #39ff14, 0 0 18px #00eaff;
+            transition: width 0.33s cubic-bezier(.4,1.6,.4,1), background 0.22s;
+            z-index: 2;
+        }
+        .navbar-link-anim:hover,
+        .navbar-link-anim:focus {
+            color: #ffe87c !important;
+            text-shadow: 0 0 24px #ffe87c, 0 0 48px #39ff14;
+            outline: none;
+        }
+        .navbar-link-anim:hover .navbar-link-bar,
+        .navbar-link-anim:focus .navbar-link-bar {
+            width: 100%;
+            background: linear-gradient(90deg,#ffe87c 0%,#00eaff 100%);
+        }
+        @media (max-width: 700px) {
+            #navbar-links-right {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                right: 0;
+                width: 100vw;
+                justify-content: center;
+                gap: 18px;
+                background: rgba(24,26,34,0.98);
+                padding: 8px 0 8px 0;
+                border-radius: 0 0 18px 18px;
+                box-shadow: 0 4px 24px #1bff6a22;
+            }
+            .navbar-link-anim {
+                font-size: 1.05em !important;
+                padding: 4px 8px;
+            }
+        }
+        /* ...existing code... */
+    </style>
+    <script>
+        // ...existing code...
+        window.addEventListener('DOMContentLoaded', function() {
+            // ...existing code...
+
+            // Scroll morbido per Series Nyfurion
+            var seriesLink = document.getElementById('series-link');
+            if(seriesLink) {
+                seriesLink.addEventListener('click', function(e) {
+                    var target = document.getElementById('nuova-sezione');
+                    if(target) {
+                        e.preventDefault();
+                        target.scrollIntoView({behavior: 'smooth'});
+                    }
+                });
+            }
+
+            // Scroll morbido per Contatti
+            var contattiLink = document.getElementById('contatti-link');
+            if(contattiLink) {
+                contattiLink.addEventListener('click', function(e) {
+                    var target = document.getElementById('contatti-section');
+                    if(target) {
+                        e.preventDefault();
+                        target.scrollIntoView({behavior: 'smooth'});
+                    }
+                });
+            }
+            // ...existing code...
+        });
+        // ...existing code...
+    </script>
+    <!-- Hero section centrale -->
+    <section id="main-section" style="position:relative;z-index:2;min-height:100vh;width:100vw;padding:0;margin:0;overflow:hidden;">
+        <img src="https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiaup4omd7tcnlgjkxamvd74352ii26pzc5erawv3l5q3ouykr76za"
+             alt="Nyfurion Main"
+             style="position:absolute;top:0;left:0;width:100vw;height:100vh;object-fit:cover;display:block;border:none;margin:0;padding:0;z-index:1;">
+        <!-- Banner community in basso -->
+        <!-- COOKIE BANNER RIMOSSO -->
+    </section>
+    <!-- Nuova sezione che si vede scrollando -->
+    <section id="nuova-sezione" style="
+        position:relative;
+        z-index:3;
+        min-height:100vh;
+        width:100vw;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        background:#181a22;
+        padding:0;
+        margin:0;
+        border:none;
+        box-shadow:none;
+    ">
+        <div style="
+            max-width:900px;
+            width:100vw;
+            min-height:100vh;
+            padding:3em 1.5em;
+            text-align:left;
+            margin:0;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            background:#181a22;
+            border:none;
+            box-shadow:none;
+        ">
+            <div style="color:#1bff6a; font-family:'Orbitron',sans-serif; font-size:2em; text-shadow:0 0 18px #1bff6a,0 0 32px #1bff6a; margin-bottom:0.2em; text-align:center;">
+                NYFURION
+            </div>
+            <div style="color:#1bff6a; font-family:'Orbitron',sans-serif; font-size:1.25em; text-shadow:0 0 12px #1bff6a; margin-bottom:1.1em; text-align:center;">
+                The War of Balance and the Fate of the Guardians
+            </div>
+            <div style="color:#fff; font-size:1.13em; line-height:1.7; font-family:sans-serif; max-width:800px; margin:0 auto;">
+                <div id="typewriter-text" style="white-space:pre-line;"></div>
+                <noscript>
+                    <!-- ...testo statico come fallback... -->
+                </noscript>
+            </div>
+        </div>
+    </section>
+    <style>
+        /* ...existing code... */
+        #nuova-sezione,
+        #nuova-sezione > div {
+            background: #181a22 !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        /* ...existing code... */
+    </style>
+    <style>
+        /* ...existing code... */
+        @keyframes arrowDownAnim {
+            0% { transform: translateY(0);}
+            100% { transform: translateY(18px);}
+        }
+        /* ...existing code... */
+    </style>
+    <script>
+        // ...existing code...
+        window.addEventListener('DOMContentLoaded', function() {
+            // ...existing code...
+
+            // Mostra la nuova sezione quando si scrolla verso il basso
+            var nuovaSezione = document.getElementById('nuova-sezione');
+            window.addEventListener('scroll', function() {
+                var scrollY = window.scrollY || window.pageYOffset;
+                var trigger = window.innerHeight * 0.5;
+                if (scrollY > trigger) {
+                    nuovaSezione.classList.add('visible');
+                } else {
+                    nuovaSezione.classList.remove('visible');
+                }
+            });
+
+            // Scroll morbido per Series Nyfurion
+            var seriesLink = document.getElementById('series-link');
+            if(seriesLink) {
+                seriesLink.addEventListener('click', function(e) {
+                    var target = document.getElementById('nuova-sezione');
+                    if(target) {
+                        e.preventDefault();
+                        target.scrollIntoView({behavior: 'smooth'});
+                    }
+                });
+            }
+
+            // Scroll morbido per Contatti
+            var contattiLink = document.getElementById('contatti-link');
+            if(contattiLink) {
+                contattiLink.addEventListener('click', function(e) {
+                    var target = document.getElementById('contatti-section');
+                    if(target) {
+                        e.preventDefault();
+                        target.scrollIntoView({behavior: 'smooth'});
+                    }
+                });
+            }
+
+            // Effetto macchina da scrivere per il racconto
+            var typewriterText = document.getElementById('typewriter-text');
+            if(typewriterText) {
+                var storyHTML = `
+<span style="color:#1bff6a; font-weight:bold;">- Nyfurion</span>, the realm suspended between light and darkness, was not always a battlefield. Once, under the guidance of the King of Nyfurion, it thrived in harmony no wars, no divisions. The sovereign, gifted with unparalleled wisdom, knew he could not rule forever. He had to choose an heir. He was the father of three children, each with a different vision of the world. When the day of succession arrived, he chose the eldest the one who demonstrated discipline, justice, and inner strength: the Legendary Supreme. But this decision did not come without consequences.
+
+<span style="color:#1bff6a; font-weight:bold;">- The Rise of Dark Power</span>
+The second born, the most ambitious, the most tormented, had long awaited the day he would inherit power. When he was excluded, he was overcome with rage. A void grew within him, a deep thirst for revenge. That day, the Dark Power of Evil was born, the one who would defy order and shatter balance. He refused to accept his father’s decision. He gathered followers among those who did not want to be ruled, those who saw the Legendary Supreme as a tyrant disguised as a savior. Thus, the Baby Rebels emerged young warriors who despise imposed order and reject civilization. To them, chaos is freedom. But in this war between good and evil, there is one figure watching from the shadows: The Queen, the third descendant, who has never fought but holds in her hands the last spark of primordial power. She takes no side, but if Nyfurion falls, she will decide the kingdom’s fate.
+
+<span style="color:#1bff6a; font-weight:bold;">- The Creation of the Guardians</span>
+As conflict spread, the Legendary Supreme realized he could not face it alone. Armies were not enough. Courage was not enough. The heart of Nyfurion had to be sealed. At the center of the realm existed a forbidden gateway: the Unique Portal. No one knew what lay beyond it, but it was said to contain absolute power—something capable of rewriting reality itself. If Dark Power reached it, Nyfurion would fall. That was when The Guardians of the Portal were chosen. They were not ordinary warriors. Each had followed a precise path, honed their skills, and sacrificed their existence to protect the gateway.
+The Eternal Guardian, the only one who has seen the Portal open and close. He survived and still awaits the day when it will be needed again.
+
+<span style="color:#1bff6a; font-weight:bold;">- The Shadow Predators and the Silent War</span>
+As war intensifies, another danger grows in the streets of Nyfurion. The Shadow Predators are infiltrators with no faction. They serve neither good nor evil but steal everything of value from the homes of neutrals, weakening and isolating them. They do not wish to rule Nyfurion. They only seek to profit from its downfall. No one sees them. No one stops them.
+
+<span style="color:#1bff6a; font-weight:bold;">- The Fate of Nyfurion</span>
+Now, the realm teeters on the brink of ruin. The Legendary Supreme fights to protect order. Dark Power advances, dragging the Rebels with him. The Guardians maintain the seal on the Portal. The Baby Warriors of Peace struggle to preserve civilization, guided by the Masters of Discipline. But all this may not be enough. Because the Queen has yet to choose. If she intervenes, Nyfurion may find a new balance. If she remains in the shadows, conflict will be eternal. But nothing in Nyfurion is truly safe anymore.
+
+<span style="color:#1bff6a; font-size:0.95em; font-family:'Orbitron',sans-serif; text-shadow:0 0 10px #1bff6a;">Thank you for your attention
+Thank you for taking the time to check out the NFT collection. I truly appreciate your interest and support. Stay tuned for upcoming updates!</span>
+
+<span style="font-size:0.7em; color:#fff; margin-top:2em; text-shadow:0 0 8px #fff, 0 0 16px #fff;">
+Copyright © [Year] Riccardo Duca All rights reserved.
+This PDF file was created by Riccardo Duca. Unauthorized reproduction, distribution, or modification of the content is strictly prohibited. The file may be downloaded and shared for personal use only. Any commercial use, adaptation, or redistribution without explicit written permission from the copyright holder is forbidden.
+</span>
+`;
+
+                // Funzione macchina da scrivere che gestisce anche i tag HTML
+                function typeWriterEffect(element, html, speed) {
+                    let i = 0;
+                    let isTag = false;
+                    let text = '';
+                    function type() {
+                        if (i < html.length) {
+                            let char = html[i];
+                            text += char;
+                            element.innerHTML = text + (isTag ? '' : '<span style="opacity:0.5;">|</span>');
+                            if (char === '<') isTag = true;
+                            if (char === '>') isTag = false;
+                            i++;
+                            setTimeout(type, isTag ? 0 : speed);
+                        } else {
+                            element.innerHTML = text; // Rimuovi cursore finale
+                        }
+                    }
+                    type();
+                }
+                typeWriterEffect(typewriterText, storyHTML, 0.0001); // super veloce, praticamente istantaneo
+            }
+        });
+        // ...existing code...
+    </script>
+    <!-- Banner cookies Instagram & Discord: mostra SEMPRE all'apertura -->
+    <!-- COOKIE BANNER RIMOSSO -->
+    <!-- Banner per la pagina Story: mostra SOLO la prima volta -->
+    <div id="story-bar" style="display:none; position:fixed; top:80px; left:50%; transform:translateX(-50%); min-width:260px; max-width:420px; background:rgba(20,20,20,0.98); color:#fff; border-radius:14px; box-shadow:0 4px 24px #000a; padding:0.7em 1.5em; z-index:9999; font-family:sans-serif; text-align:center; font-size:1.08em; cursor:pointer;">
+        <span style="font-weight:bold; color:#ffe87c;">Vai alla pagina Story</span>
+    </div>
+    <script>
+        // ...existing code...
+        // Banner cookies Instagram & Discord: mostra SEMPRE all'apertura
+        // SCRIPT COOKIE BANNER RIMOSSO
+    </script>
+    <!-- Seconda sezione scroll down -->
+    <section id="seconda-sezione" style="
+        position:relative;
+        z-index:4;
+        min-height:100vh;
+        width:100vw;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        background:var(--nyfurion-bg,#181a22);
+        padding:0;
+        margin:0;
+        border:none;
+        box-shadow:none;
+    ">
+        <div style="
+            max-width:1200px;
+            width:100vw;
+            min-height:100vh;
+            padding:3em 1.5em;
+            text-align:left;
+            margin:0;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            background:transparent;
+            border:none;
+            box-shadow:none;
+        ">
+            <div style="color:#09ee1c; font-family:'Orbitron',sans-serif; font-size:2.2em; text-shadow:0 0 18px #1bff6a,0 0 32px #1bff6a; margin-bottom:1.5em; text-align:center;"
+                 class="nyfurion-glow-title">
+                Nyfurion NFT Collection
+            </div>
+            <div style="color:#1bff6a; font-family:'Orbitron',sans-serif; font-size:1.25em; text-shadow:0 0 12px #1bff6a; margin-bottom:1.1em; text-align:center;">
+                
+            </div>
+            <!-- RIMOSSO: <div id="typewriter-text-2" style="display:none;"></div> -->
+            <noscript>
+                <!-- ...existing code... -->
+            </noscript>
+            <div id="nft-collection-grid" style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+                gap: 18px;
+                width: 100%;
+                max-width: 900px;
+                margin: 3em auto 0 auto;
+                justify-items: center;
+            ">
+                <!-- ...existing code... -->
+            </div>
+        </div>
+    </section>
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            // ...existing code...
+
+            // Inserisci 100 riquadri NFT numerati, artistici, con spazio per immagine e hover glow
+            var nftGrid = document.getElementById('nft-collection-grid');
+            if(nftGrid) {
+                nftGrid.innerHTML = '';
+                // Numeri dorati (devono avere effetto luce)
+                const goldNumbers = [5, 21, 40, 49, 50, 52, 54, 56, 59, 64, 73, 77, 79, 80, 82, 85, 87, 90, 91, 95, 96, 97, 98, 99, 100];
+                let html = '';
+                // Array di immagini IPFS (tutti i 100 link, dal 1 al 100)
+                const ipfsImages = [
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeih6libbmlkie7co676pow2s6mlen26q2s4tsn3tnscrd4y345vppy',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihjknki2b63ubz6bqj6hblbieacitcebgmr7waljd6oh7r3ydiuza',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeia6uuwhpbsqgl6fcblcw6cx4wzwxhugdt7dnakvgj5wkgc5jtwswq',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeig5olnw56w6kpvvgddyfksx54tlxqxaevwjrati4ofeo6d4z2jb2a',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihtpwxlelkj6rfevol73xo3ujtb6mvpzmlatddhyvmennppcg7joq',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeif72446odoaom7j44wowb2attvjx4puzepl5sqefswqjx6eovqnvu',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiclf4ttiyuweonubxsovcvbtlzl75q5jsai63evvknbi3pp4dioei',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeigv4fw7smf6bi3xgemhhmkr5mafd3vta6qdvmmr3mpveo2kdrtu5a',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeifkmptahi5cq27wa5ukgnpc3amkfdvkgtwcjpwqowbrqovereylj4',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihshly3g2xc7jss5za4isjwehyq2mkmimfei2rwnvvamsc52pqx4m',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihdgzo4ixqieji7x4xprldw326bn3b75caksk4fla4mgwtolt2vhe',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeifsononlwopad3blx2mltvgk22twe4jx3iepi34knfzvvo5p6ymv4',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiacm363ts3ujhudnmqn3ytqj5qr6azf6oatwodfdgje226uegamh4',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeibgmksoigwvqjond6op6jgfnys33gphat7lkikslavlbeqdjazn4m',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeia37e5xfkjexezzumjyknwokp3j6tl4jlpsismif4ey3rkdmjcpdq',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeieq55easomxtwsuh7ij2le6h23fkndkucwv4xvroydv52e6t5g7ea',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeia5rurmyp33ko45zhyktwpxh6edzi3z3yk4thdpnyvvlvsg5hfkji',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihpu6sdm4f42fbubyrxz32jv3miviqmgmeorsylglgs7shha3qglq',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiexylyijt5e76jjvxininzjxnmqii4pqiklv3ebubsplygnaghbpm',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihh5gmynwn5jdzjea2p5x4u2xjorrbrvvuiganju2ayljsbnlmluu',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiab7miiuxvra5mflmdc6go6bhwdvgug7nn6h4zgnq3732xqvcgndi',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeidojwaqies3w2hl6vj5knsoojpco5nz6am2l5kdivso76qoveyhom',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeidjomzcmdhmj7wp7gzxrccxo7sqqmlunq2wivmxmcr5zzjneq25se',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeif4civwuyjxsc7oc6dxclhphm46hkq7e2spids3vl5afzudfjl5qy',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeieb6xzpdlxywkrklmzkbukxj2akayxydqqeorba3tcweoj463nvc4',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeie5n5wwiljyonv74qh73xd54fxblxneaq4s762abgdb3ggozwvbsm',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihunlkimkgxewb4qqtd7jmu274omd5w3gxxbadiyr74i4cdtokf5y',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeibiliopup5ivbayop2qag25lsmqsxorbejtco52y44p7z3qg7i2ge',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeia6yzvznind5nemkswrbimzi2pr4zcshd2ymi3h5nm5vz6ct4k7ri',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeibufeeghzy35jqwm7ntxczhu3gxguv4dxdiry7scovjfyki4tahie',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihtlaq4vao4jm3awts4eitjr3w3l5dhj3ise5yetpxjdj322z5vji',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeidrgqloy2otow5vii5sjx3qbhql6wzgl3qkvowkhmr7hqotq5djga',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiem47odjqzifsgaq4hmg2cxnlzq6zootkkxaeequqsnnaial2lldy',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeigltmwzp74qezyljgw4phrlvulhfnxixvlrzp5uu745czoh6ovzcq',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeigx7hgqqdirxg2ghkgsa662zsnsjiuortjpn4anfoazw6lme5qzni',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihaahmaqe7rwuylkhptauikfzj3v5yu7p7ivvao34i6irwkxkvrmu',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeidm2dqj3q7g3dadyyui2e6pujkklkrwf4h3zjrll3w52hkaus2v7u',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeicbbcsehgruteuzs3u7ubl2to5pucse7ansbbs55bdjji7xuo2gau',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeieemg4pruy54nn3fgxj5mhp5flxqropw3abzsvbff6iwmvy3fu4gq',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeifimqznzdizyzizmjiodulbnlqal4zde4zo2wpstmanvihdv4lin4',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiffqiv3obezdju34w6hhagsnz4bl3q4oukpw2p2aqpgd7qpsmlauq',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeidexevo6opijsw6lqky75npv6gwliion7ofbusii5hirxl5wowkqu',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeif7qggaikl3ixi6hijckwke2katwf6vfkcktdzugvdcgdrdravzqa',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeibvhmaoutcsexi67ihk56vuy7i2sdsjz5caykgqspvxzluiitqwzi',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeibvhmaoutcsexi67ihk56vuy7i2sdsjz5caykgqspvxzluiitqwzi',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeibjj2xikjl47baxes346pqqpmwg4ls5id6t2x63bdhlxxqfmqsdau',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeifoswbjlpgkjhuz37mylwjlv26acblsfqaizbgcgyofw2z33stgia',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiduuv2pbe6liyjo4lnq45ucbxdh3jkcetcq7mwf7ctqjki4pldgr4',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeierbweov4wrqkq6azhr7ztd6cj6ec6tbiia7hql2ed2y5biipcy6q',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeicra46ft24s6syk4m4kq2xovty2seqt7pfyij6hcwlznhppfzyvai',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihruredohuf7vqo25bvdwllxwvm75dyrenxwbdmofmlm65tnjw5pe',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeidww33f6bkjjo665hcmsynqk644kjmnsk4fpxm536fanlb32oolzq',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeidvqoxdq22t2cf47hgvanjighpx5wgjdo7nowbju3t4whqmr43qp4',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeig7iw4mnsrxtza3yt4k5ulm5bsu3bce22tqgg67tiqsfb6qrrhspq',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihsw47mhpllocmuflenj3ujieazsxkz3gafhomzwem2u7pnwyssau',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeibro6jvxwfg7dg5hvczwz5s67ugqmbnhpqdtf2lasma7kscqwhvam',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeifhuj4yftjdqspdyi2iye3mqymztmedmxk6vezuqtusl5mhulphx4',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeigi3zk6xr4yqkro7gd7mxcbjheiq7lyjvso2aypyaizqkybuabdpi',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeia75dfbua52mv6v6ydkpxbep767aewmiit5lrpysfxiz2zi5esh5y',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeig5oiqr3rlsglxctu3kz7z5eeguhimhsgotgwqdg6fytl4vjd5zce',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiaqmqgrxlhxra4gfymiic5yveic3m6cyhfkniysvxoabksoawq4zy',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeicjj6fdzfm2n7nhryi7e7c7ojrod3ijqtma3wu3aagxv5ptlatx34',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeib6m7sejuw3zsq6jtctdj4p72fozd5vxjlevppo4yj7x2joivdi54',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiecnkmventevpcwy7nkll3ishsjbilbt7nsxeyzcfr2hr2h2lxitm',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeid55mtpfglf5t6obdgl4sli6kg5z4nkjxsojwaojnvo4ojwadn5gu',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeicvpsgnv66g26hnasybpelmskzlgrpomeiiviv6x5em5vtsigskdi',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeialyevpp3qjip7u65grnlr6x5muwiamzbxblepvqq4mhlnlsbvory',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeib4tdff3qhldvjax5xpb5ynvn6fnybn23qjmxufrxreqlyzas6lvi',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiaeqxlkc6pyy4m4vofuetv74sx26encwhdovr5khpmju7e4kh4bmi',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeif3pq5hfmwlbyjosdytik57hbusojocoon6536bnnhpa5skrvrfze',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeih6tvq4e4xgu56dwyvmglalthhvhgqhrexrn4gpd3ociq2ov7jqly',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeie4du2esem2ywwd2cus45ne6mckqnww5it5x236ytwntwfgc6b2ua',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiablpf47abaq7woiym3az6pzktfx3ad5admznzhnmb2jap3hsc3w4',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeigvhqjuvi2lujjginl7ksrpivugtiub67xzktek3aexrkjjsf4rbi',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeig4p2535k6g3w4e3hbwvsixt63c7na26qb4horyoyfyub6s4ul2vy',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeifpvqkwtjcjngzsk3edqtrgosemoo7izwa4ov6j5rmsxmaxyrvjoe',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeidpfcs723tngzu7jhcl4vmvegn3zadnr2zdkavxgyhjx565vnw2ti',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiamudmhrto75nn232it2jilg3cgnszlakulh5cuhed2ahczbp4qja',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeia7gmkxsl7mcrlcs6q6s7buwol6nfbsoyag72kevutymcszillnpq',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeidanqzdsuqhuyyec6ubccqmz2fqz2aqz7jahcco5bqj5uiwmchsga',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiasn34we2orkzi6h4gbf2rnbamheg2sp7mllbonf4f6q3rnbshcqe',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiaji7stjkpduv57zhbqpbwysvsk4oobmbivbplbcku4y6uoz6vu7a',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihzly344qsi53df2x75jdrgig4xr23qvk4wa3raom5dxxampztsoi',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeigx4gjiyptfikapecvg2ozxso4ayo5ugg7jy5rklogbrpmgr3chwm',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiceuxudre25k6jx5vzxjeo4loddyeyw3ecet3yny6rmdrv74bg5ja',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihcdhvzbimjoowxvb5woa2okqiwbob2ic7y3iohko5r7j5aki4ucm',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeifncjqddkf7gybtwlgfq2r74w6aoxbzf47uhn6cm2gjp5u4x73yq4',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeigf4sz5gzgi5fp6uk4joqfvdfyhl2loozoi5sim5peo3yvcctsgei',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeigk2tqfy7wmbakvrvq6quq3mywxilpo7er2lu5mkorkya3hxek54e',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeib4canitj2mskyq2ncfpux4klk6rvs7ywlbooqh2xrqpi6z643dre',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihbia2gsdre4uyzw3zay5ugnlndm4hxxwuq5deuw6sxsv75m3idyq',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeic5yg6pnz5kwi2h4sybwc27ghvt7ibvahtk667xaihrzevktt3kxe',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiaqivi6nfibohdbuwccerqhzapiaadvxuc6us2q57dzb3becwxyui',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihiewflkict5btl5ciuozkos4y2qdj6aeytzylspxxzyvtnoowmci',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeib27rauegjtji2m4jvoe2hyopiizs55llehj4kcut6gijy5giu7si',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeid5scc7tpzqx2jstdeotfxnrgg7452rqokkwb5yhf5cdwvh6cq6bq',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeigqojh4ciza2mtaxehmgogdsegtgalwwnhg3zl7ztgrp46jjbymze',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeia34suruaf5crn7nus57arqyuqwyujnkle2amclcy4wdfekcvoo4a',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiao5op5hiid4njmdjhjxktt6mafc6taqmfucbpupyxjlvkcepx3yy',
+                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiasegca52hsthtpupwzgidlxgm7xbxyn6gu7btcuteqnqteutv2um'
+                ];
+                for(let i=1; i<=100; i++) {
+                    let imgUrl = ipfsImages[i-1] || '';
+                    let goldClass = goldNumbers.includes(i) ? ' nft-box-gold' : '';
+                    html += `
+                    <div class="nft-box-artistico${goldClass}" data-img="${imgUrl}" data-num="${i}" style="
+                        width:110px;
+                        height:140px;
+                        background:linear-gradient(135deg,#101820 60%,#181818 100%);
+                        border:2.5px solid ${ goldNumbers.includes(i) ? '#ffe87c' : '#00eaff'};
+                        border-radius:18px;
+                        display:flex;
+                        flex-direction:column;
+                        align-items:center;
+                        justify-content:flex-end;
+                        font-family:'Orbitron',sans-serif;
+                        color:${ goldNumbers.includes(i) ? '#ffe87c' : '#00eaff'};
+                        font-size:1.1em;
+                        box-shadow:0 0 18px ${goldNumbers.includes(i) ? '#ffe87c99' : '#00eaff33'},0 0 32px ${goldNumbers.includes(i) ? '#ffe87c44' : '#1bff6a22'};
+                        user-select:none;
+                        cursor:pointer;
+                        margin:0;
+                        position:relative;
+                        overflow:hidden;
+                        margin-bottom:10px;
+                        margin-top:10px;
+                        margin-left:auto;
+                        margin-right:auto;
+                        z-index:1;
+                        transition: 
+                            transform 0.22s cubic-bezier(.25,1.5,.5,1.1), 
+                            box-shadow 0.22s, 
+                            border-color 0.22s, 
+                            z-index 0.22s;
+                    ">
+                        <div style="
+                            width:92px;
+                            height:92px;
+                            background:linear-gradient(120deg,#232a3a 60%,#181818 100%);
+                            border-radius:12px;
+                            margin-top:13px;
+                            margin-bottom:8px;
+                            box-shadow:0 0 18px ${goldNumbers.includes(i) ? '#ffe87c88' : '#00eaff55'},0 0 32px ${goldNumbers.includes(i) ? '#ffe87c44' : '#1bff6a22'};
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            overflow:hidden;
+                            border:1.5px solid ${goldNumbers.includes(i) ? '#ffe87c' : '#1bff6a'};
+                            position:relative;
+                        ">
+                            <img src="${imgUrl}" alt="NFT #${i}" style="width:100%;height:100%;object-fit:cover;${imgUrl ? '' : 'display:none;'}">
+                            <span style="color:#444;font-size:2.1em;opacity:0.25;position:absolute;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;${imgUrl ? 'display:none;' : ''}">?</span>
+                        </div>
+                        <div style="
+                            width:100%;
+                            text-align:center;
+                            background:rgba(0,0,0,0.65);
+                            border-radius:0 0 14px 14px;
+                            padding:0.3em 0 0.2em 0;
+                            font-size:1.08em;
+                            color:${goldNumbers.includes(i) ? '#ffe87c' : '#1bff6a'};
+                            letter-spacing:0.04em;
+                            text-shadow:0 0 8px ${goldNumbers.includes(i) ? '#ffe87c' : '#00eaff'},0 0 16px ${goldNumbers.includes(i) ? '#ffe87c' : '#1bff6a'};
+                            font-family:'Orbitron',sans-serif;
+                            margin-top:auto;
+                        ">
+                            #${i}
+                        </div>
+                    </div>
+                    `;
+                }
+                nftGrid.innerHTML = html;
+
+                // Interattività hover per tutti i riquadri
+                const nftBoxes = nftGrid.querySelectorAll('.nft-box-artistico');
+                nftBoxes.forEach(box => {
+                    const img = box.querySelector('img');
+                    if (img) img.classList.add('nft-img-anim');
+                    // Effetto parallax e glow su hover (esterno)
+                    box.addEventListener('mousemove', function(e) {
+                        const rect = this.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        const centerX = rect.width / 2;
+                        const centerY = rect.height / 2;
+                        const moveX = (x - centerX) / centerX * 8;
+                        const moveY = (y - centerY) / centerY * 8;
+                        this.style.transform = `scale(1.08) rotateX(${-moveY}deg) rotateY(${moveX}deg)`;
+                        if (img) img.style.filter = 'brightness(1.22) saturate(1.3)';
+                        // Effetto highlight bordo
+                        this.style.boxShadow = `0 0 48px #1bff6a, 0 0 64px #00eaff, 0 0 24px #fff`;
+                    });
+                    box.addEventListener('mouseenter', function() {
+                        this.style.transition = 'transform 0.22s cubic-bezier(.25,1.5,.5,1.1), box-shadow 0.22s, border-color 0.22s, z-index 0.22s';
+                        this.style.transform = 'scale(1.08)';
+                        this.style.zIndex = 10;
+                        this.style.boxShadow = `0 0 32px #ffe87c,0 0 64px #00eaff, 0 0 24px #fff`;
+                        this.style.borderColor = this.classList.contains('nft-box-gold') ? '#ffe87c' : '#1bff6a';
+                        // Effetto animato sull'immagine (interno)
+                        if (img) {
+                            img.classList.add('nft-img-anim-active');
+                            img.style.transition = 'transform 0.33s, filter 0.33s, box-shadow 0.33s';
+                            img.style.transform = 'scale(1.13) rotate(-2deg)';
+                            img.style.boxShadow = '0 0 32px #1bff6a, 0 0 64px #00eaff, 0 0 24px #fff';
+                        }
+                        // Effetto scintillante animato solo per i dorati
+                        if (this.classList.contains('nft-box-gold')) {
+                            if (img) {
+                                img.classList.remove('gold-shine-anim');
+                                void img.offsetWidth;
+                                img.classList.add('gold-shine-anim');
+                            }
+                        }
+                    });
+                    box.addEventListener('mouseleave', function() {
+                        this.style.transition = 'transform 0.22s cubic-bezier(.25,1.5,.5,1.1), box-shadow 0.22s, border-color 0.22s, z-index 0.22s';
+                        this.style.transform = 'scale(1)';
+                        this.style.zIndex = 1;
+                        this.style.boxShadow = this.classList.contains('nft-box-gold')
+                            ? '0 0 18px #ffe87c99,0 0 32px #ffe87c44'
+                            : '0 0 18px #00eaff33,0 0 32px #1bff6a22';
+                        this.style.borderColor = this.classList.contains('nft-box-gold') ? '#ffe87c' : '#00eaff';
+                        // Rimuovi effetto animato sull'immagine (interno)
+                        if (img) {
+                            img.classList.remove('nft-img-anim-active');
+                            img.classList.remove('gold-shine-anim');
+                            img.style.filter = '';
+                            img.style.transform = '';
+                            img.style.boxShadow = '';
+                        }
+                    });
+                    // Reset parallax su mouseleave
+                    box.addEventListener('mouseleave', function() {
+                        this.style.transform = 'scale(1)';
+                    });
+                    // Click animazione "pulse" (esterno)
+                    box.addEventListener('mousedown', function() {
+                        this.style.transform += ' scale(0.96)';
+                        if (img) img.style.transform += ' scale(0.98)';
+                    });
+                    box.addEventListener('mouseup', function() {
+                        this.style.transform = this.style.transform.replace(' scale(0.96)', '');
+                        if (img) img.style.transform = img.style.transform.replace(' scale(0.98)', '');
+                    });
+                });
+
+                // Handler per aprire il modal overview al click su un riquadro
+                const overviewModal = document.getElementById('nft-overview-modal');
+                const overviewImg = document.getElementById('nft-overview-img');
+                const overviewText = document.getElementById('nft-overview-text');
+                const nftBoxesArr = Array.from(nftBoxes);
+                let currentOverviewIndex = null;
+
+                function openOverview(idx) {
+                    const box = nftBoxesArr[idx];
+                    if (!box) return;
+                    const img = box.getAttribute('data-img');
+                    const num = box.getAttribute('data-num');
+                    overviewImg.src = img;
+                    overviewText.textContent = `NFT #${num}`;
+                    overviewModal.classList.add('active');
+                    currentOverviewIndex = idx;
+                }
+
+                nftBoxes.forEach((box, idx) => {
+                    box.addEventListener('click', function() {
+                        openOverview(idx);
+                    });
+                });
+
+                // Frecce navigazione overview
+                document.getElementById('nft-arrow-left').onclick = function(e) {
+                    e.stopPropagation();
+                    if (currentOverviewIndex === null) return;
+                    let prev = currentOverviewIndex - 1;
+                    if (prev < 0) prev = nftBoxesArr.length - 1;
+                    openOverview(prev);
+                };
+                document.getElementById('nft-arrow-right').onclick = function(e) {
+                    e.stopPropagation();
+                    if (currentOverviewIndex === null) return;
+                    let next = currentOverviewIndex + 1;
+                    if (next >= nftBoxesArr.length) next = 0;
+                    openOverview(next);
+                };
+
+                // Chiudi modal
+                document.querySelector('.nft-overview-close').onclick = function() {
+                    overviewModal.classList.remove('active');
+                    currentOverviewIndex = null;
+                };
+                // Chiudi modal cliccando fuori dall'immagine
+                overviewModal.addEventListener('click', function(e) {
+                    if(e.target === overviewModal) {
+                        overviewModal.classList.remove('active');
+                        currentOverviewIndex = null;
+                    }
+                });
+            }
+            // ...existing code...
+        });
+    </script>
+    <div id="nft-overview-modal">
+        <button class="nft-overview-close" aria-label="Chiudi overview">&times;</button>
+        <div id="nft-overview-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;">
+            <img id="nft-overview-img" src="" alt="NFT Overview" style="display:block;margin:0 auto;max-width:340px;max-height:60vh;box-shadow:0 0 32px #1bff6a,0 0 64px #00eaff;" />
+            <div id="nft-overview-text" style="font-family:'Cinzel',serif;font-size:2.3em;color:#ffe87c;text-align:center;margin-top:18px;letter-spacing:0.08em;text-shadow:0 0 18px #ffe87c,0 0 32px #1bff6a,0 0 12px #00eaff;"></div>
+            <div id="nft-overview-arrows" style="display:flex;justify-content:center;align-items:center;margin-top:18px;gap:38px;">
+                <button id="nft-arrow-left" style="background:none;border:none;color:#ffe87c;font-size:2.5em;cursor:pointer;user-select:none;transition:color 0.2s;" aria-label="Precedente">&#8592;</button>
+                <button id="nft-arrow-right" style="background:none;border:none;color:#ffe87c;font-size:2.5em;cursor:pointer;user-select:none;transition:color 0.2s;" aria-label="Successivo">&#8594;</button>
+            </div>
+        </div>
+    </div>
+    <style>
+        /* ...existing code... */
+        #nft-overview-modal {
+            display: none;
+            position: fixed;
+            z-index: 99999;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10, 20, 30, 0.97);
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.22s;
+        }
+        #nft-overview-modal.active {
+            display: flex;
+        }
+        #nft-overview-img {
+            max-width: 96vw;
+            max-height: 92vh;
+            border-radius: 22px;
+            box-shadow: 0 0 120px #1bff6a, 0 0 220px #00eaff, 0 0 64px #fff;
+            border: 4px solid #1bff6a;
+            background: #181818;
+            object-fit: contain;
+            transition: box-shadow 0.22s, border 0.22s;
+            display: block;
+            margin: 0 auto;
+        }
+        #nft-overview-modal .nft-overview-close {
+            position: absolute;
+            top: 32px;
+            right: 48px;
+            font-size: 2.5em;
+            color: #fff;
+            cursor: pointer;
+            z-index: 100001;
+            background: none;
+            border: none;
+            text-shadow: 0 0 18px #1bff6a, 0 0 32px #00eaff;
+            transition: color 0.2s;
+        }
+        #nft-overview-modal .nft-overview-close:hover {
+            color: #ffe87c;
+        }
+        @media (max-width: 700px) {
+            #nft-overview-img {
+                max-width: 98vw;
+                max-height: 70vh;
+            }
+            #nft-overview-modal .nft-overview-close {
+                top: 12px;
+                right: 18px;
+                font-size: 2em;
+            }
+        }
+    </style>
+    <!-- ROADMAP INTERATTIVA FLUIDA E MODERNA -->
+    <section id="roadmap-section" style="position:relative;z-index:5;min-height:100vh;width:100vw;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--nyfurion-bg,#181a22);padding:0;margin:0;border:none;box-shadow:none;overflow:hidden;">
+        <!-- Sfondo animato: particelle leggere -->
+        <canvas id="roadmap-particles-bg" style="position:absolute;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;"></canvas>
+        <div style="position:relative;z-index:2;width:100%;max-width:900px;margin:0 auto;padding:4em 1.5em 2em 1.5em;">
+            <!-- Scritta centrale "Roadmap" aggiunta -->
+            <div style="width:100%;text-align:center;margin-bottom:1.5em;">
+                <span style="font-family:'Orbitron','Cinzel',sans-serif;font-size:2.5em;color:#f4ffe8;letter-spacing:0.09em;text-shadow:0 0 18px #1bff6a,0 0 32px #00eaff,0 0 8px #faf3d5;filter:drop-shadow(0 0 12px #00eaff) drop-shadow(0 0 18px #1bff6a);display:inline-block;">
+                    Roadmap
+                </span>
+            </div>
+            <div class="roadmap-title-text" style="font-family:'Orbitron', 'Cinzel', sans-serif; font-size: 2.5em; color: #f4ffe8; letter-spacing: 0.09em; text-shadow: 0 0 18px #1bff6a, 0 0 32px #00eaff, 0 0 8px #faf3d5; filter:drop-shadow(0 0 12px #00eaff) drop-shadow(0 0 18px #1bff6a); display:inline-block; opacity:0; transform:translateY(40px); transition:opacity 0.7s,transform 0.7s;">
+                Roadmap
+            </div>
+            <div id="roadmap-timeline"></div>
+        </div>
+    </section>
+    <style>
+        /* ...existing code... */
+        .roadmap-title-text {
+            font-family: 'Orbitron', 'Cinzel', sans-serif;
+            font-size: 2.5em;
+            color: #f4ffe8;
+            letter-spacing: 0.09em;
+            text-shadow:  0  0 18px #1bff6a, 0 0 32px #00eaff, 0 0 8px #faf3d5;
+                       filter: drop-shadow(0 0 12px #00eaff) drop-shadow(0 0 18px #1bff6a);
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity  0.7s, transform 0.7s;
+        }
+               .roadmap-title-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .roadmap-timeline-container {
+            position: relative;
+            padding: 2em 0 2em 0;
+        }
+        .roadmap-timeline-line {
+            position: absolute;
+            left: 32px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg,#1bff6a  0%,#00eaff 100%);
+            border-radius: 2px;
+            z-index: 0;
+            opacity: 0.25;
+        }
+        .roadmap-step {
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 2.5em;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity  0.7s, transform 0.7s;
+        }
+        .roadmap-step.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .roadmap-step:last-child { margin-bottom: 0; }
+        .roadmap-step-indicator {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #232a3a;
+            border: 3px solid #00eaff;
+            box-shadow: 0 0 0 0 #1bff6a;
+            margin-right: 24px;
+            margin-left: 8px;
+            position: relative;
+            z-index: 2;
+            transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .roadmap-step-indicator.active,
+        .roadmap-step-indicator:hover {
+            border-color: #5fffd7;
+            background: #1bff6a;
+            box-shadow: 0 0 16px #1bff6a, 0 0 32px #00eaff;
+        }
+        .roadmap-step-content {
+            background: linear-gradient(90deg,#181818 80%,#1bff6a11 100%);
+            border-radius: 14px;
+            box-shadow: 0 0 18px #1bff6a22, 0 0 32px #00eaff11;
+            border: 1.5px solid #00eaff33;
+            color: #fff;
+                       font-family: 'Orbitron',sans-serif;
+            font-size: 1.08em;
+            padding: 1.1em 1.3em;
+            min-width: 0;
+            flex: 1;
+            transition: box-shadow 0.3s, border-color 0.3s, background 0.3s;
+            cursor: pointer;
+            opacity: 0.92;
+        }
+        .roadmap-step-content.active,
+        .roadmap-step-content:hover {
+            background: linear-gradient(90deg,#1bff6a22,#00eaff22,#5fffd711);
+            box-shadow: 0 0 32px #1bff6a, 0 0 64px #00eaff, 0 0 24px #5fffd7;
+            border-color: #5fffd7;
+        }
+        .roadmap-step-title {
+            font-size: 1.13em;
+            color: #5fffd7; /* Cambiato da giallo (#ffe87c) a un verde acqua brillante */
+            text-shadow: 0 0 8px #5fffd7, 0 0 16px #1bff6a;
+            font-weight: bold;
+            margin-bottom: 0.3em;
+            display: block;
+        }
+        .roadmap-step-desc {
+            color: #e6e6e6;
+            text-shadow: 0 0 6px #00eaff33;
+            font-size: 1em;
+            line-height: 1.6;
+            display: none;
+            margin-top: 0.5em;
+            transition: opacity 0.4s;
+        }
+        .roadmap-step-content.active .roadmap-step-desc,
+        .roadmap-step-content:hover .roadmap-step-desc {
+            display: block;
+            animation: fadeIn 0.7s;
+        }
+        @media (max-width: 600px) {
+            .roadmap-timeline-line { left: 16px; }
+            .roadmap-step { flex-direction: column; align-items: flex-start; }
+            .roadmap-step-indicator { margin: 0 0 10px 0; }
+        }
+    </style>
+    <script>
+    window.addEventListener('DOMContentLoaded', function() {
+        // Titolo fade-in
+        setTimeout(() => {
+            document.querySelector('.roadmap-title-text').classList.add('visible');
+        }, 200);
+
+        // Step roadmap
+        const roadmapSteps = [
+            {
+                icon: "🌱",
+                title: "Collection Launch",
+                desc: "Launch of the first 100 unique NFTs on OpenSea! The journey begins with an exclusive drop of the first pieces in the collection, kickstarting the community building and the first ownership opportunities. Are you ready to be among the pioneers? Release of the first 100 unique NFTs on OpenSea.",
+            },
+            {
+                icon: "🤝",
+                title: "Community Social & Discord",
+                desc: "Official Discord launch for the community, special events, exclusive rewards for early supporters, and an exciting quiz contest! Stay connected with us on Instagram, X, Discord, and Facebook for all the latest updates on the NFT collection!",
+            },
+            {
+                icon: "🔥",
+                title: "NFT additions",
+                desc: "Expansion of the Nyfurion universe! New NFTs will enrich the collection: female characters, the destroyed city, abandoned streets, and all the elements that shape this world. An evolution that will bring even more depth to the community and the project. Are you ready to explore Nyfurion? 🔥✨",
+            },
+            {
+                icon: "🎬",
+                title: "Roadmap 2.0",
+                desc: "Nyfurion is a growing narrative universe, and the future may bring new forms of storytelling. The lore of Nyfurion continues to expand, opening the door to endless possibilities for evolution.✨",
+            }
+        ];
+
+        // Timeline rendering
+        const timeline = document.getElementById('roadmap-timeline');
+        timeline.innerHTML = `
+            <div class="roadmap-timeline-container">
+                <div class="roadmap-timeline-line"></div>
+                <div id="roadmap-steps-list"></div>
+            </div>
+        `;
+        const stepsList = document.getElementById('roadmap-steps-list');
+        roadmapSteps.forEach((step, idx) => {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = 'roadmap-step';
+            stepDiv.innerHTML = `
+                <div class="roadmap-step-indicator" data-step="${idx}">
+                    <span class="step-icon">${step.icon}</span>
+                </div>
+                <div class="roadmap-step-content">
+                    <span class="roadmap-step-title">${step.title}</span>
+                    <span class="roadmap-step-desc">${step.desc}</span>
+                </div>
+            `;
+            stepsList.appendChild(stepDiv);
+        });
+
+        // Animazione fade-in progressiva degli step
+        const stepEls = Array.from(document.querySelectorAll('.roadmap-step'));
+        stepEls.forEach((el, i) => {
+            setTimeout(() => el.classList.add('visible'), 400 + i * 180);
+        });
+
+        // Interazione: highlight indicator e mostra descrizione
+        stepEls.forEach((el, idx) => {
+            const indicator = el.querySelector('.roadmap-step-indicator');
+            const content = el.querySelector('.roadmap-step-content');
+            indicator.addEventListener('mouseenter', () => {
+                indicator.classList.add('active');
+                content.classList.add('active');
+            });
+            indicator.addEventListener('mouseleave', () => {
+                indicator.classList.remove('active');
+                content.classList.remove('active');
+            });
+            content.addEventListener('mouseenter', () => {
+                indicator.classList.add('active');
+                content.classList.add('active');
+            });
+            content.addEventListener('mouseleave', () => {
+                indicator.classList.remove('active');
+                content.classList.remove('active');
+            });
+            // Click: mostra descrizione e highlight, chiudi altri
+            content.addEventListener('click', () => {
+                stepEls.forEach((other, j) => {
+                    other.querySelector('.roadmap-step-indicator').classList.remove('active');
+                    other.querySelector('.roadmap-step-content').classList.remove('active');
+                });
+                indicator.classList.add('active');
+                content.classList.add('active');
+            });
+        });
+
+        // Attiva il primo step di default
+        setTimeout(() => {
+            const first = stepEls[0];
+            if (first) {
+                first.querySelector('.roadmap-step-indicator').classList.add('active');
+                first.querySelector('.roadmap-step-content').classList.add('active');
+            }
+        }, 900);
+
+        // Sfondo: particelle leggere animate
+        function roadmapParticles() {
+            const canvas = document.getElementById('roadmap-particles-bg');
+            if (!canvas) return;
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            for (let i = 0; i < 38; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: 1.2 + Math.random() * 2.2,
+                    dx: (Math.random() - 0.5) * 0.18,
+                    dy: (Math.random() - 0.5) * 0.18,
+                    a: 0.18 + Math.random() * 0.22
+                });
+            }
+            function draw() {
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                particles.forEach(p => {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+                    ctx.fillStyle = `rgba(27,255,106,${p.a})`;
+                    ctx.shadowColor = "#00eaff";
+                    ctx.shadowBlur = 8;
+                    ctx.fill();
+                    ctx.restore();
+                });
+            }
+            function animate() {
+                particles.forEach(p => {
+                    p.x += p.dx;
+                    p.y += p.dy;
+                    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+                    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+                });
+                draw();
+                requestAnimationFrame(animate);
+            }
+            animate();
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+        setTimeout(roadmapParticles, 200);
+    });
+    </script>
+    <!-- Sezione Contatti Professionale -->
+    <section id="contatti-section" style="
+        position:relative;
+        z-index:6;
+        min-height:100vh;
+        width:100vw;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        background:var(--nyfurion-bg,#181a22);
+        padding:0;
+        margin:0;
+        border:none;
+        box-shadow:none;
+        overflow:hidden;
+    ">
+        <!-- Sfondo animato: onde luminose -->
+        <canvas id="contatti-bg-canvas" style="position:absolute;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;"></canvas>
+        <div style="
+            max-width:600px;
+            width:100vw;
+            min-height:60vh;
+            padding:3em 1.5em 2em 1.5em;
+            text-align:center;
+            margin:0 auto;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            background:transparent;
+            border:none;
+            box-shadow:none;
+            position:relative;
+            z-index:2;
+        ">
+            <div class="contatti-title" style="
+                font-family:'Orbitron','Cinzel',sans-serif;
+                font-size:2.2em;
+                color:#5fffd7;
+                letter-spacing:0.09em;
+                text-shadow:0 0 18px #1bff6a,0 0 24px #00eaff,0 0 8px #faf3d5;
+                margin-bottom:0.7em;
+                filter:drop-shadow(0 0 12px #00eaff) drop-shadow(0 0 18px #1bff6a);
+                opacity:0;
+                transform:translateY(40px);
+                transition:opacity 0.7s,transform 0.7s;
+            ">
+                Contacts
+            </div>
+            <div class="contatti-desc" style="
+                color:#e6e6e6;
+                font-size:1.15em;
+                font-family:'Orbitron',sans-serif;
+                margin-bottom:2em;
+                text-shadow:0 0 8px #00eaff33;
+                opacity:0;
+                transform:translateY(40px);
+                transition:opacity 0.7s,transform 0.7s;
+            ">
+                For collaborations, professional requests or information about the Nyfurion project, fill out the form or use the direct links.
+            </div>
+            <form id="contatti-form" autocomplete="off" action="https://formspree.io/f/xqkrqzqj" method="POST" style="
+                width:100%;
+                max-width:420px;
+                margin:0 auto;
+                background:rgba(24,26,34,0.98);
+                border-radius:18px;
+                box-shadow:0 0 24px #1bff6a33,0 0 48px #00eaff22;
+                padding:2em 1.5em 1.5em 1.5em;
+                display:flex;
+                flex-direction:column;
+                gap:1.2em;
+                border:1.5px solid #5fffd7;
+                opacity:0;
+                transform:translateY(40px);
+                transition:opacity 0.7s,transform 0.7s;
+            ">
+                <input type="text" name="nome" placeholder="Name" required style="
+                    background:#181a22;
+                    border:1.5px solid #1bff6a;
+                    border-radius:8px;
+                    color:#fff;
+                    font-size:1.08em;
+                    padding:0.7em 1em;
+                    outline:none;
+                    transition:border 0.2s, box-shadow 0.2s;
+                    box-shadow:0 0 8px #1bff6a22;
+                " />
+                <input type="email" name="email" placeholder="Email" required style="
+                    background:#181a22;
+                    border:1.5px solid #00eaff;
+                    border-radius:8px;
+                    color:#fff;
+                    font-size:1.08em;
+                    padding:0.7em 1em;
+                    outline:none;
+                    transition:border 0.2s, box-shadow 0.2s;
+                    box-shadow:0 0 8px #00eaff22;
+                " />
+                <textarea name="messaggio" placeholder="Message" rows="4" required style="
+                    background:#181a22;
+                    border:1.5px solid #5fffd7;
+                    border-radius:8px;
+                    color:#fff;
+                    font-size:1.08em;
+                    padding:0.7em 1em;
+                    outline:none;
+                    resize:vertical;
+                    transition:border 0.2s, box-shadow 0.2s;
+                    box-shadow:0 0 8px #5fffd722;
+                "></textarea>
+                <!-- Hidden field for email destination -->
+                <input type="hidden" name="_replyto" value="nyfurion@gmail.com" />
+                <button type="submit" style="
+                    background:linear-gradient(90deg,#1bff6a 0%,#00eaff 100%);
+                    color:#181a22;
+                    font-family:'Orbitron',sans-serif;
+                    font-size:1.13em;
+                    font-weight:bold;
+                    border:none;
+                    border-radius:10px;
+                    padding:0.7em 0;
+                    margin-top:0.5em;
+                    box-shadow:0 0 18px #1bff6a55,0 0 32px #00eaff33;
+                    cursor:pointer;
+                    letter-spacing:0.06em;
+                    transition:background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.18s;
+                ">Send Message</button>
+                <div id="contatti-success" style="display:none;color:#5fffd7;font-weight:bold;margin-top:1em;text-shadow:0 0 8px #1bff6a;">Message sent! Thank you for contacting us.</div>
+            </form>
+            <!-- Custom Instagram/Discord/OpenSea/Email icons below contacts -->
+            <div class="contatti-social-icons" style="margin-top:2.8em;display:flex;gap:2.5em;justify-content:center;align-items:center;">
+                <!-- Instagram icon -->
+                <a href="https://www.instagram.com/nyfurion_club/" target="_blank" title="Instagram" style="display:inline-block;">
+                    <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="4" width="30" height="30" rx="8" stroke="#e1306c" stroke-width="3.2" fill="none"/>
+                        <circle cx="19" cy="19" r="8" stroke="#e1306c" stroke-width="2.2" fill="none"/>
+                        <circle cx="27.2" cy="10.8" r="2.1" fill="#e1306c"/>
+                    </svg>
+                </a>
+                <!-- Discord icon -->
+                <a href="https://discord.com/channels/1369074617150607441/1369074617674629133" target="_blank" title="Discord" style="display:inline-block;">
+                    <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="4" width="30" height="30" rx="8" stroke="#7289da" stroke-width="3.2" fill="none"/>
+                        <ellipse cx="19" cy="22" rx="7" ry="4.5" stroke="#7289da" stroke-width="2.2" fill="none"/>
+                        <circle cx="15.5" cy="20" r="1.2" fill="#7289da"/>
+                        <circle cx="22.5" cy="20" r="1.2" fill="#7289da"/>
+                    </svg>
+                </a>
+                <!-- OpenSea icon -->
+                <a href="https://opensea.io/collection/nyfurion" target="_blank" title="OpenSea" style="display:inline-block;">
+                    <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="4" width="30" height="30" rx="8" stroke="#00eaff" stroke-width="3.2" fill="none"/>
+                        <!-- Stylized OpenSea boat icon -->
+                        <circle cx="19" cy="19" r="11" stroke="#00eaff" stroke-width="2.2" fill="#fff"/>
+                        <path d="M13 23c2.5-2 9.5-2 12 0" stroke="#00eaff" stroke-width="2" fill="none"/>
+                        <path d="M19 13v6l4 2" stroke="#00eaff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="19" cy="25" r="1.2" fill="#00eaff"/>
+                    </svg>
+                </a>
+                <!-- Email icon -->
+                <a href="mailto:nyfurion@gmail.com" title="Email" style="display:inline-block;">
+                    <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="8" width="30" height="22" rx="6" stroke="#5fffd7" stroke-width="3.2" fill="none"/>
+                        <polyline points="7,11 19,23 31,11" stroke="#5fffd7" stroke-width="2.2" fill="none"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+    <style>
+        /* ...existing code... */
+        #contatti-section, #contatti-section > div {
+            background: var(--nyfurion-bg,#181a22) !important;
+        }
+        .contatti-link:hover, .contatti-link:focus {
+            color: #fff !important;
+            text-shadow: 0 0 12px #5fffd7, 0 0 24px #00eaff;
+            outline: none;
+        }
+        #contatti-form input:focus, #contatti-form textarea:focus {
+            border-color: #5fffd7;
+            box-shadow: 0 0 16px #1bff6a, 0 0 32px #00eaff;
+        }
+        #contatti-form button:hover, #contatti-form button:focus {
+            background:linear-gradient(90deg,#00eaff 0%,#1bff6a 100%);
+            color:#fff;
+            box-shadow:0 0 32px #00eaff,0 0 64px #1bff6a;
+            transform:scale(1.04);
+            outline:none;
+        }
+        @media (max-width: 700px) {
+            #contatti-section > div { padding:2em 0.5em 1em 0.5em; }
+            .contatti-title { font-size:1.3em !important; }
+            .contatti-social-icons { gap: 1.2em !important; }
+            .contatti-social-icons svg { width: 28px; height: 28px; }
+        }
+    </style>
+    <script>
+        // ...existing code...
+        window.addEventListener('DOMContentLoaded', function() {
+            // ...existing code...
+
+            // Animazione fade-in progressiva per la sezione contatti
+            setTimeout(() => {
+                const t = document.querySelector('.contatti-title');
+                const d = document.querySelector('.contatti-desc');
+                const f = document.getElementById('contatti-form');
+                const l = document.querySelector('.contatti-links');
+                if(t) { t.style.opacity = 1; t.style.transform = 'translateY(0)'; }
+                if(d) { setTimeout(()=>{d.style.opacity=1;d.style.transform='translateY(0)';},200)}
+                if(f) { setTimeout(()=>{f.style.opacity=1;f.style.transform='translateY(0)';},400)}
+                if(l) { setTimeout(()=>{l.style.opacity=1;l.style.transform='translateY(0)';},600)}
+            }, 400);
+
+            // Gestione invio form: mostra messaggio di successo dopo submit (Formspree)
+            const form = document.getElementById('contatti-form');
+            if(form) {
+                form.addEventListener('submit', function(e){
+                    // Lascia che il form venga inviato normalmente (Formspree gestisce la mail)
+                    setTimeout(()=>{
+                        document.getElementById('contatti-success').style.display = 'block';
+                        setTimeout(()=>{document.getElementById('contatti-success').style.display = 'none';}, 3500);
+                    }, 900);
+                });
+            }
+
+            // Sfondo animato: onde luminose
+            function contattiBgWaves() {
+                const canvas = document.getElementById('contatti-bg-canvas');
+                if (!canvas) return;
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                const ctx = canvas.getContext('2d');
+                let t = 0;
+                function draw() {
+                    ctx.clearRect(0,0,canvas.width,canvas.height);
+                    for(let i=0;i<3;i++){
+                        ctx.save();
+                        ctx.globalAlpha = 0.16 + i*0.07;
+                        ctx.beginPath();
+                        for(let x=0;x<=canvas.width;x+=4){
+                            const y = canvas.height/2 + Math.sin((x/180)*Math.PI + t*0.7 + i)*32 + Math.cos((x/90)*Math.PI + t*0.5 + i)*18 + i*24;
+                            ctx.lineTo(x,y);
+                        }
+                        ctx.lineTo(canvas.width,canvas.height);
+                        ctx.lineTo(0,canvas.height);
+                        ctx.closePath();
+                        ctx.fillStyle = i===0 ? "#1bff6a" : (i===1 ? "#00eaff" : "#5fffd7");
+                        ctx.shadowColor = ctx.fillStyle;
+                        ctx.shadowBlur = 24 + i*12;
+                        ctx.fill();
+                        ctx.restore();
+                    }
+                }
+                function animate() {
+                    t += 0.018;
+                    draw();
+                    requestAnimationFrame(animate);
+                }
+                animate();
+                window.addEventListener('resize', () => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                });
+            }
+            setTimeout(contattiBgWaves, 400);
+        });
+    </script>
+    <script>
+        // RIMUOVI TUTTO IL BLOCCO MULTILINGUA E LASCIA SOLO ITALIANO
+        // --- INIZIO BLOCCO UNICO ITALIANO ---
+        // Nessuna traduzione automatica, tutto statico in italiano
+        // --- FINE BLOCCO UNICO ITALIANO ---
+    </script>
+</body>
+</html>
