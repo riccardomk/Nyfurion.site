@@ -254,154 +254,272 @@
                 font-size: 1.05em !important;
                 padding: 4px 8px;
             }
-            /* Migliora logo su mobile */
-            #logo-link, #logo-link img {
-                width: 38px !important;
-                height: 38px !important;
-            }
-            .navbar-home-circle {
-                width: 38px !important;
-                height: 38px !important;
-                margin-left: 10px !important;
-                margin-top: 10px !important;
-            }
         }
-        @media (max-width: 500px) {
-            /* Riduci padding e font nelle sezioni principali */
-            #main-section,
-            #nuova-sezione,
-            #seconda-sezione,
-            #roadmap-section,
-            #contatti-section {
-                padding: 0 !important;
-            }
-            #nuova-sezione > div,
-            #seconda-sezione > div,
-            #roadmap-section > div,
-            #contatti-section > div {
-                padding: 1.2em 0.3em !important;
-            }
-            .nyfurion-glow-title,
-            .contatti-title,
-            .roadmap-title-text {
-                font-size: 1.2em !important;
-            }
-            .roadmap-title-text {
-                font-size: 1.3em !important;
-            }
-            .contatti-desc {
-                font-size: 0.98em !important;
-            }
-        }
-        /* Griglia NFT responsive */
-        @media (max-width: 900px) {
-            #nft-collection-grid {
-                grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)) !important;
-                gap: 12px !important;
-                max-width: 98vw !important;
-            }
-            .nft-box-artistico {
-                width: 90px !important;
-                height: 110px !important;
-            }
-            .nft-box-artistico > div:first-child {
-                width: 70px !important;
-                height: 70px !important;
-            }
-        }
-        @media (max-width: 600px) {
-            #nft-collection-grid {
-                grid-template-columns: repeat(3, 1fr) !important;
-                gap: 8px !important;
-            }
-            .nft-box-artistico {
-                width: 80px !important;
-                height: 95px !important;
-                font-size: 0.95em !important;
-            }
-            .nft-box-artistico > div:first-child {
-                width: 56px !important;
-                height: 56px !important;
-            }
-        }
-        @media (max-width: 400px) {
-            #nft-collection-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-            }
-            .nft-box-artistico {
-                width: 65px !important;
-                height: 80px !important;
-                font-size: 0.85em !important;
-            }
-            .nft-box-artistico > div:first-child {
-                width: 40px !important;
-                height: 40px !important;
-            }
-        }
-        /* Modal NFT responsive */
-        @media (max-width: 700px) {
-            #nft-overview-img {
-                max-width: 98vw !important;
-                max-height: 60vh !important;
-            }
-            #nft-overview-modal .nft-overview-close {
-                top: 12px !important;
-                right: 18px !important;
-                font-size: 2em !important;
-            }
-            #nft-overview-text {
-                font-size: 1.2em !important;
-            }
-        }
-        /* Roadmap step responsive */
-        @media (max-width: 600px) {
-            .roadmap-step-content {
-                font-size: 0.98em !important;
-                padding: 0.7em 0.6em !important;
-            }
-            .roadmap-step-title {
-                font-size: 1em !important;
-            }
-        }
-        /* Form contatti responsive */
-        @media (max-width: 600px) {
-            #contatti-form {
-                padding: 1em 0.5em 0.7em 0.5em !important;
-                max-width: 98vw !important;
-            }
-            #contatti-form input,
-            #contatti-form textarea {
-                font-size: 0.98em !important;
-                padding: 0.5em 0.7em !important;
-            }
-            #contatti-form button {
-                font-size: 1em !important;
-                padding: 0.5em 0 !important;
-            }
-        }
-        /* Social icons più piccole su mobile */
-        @media (max-width: 600px) {
-            .contatti-social-icons svg {
-                width: 24px !important;
-                height: 24px !important;
-            }
-            .contatti-social-icons {
-                gap: 1em !important;
-            }
-        }
-        /* Riduci margini e padding generali su mobile */
-        @media (max-width: 500px) {
-            body, html {
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-            section {
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-        }
+        /* ...existing code... */
     </style>
-    <!-- ...existing code... -->
+    <script>
+        // ...existing code...
+        window.addEventListener('DOMContentLoaded', function() {
+            // ...existing code...
+
+            // Scroll morbido per Series Nyfurion
+            var seriesLink = document.getElementById('series-link');
+            if(seriesLink) {
+                seriesLink.addEventListener('click', function(e) {
+                    var target = document.getElementById('nuova-sezione');
+                    if(target) {
+                        e.preventDefault();
+                        target.scrollIntoView({behavior: 'smooth'});
+                    }
+                });
+            }
+
+            // Scroll morbido per Contatti
+            var contattiLink = document.getElementById('contatti-link');
+            if(contattiLink) {
+                contattiLink.addEventListener('click', function(e) {
+                    var target = document.getElementById('contatti-section');
+                    if(target) {
+                        e.preventDefault();
+                        target.scrollIntoView({behavior: 'smooth'});
+                    }
+                });
+            }
+            // ...existing code...
+        });
+        // ...existing code...
+    </script>
+    <!-- Hero section centrale -->
+    <section id="main-section" style="position:relative;z-index:2;min-height:100vh;width:100vw;padding:0;margin:0;overflow:hidden;">
+        <img src="https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiaup4omd7tcnlgjkxamvd74352ii26pzc5erawv3l5q3ouykr76za"
+             alt="Nyfurion Main"
+             style="position:absolute;top:0;left:0;width:100vw;height:100vh;object-fit:cover;display:block;border:none;margin:0;padding:0;z-index:1;">
+        <!-- Banner community in basso -->
+        <!-- COOKIE BANNER RIMOSSO -->
+    </section>
+    <!-- Nuova sezione che si vede scrollando -->
+    <section id="nuova-sezione" style="
+        position:relative;
+        z-index:3;
+        min-height:100vh;
+        width:100vw;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        background:#181a22;
+        padding:0;
+        margin:0;
+        border:none;
+        box-shadow:none;
+    ">
+        <div style="
+            max-width:900px;
+            width:100vw;
+            min-height:100vh;
+            padding:3em 1.5em;
+            text-align:left;
+            margin:0;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            background:#181a22;
+            border:none;
+            box-shadow:none;
+        ">
+            <div style="color:#1bff6a; font-family:'Orbitron',sans-serif; font-size:2em; text-shadow:0 0 18px #1bff6a,0 0 32px #1bff6a; margin-bottom:0.2em; text-align:center;">
+                NYFURION
+            </div>
+            <div style="color:#1bff6a; font-family:'Orbitron',sans-serif; font-size:1.25em; text-shadow:0 0 12px #1bff6a; margin-bottom:1.1em; text-align:center;">
+                The War of Balance and the Fate of the Guardians
+            </div>
+            <div style="color:#fff; font-size:1.13em; line-height:1.7; font-family:sans-serif; max-width:800px; margin:0 auto;">
+                <div id="typewriter-text" style="white-space:pre-line;"></div>
+                <noscript>
+                    <!-- ...testo statico come fallback... -->
+                </noscript>
+            </div>
+        </div>
+    </section>
+    <style>
+        /* ...existing code... */
+        #nuova-sezione,
+        #nuova-sezione > div {
+            background: #181a22 !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        /* ...existing code... */
+    </style>
+    <style>
+        /* ...existing code... */
+        @keyframes arrowDownAnim {
+            0% { transform: translateY(0);}
+            100% { transform: translateY(18px);}
+        }
+        /* ...existing code... */
+    </style>
+    <script>
+        // ...existing code...
+        window.addEventListener('DOMContentLoaded', function() {
+            // ...existing code...
+
+            // Mostra la nuova sezione quando si scrolla verso il basso
+            var nuovaSezione = document.getElementById('nuova-sezione');
+            window.addEventListener('scroll', function() {
+                var scrollY = window.scrollY || window.pageYOffset;
+                var trigger = window.innerHeight * 0.5;
+                if (scrollY > trigger) {
+                    nuovaSezione.classList.add('visible');
+                } else {
+                    nuovaSezione.classList.remove('visible');
+                }
+            });
+
+            // Scroll morbido per Series Nyfurion
+            var seriesLink = document.getElementById('series-link');
+            if(seriesLink) {
+                seriesLink.addEventListener('click', function(e) {
+                    var target = document.getElementById('nuova-sezione');
+                    if(target) {
+                        e.preventDefault();
+                        target.scrollIntoView({behavior: 'smooth'});
+                    }
+                });
+            }
+
+            // Scroll morbido per Contatti
+            var contattiLink = document.getElementById('contatti-link');
+            if(contattiLink) {
+                contattiLink.addEventListener('click', function(e) {
+                    var target = document.getElementById('contatti-section');
+                    if(target) {
+                        e.preventDefault();
+                        target.scrollIntoView({behavior: 'smooth'});
+                    }
+                });
+            }
+
+            // Effetto macchina da scrivere per il racconto
+            var typewriterText = document.getElementById('typewriter-text');
+            if(typewriterText) {
+                var storyHTML = `
+<span style="color:#1bff6a; font-weight:bold;">- Nyfurion</span>, the realm suspended between light and darkness, was not always a battlefield. Once, under the guidance of the King of Nyfurion, it thrived in harmony no wars, no divisions. The sovereign, gifted with unparalleled wisdom, knew he could not rule forever. He had to choose an heir. He was the father of three children, each with a different vision of the world. When the day of succession arrived, he chose the eldest the one who demonstrated discipline, justice, and inner strength: the Legendary Supreme. But this decision did not come without consequences.
+
+<span style="color:#1bff6a; font-weight:bold;">- The Rise of Dark Power</span>
+The second born, the most ambitious, the most tormented, had long awaited the day he would inherit power. When he was excluded, he was overcome with rage. A void grew within him, a deep thirst for revenge. That day, the Dark Power of Evil was born, the one who would defy order and shatter balance. He refused to accept his father’s decision. He gathered followers among those who did not want to be ruled, those who saw the Legendary Supreme as a tyrant disguised as a savior. Thus, the Baby Rebels emerged young warriors who despise imposed order and reject civilization. To them, chaos is freedom. But in this war between good and evil, there is one figure watching from the shadows: The Queen, the third descendant, who has never fought but holds in her hands the last spark of primordial power. She takes no side, but if Nyfurion falls, she will decide the kingdom’s fate.
+
+<span style="color:#1bff6a; font-weight:bold;">- The Creation of the Guardians</span>
+As conflict spread, the Legendary Supreme realized he could not face it alone. Armies were not enough. Courage was not enough. The heart of Nyfurion had to be sealed. At the center of the realm existed a forbidden gateway: the Unique Portal. No one knew what lay beyond it, but it was said to contain absolute power—something capable of rewriting reality itself. If Dark Power reached it, Nyfurion would fall. That was when The Guardians of the Portal were chosen. They were not ordinary warriors. Each had followed a precise path, honed their skills, and sacrificed their existence to protect the gateway.
+The Eternal Guardian, the only one who has seen the Portal open and close. He survived and still awaits the day when it will be needed again.
+
+<span style="color:#1bff6a; font-weight:bold;">- The Shadow Predators and the Silent War</span>
+As war intensifies, another danger grows in the streets of Nyfurion. The Shadow Predators are infiltrators with no faction. They serve neither good nor evil but steal everything of value from the homes of neutrals, weakening and isolating them. They do not wish to rule Nyfurion. They only seek to profit from its downfall. No one sees them. No one stops them.
+
+<span style="color:#1bff6a; font-weight:bold;">- The Fate of Nyfurion</span>
+Now, the realm teeters on the brink of ruin. The Legendary Supreme fights to protect order. Dark Power advances, dragging the Rebels with him. The Guardians maintain the seal on the Portal. The Baby Warriors of Peace struggle to preserve civilization, guided by the Masters of Discipline. But all this may not be enough. Because the Queen has yet to choose. If she intervenes, Nyfurion may find a new balance. If she remains in the shadows, conflict will be eternal. But nothing in Nyfurion is truly safe anymore.
+
+<span style="color:#1bff6a; font-size:0.95em; font-family:'Orbitron',sans-serif; text-shadow:0 0 10px #1bff6a;">Thank you for your attention
+Thank you for taking the time to check out the NFT collection. I truly appreciate your interest and support. Stay tuned for upcoming updates!</span>
+
+<span style="font-size:0.7em; color:#fff; margin-top:2em; text-shadow:0 0 8px #fff, 0 0 16px #fff;">
+Copyright © [Year] Riccardo Duca All rights reserved.
+This PDF file was created by Riccardo Duca. Unauthorized reproduction, distribution, or modification of the content is strictly prohibited. The file may be downloaded and shared for personal use only. Any commercial use, adaptation, or redistribution without explicit written permission from the copyright holder is forbidden.
+</span>
+`;
+
+                // Funzione macchina da scrivere che gestisce anche i tag HTML
+                function typeWriterEffect(element, html, speed) {
+                    let i = 0;
+                    let isTag = false;
+                    let text = '';
+                    function type() {
+                        if (i < html.length) {
+                            let char = html[i];
+                            text += char;
+                            element.innerHTML = text + (isTag ? '' : '<span style="opacity:0.5;">|</span>');
+                            if (char === '<') isTag = true;
+                            if (char === '>') isTag = false;
+                            i++;
+                            setTimeout(type, isTag ? 0 : speed);
+                        } else {
+                            element.innerHTML = text; // Rimuovi cursore finale
+                        }
+                    }
+                    type();
+                }
+                typeWriterEffect(typewriterText, storyHTML, 0.0001); // super veloce, praticamente istantaneo
+            }
+        });
+        // ...existing code...
+    </script>
+    <!-- Banner cookies Instagram & Discord: mostra SEMPRE all'apertura -->
+    <!-- COOKIE BANNER RIMOSSO -->
+    <!-- Banner per la pagina Story: mostra SOLO la prima volta -->
+    <div id="story-bar" style="display:none; position:fixed; top:80px; left:50%; transform:translateX(-50%); min-width:260px; max-width:420px; background:rgba(20,20,20,0.98); color:#fff; border-radius:14px; box-shadow:0 4px 24px #000a; padding:0.7em 1.5em; z-index:9999; font-family:sans-serif; text-align:center; font-size:1.08em; cursor:pointer;">
+        <span style="font-weight:bold; color:#ffe87c;">Vai alla pagina Story</span>
+    </div>
+    <script>
+        // ...existing code...
+        // Banner cookies Instagram & Discord: mostra SEMPRE all'apertura
+        // SCRIPT COOKIE BANNER RIMOSSO
+    </script>
+    <!-- Seconda sezione scroll down -->
+    <section id="seconda-sezione" style="
+        position:relative;
+        z-index:4;
+        min-height:100vh;
+        width:100vw;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        background:var(--nyfurion-bg,#181a22);
+        padding:0;
+        margin:0;
+        border:none;
+        box-shadow:none;
+    ">
+        <div style="
+            max-width:1200px;
+            width:100vw;
+            min-height:100vh;
+            padding:3em 1.5em;
+            text-align:left;
+            margin:0;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            background:transparent;
+            border:none;
+            box-shadow:none;
+        ">
+            <div style="color:#09ee1c; font-family:'Orbitron',sans-serif; font-size:2.2em; text-shadow:0 0 18px #1bff6a,0 0 32px #1bff6a; margin-bottom:1.5em; text-align:center;"
+                 class="nyfurion-glow-title">
+                Nyfurion NFT Collection
+            </div>
+            <div style="color:#1bff6a; font-family:'Orbitron',sans-serif; font-size:1.25em; text-shadow:0 0 12px #1bff6a; margin-bottom:1.1em; text-align:center;">
+                
+            </div>
+            <!-- RIMOSSO: <div id="typewriter-text-2" style="display:none;"></div> -->
+            <noscript>
+                <!-- ...existing code... -->
+            </noscript>
+            <div id="nft-collection-grid" style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+                gap: 18px;
+                width: 100%;
+                max-width: 900px;
+                margin: 3em auto 0 auto;
+                justify-items: center;
+            ">
+                <!-- ...existing code... -->
+            </div>
+        </div>
+    </section>
     <script>
         window.addEventListener('DOMContentLoaded', function() {
             // ...existing code...
@@ -777,7 +895,7 @@
         @media (max-width: 700px) {
             #nft-overview-img {
                 max-width: 98vw;
-                max-height: 60vh;
+                max-height: 70vh;
             }
             #nft-overview-modal .nft-overview-close {
                 top: 12px;
