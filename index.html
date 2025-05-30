@@ -403,6 +403,36 @@
             #typewriter-text {
                 font-size: 0.98em !important;
             }
+            /* Griglia NFT mobile: 5 colonne, box piccoli e centrati */
+            #nft-collection-grid {
+                grid-template-columns: repeat(5, 1fr) !important;
+                gap: 10px !important;
+                max-width: 98vw !important;
+                margin: 2em auto 0 auto !important;
+                justify-items: center !important;
+            }
+            .nft-box-artistico {
+                width: 60px !important;
+                height: 78px !important;
+                min-width: 0 !important;
+                min-height: 0 !important;
+                font-size: 0.78em !important;
+                border-radius: 10px !important;
+                margin-bottom: 6px !important;
+                margin-top: 6px !important;
+            }
+            .nft-box-artistico > div:first-child {
+                width: 44px !important;
+                height: 44px !important;
+                border-radius: 7px !important;
+                margin-top: 6px !important;
+                margin-bottom: 4px !important;
+            }
+            .nft-box-artistico > div:last-child {
+                font-size: 0.82em !important;
+                border-radius: 0 0 8px 8px !important;
+                padding: 0.18em 0 0.12em 0 !important;
+            }
         }
         /* ...existing code... */
     </style>
@@ -1006,6 +1036,7 @@ This PDF file was created by Riccardo Duca. Unauthorized reproduction, distribut
             width: 100vw;
             height: 100vh;
             background: rgba(10, 20, 30, 0.97);
+           
             align-items: center;
             justify-content: center;
             transition: opacity 0.22s;
