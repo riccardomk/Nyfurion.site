@@ -11,22 +11,26 @@
         html, body {
             margin: 0;
             padding: 0;
-            width: 100vw;
+            width: 100%;
+            max-width: 100vw;
             min-height: 100vh;
             height: auto;
-            /* background: #000; */
-            background: var(--nyfurion-bg, #181a22); /* Uniforma il colore di background */
+            background: var(--nyfurion-bg, #181a22);
             border: none;
             box-shadow: none;
+            overflow-x: hidden !important;
         }
         body {
-            width: 100vw;
+            width: 100%;
+            max-width: 100vw;
             min-height: 100vh;
             height: auto;
-            overflow-x: hidden;
+            overflow-x: hidden !important;
             overflow-y: auto;
-            /* background: #000; */
-            background: var(--nyfurion-bg, #181a22); /* Uniforma il colore di background */
+            background: var(--nyfurion-bg, #181a22);
+        }
+        *, *::before, *::after {
+            box-sizing: border-box;
         }
         .bg-fullscreen {
             position: fixed;
@@ -159,6 +163,19 @@
     <style>
         /* ...existing code... */
         @media (max-width: 700px) {
+            html, body {
+                width: 100% !important;
+                max-width: 100vw !important;
+                overflow-x: hidden !important;
+            }
+            #navbar-hamburger {
+                right: 22px !important;
+            }
+            #navbar-mobile-menu {
+                right: 0 !important;
+                width: 100vw !important;
+                max-width: 320px !important;
+            }
             /* Logo più piccolo su mobile */
             #logo-fixed {
                 top: 10px !important;
@@ -210,26 +227,72 @@
         // ...existing code...
         window.addEventListener('DOMContentLoaded', function() {
             // ...existing code...
-            // Hamburger menu mobile
+            // Hamburger menu mobile con animazione slide da destra e basso
             var hamburger = document.getElementById('navbar-hamburger');
             var mobileMenu = document.getElementById('navbar-mobile-menu');
             var closeBtn = document.getElementById('navbar-mobile-close');
-            if (hamburger && mobileMenu && closeBtn) {
-                hamburger.addEventListener('click', function() {
-                    mobileMenu.classList.add('active');
-                    document.body.classList.add('menu-open');
-                });
-                closeBtn.addEventListener('click', function() {
+            var mobileLinks = mobileMenu ? mobileMenu.querySelectorAll('.navbar-mobile-link') : [];
+
+            // Inizializza posizione menu mobile (fuori schermo)
+            function resetMobileMenu() {
+                if (mobileMenu) {
                     mobileMenu.classList.remove('active');
-                    document.body.classList.remove('menu-open');
+                    mobileMenu.style.transform = 'translate(60px, 60px)';
+                    mobileMenu.style.opacity = '0';
+                }
+                if (mobileLinks) {
+                    mobileLinks.forEach(function(link) {
+                        link.style.opacity = '0';
+                        link.style.transform = 'translateY(20px)';
+                    });
+                }
+                document.body.classList.remove('menu-open');
+            }
+            resetMobileMenu();
+
+            if (hamburger && mobileMenu && closeBtn) {
+                hamburger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    mobileMenu.classList.add('active');
+                    mobileMenu.style.transition = 'transform 0.32s cubic-bezier(.4,1.6,.4,1), opacity 0.22s';
+                    mobileMenu.style.transform = 'translate(0, 0)';
+                    mobileMenu.style.opacity = '1';
+                    document.body.classList.add('menu-open');
+                    // Animazione comparsa link
+                    setTimeout(function() {
+                        mobileLinks.forEach(function(link, i) {
+                            setTimeout(function() {
+                                link.style.opacity = '1';
+                                link.style.transform = 'translateY(0)';
+                            }, 80 * i);
+                        });
+                    }, 60);
+                });
+                closeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    resetMobileMenu();
                 });
                 // Chiudi menu al click su link
-                var mobileLinks = mobileMenu.querySelectorAll('.navbar-mobile-link');
                 mobileLinks.forEach(function(link) {
-                    link.addEventListener('click', function() {
-                        mobileMenu.classList.remove('active');
-                        document.body.classList.remove('menu-open');
+                    link.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        resetMobileMenu();
                     });
+                });
+                // Chiudi menu cliccando fuori dal menu
+                document.addEventListener('click', function(e) {
+                    if (
+                        mobileMenu.classList.contains('active') &&
+                        !mobileMenu.contains(e.target) &&
+                        e.target !== hamburger &&
+                        !hamburger.contains(e.target)
+                    ) {
+                        resetMobileMenu();
+                    }
+                });
+                // Previeni chiusura immediata se si clicca sul menu stesso
+                mobileMenu.addEventListener('click', function(e) {
+                    e.stopPropagation();
                 });
             }
             // ...existing code...
@@ -976,6 +1039,7 @@ This PDF file was created by Riccardo Duca. Unauthorized reproduction, distribut
             transition: color 0.2s;
         }
         #nft-overview-modal .nft-overview-close:hover {
+
             color: #ffe87c;
         }
         @media (max-width: 700px) {
