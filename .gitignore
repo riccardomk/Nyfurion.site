@@ -1,0 +1,24 @@
+# Ignora la cartella dei log
+logs/
+# Ignora le dipendenze Node.js
+node_modules/
+# Ignora file temporanei di sistema/editor
+.DS_Store
+Thumbs.db
+*.log
+# Ignora backup temporanei di editor
+*.swp
+*.swo
+*.tmp
+# Ignora file di ambiente (se presenti)
+.env
+.env.local
+# Ignora output di build (se usi strumenti di build)
+dist/
+build/
+# ...puoi aggiungere altre cartelle temporanee se ne usi...
+
+# Lascia fuori dal .gitignore (quindi vengono tracciati):
+# - Tutti i file del sito (HTML, CSS, JS, immagini, ecc.)
+# - Il backend (tranne node_modules e logs)
+# - File di configurazione (package.json, server.js, ecc.)

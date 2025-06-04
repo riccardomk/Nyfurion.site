@@ -5,8 +5,8 @@ const cors = require('cors');
 const app = express();
 const PORT = 3001;
 
-// Cartella log protetta
-const LOG_DIR = path.join(__dirname, 'logs');
+// Cartella log protetta nella root del progetto
+const LOG_DIR = path.join(__dirname, '..', 'logs');
 const LOG_FILE = path.join(LOG_DIR, 'consensi-log.json');
 
 // Crea la cartella log se non esiste
