@@ -157,380 +157,55 @@
                  style="width:44px;height:44px;border-radius:50%;object-fit:cover;display:block;transition:transform 0.22s,box-shadow 0.22s;">
         </a>
     </div>
-    <!-- Bottone hamburger mobile -->
-    <button id="navbar-hamburger" aria-label="Apri menu" style="display:none;position:fixed;top:18px;right:22px;z-index:200;background:none;border:none;padding:8px;cursor:pointer;">
-        <span style="display:block;width:28px;height:4px;background:#bafff7;border-radius:2px;margin-bottom:5px;"></span>
-        <span style="display:block;width:28px;height:4px;background:#bafff7;border-radius:2px;margin-bottom:5px;"></span>
-        <span style="display:block;width:28px;height:4px;background:#bafff7;border-radius:2px;"></span>
-    </button>
-    <!-- Menu mobile a comparsa -->
-    <div id="navbar-mobile-menu" style="display:none;position:fixed;top:0;right:0;width:100vw;max-width:270px;height:100vh;background:rgba(24,26,34,0.98);z-index:300;box-shadow:-2px 0 24px #1bff6a22;flex-direction:column;align-items:flex-end;padding:0;">
-        <button id="navbar-mobile-close" aria-label="Chiudi menu" style="background:none;border:none;color:#bafff7;font-size:2.2em;padding:18px 22px 0 0;cursor:pointer;align-self:flex-end;">&times;</button>
-        <nav style="width:100%;display:flex;flex-direction:column;align-items:flex-end;padding:2em 2em 0 0;gap:1.5em;">
-            <a href="#nuova-sezione" class="navbar-mobile-link" style="font-family:'Cinzel',serif;font-size:1.25em;color:#bafff7;text-shadow:0 0 16px #5fffd7,0 0 32px #00eaff;font-weight:bold;letter-spacing:0.04em;text-decoration:none;padding:8px 0;">Series Nyfurion</a>
-            <a href="#contatti-section" class="navbar-mobile-link" style="font-family:'Cinzel',serif;font-size:1.25em;color:#bafff7;text-shadow:0 0 16px #5fffd7,0 0 32px #00eaff;font-weight:bold;letter-spacing:0.04em;text-decoration:none;padding:8px 0;">Contacts</a>
-        </nav>
+   
+    <!-- Logo interattivo a sinistra in alto, VERSIONE GRANDE SOLO PER SCHERMI GRANDI -->
+    <div id="logo-large" style="
+        position:fixed;
+        top:20px;
+        left:20px;
+        z-index:100;
+        display:none;
+        align-items:center;
+        transition:transform 0.22s;
+    ">
+        <a href="#main-section" id="logo-link-large"
+           style="
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            width:80px;
+            height:80px;
+            border-radius:50%;
+            box-shadow:0 0 24px #39ff14;
+            background:transparent;
+            border:none;
+            cursor:pointer;
+            outline:none;
+        ">
+            <img src="https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafkreica2ztb5hkeyfccacirac4dmc7sqbiinddynxkp5v4db5ieclerai"
+                 alt="Logo Nyfurion"
+                 id="logo-img-large"
+                 style="
+                    width:64px;
+                    height:64px;
+                    border-radius:50%;
+                    object-fit:cover;
+                    display:block;
+                    transition:transform 0.22s;
+                 ">
+        </a>
     </div>
     <style>
         /* ...existing code... */
-        @media (max-width: 700px) {
-            html, body {
-                width: 100% !important;
-                max-width: 100vw !important;
-                overflow-x: hidden !important;
-            }
-            #navbar-hamburger {
-                right: 22px !important;
-            }
-            #navbar-mobile-menu {
-                right: 0 !important;
-                max-width: 270px !important; /* ridotto da 320px */
-                width: 100vw !important;
-                height: 100vh !important;
-            }
-            /* Logo più piccolo su mobile */
+        @media (min-width: 701px) {
             #logo-fixed {
-                top: 10px !important;
-                left: 10px !important;
-            }
-            #logo-link {
-                width: 38px !important;
-                height: 38px !important;
-            }
-            #logo-img {
-                width: 32px !important;
-                height: 32px !important;
-            }
-            /* Nascondi la navbar desktop e mostra hamburger */
-            #navbar-links-right {
                 display: none !important;
             }
-            #navbar-hamburger {
-                display: block !important;
-            }
-            /* Menu mobile overlay */
-            #navbar-mobile-menu {
-                display: none;
-            }
-            #navbar-mobile-menu.active {
+            #logo-large {
                 display: flex !important;
             }
-            .navbar-mobile-link {
-                color: #bafff7 !important;
-                font-size: 1.18em !important;
-                padding: 10px 0 !important;
-                border-radius: 8px !important;
-                transition: background 0.18s, color 0.18s;
-            }
-            .navbar-mobile-link:active,
-            .navbar-mobile-link:focus,
-            .navbar-mobile-link:hover {
-                background: #232a3a !important;
-                color: #ffe87c !important;
-            }
-            /* Blocca scroll quando menu mobile aperto */
-            body.menu-open {
-                overflow: hidden !important;
-            }
         }
-        /* ...existing code... */
     </style>
-    <script>
-        // ...existing code...
-        window.addEventListener('DOMContentLoaded', function() {
-            // ...existing code...
-            // Hamburger menu mobile con animazione slide da destra e basso
-            var hamburger = document.getElementById('navbar-hamburger');
-            var mobileMenu = document.getElementById('navbar-mobile-menu');
-            var closeBtn = document.getElementById('navbar-mobile-close');
-            var mobileLinks = mobileMenu ? mobileMenu.querySelectorAll('.navbar-mobile-link') : [];
-
-            // Inizializza posizione menu mobile (fuori schermo)
-            function resetMobileMenu() {
-                if (mobileMenu) {
-                    mobileMenu.classList.remove('active');
-                    mobileMenu.style.transform = 'translate(60px, 60px)';
-                    mobileMenu.style.opacity = '0';
-                }
-                if (mobileLinks) {
-                    mobileLinks.forEach(function(link) {
-                        link.style.opacity = '0';
-                        link.style.transform = 'translateY(20px)';
-                    });
-                }
-                document.body.classList.remove('menu-open');
-            }
-            resetMobileMenu();
-
-            if (hamburger && mobileMenu && closeBtn) {
-                hamburger.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    mobileMenu.classList.add('active');
-                    mobileMenu.style.transition = 'transform 0.32s cubic-bezier(.4,1.6,.4,1), opacity 0.22s';
-                    mobileMenu.style.transform = 'translate(0, 0)';
-                    mobileMenu.style.opacity = '1';
-                    document.body.classList.add('menu-open');
-                    // Animazione comparsa link
-                    setTimeout(function() {
-                        mobileLinks.forEach(function(link, i) {
-                            setTimeout(function() {
-                                link.style.opacity = '1';
-                                link.style.transform = 'translateY(0)';
-                            }, 80 * i);
-                        });
-                    }, 60);
-                });
-                closeBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    resetMobileMenu();
-                });
-                // Chiudi menu al click su link
-                mobileLinks.forEach(function(link) {
-                    link.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        resetMobileMenu();
-                    });
-                });
-                // Chiudi menu cliccando fuori dal menu
-                document.addEventListener('click', function(e) {
-                    if (
-                        mobileMenu.classList.contains('active') &&
-                        !mobileMenu.contains(e.target) &&
-                        e.target !== hamburger &&
-                        !hamburger.contains(e.target)
-                    ) {
-                        resetMobileMenu();
-                    }
-                });
-                // Previeni chiusura immediata se si clicca sul menu stesso
-                mobileMenu.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                });
-            }
-            // ...existing code...
-        });
-        // ...existing code...
-    </script>
-    <!-- Link interattivi a destra -->
-    <div id="navbar-links-right" style="position:fixed;top:32px;right:38px;z-index:100;display:flex;gap:38px;align-items:center;">
-        <a href="#nuova-sezione" id="series-link"
-           class="navbar-link-anim"
-           style="font-family:'Cinzel',serif;font-size:1.32em;color:#bafff7;text-shadow:0 0 16px #5fffd7,0 0 32px #00eaff;font-weight:bold;letter-spacing:0.04em;text-decoration:none;position:relative;outline:none;background:none;padding:4px 12px;border-radius:8px;transition:color 0.18s,text-shadow 0.18s;">
-            Series Nyfurion
-            <span class="navbar-link-bar"></span>
-        </a>
-        <a href="#contatti-section" id="contatti-link"
-           class="navbar-link-anim"
-           style="font-family:'Cinzel',serif;font-size:1.32em;color:#bafff7;text-shadow:0 0 16px #5fffd7,0 0 32px #00eaff;font-weight:bold;letter-spacing:0.04em;text-decoration:none;position:relative;outline:none;background:none;padding:4px 12px;border-radius:8px;transition:color 0.18s,text-shadow 0.18s;">
-            Contacts
-            <span class="navbar-link-bar"></span>
-        </a>
-    </div>
-    <style>
-        /* ...existing code... */
-        .navbar-link-anim {
-            position: relative;
-            overflow: visible;
-            cursor: pointer;
-            transition: color 0.18s, text-shadow 0.18s;
-        }
-        .navbar-link-anim .navbar-link-bar {
-            display: block;
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            height: 3px;
-            width: 0;
-            background: linear-gradient(90deg,#39ff14 0%,#00eaff 100%);
-            border-radius: 2px;
-            box-shadow: 0 0 8px #39ff14, 0 0 18px #00eaff;
-            transition: width 0.33s cubic-bezier(.4,1.6,.4,1), background 0.22s;
-            z-index: 2;
-        }
-        .navbar-link-anim:hover,
-        .navbar-link-anim:focus {
-            color: #ffe87c !important;
-            text-shadow: 0 0 24px #ffe87c, 0 0 48px #39ff14;
-            outline: none;
-        }
-        .navbar-link-anim:hover .navbar-link-bar,
-        .navbar-link-anim:focus .navbar-link-bar {
-            width: 100%;
-            background: linear-gradient(90deg,#ffe87c 0%,#00eaff 100%);
-        }
-        @media (max-width: 700px) {
-            /* Navbar mobile compatta */
-            #navbar-links-right {
-                top: 10px !important;
-                right: 0 !important;
-                left: 0 !important;
-                width: 100vw !important;
-                gap: 8px !important;
-                padding: 6px 0 6px 0 !important;
-                border-radius: 0 0 12px 12px !important;
-                box-shadow: 0 2px 18px #1bff6a22 !important;
-                background: rgba(24,26,34,0.98) !important;
-                justify-content: center !important;
-            }
-            .navbar-link-anim {
-                font-size: 1em !important;
-                padding: 4px 6px !important;
-            }
-            /* Logo mobile più piccolo e spostato */
-            #logo-link,
-            #logo-link + img,
-            .navbar-home-circle {
-                width: 38px !important;
-                height: 38px !important;
-                margin-left: 8px !important;
-                margin-top: 8px !important;
-            }
-            #logo-img {
-                width: 32px !important;
-                height: 32px !important;
-            }
-            /* Hero image mobile: copre tutto e centrata */
-            #main-section > img {
-                width: 100vw !important;
-                height: 60vh !important;
-                min-height: 220px !important;
-                max-height: 70vw !important;
-                object-fit: cover !important;
-                object-position: center top !important;
-            }
-            #main-section {
-                min-height: 60vh !important;
-                padding-top: 60px !important;
-            }
-            /* Testo hero mobile più leggibile */
-            #nuova-sezione > div {
-                padding: 1.2em 0.3em !important;
-            }
-            #nuova-sezione div[style*="font-size:2em"] {
-                font-size: 1.2em !important;
-            }
-            #nuova-sezione div[style*="font-size:1.25em"] {
-                font-size: 1em !important;
-            }
-            #typewriter-text {
-                font-size: 0.98em !important;
-            }
-            /* Griglia NFT mobile: 5 colonne, box piccoli e centrati */
-            #nft-collection-grid {
-                grid-template-columns: repeat(5, 1fr) !important;
-                gap: 10px !important;
-                max-width: 98vw !important;
-                margin: 2em auto 0 auto !important;
-                justify-items: center !important;
-            }
-            .nft-box-artistico {
-                width: 110px !important;
-                height: 140px !important;
-                font-size: 1.1em !important;
-                border-radius: 18px !important;
-                margin-bottom: 10px !important;
-                margin-top: 10px !important;
-            }
-            .nft-box-artistico > div:first-child {
-                width: 92px !important;
-                height: 92px !important;
-                border-radius: 12px !important;
-                margin-top: 13px !important;
-                margin-bottom: 8px !important;
-            }
-            .nft-box-artistico > div:last-child {
-                font-size: 1.08em !important;
-                border-radius: 0 0 14px 14px !important;
-                padding: 0.3em 0 0.2em 0 !important;
-            }
-        }
-        @media (min-width: 700px) {
-            .nft-box-artistico {
-                width: 320px !important;
-                height: 320px !important;
-                font-size: 1.55em !important;
-                border-radius: 32px !important;
-                margin-bottom: 22px !important;
-                margin-top: 22px !important;
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                justify-content: flex-end !important;
-            }
-            .nft-box-artistico > div:first-child {
-                width: 288px !important;
-                height: 220px !important;
-                border-radius: 22px !important;
-                margin-top: 16px !important;
-                margin-bottom: 6px !important;
-                background: linear-gradient(120deg,#232a3a 60%,#181818 100%) !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                box-shadow: 0 0 24px #00eaff55, 0 0 48px #1bff6a22 !important;
-                /* RIMUOVI il bordo interno */
-                border: none !important;
-                position: relative !important;
-                overflow: hidden !important;
-            }
-            .nft-box-artistico > div:last-child {
-                width: 100% !important;
-                min-height: 38px !important;
-                height: 38px !important;
-                background: rgba(0,0,0,0.82) !important;
-                border-radius: 0 0 24px 24px !important;
-                padding: 0 !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                box-shadow: none !important;
-            }
-            .nft-number-label {
-                font-size: 1.05em !important;
-                color: #ffd700 !important;
-                font-family: 'Orbitron',sans-serif !important;
-                font-weight: bold !important;
-                letter-spacing: 0.04em !important;
-                text-shadow: 0 0 8px #ffe87c, 0 0 16px #ffd700 !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                line-height: 1 !important;
-            }
-        }
-        /* ...existing code... */
-    </style>
-    <script>
-        // ...existing code...
-        window.addEventListener('DOMContentLoaded', function() {
-            // ...existing code...
-
-            // Scroll morbido per Series Nyfurion
-            var seriesLink = document.getElementById('series-link');
-            if(seriesLink) {
-                seriesLink.addEventListener('click', function(e) {
-                    var target = document.getElementById('nuova-sezione');
-                    if(target) {
-                        e.preventDefault();
-                        target.scrollIntoView({behavior: 'smooth'});
-                    }
-                });
-            }
-
-            // Scroll morbido per Contatti
-            var contattiLink = document.getElementById('contatti-link');
-            if(contattiLink) {
-                contattiLink.addEventListener('click', function(e) {
-                    var target = document.getElementById('contatti-section');
-                    if(target) {
-                        e.preventDefault();
-                        target.scrollIntoView({behavior: 'smooth'});
-                    }
-                });
-            }
-            // ...existing code...
-        });
-        // ...existing code...
-    </script>
     <!-- Hero section centrale -->
     <section id="main-section" style="position:relative;z-index:2;min-height:60vh;width:100vw;padding:0;margin:0;overflow:hidden;display:flex;justify-content:center;align-items:center;">
         <div style="max-width:820px;width:96vw;margin:3em auto 2em auto;box-shadow:0 0 32px #1bff6a33,0 0 64px #00eaff22;border-radius:32px;overflow:hidden;position:relative;">
@@ -543,59 +218,50 @@
     </section>
     <!-- Nuova sezione che si vede scrollando -->
     <section id="nuova-sezione" style="
-        position:relative;
-        z-index:3;
-        min-height:100vh;
+    position:relative;
+    z-index:3;
+    min-height:100vh;
+    width:100vw;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background:#181a22;
+    padding:0;
+    margin:0;
+    border:none;
+    box-shadow:none;
+">
+    <div style="
+        max-width:900px;
         width:100vw;
+        min-height:100vh;
+        padding:3em 1.5em;
+        text-align:left;
+        margin:0;
         display:flex;
         flex-direction:column;
         align-items:center;
         justify-content:center;
         background:#181a22;
-        padding:0;
-        margin:0;
         border:none;
         box-shadow:none;
     ">
-        <div style="
-            max-width:900px;
-            width:100vw;
-            min-height:100vh;
-            padding:3em 1.5em;
-            text-align:left;
-            margin:0;
-            display:flex;
-            flex-direction:column;
-            align-items:center;
-            justify-content:center;
-            background:#181a22;
-            border:none;
-            box-shadow:none;
-        ">
-            <div style="color:#1bff6a; font-family:'Orbitron',sans-serif; font-size:2em; text-shadow:0 0 18px #1bff6a,0 0 32px #1bff6a; margin-bottom:0.2em; text-align:center;">
-                NYFURION
-            </div>
-            <div style="color:#1bff6a; font-family:'Orbitron',sans-serif; font-size:1.25em; text-shadow:0 0 12px #1bff6a; margin-bottom:1.1em; text-align:center;">
-                The War of Balance and the Fate of the Guardians
-            </div>
-            <div style="color:#fff; font-size:1.13em; line-height:1.7; font-family:sans-serif; max-width:800px; margin:0 auto;">
-                <div id="typewriter-text" style="white-space:pre-line;"></div>
-                <noscript>
-                    <!-- ...testo statico come fallback... -->
-                </noscript>
-            </div>
-        </div>
-    </section>
-    <style>
-        /* ...existing code... */
-        #nuova-sezione,
-        #nuova-sezione > div {
-            background: #181a22 !important;
-            border: none !important;
-            box-shadow: none !important;
-        }
-        /* ...existing code... */
-    </style>
+        <div style="color:#f4ffe8; font-family:'Orbitron','Cinzel',sans-serif; font-size:2.2em; letter-spacing:0.09em; text-shadow:0 0 18px #1bff6a, 0 0 32px #00eaff, 0 0 8px #faf3d5; filter:drop-shadow(0 0 12px #00eaff) drop-shadow(0 0 18px #1bff6a); margin-bottom:0.2em; text-align:center; font-weight:bold;">
+        NYFURION
+    </div>
+    <div style="color:#f4ffe8; font-family:'Orbitron','Cinzel',sans-serif; font-size:1.25em; letter-spacing:0.07em; text-shadow:0 0 12px #1bff6a, 0 0 24px #00eaff, 0 0 8px #faf3d5; filter:drop-shadow(0 0 12px #00eaff) drop-shadow(0 0 18px #1bff6a); margin-bottom:1.1em; text-align:center; font-weight:bold;">
+        The War of Balance and the Fate of the Guardians
+    </div>
+    <div style="color:#fff; font-size:1.13em; line-height:1.7; font-family:sans-serif; max-width:800px; margin:0 auto;">
+        <div id="typewriter-text" style="white-space:pre-line;"></div>
+        <noscript>
+            <!-- ...testo statico come fallback... -->
+        </noscript>
+    </div>
+    </div>
+</section>
+    <!-- ...existing code... -->
     <style>
         /* ...existing code... */
         @keyframes arrowDownAnim {
@@ -645,55 +311,76 @@
                 });
             }
 
-            // Effetto macchina da scrivere per il racconto
+            // Effetto artistico mistico: titoli verdi e ringraziamenti/copyright a capo, effetto quasi istantaneo
             var typewriterText = document.getElementById('typewriter-text');
             if(typewriterText) {
+                // Inserisci <br> dopo ogni titolo verde, ringraziamenti e copyright
                 var storyHTML = `
-<span style="color:#1bff6a; font-weight:bold;">- Nyfurion</span>, the realm suspended between light and darkness, was not always a battlefield. Once, under the guidance of the King of Nyfurion, it thrived in harmony no wars, no divisions. The sovereign, gifted with unparalleled wisdom, knew he could not rule forever. He had to choose an heir. He was the father of three children, each with a different vision of the world. When the day of succession arrived, he chose the eldest the one who demonstrated discipline, justice, and inner strength: the Legendary Supreme. But this decision did not come without consequences.
+<span style="color:#1bff6a; font-weight:bold; display:block; margin-top:1.2em; margin-bottom:0.2em;">- Nyfurion</span><br>
+the realm suspended between light and darkness, was not always a battlefield. Once, under the guidance of the King of Nyfurion, it thrived in harmony no wars, no divisions. The sovereign, gifted with unparalleled wisdom, knew he could not rule forever. He had to choose an heir. He was the father of three children, each with a different vision of the world. When the day of succession arrived, he chose the eldest the one who demonstrated discipline, justice, and inner strength: the Legendary Supreme. But this decision did not come without consequences.
 
-<span style="color:#1bff6a; font-weight:bold;">- The Rise of Dark Power</span>
+<span style="color:#1bff6a; font-weight:bold; display:block; margin-top:1.2em; margin-bottom:0.2em;">- The Rise of Dark Power</span><br>
 The second born, the most ambitious, the most tormented, had long awaited the day he would inherit power. When he was excluded, he was overcome with rage. A void grew within him, a deep thirst for revenge. That day, the Dark Power of Evil was born, the one who would defy order and shatter balance. He refused to accept his father’s decision. He gathered followers among those who did not want to be ruled, those who saw the Legendary Supreme as a tyrant disguised as a savior. Thus, the Baby Rebels emerged young warriors who despise imposed order and reject civilization. To them, chaos is freedom. But in this war between good and evil, there is one figure watching from the shadows: The Queen, the third descendant, who has never fought but holds in her hands the last spark of primordial power. She takes no side, but if Nyfurion falls, she will decide the kingdom’s fate.
 
-<span style="color:#1bff6a; font-weight:bold;">- The Creation of the Guardians</span>
+<span style="color:#1bff6a; font-weight:bold; display:block; margin-top:1.2em; margin-bottom:0.2em;">- The Creation of the Guardians</span><br>
 As conflict spread, the Legendary Supreme realized he could not face it alone. Armies were not enough. Courage was not enough. The heart of Nyfurion had to be sealed. At the center of the realm existed a forbidden gateway: the Unique Portal. No one knew what lay beyond it, but it was said to contain absolute power—something capable of rewriting reality itself. If Dark Power reached it, Nyfurion would fall. That was when The Guardians of the Portal were chosen. They were not ordinary warriors. Each had followed a precise path, honed their skills, and sacrificed their existence to protect the gateway.
 The Eternal Guardian, the only one who has seen the Portal open and close. He survived and still awaits the day when it will be needed again.
 
-<span style="color:#1bff6a; font-weight:bold;">- The Shadow Predators and the Silent War</span>
+<span style="color:#1bff6a; font-weight:bold; display:block; margin-top:1.2em; margin-bottom:0.2em;">- The Shadow Predators and the Silent War</span><br>
 As war intensifies, another danger grows in the streets of Nyfurion. The Shadow Predators are infiltrators with no faction. They serve neither good nor evil but steal everything of value from the homes of neutrals, weakening and isolating them. They do not wish to rule Nyfurion. They only seek to profit from its downfall. No one sees them. No one stops them.
 
-<span style="color:#1bff6a; font-weight:bold;">- The Fate of Nyfurion</span>
+<span style="color:#1bff6a; font-weight:bold; display:block; margin-top:1.2em; margin-bottom:0.2em;">- The Fate of Nyfurion</span><br>
 Now, the realm teeters on the brink of ruin. The Legendary Supreme fights to protect order. Dark Power advances, dragging the Rebels with him. The Guardians maintain the seal on the Portal. The Baby Warriors of Peace struggle to preserve civilization, guided by the Masters of Discipline. But all this may not be enough. Because the Queen has yet to choose. If she intervenes, Nyfurion may find a new balance. If she remains in the shadows, conflict will be eternal. But nothing in Nyfurion is truly safe anymore.
 
-<span style="color:#1bff6a; font-size:0.95em; font-family:'Orbitron',sans-serif; text-shadow:0 0 10px #1bff6a;">Thank you for your attention
-Thank you for taking the time to check out the NFT collection. I truly appreciate your interest and support. Stay tuned for upcoming updates!</span>
-
-<span style="font-size:0.7em; color:#fff; margin-top:2em; text-shadow:0 0 8px #fff, 0 0 16px #fff;">
-Copyright © [Year] Riccardo Duca All rights reserved.
+<br>
+<span style="color:#1bff6a; font-size:0.95em; font-family:'Orbitron',sans-serif; text-shadow:0 0 10px #1bff6a; display:block; margin-top:1.5em; margin-bottom:0.5em;">
+Thank you for your attention<br>
+Thank you for taking the time to check out the NFT collection. I truly appreciate your interest and support. Stay tuned for upcoming updates!
+</span>
+<br>
+<span style="font-size:0.7em; color:#fff; margin-top:2em; text-shadow:0 0 8px #fff, 0 0 16px #fff; display:block;">
+Copyright © [Year] Riccardo Duca All rights reserved.<br>
 This PDF file was created by Riccardo Duca. Unauthorized reproduction, distribution, or modification of the content is strictly prohibited. The file may be downloaded and shared for personal use only. Any commercial use, adaptation, or redistribution without explicit written permission from the copyright holder is forbidden.
 </span>
 `;
 
-                // Funzione macchina da scrivere che gestisce anche i tag HTML
-                function typeWriterEffect(element, html, speed) {
-                    let i = 0;
-                    let isTag = false;
-                    let text = '';
-                    function type() {
-                        if (i < html.length) {
-                            let char = html[i];
-                            text += char;
-                            element.innerHTML = text + (isTag ? '' : '<span style="opacity:0.5;">|</span>');
-                            if (char === '<') isTag = true;
-                            if (char === '>') isTag = false;
-                            i++;
-                            setTimeout(type, isTag ? 0 : speed);
+                // Funzione per effetto mistico artistico, velocità quasi istantanea
+                function mysticRevealEffect(element, html, baseDelay) {
+                    let chars = [];
+                    let inTag = false, tagBuffer = '';
+                    for (let i = 0; i < html.length; i++) {
+                        let c = html[i];
+                        if (c === '<') { inTag = true; tagBuffer = '<'; }
+                        else if (inTag) {
+                            tagBuffer += c;
+                            if (c === '>') { inTag = false; chars.push({type:'tag', value:tagBuffer}); tagBuffer = ''; }
                         } else {
-                            element.innerHTML = text; // Rimuovi cursore finale
+                            chars.push({type:'char', value:c});
                         }
                     }
-                    type();
+                    let htmlOut = '';
+                    let charIdx = 0;
+                    chars.forEach((obj, idx) => {
+                        if (obj.type === 'tag') {
+                            htmlOut += obj.value;
+                        } else {
+                            // Movimento verticale random e dissolvenza
+                            let delay = baseDelay * charIdx + Math.random() * 10; // velocissimo
+                            let y = Math.round(Math.random()*16-8);
+                            htmlOut += `<span class="mystic-char" style="opacity:0;display:inline-block;transform:translateY(${y}px);transition:opacity 0.18s ${delay}ms,transform 0.28s ${delay}ms;">${obj.value === ' ' ? '&nbsp;' : obj.value}</span>`;
+                            charIdx++;
+                        }
+                    });
+                    element.innerHTML = htmlOut;
+                    setTimeout(() => {
+                        let spans = element.querySelectorAll('.mystic-char');
+                        spans.forEach(span => {
+                            span.style.opacity = 1;
+                            span.style.transform = 'translateY(0)';
+                        });
+                    }, 20);
                 }
-                typeWriterEffect(typewriterText, storyHTML, 0.0001); // super veloce, praticamente istantaneo
+                mysticRevealEffect(typewriterText, storyHTML, 1); // baseDelay molto basso per effetto quasi istantaneo
             }
         });
         // ...existing code...
@@ -740,11 +427,34 @@ This PDF file was created by Riccardo Duca. Unauthorized reproduction, distribut
             border:none;
             box-shadow:none;
         ">
-            <div style="color:#09ee1c; font-family:'Orbitron',sans-serif; font-size:2.2em; text-shadow:0 0 18px #1bff6a,0 0 32px #1bff6a; margin-bottom:1.5em; text-align:center;"
-                 class="nyfurion-glow-title">
-                Nyfurion NFT Collection
+            <div
+                style="
+                    font-family: 'Orbitron','Cinzel',sans-serif;
+                    font-size: 2.5em;
+                    color: #f4ffe8;
+                    letter-spacing: 0.09em;
+                    text-shadow: 0 0 18px #1bff6a, 0 0 32px #00eaff, 0 0 8px #faf3d5;
+                    filter: drop-shadow(0 0 12px #00eaff) drop-shadow(0 0 18px #1bff6a);
+                    display: inline-block;
+                    margin-bottom: 1.5em;
+                    text-align: center;
+                    font-weight: bold;
+                "
+                class="nyfurion-glow-title"
+            >
+                NFT Collection
             </div>
-            <div style="color:#1bff6a; font-family:'Orbitron',sans-serif; font-size:1.25em; text-shadow:0 0 12px #1bff6a; margin-bottom:1.1em; text-align:center;">
+            <style>
+                @keyframes neon-flicker {
+                    0% { opacity: 1; filter: brightness(1.1) drop-shadow(0 0 18px #00eaff) drop-shadow(0 0 28px #1bff6a);}
+                    92% { opacity: 1; filter: brightness(1.1) drop-shadow(0 0 18px #00eaff) drop-shadow(0 0 28px #1bff6a);}
+                    94% { opacity: 0.7; filter: brightness(0.7) drop-shadow(0 0 8px #00eaff);}
+                    96% { opacity: 1; filter: brightness(1.2) drop-shadow(0 0 28px #1bff6a);}
+                    98% { opacity: 0.8; filter: brightness(0.8) drop-shadow(0 0 8px #00eaff);}
+                    100% { opacity: 1; filter: brightness(1.1) drop-shadow(0 0 18px #00eaff) drop-shadow(0 0 28px #1bff6a);}
+                }
+            </style>
+            <div style="color:#1bff6a; font-family:'Orbitron',sans-serif; font-size:1.25em; letter-spacing:0.07em; text-shadow:0 0 12px #1bff6a, 0 0 24px #00eaff, 0 0 8px #faf3d5; filter:drop-shadow(0 0 12px #00eaff) drop-shadow(0 0 18px #1bff6a); margin-bottom:1.1em; text-align:center; font-weight:bold;">
                 
             </div>
             <!-- RIMOSSO: <div id="typewriter-text-2" style="display:none;"></div> -->
@@ -753,328 +463,382 @@ This PDF file was created by Riccardo Duca. Unauthorized reproduction, distribut
             </noscript>
             <!-- INIZIO: wrapper scroll orizzontale -->
             <div id="nft-scroll-wrapper" style="width:100%;max-width:900px;margin:3em auto 0 auto;overflow-x:auto;overflow-y:hidden;padding-bottom:8px;">
-                <div id="nft-collection-grid" style="
-                    display: flex;
-                    flex-direction: row;
-                    gap: 18px;
-                    width: max-content;
-                    min-width: 100%;
-                    justify-content: flex-start;
-                    align-items: stretch;
-                    /* rimuovi grid-template-columns */
-                ">
-                    <!-- ...existing code... -->
-                </div>
-            </div>
-            <!-- FINE: wrapper scroll orizzontale -->
-        </div>
-    </section>
-    <script>
-        window.addEventListener('DOMContentLoaded', function() {
-            // ...existing code...
+    <div id="nft-collection-grid" style="
+        display: flex;
+        flex-direction: row;
+        gap: 18px;
+        width: max-content;
+        min-width: 100%;
+        justify-content: flex-start;
+        align-items: stretch;
+        scroll-snap-type: x mandatory;
+    ">
+        <!-- NFT dinamici inseriti via JS -->
+    </div>
+</div>
+<style>
+/* NFT gallery: solo immagini, numero in overlay, senza riquadri */
+#nft-collection-grid {
+    gap: 18px;
+}
+.nft-img-solo {
+    position: relative;
+    width: 180px;
+    height: 240px;
+    flex: 0 0 auto;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px #00eaff33;
+    background: #232a3a;
+    scroll-snap-align: start;
+    transition: transform 0.18s;
+    cursor: pointer;
+}
+.nft-img-solo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border: none;
+    background: #232a3a;
+    transition: transform 0.18s;
+}
+.nft-img-solo:hover img {
+    transform: scale(1.04);
+}
+.nft-num-overlay {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.55);
+    color: #ffe87c;
+    font-family: 'Orbitron',sans-serif;
+    font-size: 1.18em;
+    font-weight: bold;
+    letter-spacing: 0.04em;
+    text-shadow: 0 0 8px #ffe87c, 0 0 16px #ffd700;
+    padding: 0.18em 0.7em 0.13em 0.7em;
+    border-radius: 0 12px 0 0;
+    margin: 0;
+    opacity: 0.98;
+    z-index: 2;
+    pointer-events: none;
+}
+@media (max-width: 700px) {
+    #nft-scroll-wrapper {
+        max-width: 99vw !important;
+        padding-bottom: 4px !important;
+    }
+    #nft-collection-grid {
+        gap: 8px !important;
+    }
+    .nft-img-solo {
+        width: 44vw;
+        max-width: 160px;
+        height: 44vw;
+        max-height: 160px;
+        min-width: 90px;
+        min-height: 90px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #232a3a;
+        /* Per evitare stretching verticale */
+        aspect-ratio: 1/1;
+    }
+    .nft-img-solo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain !important;
+        object-position: center center !important;
+        background: #232a3a !important;
+        display: block;
+        /* Centra verticalmente */
+        margin: 0 auto;
+    }
+    .nft-num-overlay {
+        font-size: 1em;
+        padding: 0.13em 0.5em 0.11em 0.5em;
+        border-radius: 0 8px 0 0;
+    }
+}
+</style>
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+    // ...existing code...
 
-            // Inserisci 100 riquadri NFT numerati, artistici, con spazio per immagine e hover glow
-            var nftGrid = document.getElementById('nft-collection-grid');
-            if(nftGrid) {
-                nftGrid.innerHTML = '';
-                const goldNumbers = [5, 21, 40, 49, 50, 52, 54, 56, 59, 64, 73, 77, 79, 80, 82, 85, 87, 90, 91, 95, 96, 97, 98, 99, 100];
-                let html = '';
-                const ipfsImages = [
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeih6libbmlkie7co676pow2s6mlen26q2s4tsn3tnscrd4y345vppy',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihjknki2b63ubz6bqj6hblbieacitcebgmr7waljd6oh7r3ydiuza',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeia6uuwhpbsqgl6fcblcw6cx4wzwxhugdt7dnakvgj5wkgc5jtwswq',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeig5olnw56w6kpvvgddyfksx54tlxqxaevwjrati4ofeo6d4z2jb2a',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihtpwxlelkj6rfevol73xo3ujtb6mvpzmlatddhyvmennppcg7joq',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeif72446odoaom7j44wowb2attvjx4puzepl5sqefswqjx6eovqnvu',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiclf4ttiyuweonubxsovcvbtlzl75q5jsai63evvknbi3pp4dioei',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeigv4fw7smf6bi3xgemhhmkr5mafd3vta6qdvmmr3mpveo2kdrtu5a',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeifkmptahi5cq27wa5ukgnpc3amkfdvkgtwcjpwqowbrqovereylj4',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihshly3g2xc7jss5za4isjwehyq2mkmimfei2rwnvvamsc52pqx4m',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihdgzo4ixqieji7x4xprldw326bn3b75caksk4fla4mgwtolt2vhe',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeifsononlwopad3blx2mltvgk22twe4jx3iepi34knfzvvo5p6ymv4',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiacm363ts3ujhudnmqn3ytqj5qr6azf6oatwodfdgje226uegamh4',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeibgmksoigwvqjond6op6jgfnys33gphat7lkikslavlbeqdjazn4m',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeia37e5xfkjexezzumjyknwokp3j6tl4jlpsismif4ey3rkdmjcpdq',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeieq55easomxtwsuh7ij2le6h23fkndkucwv4xvroydv52e6t5g7ea',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeia5rurmyp33ko45zhyktwpxh6edzi3z3yk4thdpnyvvlvsg5hfkji',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihpu6sdm4f42fbubyrxz32jv3miviqmgmeorsylglgs7shha3qglq',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiexylyijt5e76jjvxininzjxnmqii4pqiklv3ebubsplygnaghbpm',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihh5gmynwn5jdzjea2p5x4u2xjorrbrvvuiganju2ayljsbnlmluu',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiab7miiuxvra5mflmdc6go6bhwdvgug7nn6h4zgnq3732xqvcgndi',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeidojwaqies3w2hl6vj5knsoojpco5nz6am2l5kdivso76qoveyhom',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeidjomzcmdhmj7wp7gzxrccxo7sqqmlunq2wivmxmcr5zzjneq25se',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeif4civwuyjxsc7oc6dxclhphm46hkq7e2spids3vl5afzudfjl5qy',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeieb6xzpdlxywkrklmzkbukxj2akayxydqqeorba3tcweoj463nvc4',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeie5n5wwiljyonv74qh73xd54fxblxneaq4s762abgdb3ggozwvbsm',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihunlkimkgxewb4qqtd7jmu274omd5w3gxxbadiyr74i4cdtokf5y',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeibiliopup5ivbayop2qag25lsmqsxorbejtco52y44p7z3qg7i2ge',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeia6yzvznind5nemkswrbimzi2pr4zcshd2ymi3h5nm5vz6ct4k7ri',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeibufeeghzy35jqwm7ntxczhu3gxguv4dxdiry7scovjfyki4tahie',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihtlaq4vao4jm3awts4eitjr3w3l5dhj3ise5yetpxjdj322z5vji',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeidrgqloy2otow5vii5sjx3qbhql6wzgl3qkvowkhmr7hqotq5djga',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiem47odjqzifsgaq4hmg2cxnlzq6zootkkxaeequqsnnaial2lldy',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeigltmwzp74qezyljgw4phrlvulhfnxixvlrzp5uu745czoh6ovzcq',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeigx7hgqqdirxg2ghkgsa662zsnsjiuortjpn4anfoazw6lme5qzni',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihaahmaqe7rwuylkhptauikfzj3v5yu7p7ivvao34i6irwkxkvrmu',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeidm2dqj3q7g3dadyyui2e6pujkklkrwf4h3zjrll3w52hkaus2v7u',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeicbbcsehgruteuzs3u7ubl2to5pucse7ansbbs55bdjji7xuo2gau',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeieemg4pruy54nn3fgxj5mhp5flxqropw3abzsvbff6iwmvy3fu4gq',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeifimqznzdizyzizmjiodulbnlqal4zde4zo2wpstmanvihdv4lin4',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiffqiv3obezdju34w6hhagsnz4bl3q4oukpw2p2aqpgd7qpsmlauq',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeidexevo6opijsw6lqky75npv6gwliion7ofbusii5hirxl5wowkqu',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeif7qggaikl3ixi6hijckwke2katwf6vfkcktdzugvdcgdrdravzqa',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeibvhmaoutcsexi67ihk56vuy7i2sdsjz5caykgqspvxzluiitqwzi',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeibvhmaoutcsexi67ihk56vuy7i2sdsjz5caykgqspvxzluiitqwzi',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeibjj2xikjl47baxes346pqqpmwg4ls5id6t2x63bdhlxxqfmqsdau',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeifoswbjlpgkjhuz37mylwjlv26acblsfqaizbgcgyofw2z33stgia',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiduuv2pbe6liyjo4lnq45ucbxdh3jkcetcq7mwf7ctqjki4pldgr4',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeierbweov4wrqkq6azhr7ztd6cj6ec6tbiia7hql2ed2y5biipcy6q',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeicra46ft24s6syk4m4kq2xovty2seqt7pfyij6hcwlznhppfzyvai',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihruredohuf7vqo25bvdwllxwvm75dyrenxwbdmofmlm65tnjw5pe',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeidww33f6bkjjo665hcmsynqk644kjmnsk4fpxm536fanlb32oolzq',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeidvqoxdq22t2cf47hgvanjighpx5wgjdo7nowbju3t4whqmr43qp4',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeig7iw4mnsrxtza3yt4k5ulm5bsu3bce22tqgg67tiqsfb6qrrhspq',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihsw47mhpllocmuflenj3ujieazsxkz3gafhomzwem2u7pnwyssau',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeibro6jvxwfg7dg5hvczwz5s67ugqmbnhpqdtf2lasma7kscqwhvam',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeifhuj4yftjdqspdyi2iye3mqymztmedmxk6vezuqtusl5mhulphx4',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeigi3zk6xr4yqkro7gd7mxcbjheiq7lyjvso2aypyaizqkybuabdpi',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeia75dfbua52mv6v6ydkpxbep767aewmiit5lrpysfxiz2zi5esh5y',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeig5oiqr3rlsglxctu3kz7z5eeguhimhsgotgwqdg6fytl4vjd5zce',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiaqmqgrxlhxra4gfymiic5yveic3m6cyhfkniysvxoabksoawq4zy',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeicjj6fdzfm2n7nhryi7e7c7ojrod3ijqtma3wu3aagxv5ptlatx34',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeib6m7sejuw3zsq6jtctdj4p72fozd5vxjlevppo4yj7x2joivdi54',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiecnkmventevpcwy7nkll3ishsjbilbt7nsxeyzcfr2hr2h2lxitm',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeid55mtpfglf5t6obdgl4sli6kg5z4nkjxsojwaojnvo4ojwadn5gu',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeicvpsgnv66g26hnasybpelmskzlgrpomeiiviv6x5em5vtsigskdi',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeialyevpp3qjip7u65grnlr6x5muwiamzbxblepvqq4mhlnlsbvory',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeib4tdff3qhldvjax5xpb5ynvn6fnybn23qjmxufrxreqlyzas6lvi',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiaeqxlkc6pyy4m4vofuetv74sx26encwhdovr5khpmju7e4kh4bmi',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeif3pq5hfmwlbyjosdytik57hbusojocoon6536bnnhpa5skrvrfze',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeih6tvq4e4xgu56dwyvmglalthhvhgqhrexrn4gpd3ociq2ov7jqly',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeie4du2esem2ywwd2cus45ne6mckqnww5it5x236ytwntwfgc6b2ua',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiablpf47abaq7woiym3az6pzktfx3ad5admznzhnmb2jap3hsc3w4',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeigvhqjuvi2lujjginl7ksrpivugtiub67xzktek3aexrkjjsf4rbi',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeig4p2535k6g3w4e3hbwvsixt63c7na26qb4horyoyfyub6s4ul2vy',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeifpvqkwtjcjngzsk3edqtrgosemoo7izwa4ov6j5rmsxmaxyrvjoe',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeidpfcs723tngzu7jhcl4vmvegn3zadnr2zdkavxgyhjx565vnw2ti',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiamudmhrto75nn232it2jilg3cgnszlakulh5cuhed2ahczbp4qja',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeia7gmkxsl7mcrlcs6q6s7buwol6nfbsoyag72kevutymcszillnpq',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeidanqzdsuqhuyyec6ubccqmz2fqz2aqz7jahcco5bqj5uiwmchsga',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiasn34we2orkzi6h4gbf2rnbamheg2sp7mllbonf4f6q3rnbshcqe',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiaji7stjkpduv57zhbqpbwysvsk4oobmbivbplbcku4y6uoz6vu7a',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihzly344qsi53df2x75jdrgig4xr23qvk4wa3raom5dxxampztsoi',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeigx4gjiyptfikapecvg2ozxso4ayo5ugg7jy5rklogbrpmgr3chwm',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiceuxudre25k6jx5vzxjeo4loddyeyw3ecet3yny6rmdrv74bg5ja',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihcdhvzbimjoowxvb5woa2okqiwbob2ic7y3iohko5r7j5aki4ucm',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeifncjqddkf7gybtwlgfq2r74w6aoxbzf47uhn6cm2gjp5u4x73yq4',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeigf4sz5gzgi5fp6uk4joqfvdfyhl2loozoi5sim5peo3yvcctsgei',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeigk2tqfy7wmbakvrvq6quq3mywxilpo7er2lu5mkorkya3hxek54e',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeib4canitj2mskyq2ncfpux4klk6rvs7ywlbooqh2xrqpi6z643dre',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihbia2gsdre4uyzw3zay5ugnlndm4hxxwuq5deuw6sxsv75m3idyq',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeic5yg6pnz5kwi2h4sybwc27ghvt7ibvahtk667xaihrzevktt3kxe',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiaqivi6nfibohdbuwccerqhzapiaadvxuc6us2q57dzb3becwxyui',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeihiewflkict5btl5ciuozkos4y2qdj6aeytzylspxxzyvtnoowmci',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeib27rauegjtji2m4jvoe2hyopiizs55llehj4kcut6gijy5giu7si',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeid5scc7tpzqx2jstdeotfxnrgg7452rqokkwb5yhf5cdwvh6cq6bq',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeigqojh4ciza2mtaxehmgogdsegtgalwwnhg3zl7ztgrp46jjbymze',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeia34suruaf5crn7nus57arqyuqwyujnkle2amclcy4wdfekcvoo4a',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiao5op5hiid4njmdjhjxktt6mafc6taqmfucbpupyxjlvkcepx3yy',
-                    'https://tomato-given-capybara-992.mypinata.cloud/ipfs/bafybeiasegca52hsthtpupwzgidlxgm7xbxyn6gu7btcuteqnqteutv2um'
+    // Galleria NFT senza riquadri, solo immagini e numero in overlay
+    var nftGrid = document.getElementById('nft-collection-grid');
+    if(nftGrid) {
+        nftGrid.innerHTML = '';
+        const goldNumbers = [5, 21, 40, 49, 50, 52, 54, 56, 59, 64, 73, 77, 79, 80, 82, 85, 87, 90, 91, 95, 96, 97, 98, 99, 100];
+        const ipfsImages = [
+                    'https://cdn.nyfurion.com/ipfs/bafybeih6libbmlkie7co676pow2s6mlen26q2s4tsn3tnscrd4y345vppy', //1
+                    'https://cdn.nyfurion.com/ipfs/bafybeihjknki2b63ubz6bqj6hblbieacitcebgmr7waljd6oh7r3ydiuza', //2
+                    'https://cdn.nyfurion.com/ipfs/bafybeia6uuwhpbsqgl6fcblcw6cx4wzwxhugdt7dnakvgj5wkgc5jtwswq', //3
+                    'https://cdn.nyfurion.com/ipfs/bafybeig5olnw56w6kpvvgddyfksx54tlxqxaevwjrati4ofeo6d4z2jb2a',
+                    'https://cdn.nyfurion.com/ipfs/bafybeihtpwxlelkj6rfevol73xo3ujtb6mvpzmlatddhyvmennppcg7joq', 
+                    'https://cdn.nyfurion.com/ipfs/bafybeif72446odoaom7j44wowb2attvjx4puzepl5sqefswqjx6eovqnvu',
+                    'https://cdn.nyfurion.com/ipfs/bafybeiclf4ttiyuweonubxsovcvbtlzl75q5jsai63evvknbi3pp4dioei',
+                    'https://cdn.nyfurion.com/ipfs/bafybeigv4fw7smf6bi3xgemhhmkr5mafd3vta6qdvmmr3mpveo2kdrtu5a', /////
+                    'https://cdn.nyfurion.com/ipfs/bafybeifkmptahi5cq27wa5ukgnpc3amkfdvkgtwcjpwqowbrqovereylj4', ///9
+                    'https://cdn.nyfurion.com/ipfs/bafybeihshly3g2xc7jss5za4isjwehyq2mkmimfei2rwnvvamsc52pqx4m', //10
+                    'https://cdn.nyfurion.com/ipfs/bafybeihdgzo4ixqieji7x4xprldw326bn3b75caksk4fla4mgwtolt2vhe', //11
+                    'https://cdn.nyfurion.com/ipfs/bafybeifsononlwopad3blx2mltvgk22twe4jx3iepi34knfzvvo5p6ymv4',
+                    'https://cdn.nyfurion.com/ipfs/bafybeiacm363ts3ujhudnmqn3ytqj5qr6azf6oatwodfdgje226uegamh4', //13
+                    'https://cdn.nyfurion.com/ipfs/bafybeibgmksoigwvqjond6op6jgfnys33gphat7lkikslavlbeqdjazn4m', 
+                    'https://cdn.nyfurion.com/ipfs/bafybeia37e5xfkjexezzumjyknwokp3j6tl4jlpsismif4ey3rkdmjcpdq',
+                    'https://cdn.nyfurion.com/ipfs/bafybeieq55easomxtwsuh7ij2le6h23fkndkucwv4xvroydv52e6t5g7ea', // 16
+                    'https://cdn.nyfurion.com/ipfs/bafybeia5rurmyp33ko45zhyktwpxh6edzi3z3yk4thdpnyvvlvsg5hfkji', // 17
+                    'https://cdn.nyfurion.com/ipfs/bafybeihpu6sdm4f42fbubyrxz32jv3miviqmgmeorsylglgs7shha3qglq', // 18
+                    'https://cdn.nyfurion.com/ipfs/bafybeiexylyijt5e76jjvxininzjxnmqii4pqiklv3ebubsplygnaghbpm', //
+                    'https://cdn.nyfurion.com/ipfs/bafybeihh5gmynwn5jdzjea2p5x4u2xjorrbrvvuiganju2ayljsbnlmluu', // 20 fino a qui ok 
+                    'https://cdn.nyfurion.com/ipfs/bafybeiab7miiuxvra5mflmdc6go6bhwdvgug7nn6h4zgnq3732xqvcgndi', // 
+                    'https://cdn.nyfurion.com/ipfs/bafybeidojwaqies3w2hl6vj5knsoojpco5nz6am2l5kdivso76qoveyhom', //
+                    'https://cdn.nyfurion.com/ipfs/bafybeidjomzcmdhmj7wp7gzxrccxo7sqqmlunq2wivmxmcr5zzjneq25se', //
+                    'https://cdn.nyfurion.com/ipfs/bafybeif4civwuyjxsc7oc6dxclhphm46hkq7e2spids3vl5afzudfjl5qy', //
+                    'https://cdn.nyfurion.com/ipfs/bafybeieb6xzpdlxywkrklmzkbukxj2akayxydqqeorba3tcweoj463nvc4', // 25 ok fino a qui
+                    'https://cdn.nyfurion.com/ipfs/bafybeie5n5wwiljyonv74qh73xd54fxblxneaq4s762abgdb3ggozwvbsm', // 
+                    'https://cdn.nyfurion.com/ipfs/bafybeihunlkimkgxewb4qqtd7jmu274omd5w3gxxbadiyr74i4cdtokf5y', //
+                    'https://cdn.nyfurion.com/ipfs/bafybeibiliopup5ivbayop2qag25lsmqsxorbejtco52y44p7z3qg7i2ge', // ok fino a qui 
+                    'https://cdn.nyfurion.com/ipfs/bafybeia6yzvznind5nemkswrbimzi2pr4zcshd2ymi3h5nm5vz6ct4k7ri',
+                    'https://cdn.nyfurion.com/ipfs/bafybeibufeeghzy35jqwm7ntxczhu3gxguv4dxdiry7scovjfyki4tahie', //30 ok fino a qui 
+                    'https://cdn.nyfurion.com/ipfs/bafybeihtlaq4vao4jm3awts4eitjr3w3l5dhj3ise5yetpxjdj322z5vji',
+                    'https://cdn.nyfurion.com/ipfs/bafybeibrvdibg3to2cfgqm5w7pvvf5pknajq56oeiqp62klx5qngj4crxu', //
+                    'https://cdn.nyfurion.com/ipfs/bafybeidrgqloy2otow5vii5sjx3qbhql6wzgl3qkvowkhmr7hqotq5djga', //33
+                    'https://cdn.nyfurion.com/ipfs/bafybeiem47odjqzifsgaq4hmg2cxnlzq6zootkkxaeequqsnnaial2lldy', //34
+                    'https://cdn.nyfurion.com/ipfs/bafybeigltmwzp74qezyljgw4phrlvulhfnxixvlrzp5uu745czoh6ovzcq', //35
+                    'https://cdn.nyfurion.com/ipfs/bafybeigx7hgqqdirxg2ghkgsa662zsnsjiuortjpn4anfoazw6lme5qzni',
+                    'https://cdn.nyfurion.com/ipfs/bafybeihaahmaqe7rwuylkhptauikfzj3v5yu7p7ivvao34i6irwkxkvrmu',
+                    'https://cdn.nyfurion.com/ipfs/bafybeidm2dqj3q7g3dadyyui2e6pujkklkrwf4h3zjrll3w52hkaus2v7u', //38
+                    'https://cdn.nyfurion.com/ipfs/bafybeicbbcsehgruteuzs3u7ubl2to5pucse7ansbbs55bdjji7xuo2gau', //39
+                    'https://cdn.nyfurion.com/ipfs/bafybeieemg4pruy54nn3fgxj5mhp5flxqropw3abzsvbff6iwmvy3fu4gq', //40
+                    'https://cdn.nyfurion.com/ipfs/bafybeifimqznzdizyzizmjiodulbnlqal4zde4zo2wpstmanvihdv4lin4', //41
+                    'https://cdn.nyfurion.com/ipfs/bafybeiffqiv3obezdju34w6hhagsnz4bl3q4oukpw2p2aqpgd7qpsmlauq', //42
+                    'https://cdn.nyfurion.com/ipfs/bafybeidexevo6opijsw6lqky75npv6gwliion7ofbusii5hirxl5wowkqu', //43
+                    'https://cdn.nyfurion.com/ipfs/bafybeif7qggaikl3ixi6hijckwke2katwf6vfkcktdzugvdcgdrdravzqa', //44
+                    'https://cdn.nyfurion.com/ipfs/bafybeibvhmaoutcsexi67ihk56vuy7i2sdsjz5caykgqspvxzluiitqwzi', //45
+                    'https://cdn.nyfurion.com/ipfs/bafybeibjj2xikjl47baxes346pqqpmwg4ls5id6t2x63bdhlxxqfmqsdau', //46
+                    
+                    'https://cdn.nyfurion.com/ipfs/bafybeifoswbjlpgkjhuz37mylwjlv26acblsfqaizbgcgyofw2z33stgia', //47
+                    'https://cdn.nyfurion.com/ipfs/bafybeiduuv2pbe6liyjo4lnq45ucbxdh3jkcetcq7mwf7ctqjki4pldgr4',
+                    'https://cdn.nyfurion.com/ipfs/bafybeierbweov4wrqkq6azhr7ztd6cj6ec6tbiia7hql2ed2y5biipcy6q',
+                    'https://cdn.nyfurion.com/ipfs/bafybeicra46ft24s6syk4m4kq2xovty2seqt7pfyij6hcwlznhppfzyvai', //50
+
+                    'https://cdn.nyfurion.com/ipfs/bafybeihruredohuf7vqo25bvdwllxwvm75dyrenxwbdmofmlm65tnjw5pe',
+                    'https://cdn.nyfurion.com/ipfs/bafybeidww33f6bkjjo665hcmsynqk644kjmnsk4fpxm536fanlb32oolzq',
+                    'https://cdn.nyfurion.com/ipfs/bafybeidvqoxdq22t2cf47hgvanjighpx5wgjdo7nowbju3t4whqmr43qp4',
+                    'https://cdn.nyfurion.com/ipfs/bafybeig7iw4mnsrxtza3yt4k5ulm5bsu3bce22tqgg67tiqsfb6qrrhspq',
+                    'https://cdn.nyfurion.com/ipfs/bafybeihsw47mhpllocmuflenj3ujieazsxkz3gafhomzwem2u7pnwyssau', //55
+
+                    'https://cdn.nyfurion.com/ipfs/bafybeibro6jvxwfg7dg5hvczwz5s67ugqmbnhpqdtf2lasma7kscqwhvam',
+                    'https://cdn.nyfurion.com/ipfs/bafybeifhuj4yftjdqspdyi2iye3mqymztmedmxk6vezuqtusl5mhulphx4',
+                    'https://cdn.nyfurion.com/ipfs/bafybeigi3zk6xr4yqkro7gd7mxcbjheiq7lyjvso2aypyaizqkybuabdpi',
+                    'https://cdn.nyfurion.com/ipfs/bafybeia75dfbua52mv6v6ydkpxbep767aewmiit5lrpysfxiz2zi5esh5y',
+                    'https://cdn.nyfurion.com/ipfs/bafybeig5oiqr3rlsglxctu3kz7z5eeguhimhsgotgwqdg6fytl4vjd5zce', //60
+
+                    'https://cdn.nyfurion.com/ipfs/bafybeiaqmqgrxlhxra4gfymiic5yveic3m6cyhfkniysvxoabksoawq4zy', 
+                    'https://cdn.nyfurion.com/ipfs/bafybeicjj6fdzfm2n7nhryi7e7c7ojrod3ijqtma3wu3aagxv5ptlatx34', //62
+
+                    'https://cdn.nyfurion.com/ipfs/bafybeib6m7sejuw3zsq6jtctdj4p72fozd5vxjlevppo4yj7x2joivdi54', //63
+                    'https://cdn.nyfurion.com/ipfs/bafybeiecnkmventevpcwy7nkll3ishsjbilbt7nsxeyzcfr2hr2h2lxitm',
+                    'https://cdn.nyfurion.com/ipfs/bafybeid55mtpfglf5t6obdgl4sli6kg5z4nkjxsojwaojnvo4ojwadn5gu',
+                    'https://cdn.nyfurion.com/ipfs/bafybeicvpsgnv66g26hnasybpelmskzlgrpomeiiviv6x5em5vtsigskdi',
+                    'https://cdn.nyfurion.com/ipfs/bafybeialyevpp3qjip7u65grnlr6x5muwiamzbxblepvqq4mhlnlsbvory',
+                    'https://cdn.nyfurion.com/ipfs/bafybeib4tdff3qhldvjax5xpb5ynvn6fnybn23qjmxufrxreqlyzas6lvi', //68
+                    'https://cdn.nyfurion.com/ipfs/bafybeiaeqxlkc6pyy4m4vofuetv74sx26encwhdovr5khpmju7e4kh4bmi', //69
+                    'https://cdn.nyfurion.com/ipfs/bafybeif3pq5hfmwlbyjosdytik57hbusojocoon6536bnnhpa5skrvrfze', //70
+                    'https://cdn.nyfurion.com/ipfs/bafybeih6tvq4e4xgu56dwyvmglalthhvhgqhrexrn4gpd3ociq2ov7jqly', //71
+                    'https://cdn.nyfurion.com/ipfs/bafybeie4du2esem2ywwd2cus45ne6mckqnww5it5x236ytwntwfgc6b2ua', //72
+                    'https://cdn.nyfurion.com/ipfs/bafybeiablpf47abaq7woiym3az6pzktfx3ad5admznzhnmb2jap3hsc3w4', //73
+                    'https://cdn.nyfurion.com/ipfs/bafybeigvhqjuvi2lujjginl7ksrpivugtiub67xzktek3aexrkjjsf4rbi',
+                    'https://cdn.nyfurion.com/ipfs/bafybeig4p2535k6g3w4e3hbwvsixt63c7na26qb4horyoyfyub6s4ul2vy',
+                    'https://cdn.nyfurion.com/ipfs/bafybeifpvqkwtjcjngzsk3edqtrgosemoo7izwa4ov6j5rmsxmaxyrvjoe',
+                    'https://cdn.nyfurion.com/ipfs/bafybeidpfcs723tngzu7jhcl4vmvegn3zadnr2zdkavxgyhjx565vnw2ti',
+                    'https://cdn.nyfurion.com/ipfs/bafybeiamudmhrto75nn232it2jilg3cgnszlakulh5cuhed2ahczbp4qja',
+                    'https://cdn.nyfurion.com/ipfs/bafybeia7gmkxsl7mcrlcs6q6s7buwol6nfbsoyag72kevutymcszillnpq',
+                    'https://cdn.nyfurion.com/ipfs/bafybeidanqzdsuqhuyyec6ubccqmz2fqz2aqz7jahcco5bqj5uiwmchsga', //80
+                    'https://cdn.nyfurion.com/ipfs/bafybeiasn34we2orkzi6h4gbf2rnbamheg2sp7mllbonf4f6q3rnbshcqe',
+                    'https://cdn.nyfurion.com/ipfs/bafybeiaji7stjkpduv57zhbqpbwysvsk4oobmbivbplbcku4y6uoz6vu7a',
+                    'https://cdn.nyfurion.com/ipfs/bafybeihzly344qsi53df2x75jdrgig4xr23qvk4wa3raom5dxxampztsoi',
+                    'https://cdn.nyfurion.com/ipfs/bafybeigx4gjiyptfikapecvg2ozxso4ayo5ugg7jy5rklogbrpmgr3chwm', //84
+                    'https://cdn.nyfurion.com/ipfs/bafybeiceuxudre25k6jx5vzxjeo4loddyeyw3ecet3yny6rmdrv74bg5ja', 
+                    'https://cdn.nyfurion.com/ipfs/bafybeihcdhvzbimjoowxvb5woa2okqiwbob2ic7y3iohko5r7j5aki4ucm',
+                    'https://cdn.nyfurion.com/ipfs/bafybeifncjqddkf7gybtwlgfq2r74w6aoxbzf47uhn6cm2gjp5u4x73yq4', //87
+                    'https://cdn.nyfurion.com/ipfs/bafybeigf4sz5gzgi5fp6uk4joqfvdfyhl2loozoi5sim5peo3yvcctsgei',
+                    'https://cdn.nyfurion.com/ipfs/bafybeigk2tqfy7wmbakvrvq6quq3mywxilpo7er2lu5mkorkya3hxek54e',
+                    'https://cdn.nyfurion.com/ipfs/bafybeib4canitj2mskyq2ncfpux4klk6rvs7ywlbooqh2xrqpi6z643dre',
+                    'https://cdn.nyfurion.com/ipfs/bafybeihbia2gsdre4uyzw3zay5ugnlndm4hxxwuq5deuw6sxsv75m3idyq', // 91
+                    'https://cdn.nyfurion.com/ipfs/bafybeic5yg6pnz5kwi2h4sybwc27ghvt7ibvahtk667xaihrzevktt3kxe',
+                    'https://cdn.nyfurion.com/ipfs/bafybeiaqivi6nfibohdbuwccerqhzapiaadvxuc6us2q57dzb3becwxyui',
+                    'https://cdn.nyfurion.com/ipfs/bafybeihiewflkict5btl5ciuozkos4y2qdj6aeytzylspxxzyvtnoowmci',
+                    'https://cdn.nyfurion.com/ipfs/bafybeib27rauegjtji2m4jvoe2hyopiizs55llehj4kcut6gijy5giu7si',
+                    'https://cdn.nyfurion.com/ipfs/bafybeid5scc7tpzqx2jstdeotfxnrgg7452rqokkwb5yhf5cdwvh6cq6bq',
+                    'https://cdn.nyfurion.com/ipfs/bafybeigqojh4ciza2mtaxehmgogdsegtgalwwnhg3zl7ztgrp46jjbymze',
+                    'https://cdn.nyfurion.com/ipfs/bafybeia34suruaf5crn7nus57arqyuqwyujnkle2amclcy4wdfekcvoo4a',
+                    'https://cdn.nyfurion.com/ipfs/bafybeiao5op5hiid4njmdjhjxktt6mafc6taqmfucbpupyxjlvkcepx3yy',
+                    'https://cdn.nyfurion.com/ipfs/bafybeiasegca52hsthtpupwzgidlxgm7xbxyn6gu7btcuteqnqteutv2um'
                 ];
                 for(let i=1; i<=100; i++) {
                     let imgUrl = ipfsImages[i-1] || '';
-                    let goldClass = goldNumbers.includes(i) ? ' nft-box-gold' : '';
-                    // Font meno bold, colore blu neon, glow azzurro/blu, riquadro leggero
-                    let numberColor = '#00eaff';
-                    let numberShadow = '0 0 8px #00eaff, 0 0 18px #1b6aff';
-                    html += `
-                    <div class="nft-box-artistico${goldClass}" data-img="${imgUrl}" data-num="${i}" tabindex="0" style="border-radius:18px;border:2px solid #00eaff;box-shadow:0 0 0 #00eaff,0 0 0 #1bff6a;">
-                        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;background:#232a3a;border-radius:14px;margin:12px 0 0 0;overflow:hidden;">
-                            <img src="${imgUrl}" alt="NFT #${i}" style="width:100%;height:100%;object-fit:contain;display:block;border:none;margin:0;padding:0;background:#232a3a;">
-                            <span style="color:#444;font-size:2.1em;opacity:0.25;position:absolute;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;${imgUrl ? 'display:none;' : ''}">?</span>
-                        </div>
-                        <div class="nft-number-label" style="
-                            width:80px;
-                            margin:0 auto;
-                            text-align:center;
-                            font-family:'Montserrat', Arial, sans-serif;
-                            font-size:1.13em;
-                            color:${numberColor};
-                            letter-spacing:0.04em;
-                            text-shadow:${numberShadow};
-                            background:rgba(0,34,68,0.55);
-                            border-radius:8px;
-                            border:1.5px solid #00eaff;
-                            box-shadow:0 0 8px #00eaff44;
-                            padding:0.10em 0 0.08em 0;
-                            margin-top:0;
-                            font-weight:600;
-                            opacity:0.98;
-                            position:relative;
-                            top:-2px;
-                        ">
-                            #${i}
-                        </div>
-                    </div>
-                    `;
+                    let goldClass = goldNumbers.includes(i) ? ' nft-num-gold' : '';
+                    nftGrid.innerHTML += `
+<div class="nft-img-solo" tabindex="0">
+    <img src="${imgUrl}" alt="NFT #${i}" loading="lazy">
+    <span class="nft-num-overlay${goldClass}">#${i}</span>
+</div>
+`;
                 }
-                nftGrid.innerHTML = html;
+            }
 
-                // Effetti hover/parallax migliorati
-                const nftBoxes = nftGrid.querySelectorAll('.nft-box-artistico');
+            // Espansione inline NFT
+            const scrollWrapper = document.getElementById('nft-scroll-wrapper');
+            if (scrollWrapper) {
+                // Drag & drop mouse
+                let isDown = false, startX, scrollLeft, bouncing = false;
+                scrollWrapper.addEventListener('mousedown', function(e) {
+                    isDown = true;
+                    scrollWrapper.classList.add('dragging');
+                    startX = e.pageX - scrollWrapper.offsetLeft;
+                    scrollLeft = scrollWrapper.scrollLeft;
+                });
+                scrollWrapper.addEventListener('mouseleave', function() {
+                    isDown = false;
+                    scrollWrapper.classList.remove('dragging');
+                });
+                scrollWrapper.addEventListener('mouseup', function() {
+                    isDown = false;
+                    scrollWrapper.classList.remove('dragging');
+                });
+                scrollWrapper.addEventListener('mousemove', function(e) {
+                    if (!isDown) return;
+                    e.preventDefault();
+                    const x = e.pageX - scrollWrapper.offsetLeft;
+                    const walk = (x - startX) * 1.2;
+                    scrollWrapper.scrollLeft = scrollLeft - walk;
+                });
+                // Touch drag (mobile)
+                let touchStartX = 0, touchScrollLeft = 0;
+                scrollWrapper.addEventListener('touchstart', function(e) {
+                    if (e.touches.length !== 1) return;
+                    touchStartX = e.touches[0].pageX;
+                    touchScrollLeft = scrollWrapper.scrollLeft;
+                });
+                scrollWrapper.addEventListener('touchmove', function(e) {
+                    if (e.touches.length !== 1) return;
+                    const x = e.touches[0].pageX;
+                    const walk = (x - touchStartX) * 1.2;
+                    scrollWrapper.scrollLeft = touchScrollLeft - walk;
+                });
+
+                // Accessibilità tastiera
+                scrollWrapper.tabIndex = 0;
+                scrollWrapper.setAttribute('aria-label', 'Galleria NFT scorribile orizzontalmente');
+                scrollWrapper.style.outline = 'none';
+                scrollWrapper.addEventListener('keydown', function(e) {
+                    if (e.key === 'ArrowRight') {
+                        scrollWrapper.scrollBy({left: 120, behavior: 'smooth'});
+                        e.preventDefault();
+                    }
+                    if (e.key === 'ArrowLeft') {
+                        scrollWrapper.scrollBy({left: -120, behavior: 'smooth'});
+                        e.preventDefault();
+                    }
+                });
+                // Permetti tab focus sui box NFT
+                const nftBoxes = scrollWrapper.querySelectorAll('.nft-box-artistico');
                 nftBoxes.forEach(box => {
-                    const img = box.querySelector('img');
-                    box.addEventListener('mousemove', function(e) {
-                        const rect = this.getBoundingClientRect();
-                        const x = e.clientX - rect.left;
-                        const y = e.clientY - rect.top;
-                        const centerX = rect.width / 2;
-                        const centerY = rect.height / 2;
-                        const moveX = (x - centerX) / centerX * 6;
-                        const moveY = (y - centerY) / centerY * 6;
-                        this.style.transform = `scale(1.045) translateY(-6px) rotateX(${-moveY}deg) rotateY(${moveX}deg)`;
-                    });
-                    box.addEventListener('mouseleave', function() {
-                        this.style.transform = '';
-                        if (img) img.style.filter = '';
-                    });
-                    box.addEventListener('mousedown', function() {
-                        this.style.transform += ' scale(0.97)';
-                        if (img) img.style.transform += ' scale(0.98)';
-                    });
-                    box.addEventListener('mouseup', function() {
-                        this.style.transform = this.style.transform.replace(' scale(0.97)', '');
-                        if (img) img.style.transform = img.style.transform.replace(' scale(0.98)', '');
-                    });
+                    box.tabIndex = 0;
                 });
 
-                // MODALE FULLSCREEN NFT: numero subito dopo la foto, in un riquadro illuminato, font lineare
-                let nftModal = document.getElementById('nft-overview-modal');
-                if (!nftModal) {
-                    nftModal = document.createElement('div');
-                    nftModal.id = 'nft-overview-modal';
-                    nftModal.innerHTML = `
-                        <button class="nft-overview-close" aria-label="Chiudi overview" style="position:absolute;top:24px;right:38px;font-size:2.5em;background:none;border:none;color:#00eaff;z-index:10;cursor:pointer;">&times;</button>
-                        <div id="nft-overview-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;">
-                            <div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
-                                <button id="nft-arrow-left" style="background:none;border:none;color:#00eaff;font-size:2.5em;cursor:pointer;user-select:none;transition:color 0.2s;margin-right:8px;" aria-label="Precedente">&#8592;</button>
-                                <div style="display:flex;flex-direction:column;align-items:center;">
-                                    <img id="nft-overview-img" src="" alt="NFT Overview" style="max-width:70vw;max-height:80vh;object-fit:contain;display:block;margin:0 0;box-shadow:0 0 64px #00eaff,0 0 32px #1bff6a;border:none;">
-                                    <div id="nft-overview-text" style="
-                                        margin-top:0.5em;
-                                        display:inline-block;
-                                        font-family:'Montserrat', Arial, sans-serif;
-                                        font-size:1.25em;
-                                        color:#00eaff;
-                                        font-weight:600;
-                                        letter-spacing:0.07em;
-                                        background:rgba(0,0,0,0.72);
-                                        border-radius:8px;
-                                        box-shadow:0 0 16px #00eaff,0 0 32px #1bff6a;
-                                        padding:0.18em 1.2em 0.12em 1.2em;
-                                        text-shadow:0 0 8px #00eaff, 0 0 18px #1bff6a;
-                                        position:relative;
-                                        top:-8px;
-                                    "></div>
-                                </div>
-                                <button id="nft-arrow-right" style="background:none;border:none;color:#00eaff;font-size:2.5em;cursor:pointer;user-select:none;transition:color 0.2s;margin-left:8px;" aria-label="Successivo">&#8594;</button>
-                            </div>
-                        </div>
-                    `;
-                    document.body.appendChild(nftModal);
-                }
-                nftModal.style.display = 'none';
-                nftModal.style.position = 'fixed';
-                nftModal.style.zIndex = '99999';
-                nftModal.style.left = '0';
-                nftModal.style.top = '0';
-                nftModal.style.width = '100vw';
-                nftModal.style.height = '100vh';
-                nftModal.style.background = 'rgba(10, 20, 30, 0.97)';
-                nftModal.style.alignItems = 'center';
-                nftModal.style.justifyContent = 'center';
-                nftModal.style.transition = 'opacity 0.22s';
-                nftModal.style.backdropFilter = 'blur(2px)';
-                nftModal.style.display = 'flex';
-                nftModal.style.opacity = '0';
-                nftModal.style.pointerEvents = 'none';
-
-                // Funzione per aprire la modale
-                let currentIdx = 0;
-                function openModal(idx) {
-                    currentIdx = idx;
-                    const box = nftBoxes[currentIdx];
-                    const img = box.querySelector('img');
-                    const imgUrl = img ? img.src : '';
-                    const num = box.getAttribute('data-num');
-                    const modalImg = document.getElementById('nft-overview-img');
-                    const modalText = document.getElementById('nft-overview-text');
-                    if (modalImg) {
-                        modalImg.src = imgUrl;
-                        modalImg.style.borderRadius = '0';
-                        modalImg.style.border = 'none';
-                    }
-                    if (modalText) {
-                        modalText.textContent = `#${num}`;
-                        // Gli stili sono già inline nel template sopra
-                    }
-                    nftModal.style.display = 'flex';
-                    setTimeout(() => {
-                        nftModal.style.opacity = '1';
-                        nftModal.style.pointerEvents = 'auto';
-                    }, 10);
-                    document.body.style.overflow = 'hidden';
-                }
-                function closeModal() {
-                    nftModal.style.opacity = '0';
-                    nftModal.style.pointerEvents = 'none';
-                    setTimeout(() => {
-                        nftModal.style.display = 'none';
-                        document.body.style.overflow = '';
-                    }, 200);
-                }
-                function showModalIdx(idx) {
-                    if (idx < 0) idx = nftBoxes.length - 1;
-                    if (idx >= nftBoxes.length) idx = 0;
-                    openModal(idx);
-                }
-
-                // Click su NFT: apri modale
-                nftBoxes.forEach((box, idx) => {
-
-                    box.addEventListener('click', function(e) {
-                        openModal(idx);
-                    });
-                    box.addEventListener('keydown', function(e) {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                            openModal(idx);
-                        }
-                    });
-                });
-
-                // Gestione chiusura/navigazione modale
-                nftModal.querySelector('.nft-overview-close').onclick = closeModal;
-                nftModal.addEventListener('click', function(e) {
-                    if (e.target === nftModal) closeModal();
-                });
-                document.getElementById('nft-arrow-left').onclick = function(e) {
-                    e.stopPropagation();
-                    showModalIdx((currentIdx - 1 + nftBoxes.length) % nftBoxes.length);
-                };
-                document.getElementById('nft-arrow-right').onclick = function(e) {
-                    e.stopPropagation();
-                    showModalIdx((currentIdx + 1) % nftBoxes.length);
-                };
-                // Navigazione con tastiera
-                document.addEventListener('keydown', function(e) {
-                    if (nftModal.style.display === 'flex' && nftModal.style.opacity === '1') {
-                        if (e.key === 'Escape') closeModal();
-                        if (e.key === 'ArrowLeft') showModalIdx((currentIdx - 1 + nftBoxes.length) % nftBoxes.length);
-                        if (e.key === 'ArrowRight') showModalIdx((currentIdx + 1) % nftBoxes.length);
+                // Animazione bounce ai limiti dello scroll
+                scrollWrapper.addEventListener('scroll', function() {
+                    if (bouncing) return;
+                    const maxScroll = scrollWrapper.scrollWidth - scrollWrapper.clientWidth;
+                    if (scrollWrapper.scrollLeft <= 0) {
+                        bouncing = true;
+                        scrollWrapper.animate([
+                            { transform: 'translateX(0)' },
+                            { transform: 'translateX(18px)' },
+                            { transform: 'translateX(0)' }
+                        ], { duration: 340, easing: 'cubic-bezier(.4,1.6,.4,1)' });
+                        setTimeout(()=>{bouncing=false;}, 340);
+                    } else if (scrollWrapper.scrollLeft >= maxScroll-2) {
+                        bouncing = true;
+                        scrollWrapper.animate([
+                            { transform: 'translateX(0)' },
+                            { transform: 'translateX(-18px)' },
+                            { transform: 'translateX(0)' }
+                        ], { duration: 340, easing: 'cubic-bezier(.4,1.6,.4,1)' });
+                        setTimeout(()=>{bouncing=false;}, 340);
                     }
                 });
             }
-            // ...existing code...
+
+            // Overlay e controlli (creati una sola volta)
+            let overlay = document.createElement('div');
+            overlay.id = 'nft-inline-overlay';
+            overlay.style.cssText = `
+                position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;
+                background:rgba(10,12,18,0.92);display:none;align-items:center;justify-content:center;
+                transition:background 0.2s;
+            `;
+            overlay.innerHTML = `
+                <button id="nft-inline-close" aria-label="Chiudi" style="position:absolute;top:32px;right:48px;background:none;border:none;color:#1bff6a;font-size:2.5em;cursor:pointer;z-index:2;">&times;</button>
+    <div id="nft-inline-imgbox" style="display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;">
+        <button id="nft-inline-prev" aria-label="Precedente" style="position:absolute;top:50%;left:-80px;transform:translateY(-50%);background:none;border:none;color:#1bff6a;font-size:2.5em;cursor:pointer;z-index:2;">&#8592;</button>
+        <img id="nft-inline-img" src="" alt="NFT" style="max-width:92vw;max-height:82vh;border-radius:18px;box-shadow:0 0 32px #00eaff99,0 0 64px #1bff6a33;">
+        <button id="nft-inline-next" aria-label="Successivo" style="position:absolute;top:50%;right:-80px;transform:translateY(-50%);background:none;border:none;color:#1bff6a;font-size:2.5em;cursor:pointer;z-index:2;">&#8594;</button>
+        <span id="nft-inline-num" style="margin-top:1em;color:#ffe87c;font-family:'Orbitron',sans-serif;font-size:1.3em;text-shadow:0 0 8px #ffe87c,0 0 16px #ffd700;"></span>
+    </div>
+            `;
+            document.body.appendChild(overlay);
+
+            const imgEls = nftGrid.querySelectorAll('.nft-img-solo');
+            const ipfsImages = window.ipfsImages || Array.from(imgEls).map(el => el.querySelector('img').src);
+            let currentIdx = 0;
+
+            function showOverlay(idx) {
+                if(idx < 0) idx = 0;
+                if(idx > imgEls.length-1) idx = imgEls.length-1;
+                currentIdx = idx;
+                document.getElementById('nft-inline-img').src = ipfsImages[idx];
+                document.getElementById('nft-inline-num').textContent = `#${idx+1}`;
+                overlay.style.display = 'flex';
+            }
+            function closeOverlay() {
+                overlay.style.display = 'none';
+                document.getElementById('nft-inline-img').src = '';
+            }
+            function showPrev() { if(currentIdx > 0) showOverlay(currentIdx-1);}
+            function showNext() { if(currentIdx < imgEls.length-1) showOverlay(currentIdx+1);}
+
+            imgEls.forEach((el, idx) => {
+                el.addEventListener('click', function(e) {
+                    showOverlay(idx);
+                });
+                // Accessibilità: enter/space
+                el.addEventListener('keydown', function(e) {
+                    if(e.key === 'Enter' || e.key === ' ') {
+                        showOverlay(idx);
+                    }
+                });
+            });
+
+            document.getElementById('nft-inline-close').onclick = closeOverlay;
+            document.getElementById('nft-inline-prev').onclick = showPrev;
+            document.getElementById('nft-inline-next').onclick = showNext;
+            overlay.addEventListener('click', function(e) {
+                if(e.target === overlay) closeOverlay();
+            });
+            window.addEventListener('keydown', function(e) {
+                if(overlay.style.display === 'flex') {
+                    if(e.key === 'Escape') closeOverlay();
+                    if(e.key === 'ArrowLeft') showPrev();
+                    if(e.key === 'ArrowRight') showNext();
+                }
+            });
         });
     </script>
     <!-- ROADMAP INTERATTIVA FLUIDA E MODERNA -->
@@ -1084,11 +848,11 @@ This PDF file was created by Riccardo Duca. Unauthorized reproduction, distribut
         <div style="position:relative;z-index:2;width:100%;max-width:900px;margin:0 auto;padding:4em 1.5em 2em 1.5em;">
             <!-- Scritta centrale "Roadmap" aggiunta -->
             <div style="width:100%;text-align:center;margin-bottom:1.5em;">
-                <span style="font-family:'Orbitron','Cinzel',sans-serif;font-size:2.5em;color:#f4ffe8;letter-spacing:0.09em;text-shadow:0 0 18px #1bff6a,0 0 32px #00eaff,0 0 8px #faf3d5;filter:drop-shadow(0 0 12px #00eaff) drop-shadow(0 0 18px #1bff6a);display:inline-block;">
+                <span style="font-family:'Orbitron','Cinzel',sans-serif;font-size:2.5em;color:#f4ffe8;letter-spacing:0.09em;text-shadow:0 0  18px #1bff6a,0 0  32px #00eaff,0 0 8px #faf3d5;filter:drop-shadow(0 0 12px #00eaff) drop-shadow(0 0 18px #1bff6a);display:inline-block;">
                     Roadmap
                 </span>
             </div>
-            <div class="roadmap-title-text" style="font-family:'Orbitron', 'Cinzel', sans-serif; font-size: 2.5em; color: #f4ffe8; letter-spacing: 0.09em; text-shadow: 0 0 18px #1bff6a, 0 0 32px #00eaff, 0 0 8px #faf3d5; filter:drop-shadow(0 0 12px #00eaff) drop-shadow(0 0 18px #1bff6a); display:inline-block; opacity:0; transform:translateY(40px); transition:opacity 0.7s,transform 0.7s;">
+            <div class="roadmap-title-text" style="font-family:'Orbitron', 'Cinzel', sans-serif; font-size: 2.5em; color: #f4ffe8; letter-spacing:  0.09em; text-shadow: 0 0 18px #1bff6a, 0 0 32px #00eaff, 0 0 8px #faf3d5; filter:drop-shadow(0 0 12px #00eaff) drop-shadow(0 0 18px #1bff6a); display:inline-block; opacity:0; transform:translateY(40px); transition:opacity 0.7s,transform 0.7s;">
                 Roadmap
             </div>
             <div id="roadmap-timeline"></div>
@@ -1097,18 +861,18 @@ This PDF file was created by Riccardo Duca. Unauthorized reproduction, distribut
     <style>
         /* ...existing code... */
         .roadmap-title-text {
-            font-family: 'Orbitron', 'Cinzel', sans-serif;
+            font-family: 'Orbitron', 'Cinzel', sans-serif;  
             font-size: 2.5em;
             color: #f4ffe8;
             letter-spacing: 0.09em;
             text-shadow:  0  0 18px #1bff6a, 0 0 32px #00eaff, 0 0 8px #faf3d5;
-                       filter: drop-shadow(0 0 12px #00eaff) drop-shadow(0 0 18px #1bff6a);
+            filter: drop-shadow(0 0 12px #00eaff) drop-shadow(0 0 18px #1bff6a);
             display: inline-block;
             opacity: 0;
             transform: translateY(40px);
             transition: opacity  0.7s, transform 0.7s;
         }
-               .roadmap-title-text.visible {
+        .roadmap-title-text.visible {
             opacity: 1;
             transform: translateY(0);
         }
@@ -1169,7 +933,7 @@ This PDF file was created by Riccardo Duca. Unauthorized reproduction, distribut
             box-shadow: 0 0 18px #1bff6a22, 0 0 32px #00eaff11;
             border: 1.5px solid #00eaff33;
             color: #fff;
-                       font-family: 'Orbitron',sans-serif;
+            font-family: 'Orbitron',sans-serif;
             font-size: 1.08em;
             padding: 1.1em 1.3em;
             min-width: 0;
@@ -1306,6 +1070,8 @@ This PDF file was created by Riccardo Duca. Unauthorized reproduction, distribut
 
         // Attiva il primo step di default
         setTimeout(() => {
+                      
+
             const first = stepEls[0];
             if (first) {
                 first.querySelector('.roadmap-step-indicator').classList.add('active');
@@ -1684,4 +1450,415 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-<!-- ...existing code... -->
+<!-- Privacy Policy -->
+<!-- Bottone Policy in basso a destra, più piccolo -->
+<button id="open-policy-btn" style="position:fixed;bottom:14px;right:14px;z-index:99999;background:#181a22;color:#1bff6a;font-family:'Orbitron',sans-serif;font-size:0.85em;padding:0.22em 0.9em;border-radius:14px;border:1px solid #1bff6a;box-shadow:0 0 6px #00eaff33;cursor:pointer;transition:background 0.2s, color 0.2s;">Policy</button>
+
+<!-- Modale compatta Privacy Policy con testo piccolo e scroll bar -->
+<div id="policy-modal" style="display:none;position:fixed;bottom:44px;right:14px;z-index:100000;background:rgba(10,  20, 30, 0.98);border-radius:14px;box-shadow:0 0 18px #00eaff33;max-width:480px;width:96vw;max-height:90vh;overflow:hidden;backdrop-filter:blur(2px);">
+  <div style="background:#181a22;color:#fff;width:100%;height:100%;padding:0;border-radius:14px;box-shadow:none;position:relative;">
+    <button id="close-policy-btn" style="position:absolute;top:6px;right:10px;background:none;border:none;color:#1bff6a;font-size:1.2em;cursor:pointer;z-index:2;">&times;</button>
+    <div style="color:#1bff6a;text-align:center;margin:0.7em 0 0.5em 0;font-size:1.1em;font-family:'Orbitron',sans-serif;">Privacy Policy / Informativa Privacy</div>
+    <div id="policy-modal-scroll" style="max-height:62vh;overflow-y:auto;padding:0 1em 0.6em 1em;font-size:0.93em;color:#e6e6e6;line-height:1.6;">
+      <b>IT - Informativa Privacy</b><br>
+      <ol style="padding-left:1.1em;">
+        <li><b>Titolare del trattamento</b><br>
+          Riccardo Duca, Udine Coderno/Sedegliano (Italia) <br>
+          Email: <a href="mailto:nyfurion@gmail.com" style="color:#00eaff;">nyfurion@gmail.com</a>
+        </li>
+        <li><b>Tipologie di dati raccolti</b><br>
+          Il sito raccoglie dati tecnici/statistici tramite Google Analytics, AdSense, Cloudflare, Google Tag Manager.<br>
+          Dati forniti tramite modulo/email.<br>
+          Dati raccolti tramite widget social (Instagram, Facebook, Twitter, Discord, Crypto).<br>
+          Dati relativi a transazioni Web3/Metamask (acquisto NFT in crypto).<br>
+          Dati di navigazione: IP, browser, sistema operativo, pagine visitate, durata sessione.<br>
+          Cookie e tecnologie di tracciamento.
+        </li>
+        <li><b>Finalità del trattamento</b><br>
+          Analisi statistiche, sicurezza, gestione richieste, transazioni NFT, personalizzazione esperienza utente.
+        </li>
+        <li><b>Base giuridica</b><br>
+          Consenso (modulo/email, cookie), interesse legittimo (statistiche, sicurezza), esecuzione contratto (NFT), obblighi legali.
+        </li>
+        <li><b>Modalità e conservazione</b><br>
+          Dati trattati in modo automatizzato tramite i servizi elencati.<br>
+          Non ceduti a terzi per fini commerciali.<br>
+          Dati statistici aggregati/anonimi non cancellati.<br>
+          Dati modulo/email cancellabili su richiesta.<br>
+          Dati NFT conservati per la durata necessaria.
+        </li>
+        <li><b>Diritti dell’utente</b><br>
+          Accesso, rettifica, cancellazione dati inviati tramite modulo/email.<br>
+          Limitazione/opposizione, portabilità, revoca consenso.<br>
+          I dati raccolti tramite servizi terzi sono anonimi e aggregati.<br>
+          Per richieste: nyfurion@gmail.com
+        </li>
+        <li><b>Cookie e tracciamento</b><br>
+          Il sito usa cookie tecnici, analitici, di profilazione e di terze parti.<br>
+          Gestione preferenze tramite banner cookie.
+        </li>
+        <li><b>Banner consenso cookie</b><br>
+          Banner conforme alle linee guida UE: accetta/rifiuta cookie non essenziali, gestione preferenze, link alla Cookie Policy.
+        </li>
+        <li><b>Trasferimento dati fuori UE</b><br>
+          Alcuni dati possono essere trasferiti fuori UE (es. Google, Cloudflare) con adeguate garanzie (clausole contrattuali standard).
+        </li>
+        <li><b>Sicurezza dati</b><br>
+          Crittografia SSL, firewall, accesso limitato.
+        </li>
+        <li><b>Registro consensi</b><br>
+          Il sito registra il consenso per cookie e dati personali.
+        </li>
+        <li><b>Aggiornamenti</b><br>
+          La policy può essere aggiornata. Gli utenti saranno informati tramite avvisi sul sito.
+        </li>
+      </ol>
+      <hr style="margin:1em 0;">
+      <b>EN - Privacy Policy</b><br>
+      <ol style="padding-left:1.1em;">
+        <li><b>Data Controller</b><br>
+          Riccardo Duca, Udine Coderno/Sedegliano (Italy)<br>
+          Email: <a href="mailto:nyfurion@gmail.com" style="color:#00eaff;">nyfurion@gmail.com</a>
+        </li>
+        <li><b>Types of Data Collected</b><br>
+          Technical/statistical data via Google Analytics, AdSense, Cloudflare, Google Tag Manager.<br>
+          Data provided via contact form/email.<br>
+          Data from social widgets (Instagram, Facebook, Twitter, Discord, Crypto).<br>
+          Web3/Metamask transaction data (NFT purchase in crypto).<br>
+          Browsing data: IP, browser, OS, pages visited, session duration.<br>
+          Cookies and tracking technologies.
+        </li>
+        <li><b>Purpose of Data Processing</b><br>
+          Statistical analysis, security, handling requests, NFT transactions, user experience personalization.
+        </li>
+        <li><b>Legal Basis</b><br>
+          Consent (form/email, cookies), legitimate interest (statistics, security), contract performance (NFT), legal obligations.
+        </li>
+        <li><b>Data Processing and Retention</b><br>
+          Data processed automatically via listed services.<br>
+          Not shared with third parties for commercial purposes.<br>
+          Statistical data is aggregated/anonymous and not deleted.<br>
+          Data via form/email can be deleted upon request.<br>
+          NFT data retained as needed.
+        </li>
+        <li><b>User Rights</b><br>
+          Access, rectify, delete data submitted via form/email.<br>
+          Restrict/object, portability, withdraw consent.<br>
+          Data collected via third-party services is anonymous and aggregated.<br>
+          For inquiries: nyfurion@gmail.com
+        </li>
+        <li><b>Cookies and Tracking</b><br>
+          The site uses technical, analytical, profiling, and third-party cookies.<br>
+          Preferences managed via cookie banner.
+        </li>
+        <li><b>Cookie Consent Banner</b><br>
+          Banner compliant with EU guidelines: accept/decline non-essential cookies, manage preferences, link to Cookie Policy.
+        </li>
+        <li><b>Data Transfer Outside the EU</b><br>
+          Some data may be transferred outside the EU (e.g., Google, Cloudflare) with adequate safeguards (standard contractual clauses).
+        </li>
+        <li><b>Data Security</b><br>
+          SSL encryption, firewalls, restricted access.
+        </li>
+        <li><b>Consent Log</b><br>
+          The site records user consent for cookies and personal data.
+        </li>
+        <li><b>Updates</b><br>
+          This policy may be updated. Users will be notified via site notices.
+        </li>
+      </ol>
+      <span style="font-size:0.75em;color:#aaa;float:right;">Ultimo agg.: 2025-06-03</span>
+    </div>
+    <div style="width:100%;text-align:center;padding:0.7em 0 1em 0;">
+      <button id="accept-policy-btn" style="background:#1bff6a;color:#181a22;font-family:'Orbitron',sans-serif;font-size:1em;padding:0.38em 1.5em;border-radius:12px;border:none;box-shadow:0 0 8px #00eaff33;cursor:pointer;transition:background 0.2s;">Accetto / I Accept</button>
+    </div>
+  </div>
+</div>
+<style>
+#policy-modal {
+  max-width: 480px !important;
+  width: 96vw !important;
+  max-height: 90vh !important;
+  right: 2vw !important;
+  bottom: 4vw !important;
+}
+#policy-modal-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #1bff6a #232a3a;
+}
+#policy-modal-scroll::-webkit-scrollbar {
+  width: 7px;
+  background: #232a3a;
+  border-radius: 8px;
+}
+#policy-modal-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #1bff6a 0%, #00eaff 100%);
+  border-radius: 8px;
+  min-height: 18px;
+}
+#policy-modal-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ffe87c 0%, #00eaff 100%);
+}
+@media (max-width: 600px) {
+  #policy-modal {
+    max-width: 99vw !important;
+    max-height: 98vh !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    border-radius: 0 !important;
+  }
+  #policy-modal-scroll {
+    max-height: 60vh !important;
+    font-size: 0.92em !important;
+  }
+}
+</style>
+<script>
+  // ...existing code...
+  // Gestione apertura/chiusura modale policy compatta + accetto + tracciabilità consenso lato client
+  document.addEventListener('DOMContentLoaded', function() {
+    var openBtn = document.getElementById('open-policy-btn');
+    var modal = document.getElementById('policy-modal');
+    var closeBtn = document.getElementById('close-policy-btn');
+    var acceptBtn = document.getElementById('accept-policy-btn');
+
+    // Mostra la modale solo se non è già stato accettato
+    if (localStorage.getItem('policyAccepted') === 'true') {
+      if (modal) modal.style.display = 'none';
+    } else {
+      if (modal) modal.style.display = 'block';
+    }
+
+    function closePolicyModal() {
+      modal.style.display = 'none';
+    }
+    if(openBtn && modal && closeBtn) {
+      openBtn.addEventListener('click', function() {
+        modal.style.display = 'block';
+      });
+      closeBtn.addEventListener('click', closePolicyModal);
+      document.addEventListener('click', function(e) {
+        if (modal.style.display === 'block' && !modal.contains(e.target) && e.target !== openBtn) {
+          closePolicyModal();
+        }
+      });
+    }
+    if(acceptBtn) {
+      acceptBtn.addEventListener('click', function() {
+        // Tracciabilità: salva la data e ora di accettazione oltre al flag
+        localStorage.setItem('policyAccepted', 'true');
+        localStorage.setItem('policyAcceptedAt', new Date().toISOString());
+        closePolicyModal();
+      });
+    }
+  });
+</script>
+<footer style="width:100vw;text-align:center;padding:1.2em 0 1.2em 0;color:#aaa;font-size:0.98em;font-family:'Orbitron',sans-serif;letter-spacing:0.04em;opacity:0.85;">
+  © 2024 Riccardo Duca – Tutti i diritti riservati. All rights reserved.
+</footer>
+<!-- MENU HAMBURGER A TENDINA ANIMATO (UNICO, SEMPRE VISIBILE) -->
+<style>
+#dropdown-hamburger-menu {
+    position: fixed;
+    top: 24px;
+    right: 32px;
+    z-index: 9999;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 60% 40%, #232a3a 80%, #181a22 100%);
+    box-shadow: 0 0 18px #1bff6a, 0 0 32px #00eaff22;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: box-shadow 0.22s, background 0.22s;
+    overflow: visible;
+}
+#dropdown-hamburger-menu.active {
+    box-shadow: 0 0 32px #1bff6a, 0 0 64px #00eaff66;
+    background: radial-gradient(circle at 60% 40%, #232a3a 90%, #181a22 100%);
+}
+#dropdown-hamburger-icon {
+    width: 32px;
+    height: 32px;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.22s;
+}
+#dropdown-hamburger-menu.active #dropdown-hamburger-icon {
+    opacity: 0.2;
+}
+.dropdown-menu-items {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 62px;
+    right: 0;
+    min-width: 210px;
+    background: rgba(24,26,34,0.98);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px #00eaff33;
+    padding: 0.7em 0;
+    z-index: 10;
+    border: 1.5px solid #1bff6a33;
+    animation: dropdownFadeIn 0.32s cubic-bezier(.4,1.6,.4,1);
+}
+#dropdown-hamburger-menu.active .dropdown-menu-items {
+    display: flex;
+}
+@keyframes dropdownFadeIn {
+    from { opacity: 0; transform: translateY(-18px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+.dropdown-menu-link {
+    font-family: 'Cinzel', serif;
+    font-size: 1.22em;
+    color: #bafff7;
+    text-shadow: 0 0 16px #5fffd7, 0 0 32px #00eaff;
+    font-weight: bold;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    background: none;
+    border-radius: 12px;
+    padding: 10px 24px;
+    margin: 2px 0;
+    transition: color 0.18s, text-shadow 0.18s, background 0.18s;
+    filter: drop-shadow(0 0 8px #00eaff) drop-shadow(0 0 18px #1bff6a);
+    outline: none;
+}
+.dropdown-menu-link:hover, .dropdown-menu-link:focus {
+    color: #ffe87c !important;
+    text-shadow: 0 0 24px #ffe87c, 0 0 48px #39ff14;
+    background: #232a3a;
+}
+@media (max-width: 700px) {
+    #dropdown-hamburger-menu {
+        top: 14px;
+        right: 12px;
+        width: 44px;
+        height: 44px;
+    }
+    .dropdown-menu-items {
+        min-width: 140px;
+        border-radius: 10px;
+        padding: 0.4em 0;
+    }
+    .dropdown-menu-link {
+        font-size: 1em;
+        padding: 8px 12px;
+    }
+}
+</style>
+<div id="dropdown-hamburger-menu" aria-label="Menu" tabindex="0">
+    <div id="dropdown-hamburger-icon">
+        <span style="display:block;width:28px;height:4px;background:#bafff7;border-radius:2px;margin-bottom:5px;"></span>
+        <span style="display:block;width:28px;height:4px;background:#bafff7;border-radius:2px;margin-bottom:5px;"></span>
+        <span style="display:block;width:28px;height:4px;background:#bafff7;border-radius:2px;"></span>
+    </div>
+    <div class="dropdown-menu-items">
+        <a href="#nuova-sezione" class="dropdown-menu-link">Series Nyfurion</a>
+        <a href="#seconda-sezione" class="dropdown-menu-link">NFT</a>
+        <a href="#roadmap-section" class="dropdown-menu-link">Roadmap</a>
+        <a href="#contatti-section" class="dropdown-menu-link">Contacts</a>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var menu = document.getElementById('dropdown-hamburger-menu');
+    var isOpen = false;
+    function openMenu() {
+        menu.classList.add('active');
+        isOpen = true;
+    }
+    function closeMenu() {
+        menu.classList.remove('active');
+        isOpen = false;
+    }
+    menu.addEventListener('click', function(e) {
+        if (!isOpen) openMenu();
+        else closeMenu();
+    });
+    // Chiudi menu al click su link
+    var links = menu.querySelectorAll('.dropdown-menu-link');
+    links.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            closeMenu();
+        });
+    });
+    // Accessibilità tastiera
+    menu.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            if (!isOpen) openMenu();
+            else closeMenu();
+        }
+        if (e.key === 'Escape') closeMenu();
+    });
+    // Chiudi se clicchi fuori
+    document.addEventListener('click', function(e) {
+        if (isOpen && !menu.contains(e.target)) closeMenu();
+    });
+});
+</script>
+<!-- Sfondo animato: particelle leggere su tutte le sezioni principali -->
+<canvas id="global-particles-bg" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;"></canvas>
+<script>
+// Particelle globali su tutte le sezioni (come la roadmap)
+window.addEventListener('DOMContentLoaded', function() {
+    function globalParticles() {
+        const canvas = document.getElementById('global-particles-bg');
+        if (!canvas) return;
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const PARTICLE_COUNT = window.innerWidth < 700 ? 10 : 22;
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                r: 1.2 + Math.random() * 2.2,
+                dx: (Math.random() - 0.5) * 0.18,
+                dy: (Math.random() - 0.5) * 0.18,
+                a: 0.18 + Math.random() * 0.22
+            });
+        }
+        function draw() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            particles.forEach(p => {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+                ctx.fillStyle = `rgba(27,255,106,${p.a})`;
+                ctx.shadowColor = "#00eaff";
+                ctx.shadowBlur = 8;
+                ctx.fill();
+                ctx.restore();
+            });
+        }
+        function animate() {
+            particles.forEach(p => {
+                p.x += p.dx;
+                p.y += p.dy;
+                if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+            });
+            draw();
+            requestAnimationFrame(animate);
+        }
+        animate();
+        window.addEventListener('resize', resizeCanvas);
+    }
+    setTimeout(globalParticles, 200);
+});
+</script>
+</body>
+</html>

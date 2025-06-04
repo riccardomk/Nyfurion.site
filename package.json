@@ -1,0 +1,25 @@
+{
+  "name": "nyfurionwebsite0.1",
+  "version": "1.0.0",
+  "description": "Nyfurion.com è un portale Web3 innovativo che sfrutta la tecnologia *IPFS* e *GitHub* per garantire un hosting sicuro, scalabile e completamente decentralizzato.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/riccardomk/Nyfurion.site.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/riccardomk/Nyfurion.site/issues"
+  },
+  "homepage": "https://github.com/riccardomk/Nyfurion.site#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  }
+}
