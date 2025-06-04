@@ -1070,7 +1070,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         // Attiva il primo step di default
         setTimeout(() => {
-                      
+                                            
 
             const first = stepEls[0];
             if (first) {
@@ -1649,6 +1649,18 @@ window.addEventListener('DOMContentLoaded', function() {
         // Tracciabilità: salva la data e ora di accettazione oltre al flag
         localStorage.setItem('policyAccepted', 'true');
         localStorage.setItem('policyAcceptedAt', new Date().toISOString());
+
+        // INVIO CONSENSO AL BACKEND NODE.JS
+        fetch('http://localhost:3001/api/consenso', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userAgent: navigator.userAgent,
+            policyVersion: '1.0',
+            sessionId: localStorage.getItem('policySessionId') || ''
+          })
+        }).catch(() => { /* Ignora errori di rete */ });
+
         closePolicyModal();
       });
     }
