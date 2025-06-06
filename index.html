@@ -1668,7 +1668,7 @@ window.addEventListener('DOMContentLoaded', function() {
 </script>
 <!-- Sezione Recensioni Progetto -->
 
-ù<section id="project-rating-section" style="width:96vw;max-width:1200px;margin:2.5em auto 1.2em auto;padding:0.6em 2em;background:#232a3a;border-radius:18px;box-shadow:0 0 18px #00eaff33;display:flex;align-items:center;justify-content:space-between;min-height:54px;">
+<section id="project-rating-section" style="width:96vw;max-width:1200px;margin:2.5em auto 1.2em auto;padding:0.6em 2em;background:#232a3a;border-radius:18px;box-shadow:0 0 18px #00eaff33;display:flex;align-items:center;justify-content:space-between;min-height:54px;">
   <div style="display:flex;align-items:center;gap:2em;width:100%;">
     <span style="color:#1bff6a;font-family:'Orbitron',sans-serif;font-size:1.08em;white-space:nowrap;">Valuta il progetto</span>
     <form id="project-rating-form" style="display:flex;flex-direction:row;align-items:center;gap:1.1em;margin:0;">
@@ -2005,24 +2005,81 @@ window.addEventListener('DOMContentLoaded', function() {
 
 <style>
 /* ...existing code... */
-/* RIMOSSO: Stili wallet-login-btn e varianti */
 
-/* Nascondi il bottone "Buy for 0.05 ETH" sugli smartphone */
+/* Migliora la sezione rating su mobile */
 @media (max-width: 700px) {
+  #project-rating-section {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 0.7em 0.5em !important;
+    min-height: unset !important;
+    margin: 1.2em auto 1em auto !important;
+    box-sizing: border-box;
+    /* RIMUOVI IL BOTTONE BUY SOLO SU MOBILE */
+  }
+  /* Nascondi il bottone "Buy for 0.05 ETH" su mobile */
   .nft-buy-btn {
     display: none !important;
   }
+  #project-rating-section > div {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.7em !important;
+    width: 100% !important;
+  }
+  #project-rating-form {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.5em !important;
+    width: 100% !important;
+  }
+  #project-star-rating {
+    font-size: 1.3em !important;
+    justify-content: center !important;
+    width: 100% !important;
+  }
+  #project-rating-average {
+    margin-left: 0 !important;
+    margin-top: 0.5em !important;
+    min-width: unset !important;
+    text-align: center !important;
+    width: 100% !important;
+    font-size: 0.98em !important;
+  }
+  #project-rating-success {
+    margin-left: 0 !important;
+    margin-top: 0.3em !important;
+    display: block;
+    text-align: center;
+  }
 }
+
+/* Migliora la sezione testimonianze su mobile */
+@media (max-width: 700px) {
+  #testimonianze-section {
+    padding: 0.7em 0.5em 0.7em 0.5em !important;
+    margin: 0 auto 1.2em auto !important;
+  }
+  #testimonianza-form {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.5em !important;
+    width: 100% !important;
+  }
+  #testimonianza-form input,
+  #testimonianza-form button {
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: 0.97em !important;
+    margin: 0 !important;
+  }
+  #testimonianze-list {
+    max-height: 90px !important;
+    padding-right: 0 !important;
+    font-size: 0.97em !important;
+  }
+}
+
 /* ...existing code... */
 </style>
-
-<script>
-// ...existing code...
-
-// --- RIMOSSO: Script MetaMask Wallet Login ---
-
-</script>
-
-<!-- RIMOSSO: <div id="wallet-login-btn-wrapper"> ... </div> -->
-
 <!-- ...existing code... -->
