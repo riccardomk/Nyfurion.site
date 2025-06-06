@@ -1245,6 +1245,15 @@ window.addEventListener('DOMContentLoaded', function() {
             outline:none;
         }
         @media (max-width: 700px) {
+            #contatti-section, #contatti-section > div {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+                box-sizing: border-box !important;
+                overflow: visible !important;
+                border-radius: 14px !important;
+            }
             #contatti-section > div { padding:2em 0.5em 1em 0.5em; }
             .contatti-title { font-size:1.3em !important; }
             .contatti-social-icons { gap: 1.2em !important; }
@@ -2008,14 +2017,23 @@ window.addEventListener('DOMContentLoaded', function() {
 
 /* Migliora la sezione rating su mobile */
 @media (max-width: 700px) {
+  #project-rating-section,
+  #testimonianze-section {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    border-radius: 14px !important;
+  }
   #project-rating-section {
     flex-direction: column !important;
     align-items: stretch !important;
     padding: 0.7em 0.5em !important;
     min-height: unset !important;
     margin: 1.2em auto 1em auto !important;
-    box-sizing: border-box;
-    /* RIMUOVI IL BOTTONE BUY SOLO SU MOBILE */
+    /* ...existing code... */
   }
   /* Nascondi il bottone "Buy for 0.05 ETH" su mobile */
   .nft-buy-btn {
@@ -2026,39 +2044,19 @@ window.addEventListener('DOMContentLoaded', function() {
     align-items: center !important;
     gap: 0.7em !important;
     width: 100% !important;
-  }
-  #project-rating-form {
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 0.5em !important;
-    width: 100% !important;
-  }
-  #project-star-rating {
-    font-size: 1.3em !important;
-    justify-content: center !important;
-    width: 100% !important;
-  }
-  #project-rating-average {
-    margin-left: 0 !important;
-    margin-top: 0.5em !important;
-    min-width: unset !important;
-    text-align: center !important;
-    width: 100% !important;
-    font-size: 0.98em !important;
-  }
-  #project-rating-success {
-    margin-left: 0 !important;
-    margin-top: 0.3em !important;
-    display: block;
-    text-align: center;
+    box-sizing: border-box !important;
   }
 }
-
 /* Migliora la sezione testimonianze su mobile */
 @media (max-width: 700px) {
   #testimonianze-section {
     padding: 0.7em 0.5em 0.7em 0.5em !important;
     margin: 0 auto 1.2em auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    border-radius: 14px !important;
   }
   #testimonianza-form {
     flex-direction: column !important;
@@ -2079,7 +2077,6 @@ window.addEventListener('DOMContentLoaded', function() {
     font-size: 0.97em !important;
   }
 }
-
 /* ...existing code... */
 </style>
 <!-- ...existing code... -->
