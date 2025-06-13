@@ -37,7 +37,19 @@
         <div id="missing-section"></div>
         <div id="all-section"></div>
     </div>
+    <script src="wallet-access.js"></script>
     <script>
+    window.initWalletAccess({
+        onConnect: function(address, signature) {
+            let el = document.getElementById('wallet-info');
+            if (el) el.innerHTML = 'Wallet collegato: <span style="color:#1bff6a">'+address.slice(0,6)+'...'+address.slice(-4)+'</span>';
+            let btn = document.getElementById('connect-btn');
+            if (btn) btn.style.display = 'none';
+            window.nyfWallet = address;
+        },
+        buttonId: 'connect-btn'
+    });
+
     // Configurazione collezione
     const CONTRACT_ADDRESS = "0x156D6B772980768AA69296E222CaF17aBf84B501";
     const OPENSEA_COLLECTION = "nyfurion";

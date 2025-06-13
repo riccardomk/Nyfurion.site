@@ -1118,5 +1118,29 @@
         });
     });
     </script>
+    <script src="wallet-access.js"></script>
+    <script>
+    // Miglioramento: accesso wallet unico, senza QR, valido sia desktop che mobile
+    window.initWalletAccess({
+        onConnect: function(address, signature) {
+            // Aggiorna il testo del pulsante con l'indirizzo abbreviato
+            let btn = document.getElementById('btn-connect-metamask');
+            if (btn) btn.textContent = address.slice(0,6)+'...'+address.slice(-4);
+            window.nyfWallet = address;
+            // Abilita tutti i pulsanti principali solo se wallet connesso
+            const enableBtns = ['btn-quiz','btn-community','btn-club'];
+            enableBtns.forEach(id => {
+                let b = document.getElementById(id);
+                if (b) b.disabled = false;
+            });
+        },
+        buttonId: 'btn-connect-metamask'
+    });
+    // Disabilita i pulsanti finché il wallet non è connesso
+    ['btn-quiz','btn-community','btn-club'].forEach(id => {
+        let b = document.getElementById(id);
+        if (b) b.disabled = true;
+    });
+    </script>
 </body>
 </html>

@@ -33,29 +33,8 @@ walletConnectScript.onload = web3ModalScript.onload = function() {
     async function onConnectWallet() {
         try {
             provider = await web3Modal.connect();
-            // Richiedi account
-            const accounts = provider.accounts || (await provider.request({ method: 'eth_accounts' })) || (provider.selectedAddress ? [provider.selectedAddress] : []);
-            const account = accounts[0];
-            if (!account) {
-                alert('Nessun account trovato.');
-                return;
-            }
-            // Messaggio da firmare
-            const message = 'Conferma accesso a Nyfurion Club Prime';
-            // Richiesta firma
-            let signature;
-            try {
-                signature = await provider.request({
-                    method: 'personal_sign',
-                    params: [message, account],
-                });
-            } catch (e) {
-                alert('Firma annullata. Accesso non consentito.');
-                return;
-            }
-            // Se la firma va a buon fine, redirect
-            alert('Accesso confermato! Benvenuto.');
-            window.location.href = 'club-prime.html'; // Cambia qui per altre sezioni
+            // Puoi ora usare provider con ethers.js o web3.js
+            alert('Wallet connesso!');
         } catch (e) {
             alert('Connessione annullata o fallita.');
         }

@@ -373,6 +373,17 @@
     </div>
 </div>
 <div id="nyf-profile-modal-root"></div>
+<script src="wallet-access.js"></script>
+<script>
+window.initWalletAccess({
+    onConnect: function(address, signature) {
+        let el = document.getElementById('nyf-wallet-below-chat');
+        if (el) el.textContent = 'Wallet: ' + address;
+        window.nyfWallet = address;
+    },
+    buttonId: 'connect-wallet-btn'
+});
+</script>
 <script>
 // --- Utility ---
 function abbreviateAddress(addr) {
