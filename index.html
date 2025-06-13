@@ -1066,6 +1066,7 @@ window.addEventListener('DOMContentLoaded', function() {
                     other.querySelector('.roadmap-step-content').classList.remove('active');
                 });
             });
+
         });
 
         // Attiva il primo step di default
@@ -1213,6 +1214,11 @@ window.addEventListener('DOMContentLoaded', function() {
                     <circle cx="19" cy="25" r="1.2" fill="#00eaff"/>
                 </svg>
             </a>
+            <!-- Book icon (link fornito) -->
+    <a href="https://l.instagram.com/?u=https%3A%2F%2Fpubluu.com%2Fflip-book%2F885246%2F1939412%3Ffbclid%3DPAZXh0bgNhZW0CMTEAAafdOmSa3TPBK6yG8J6AtY8_TgYzO-2OLRjRF0NRwKxEn2LPhjyE9Bv93guWKw_aem_05faaqaBnbw0Qpcv-X5RWQ&e=AT1cDmWvb0OmepCeuBjwu6kMn3Tf_-dS82XMpb8zmyJfEV0nmHzlQ_yaye0BgNTk1mi0slFX0wo0_9td27KFKmor7WuLSrCUr11SoN0"
+       target="_blank" title="Book" style="display:inline-block;font-size:2.1em;line-height:1;">
+        📖
+    </a>
             <!-- Email icon -->
             <a href="mailto:nyfurion@gmail.com" title="Email" style="display:inline-block;">
                 <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1601,7 +1607,7 @@ window.addEventListener('DOMContentLoaded', function() {
   border-radius: 8px;
 }
 #policy-modal-scroll::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #1bff6a 0%, #00eaff 100%);
+  background: linear-gradient(180deg, #1bff6a 0%, #00eaff 60%, #fff 100%);
   border-radius: 8px;
   min-height: 18px;
 }
@@ -1676,132 +1682,7 @@ window.addEventListener('DOMContentLoaded', function() {
   });
 </script>
 <!-- Sezione Recensioni Progetto -->
-
-<section id="project-rating-section" style="width:96vw;max-width:1200px;margin:2.5em auto 1.2em auto;padding:0.6em 2em;background:#232a3a;border-radius:18px;box-shadow:0 0 18px #00eaff33;display:flex;align-items:center;justify-content:space-between;min-height:54px;">
-  <div style="display:flex;align-items:center;gap:2em;width:100%;">
-    <span style="color:#1bff6a;font-family:'Orbitron',sans-serif;font-size:1.08em;white-space:nowrap;">Valuta il progetto</span>
-    <form id="project-rating-form" style="display:flex;flex-direction:row;align-items:center;gap:1.1em;margin:0;">
-      <div id="project-star-rating" style="font-size:1.7em;cursor:pointer;color:#ffe87c;user-select:none;display:flex;align-items:center;">
-        <!-- Stelle generate via JS -->
-      </div>
-      <button type="submit" style="background:#1bff6a;color:#181a22;font-family:'Orbitron',sans-serif;font-size:0.98em;padding:0.22em 1em;border-radius:10px;border:none;box-shadow:0 0 8px #00eaff33;cursor:pointer;transition:background 0.2s;">Invia</button>
-      <span id="project-rating-success" style="color:#1bff6a;margin-left:1em;display:none;font-size:0.98em;">Grazie!</span>
-    </form>
-    <div id="project-rating-average" style="margin-left:1.5em;text-align:left;color:#ffe87c;font-size:1em;min-width:100px;"></div>
-  </div>
-</section>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Sezione recensione stelle (locale, persistente)
-  const starContainer = document.getElementById('project-star-rating');
-  const ratingForm = document.getElementById('project-rating-form');
-  const ratingSuccess = document.getElementById('project-rating-success');
-  const ratingAvg = document.getElementById('project-rating-average');
-  let selected = 0;
-  function getRatings() {
-    try { return JSON.parse(localStorage.getItem('projectRatings') || '[]'); } catch { return []; }
-  }
-  function setRatings(arr) {
-    localStorage.setItem('projectRatings', JSON.stringify(arr));
-  }
-  function renderStars(val) {
-    let html = '';
-    for (let i = 1; i <= 5; i++) {
-      html += `<span class="star" data-star="${i}" style="margin:0 0.08em;${i<=val?'color:#ffe87c;':'color:#444;'}">&#9733;</span>`;
-    }
-    starContainer.innerHTML = html;
-  }
-  function renderAverage() {
-    const arr = getRatings();
-    if (arr.length === 0) {
-      ratingAvg.textContent = "Nessuna recensione.";
-      return;
-    }
-    const avg = (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2);
-    ratingAvg.innerHTML = `Media: <b>${avg}</b> / 5<br><span style="font-size:0.93em;">(${arr.length} voti)</span>`;
-  }
-  renderStars(selected);
-  renderAverage();
-  starContainer.addEventListener('mouseover', function(e) {
-    if (e.target.classList.contains('star')) {
-      renderStars(Number(e.target.dataset.star));
-    }
-  });
-  starContainer.addEventListener('mouseleave', function() {
-    renderStars(selected);
-  });
-  starContainer.addEventListener('click', function(e) {
-    if (e.target.classList.contains('star')) {
-      selected = Number(e.target.dataset.star);
-      renderStars(selected);
-    }
-  });
-  ratingForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    if (!selected) return;
-    const arr = getRatings();
-    arr.push(selected);
-    setRatings(arr);
-    ratingSuccess.style.display = 'block';
-    setTimeout(()=>{ratingSuccess.style.display='none';}, 1500);
-    renderAverage();
-  });
-});
-</script>
-
-<!-- Sezione Testimonianze e Storie Personali -->
-<section id="testimonianze-section" style="width:96vw;max-width:1200px;margin:0 auto 2em auto;padding:0.6em 2em 0.7em 2em;background:#232a3a;border-radius:18px;box-shadow:0 0 14px #00eaff22;display:flex;flex-direction:column;align-items:flex-start;min-height:44px;">
-  <div style="color:#1bff6a;font-family:'Orbitron',sans-serif;font-size:1.02em;margin-bottom:0.5em;">Testimonianze &amp; Storie della Community</div>
-  <form id="testimonianza-form" style="display:flex;flex-direction:row;align-items:center;gap:0.7em;width:100%;margin-bottom:0.7em;">
-    <input id="testimonianza-nome" type="text" maxlength="18" placeholder="Nome (opzionale)" style="padding:0.3em 0.7em;border-radius:8px;border:1px solid #222;background:#191c22;color:#fff;font-size:0.98em;width:120px;">
-    <input id="testimonianza-titolo" type="text" maxlength="32" placeholder="Titolo breve" style="padding:0.3em 0.7em;border-radius:8px;border:1px solid #222;background:#191c22;color:#fff;font-size:0.98em;width:180px;">
-    <input id="testimonianza-storia" type="text" maxlength="120" placeholder="La tua storia o motivo" style="padding:0.3em 0.7em;border-radius:8px;border:1px solid #222;background:#191c22;color:#fff;font-size:0.98em;flex:1;">
-    <button type="submit" style="background:#1bff6a;color:#181a22;font-family:'Orbitron',sans-serif;font-size:0.98em;padding:0.22em 1em;border-radius:10px;border:none;box-shadow:0 0 8px #00eaff33;cursor:pointer;transition:background 0.2s;">Invia</button>
-  </form>
-  <div id="testimonianze-list" style="width:100%;max-height:110px;overflow-y:auto;padding-right:0.5em;">
-    <!-- Testimonianze inserite via JS -->
-  </div>
-</section>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Testimonianze/storie personali (locale, ottimizzato)
-  const list = document.getElementById('testimonianze-list');
-  const form = document.getElementById('testimonianza-form');
-  const nome = document.getElementById('testimonianza-nome');
-  const titolo = document.getElementById('testimonianza-titolo');
-  const storia = document.getElementById('testimonianza-storia');
-  function getTestimonianze() {
-    try { return JSON.parse(localStorage.getItem('testimonianzeNFT') || '[]'); } catch { return []; }
-  }
-  function setTestimonianze(arr) {
-    localStorage.setItem('testimonianzeNFT', JSON.stringify(arr));
-  }
-  function renderTestimonianze() {
-    const arr = getTestimonianze();
-    list.innerHTML = '';
-    arr.slice(-8).reverse().forEach(t => {
-      const div = document.createElement('div');
-      div.style = "margin-bottom:0.5em;padding:0.5em 0.9em;background:#181a22;border-radius:8px;color:#fff;font-size:0.97em;";
-      div.innerHTML = `<b>${t.titolo ? t.titolo : 'Storia'}:</b> ${t.storia}${t.nome ? ' <span style="color:#1bff6a;font-size:0.93em;">- ' + t.nome + '</span>' : ''}`;
-      list.appendChild(div);
-    });
-    if (list.innerHTML === '') list.innerHTML = '<div style="color:#aaa;text-align:center;">Nessuna testimonianza ancora.</div>';
-  }
-  renderTestimonianze();
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const n = nome.value.trim().slice(0,18);
-    const ti = titolo.value.trim().slice(0,32);
-    const st = storia.value.trim().slice(0,120);
-    if (!st) return;
-    const arr = getTestimonianze();
-    arr.push({nome:n, titolo:ti, storia:st});
-    setTestimonianze(arr);
-    renderTestimonianze();
-    form.reset();
-  });
-});
-</script>
+<!-- RIMOSSO: Tutta la sezione valutazione progetto (stelle, form, script) -->
 
 <footer style="width:100vw;text-align:center;padding:1.2em 0 1.2em 0;color:#aaa;font-size:0.98em;font-family:'Orbitron',sans-serif;letter-spacing:0.04em;opacity:0.85;">
   © 2024 Riccardo Duca – Tutti i diritti riservati. All rights reserved.
@@ -1817,7 +1698,7 @@ document.addEventListener('DOMContentLoaded', function() {
     height: 58px;
     border-radius: 50%;
     background: radial-gradient(circle at 60% 40%, #232a3a 80%, #181a22 100%);
-    box-shadow: 0 0 18px #1bff6a, 0 0 32px #00eaff22;
+    box-shadow: 0 0 10px #1bff6a, 0 0 18px #00eaff22;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1826,7 +1707,7 @@ document.addEventListener('DOMContentLoaded', function() {
     overflow: visible;
 }
 #dropdown-hamburger-menu.active {
-    box-shadow: 0 0 32px #1bff6a, 0 0 64px #00eaff66;
+    box-shadow: 0 0 18px #1bff6a, 0 0 32px #00eaff66;
     background: radial-gradient(circle at 60% 40%, #232a3a 90%, #181a22 100%);
 }
 #dropdown-hamburger-icon {
@@ -1843,47 +1724,60 @@ document.addEventListener('DOMContentLoaded', function() {
 #dropdown-hamburger-menu.active #dropdown-hamburger-icon {
     opacity: 0.2;
 }
+#dropdown-hamburger-icon span {
+    display: block;
+    width: 28px;
+    height: 4px;
+    background: #bafff7;
+    border-radius: 2px;
+    margin-bottom: 5px;
+}
+#dropdown-hamburger-icon span:last-child {
+    margin-bottom: 0;
+}
+/* MENU APERTO: più piccolo e compatto */
 .dropdown-menu-items {
     display: none;
     flex-direction: column;
     position: absolute;
     top: 62px;
     right: 0;
-    min-width: 210px;
+    min-width: 110px;
+    max-width: 150px;
     background: rgba(24,26,34,0.98);
-    border-radius: 16px;
-    box-shadow: 0 8px 32px #00eaff33;
-    padding: 0.7em 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 18px #00eaff33;
+    padding: 0.18em 0;
     z-index: 10;
-    border: 1.5px solid #1bff6a33;
-    animation: dropdownFadeIn 0.32s cubic-bezier(.4,1.6,.4,1);
+    border: 1px solid #1bff6a33;
+    animation: dropdownFadeIn 0.22s cubic-bezier(.4,1.6,.4,1);
 }
 #dropdown-hamburger-menu.active .dropdown-menu-items {
     display: flex;
 }
 @keyframes dropdownFadeIn {
-    from { opacity: 0; transform: translateY(-18px);}
+    from { opacity: 0; transform: translateY(-10px);}
     to { opacity: 1; transform: translateY(0);}
 }
 .dropdown-menu-link {
     font-family: 'Cinzel', serif;
-    font-size: 1.22em;
+    font-size: 0.97em;
     color: #bafff7;
-    text-shadow: 0 0 16px #5fffd7, 0 0 32px #00eaff;
+    text-shadow: 0 0 8px #5fffd7, 0 0 16px #00eaff;
     font-weight: bold;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.01em;
     text-decoration: none;
     background: none;
-    border-radius: 12px;
-    padding: 10px 24px;
-    margin: 2px 0;
-    transition: color 0.18s, text-shadow 0.18s, background 0.18s;
-    filter: drop-shadow(0 0 8px #00eaff) drop-shadow(0 0 18px #1bff6a);
+    border-radius: 7px;
+    padding: 5px 10px;
+    margin: 1px 0;
+    transition: color 0.13s, text-shadow 0.13s, background 0.13s;
+    filter: drop-shadow(0 0 4px #00eaff) drop-shadow(0 0 8px #1bff6a);
     outline: none;
 }
 .dropdown-menu-link:hover, .dropdown-menu-link:focus {
     color: #ffe87c !important;
-    text-shadow: 0 0 24px #ffe87c, 0 0 48px #39ff14;
+    text-shadow: 0 0 12px #ffe87c, 0 0 24px #39ff14;
     background: #232a3a;
 }
 @media (max-width: 700px) {
@@ -1893,22 +1787,34 @@ document.addEventListener('DOMContentLoaded', function() {
         width: 44px;
         height: 44px;
     }
+    #dropdown-hamburger-icon {
+        width: 16px;
+        height: 16px;
+    }
+    #dropdown-hamburger-icon span {
+        width: 12px;
+        height: 2px;
+        margin-bottom: 2px;
+    }
     .dropdown-menu-items {
-        min-width: 140px;
-        border-radius: 10px;
-        padding: 0.4em 0;
+        min-width: 80px;
+        max-width: 110px;
+        border-radius: 7px;
+        padding: 0.12em 0;
+        top: 38px;
     }
     .dropdown-menu-link {
-        font-size: 1em;
-        padding: 8px 12px;
+        font-size: 0.85em;
+        padding: 4px 7px;
     }
 }
+/* ...existing code... */
 </style>
 <div id="dropdown-hamburger-menu" aria-label="Menu" tabindex="0">
     <div id="dropdown-hamburger-icon">
-        <span style="display:block;width:28px;height:4px;background:#bafff7;border-radius:2px;margin-bottom:5px;"></span>
-        <span style="display:block;width:28px;height:4px;background:#bafff7;border-radius:2px;margin-bottom:5px;"></span>
-        <span style="display:block;width:28px;height:4px;background:#bafff7;border-radius:2px;"></span>
+        <span></span>
+        <span></span>
+        <span></span>
     </div>
     <div class="dropdown-menu-items">
         <a href="#nuova-sezione" class="dropdown-menu-link">Series Nyfurion</a>
@@ -1917,40 +1823,127 @@ document.addEventListener('DOMContentLoaded', function() {
         <a href="#contatti-section" class="dropdown-menu-link">Contacts</a>
     </div>
 </div>
+<!-- Pulsante interattivo Portale compatto vicino al menu hamburger -->
+<a id="quiz-portal-btn" href="quiz.html" target="_blank" title="Portale"
+   style="position:fixed;top:82px;right:18px;z-index:9998;display:flex;align-items:center;justify-content:center;text-decoration:none;">
+    <span class="quiz-portal-rocket" style="font-size:1.1em;">🌀</span>
+    <span class="quiz-portal-label">journey</span>
+    <span class="quiz-portal-firebar"></span>
+</a>
+<style>
+/* Pulsante Portale compatto e minimale */
+#quiz-portal-btn {
+    background: linear-gradient(90deg,#00eaff 0%,#1bff6a 100%);
+    color: #181a22;
+    font-family: 'Orbitron',sans-serif;
+    font-size: 0.89em;
+    font-weight: bold;
+    border-radius: 9px;
+    box-shadow: 0 0 6px #00eaff33, 0 0 10px #1bff6a22;
+    padding: 0.09em 0.55em 0.09em 0.45em;
+    gap: 0.28em;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s, transform 0.18s, box-shadow 0.18s;
+    overflow: visible;
+    border: none;
+    outline: none;
+    min-width: 0;
+    min-height: 0;
+    animation: quizPortalAppear 1.2s cubic-bezier(.4,1.6,.4,1);
+}
+@keyframes quizPortalAppear {
+    0% { opacity: 0; transform: translateY(-12px) scale(0.7);}
+    100% { opacity: 1; transform: translateY(0) scale(1);}
+}
+#quiz-portal-btn:hover, #quiz-portal-btn:focus {
+    background: linear-gradient(90deg,#1bff6a 0%,#00eaff 100%);
+    color: #fff;
+    box-shadow: 0 0 14px #1bff6a, 0 0 22px #00eaff66;
+    transform: scale(1.05) translateY(-2px);
+    outline: none;
+}
+.quiz-portal-rocket {
+    font-size: 1.1em;
+    display: inline-block;
+    transition: transform 0.22s cubic-bezier(.4,1.6,.4,1);
+    will-change: transform;
+    margin-right: 0.05em;
+    margin-bottom: 0.05em;
+    filter: drop-shadow(0 0 3px #1bff6a) drop-shadow(0 0 6px #00eaff);
+}
+#quiz-portal-btn:hover .quiz-portal-rocket,
+#quiz-portal-btn:focus .quiz-portal-rocket {
+    animation: rocketFireUp 0.5s cubic-bezier(.4,1.6,.4,1);
+}
+@keyframes rocketFireUp {
+    0% { transform: translateY(0) scale(1) rotate(-6deg);}
+    30% { transform: translateY(-3px) scale(1.04) rotate(4deg);}
+    60% { transform: translateY(-8px) scale(1.08) rotate(-7deg);}
+    80% { transform: translateY(-10px) scale(1.11) rotate(5deg);}
+    100% { transform: translateY(-13px) scale(1.13) rotate(0deg);}
+}
+.quiz-portal-label {
+    font-size: 0.89em;
+    color: inherit;
+    letter-spacing: 0.03em;
+    text-shadow: 0 0 3px #00eaff, 0 0 6px #1bff6a;
+    margin-left: 0.03em;
+    margin-right: 0.05em;
+    font-weight: bold;
+}
+.quiz-portal-firebar {
+    display: block;
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    bottom: -7px;
+    height: 4px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #1bff6a 0%, #00eaff 60%, #fff 100%);
+    opacity: 0;
+    transform: scaleX(0.3) scaleY(0.6);
+    filter: blur(1.2px) brightness(1.1);
+    pointer-events: none;
+    transition: opacity 0.13s, transform 0.13s;
+    z-index: -1;
+}
+#quiz-portal-btn:hover .quiz-portal-firebar,
+#quiz-portal-btn:focus .quiz-portal-firebar {
+    opacity: 1;
+    animation: fireBarCharge 0.4s cubic-bezier(.4,1.6,.4,1) forwards, fireBarVibe 0.12s infinite alternate;
+}
+@keyframes fireBarCharge {
+    0% { transform: scaleX(0.3) scaleY(0.6);}
+    60% { transform: scaleX(0.9) scaleY(1);}
+    100% { transform: scaleX(1.1) scaleY(1.1);}
+}
+@keyframes fireBarVibe {
+    0% { filter: blur(1.2px) brightness(1.1);}
+    100% { filter: blur(2px) brightness(1.3);}
+}
+@media (max-width: 700px) {
+    #quiz-portal-btn {
+        top: 58px !important;
+        right: 3px !important;
+        font-size: 0.78em !important;
+        padding: 0.07em 0.32em 0.07em 0.32em !important;
+        border-radius: 6px !important;
+        gap: 0.13em !important;
+    }
+    .quiz-portal-rocket { font-size: 0.85em !important; }
+    .quiz-portal-label { font-size: 0.78em !important; }
+    .quiz-portal-firebar { left: 2px; right: 2px; bottom: -5px; height: 3px;}
+}
+</style>
 <script>
+// Vibrazione mouse su hover (se supportata)
 document.addEventListener('DOMContentLoaded', function() {
-    var menu = document.getElementById('dropdown-hamburger-menu');
-    var isOpen = false;
-    function openMenu() {
-        menu.classList.add('active');
-        isOpen = true;
-    }
-    function closeMenu() {
-        menu.classList.remove('active');
-        isOpen = false;
-    }
-    menu.addEventListener('click', function(e) {
-        if (!isOpen) openMenu();
-        else closeMenu();
-    });
-    // Chiudi menu al click su link
-    var links = menu.querySelectorAll('.dropdown-menu-link');
-    links.forEach(function(link) {
-        link.addEventListener('click', function(e) {
-            closeMenu();
+    var quizBtn = document.getElementById('quiz-portal-btn');
+    if (quizBtn && window.navigator.vibrate) {
+        quizBtn.addEventListener('mouseenter', function() {
+            window.navigator.vibrate([10, 6, 10]);
         });
-    });
-    // Accessibilità tastiera
-    menu.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-            btn.click();
-        }
-        if (e.key === 'Escape') closeMenu();
-    });
-    // Chiudi se clicchi fuori
-    document.addEventListener('click', function(e) {
-        if (isOpen && !menu.contains(e.target)) closeMenu();
-    });
+    }
 });
 </script>
 <!-- Sfondo animato: particelle leggere su tutte le sezioni principali -->
@@ -1966,6 +1959,7 @@ window.addEventListener('DOMContentLoaded', function() {
             canvas.height = window.innerHeight;
         }
         resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
         const ctx = canvas.getContext('2d');
         let particles = [];
         const PARTICLE_COUNT = window.innerWidth < 700 ? 10 : 22;
@@ -2047,36 +2041,97 @@ window.addEventListener('DOMContentLoaded', function() {
     box-sizing: border-box !important;
   }
 }
-/* Migliora la sezione testimonianze su mobile */
-@media (max-width: 700px) {
-  #testimonianze-section {
-    padding: 0.7em 0.5em 0.7em 0.5em !important;
-    margin: 0 auto 1.2em auto !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-    overflow: visible !important;
-    border-radius: 14px !important;
-  }
-  #testimonianza-form {
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 0.5em !important;
-    width: 100% !important;
-  }
-  #testimonianza-form input,
-  #testimonianza-form button {
-    width: 100% !important;
-    min-width: 0 !important;
-    font-size: 0.97em !important;
-    margin: 0 !important;
-  }
-  #testimonianze-list {
-    max-height: 90px !important;
-    padding-right: 0 !important;
-    font-size: 0.97em !important;
-  }
-}
 /* ...existing code... */
 </style>
+<!-- ...existing code... -->
+<script>
+// ...existing code...
+
+// MENU HAMBURGER FUNZIONANTE E ISOLATO DAL PULSANTE PORTALE
+document.addEventListener('DOMContentLoaded', function() {
+    var menu = document.getElementById('dropdown-hamburger-menu');
+    var icon = document.getElementById('dropdown-hamburger-icon');
+    var menuItems = menu.querySelector('.dropdown-menu-items');
+    var links = menu.querySelectorAll('.dropdown-menu-link');
+
+    function openMenu() {
+        menu.classList.add('active');
+        setTimeout(function() {
+            if (links.length) links[0].focus();
+        }, 10);
+    }
+    function closeMenu() {
+        menu.classList.remove('active');
+    }
+    function toggleMenu(e) {
+        if (e) e.stopPropagation();
+        if (menu.classList.contains('active')) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    }
+
+    // Click su icona hamburger o cerchio
+    icon.addEventListener('click', function(e) {
+        toggleMenu(e);
+    });
+    menu.addEventListener('click', function(e) {
+        if (e.target === menu) toggleMenu(e);
+    });
+
+    // Tastiera: Enter/Space su hamburger
+    menu.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            toggleMenu(e);
+        }
+        if (e.key === 'Escape') {
+            closeMenu();
+            menu.focus();
+        }
+        if ((e.key === 'ArrowDown' || e.key === 'Tab') && menu.classList.contains('active')) {
+            if (links.length) {
+                e.preventDefault();
+                links[0].focus();
+            }
+        }
+    });
+
+    // Chiudi cliccando fuori dal menu (ma NON sul pulsante Portale)
+    document.addEventListener('mousedown', function(e) {
+        var quizBtn = document.getElementById('quiz-portal-btn');
+        if (!menu.contains(e.target) && (!quizBtn || !quizBtn.contains(e.target))) {
+            closeMenu();
+        }
+    });
+
+    // Chiudi dopo click su un link
+    links.forEach(function(link) {
+        link.addEventListener('click', function() {
+            closeMenu();
+        });
+        // Navigazione con tastiera tra i link
+        link.addEventListener('keydown', function(e) {
+            if(e.key === 'ArrowDown') {
+                e.preventDefault();
+                var next = this.nextElementSibling;
+                if (next && next.classList.contains('dropdown-menu-link')) next.focus();
+                else if (links.length) links[0].focus();
+            }
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                var prev = this.previousElementSibling;
+                if (prev && prev.classList.contains('dropdown-menu-link')) prev.focus();
+                else if (links.length) links[links.length-1].focus();
+            }
+            if (e.key === 'Escape') {
+                closeMenu();
+                menu.focus();
+            }
+        });
+    });
+});
+
+// ...existing code...
+</script>
 <!-- ...existing code... -->
