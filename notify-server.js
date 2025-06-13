@@ -29,12 +29,21 @@ function saveSubscribers(list) {
 app.post('/api/subscribe', (req, res) => {
     const { email } = req.body;
     if (!email || !/^[^@]+@[^@]+\.[^@]+$/.test(email)) {
+        console.log('Iscrizione fallita: email non valida:', email);
         return res.status(400).json({ ok: false, error: 'Invalid email' });
     }
     let list = loadSubscribers();
     if (!list.includes(email)) {
         list.push(email);
-        saveSubscribers(list);
+        try {
+            saveSubscribers(list);
+            console.log('Nuova iscrizione:', email);
+        } catch (e) {
+            console.error('Errore salvataggio file:', e);
+            return res.status(500).json({ ok: false, error: 'File write error' });
+        }
+    } else {
+        console.log('Email già iscritta:', email);
     }
     res.json({ ok: true });
 });
