@@ -114,7 +114,20 @@ window.initWalletAccess = function(options) {
                     if (options && options.redirectUrl) {
                         // WalletConnect spesso apre una nuova webview: mostra messaggio se non si è nella pagina originale
                         if (window.location.href !== options.redirectUrl) {
-                            alert('Connessione avvenuta! Torna alla pagina originale per continuare.');
+                            // Mostra un messaggio con pulsante per tornare al sito
+                            let overlay = document.createElement('div');
+                            overlay.style = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;';
+                            overlay.innerHTML = `
+                                <div style="background:#222;padding:2em 1.5em;border-radius:18px;max-width:90vw;text-align:center;">
+                                    <h2>Connessione completata!</h2>
+                                    <p>Per continuare, torna alla pagina principale del sito.<br>Se vedi questo messaggio, premi il pulsante qui sotto:</p>
+                                    <button id="nyfurion-redirect-btn" style="margin-top:1.2em;padding:0.7em 2em;background:#1bff6a;color:#181a22;font-family:Orbitron,sans-serif;font-size:1.1em;border:none;border-radius:10px;box-shadow:0 0 12px #00eaff;cursor:pointer;">Torna al sito</button>
+                                </div>
+                            `;
+                            document.body.appendChild(overlay);
+                            document.getElementById('nyfurion-redirect-btn').onclick = function() {
+                                window.location.href = options.redirectUrl;
+                            };
                         } else {
                             window.location.href = options.redirectUrl;
                         }

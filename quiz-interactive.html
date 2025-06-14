@@ -1112,7 +1112,7 @@
         const quiz = currentQuizIndex + 1;
         const date = new Date().toISOString();
         try {
-            await fetch('http://localhost:3002/api/leaderboard', {
+            await fetch('https://nyfurion.com/api/leaderboard', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: address, score: totalScore, percent, quiz, date })

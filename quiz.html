@@ -1135,7 +1135,7 @@
     // Carica la classifica dal server
     async function loadLeaderboardFromServer() {
         try {
-            const res = await fetch('http://localhost:3002/api/leaderboard');
+            const res = await fetch('https://nyfurion.com/api/leaderboard');
             if (!res.ok) throw new Error('Errore server');
             return await res.json();
         } catch {
