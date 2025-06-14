@@ -1231,5 +1231,48 @@
         redirectUrl: window.location.pathname
     });
     </script>
+    <script>
+function submitQuizAndUpdateLeaderboard(score) {
+    fetch('/api/submit-score', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ score: score })
+    })
+    .then(response => response.json())
+    .then(data => {
+        updateLeaderboard();
+    });
+}
+
+function updateLeaderboard() {
+    fetch('/api/leaderboard')
+        .then(response => response.json())
+        .then(leaderboard => {
+            localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+            renderLeaderboard(leaderboard);
+        })
+        .catch(() => {
+            const saved = localStorage.getItem('leaderboard');
+            if (saved) renderLeaderboard(JSON.parse(saved));
+        });
+}
+
+function renderLeaderboard(leaderboard) {
+    const leaderboardDiv = document.getElementById('leaderboard');
+    if (!leaderboardDiv) return;
+    leaderboardDiv.innerHTML = '';
+    leaderboard.forEach((entry, idx) => {
+        const row = document.createElement('div');
+        row.textContent = `${idx + 1} ${entry.username}: ${entry.score}`;
+        leaderboardDiv.appendChild(row);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('leaderboard');
+    if (saved) renderLeaderboard(JSON.parse(saved));
+    updateLeaderboard();
+});
+    </script>
 </body>
 </html>
