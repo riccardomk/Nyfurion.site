@@ -381,7 +381,8 @@ window.initWalletAccess({
         if (el) el.textContent = 'Wallet: ' + address;
         window.nyfWallet = address;
     },
-    buttonId: 'connect-wallet-btn'
+    buttonId: 'connect-wallet-btn',
+    redirectUrl: window.location.pathname
 });
 </script>
 <script>

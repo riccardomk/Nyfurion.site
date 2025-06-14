@@ -1105,20 +1105,26 @@
         }, 1200);
     };
 
-    // Salva punteggio in classifica
-    function saveQuizResultToLeaderboard(percent, totalScore) {
-        const name = localStorage.getItem('nyfurionPlayerName') || "Anonymous";
-        let leaderboard = [];
-        try { leaderboard = JSON.parse(localStorage.getItem('nyfurionLeaderboard') || '[]'); } catch {}
-        leaderboard.push({
-            name,
-            score: totalScore,
-            percent,
-            quiz: currentQuizIndex + 1,
-            date: new Date().toISOString()
-        });
-        leaderboard = leaderboard.slice(-50);
-        localStorage.setItem('nyfurionLeaderboard', JSON.stringify(leaderboard));
+    // Salva punteggio in classifica (server)
+    async function saveQuizResultToLeaderboard(percent, totalScore) {
+        // Usa sempre l'indirizzo del wallet come identificativo
+        const address = window.nyfWallet || localStorage.getItem('nyfurionWallet') || localStorage.getItem('nyfurionPlayerName') || "Anonymous";
+        const quiz = currentQuizIndex + 1;
+        const date = new Date().toISOString();
+        try {
+            await fetch('http://localhost:3002/api/leaderboard', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: address, score: totalScore, percent, quiz, date })
+            });
+        } catch (e) {
+            // fallback locale se il server non è raggiungibile
+            let leaderboard = [];
+            try { leaderboard = JSON.parse(localStorage.getItem('nyfurionLeaderboard') || '[]'); } catch {}
+            leaderboard.push({ name: address, score: totalScore, percent, quiz, date });
+            leaderboard = leaderboard.slice(-50);
+            localStorage.setItem('nyfurionLeaderboard', JSON.stringify(leaderboard));
+        }
     }
 
     // Chiedi nome utente
@@ -1205,6 +1211,25 @@
     if (typeof addExtraQuizzesToAllQuizData === "function") {
         addExtraQuizzesToAllQuizData();
     }
+    </script>
+    <script src="wallet-access.js"></script>
+    <script>
+    // Bottone per accesso wallet
+    let walletBtn = document.createElement('button');
+    walletBtn.id = 'connect-wallet-btn';
+    walletBtn.className = 'nyfurion-wallet-btn';
+    walletBtn.innerHTML = `<span class="nyfurion-wallet-label">Connetti Wallet</span>`;
+    document.body.appendChild(walletBtn);
+    window.initWalletAccess({
+        onConnect: function(address, signature) {
+            walletBtn.innerHTML = `<span class='nyfurion-wallet-label'>${address.slice(0,6)}...${address.slice(-4)}</span>`;
+            walletBtn.disabled = true;
+            walletBtn.style.opacity = 0.7;
+            window.nyfWallet = address;
+        },
+        buttonId: 'connect-wallet-btn',
+        redirectUrl: window.location.pathname
+    });
     </script>
 </body>
 </html>

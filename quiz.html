@@ -473,58 +473,50 @@
     })();
     </script>
     <!-- Wallet button top right, minimal, harmonious, responsive -->
-    <button id="btn-connect-metamask" class="nyfurion-wallet-btn">
-        <span class="nyfurion-wallet-icon">
-            <!-- "Crystal" symbol inspired by Ethereum, stylized and original -->
-            <svg width="22" height="22" viewBox="0 0 22 22" style="display:block;">
-                <polygon points="11,2 19,11 11,20 3,11" fill="#bafff7" stroke="#00eaff" stroke-width="1.2"/>
-                <polygon points="11,2 11,20 19,11" fill="#1bff6a" opacity="0.18"/>
-                <polygon points="11,2 11,20 3,11" fill="#00eaff" opacity="0.13"/>
-                <circle cx="11" cy="11" r="10" fill="none" stroke="#1bff6a" stroke-width="0.7" opacity="0.18"/>
-            </svg>
-        </span>
-        <span id="metamask-btn-text" class="nyfurion-wallet-label">Wallet</span>
-    </button>
+    <!-- Wallet button rimosso su richiesta -->
     <style>
         .nyfurion-wallet-btn {
             position: fixed;
-            top: 16px;
-            right: 16px;
+            top: 18px;
+            right: 18px;
             z-index: 200;
-            background: rgba(24,26,34,0.97);
-            color: #bafff7;
+            background: linear-gradient(90deg,#00eaff 0%,#1bff6a 100%);
+            color: #181a22;
             font-family: 'Orbitron',sans-serif;
-            font-size: 1.01em;
-            font-weight: 600;
-            padding: 0.32em 1em 0.32em 0.7em;
-            border-radius: 14px;
-            border: 1.5px solid #00eaff;
-            box-shadow: 0 0 8px #00eaff33;
+            font-size: 1em;
+            font-weight: 700;
+            padding: 0.22em 1.1em 0.22em 0.8em;
+            border-radius: 50px;
+            border: none;
+            box-shadow: 0 0 18px #00eaff77, 0 0 0 #1bff6a;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 0.5em;
-            transition: background 0.18s, color 0.18s, border 0.18s;
+            transition: background 0.18s, color 0.18s, box-shadow 0.18s;
             min-width: 0;
             min-height: 0;
             outline: none;
+            text-shadow: 0 1px 8px #00eaff33;
+            letter-spacing: 0.03em;
         }
         .nyfurion-wallet-btn:hover, .nyfurion-wallet-btn:focus {
             background: linear-gradient(90deg,#1bff6a 0%,#00eaff 100%);
-            color: #181a22;
-            border-color: #1bff6a;
+            color: #fff;
+            box-shadow: 0 0 24px #1bff6a99, 0 0 0 #00eaff;
+        }
+        .nyfurion-wallet-label {
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            font-size: 1em;
+            padding-right: 2px;
+            color: inherit;
         }
         .nyfurion-wallet-icon {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 24px; height: 24px;
-        }
-        .nyfurion-wallet-label {
-            font-weight: 600;
-            letter-spacing: 0.01em;
-            font-size: 1em;
-            padding-right: 2px;
+            width: 20px; height: 20px;
         }
         @media (max-width: 700px) {
             .nyfurion-wallet-btn {
@@ -1120,10 +1112,8 @@
     </script>
     <script src="wallet-access.js"></script>
     <script>
-    // Miglioramento: accesso wallet unico, senza QR, valido sia desktop che mobile
     window.initWalletAccess({
         onConnect: function(address, signature) {
-            // Aggiorna il testo del pulsante con l'indirizzo abbreviato
             let btn = document.getElementById('btn-connect-metamask');
             if (btn) btn.textContent = address.slice(0,6)+'...'+address.slice(-4);
             window.nyfWallet = address;
@@ -1134,13 +1124,28 @@
                 if (b) b.disabled = false;
             });
         },
-        buttonId: 'btn-connect-metamask'
+        buttonId: 'btn-connect-metamask',
+        redirectUrl: window.location.pathname // redirect sulla stessa pagina dopo login
     });
     // Disabilita i pulsanti finché il wallet non è connesso
     ['btn-quiz','btn-community','btn-club'].forEach(id => {
         let b = document.getElementById(id);
         if (b) b.disabled = true;
     });
+    // Carica la classifica dal server
+    async function loadLeaderboardFromServer() {
+        try {
+            const res = await fetch('http://localhost:3002/api/leaderboard');
+            if (!res.ok) throw new Error('Errore server');
+            return await res.json();
+        } catch {
+            // fallback locale
+            try { return JSON.parse(localStorage.getItem('nyfurionLeaderboard') || '[]'); } catch { return []; }
+        }
+    }
+    // Esempio di utilizzo: mostrare la classifica
+    // (da integrare dove visualizzi la leaderboard)
+    // loadLeaderboardFromServer().then(data => console.log(data));
     </script>
 </body>
 </html>
