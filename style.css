@@ -1,0 +1,100 @@
+/* ...existing code... */
+
+/* Responsive: mobile compatibility */
+@media (max-width: 600px) {
+  body {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+  main, .container, .section, .content {
+    width: 100vw;
+    min-height: 100vh;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+  h1, h2, h3 {
+    font-size: 7vw;
+    text-align: center;
+    margin: 16px 0;
+  }
+  p, li, span, a {
+    font-size: 4.5vw;
+    line-height: 1.4;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+  /* Esempio: logo o titolo grande */
+  .logo, .main-title {
+    font-size: 10vw;
+    left: 0;
+    right: 0;
+    top: 20vh;
+    position: relative;
+    text-align: center;
+    letter-spacing: 2px;
+  }
+  /* Nascondi elementi solo desktop se necessario */
+  .desktop-only {
+    display: none !important;
+  }
+  /* Mostra elementi solo mobile se necessario */
+  .mobile-only {
+    display: block !important;
+  }
+  .responsive-section {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px 8px;
+    gap: 16px;
+    width: 100vw;
+    box-sizing: border-box;
+  }
+  .responsive-section > * {
+    width: 100%;
+    max-width: 100%;
+    font-size: 1.1rem;
+  }
+  .responsive-section img,
+  .responsive-section video {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  .responsive-section h1,
+  .responsive-section h2,
+  .responsive-section h3 {
+    font-size: 7vw;
+    text-align: center;
+    margin: 12px 0;
+  }
+  .responsive-section p,
+  .responsive-section li,
+  .responsive-section span,
+  .responsive-section a {
+    font-size: 4.5vw;
+    line-height: 1.5;
+    word-break: break-word;
+  }
+  /* Centra la scritta nyfurio su mobile */
+  .nyfurio-title {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 9vw;
+    margin: 24px 0 16px 0;
+    position: static;
+    left: unset;
+    right: unset;
+    top: unset;
+    transform: none;
+  }
+}
+
+/* ...existing code... */
