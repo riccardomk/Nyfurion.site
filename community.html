@@ -2,819 +2,578 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Community Nyfurion</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Nyfurion Community</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        html, body {
-            margin:0; padding:0; width:100vw; height:100vh;
-            background:#0b101a; color:#eaffd0;
-            font-family:'Orbitron',sans-serif;
-            overscroll-behavior-y: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-        body { min-height:100vh; }
-        .nyf-root { display:flex; flex-direction:column; height:100vh; }
-        .nyf-header {
-            background:linear-gradient(90deg,#1bff6a 0%,#00eaff 100%);
-            color:#181a22; font-weight:bold; font-size:1.2em;
-            padding:1em 2em; display:flex; align-items:center; justify-content:space-between;
-            box-sizing:border-box;
-        }
-        .nyf-header .nyf-user { display:flex; align-items:center; gap:0.7em; }
-        .nyf-avatar { width:38px; height:38px; border-radius:50%; object-fit:cover; border:2px solid #fff; }
-        .nyf-main { flex:1 1 0; display:flex; min-height:0; }
-        .nyf-sidebar {
-            width:220px; background:#181a22; border-right:2px solid #1bff6a22;
-            padding:1.2em 0.5em; display:flex; flex-direction:column; gap:1.2em;
-        }
-        .nyf-sidebar-title { color:#1bff6a; font-size:1.08em; font-weight:bold; margin-bottom:0.7em; }
-        .nyf-section-list { list-style:none; padding:0; margin:0; }
-        .nyf-section-btn {
-            width:100%; background:none; border:none; color:#bafff7; font-size:1em;
-            text-align:left; padding:0.5em 0.7em; border-radius:7px; cursor:pointer;
-            transition:background 0.15s, color 0.15s; font-family:inherit;
-        }
-        .nyf-section-btn.active, .nyf-section-btn:hover {
-            background:linear-gradient(90deg,#1bff6a22 0%,#00eaff22 100%);
-            color:#1bff6a;
-        }
-        .nyf-chat-area { flex:1 1 0; display:flex; flex-direction:column; min-width:0; }
-        .nyf-chatbox {
-            flex:1 1 0; background:rgba(24,26,34,0.93); border-radius:12px;
-            margin:1em 1.2em 0.5em 1.2em; box-shadow:0 0 12px #00eaff11;
-            overflow-y:auto; display:flex; flex-direction:column;
-            padding:1em 1em 0.5em 1em; min-height:0;
-            max-width:100vw; box-sizing:border-box;
-        }
-        .nyf-message { margin-bottom:0.7em; display:flex; align-items:flex-end; gap:0.7em; }
-        .nyf-message-content { max-width:60vw; min-width:0; display:flex; flex-direction:column; }
-        .nyf-message .meta { font-size:0.93em; color:#bafff7; font-weight:600; margin-bottom:0.1em; display:flex; align-items:center; gap:0.4em; }
-        .nyf-message .meta .date { color:#7ee7c7; font-size:0.85em; font-weight:normal; }
-        .nyf-message .text { color:#fff; background:rgba(35,42,58,0.93); border-radius:7px; padding:0.45em 0.9em; font-size:1em; margin-top:0.1em; word-break:break-word; box-shadow:0 0 6px #00eaff11; border:1px solid #1bff6a22; }
-        .nyf-message .attachments { margin-top:0.3em; }
-        .nyf-message .attachments img { max-width:120px; max-height:120px; border-radius:8px; margin-right:0.4em; margin-bottom:0.2em; border:1px solid #232a3a; }
-        .nyf-form-wrap { width:100%; display:flex; justify-content:center; align-items:flex-end; margin:0 0 0.5em 0; }
-        .nyf-form {
-            display:flex; gap:0.4em; align-items:center; width:100%; max-width:700px;
-            background:rgba(24,26,34,0.98); border-radius:8px; box-shadow:0 0 6px #00eaff11;
-            padding:0.4em 0.7em; box-sizing:border-box;
-        }
-        .nyf-form input[type="text"] {
-            border-radius:6px; border:1px solid #1bff6a; background:#181a22; color:#fff;
-            font-size:1em; padding:0.45em 0.8em; font-family:inherit; outline:none; flex:1 1 auto;
-        }
-        .nyf-btn {
-            background:linear-gradient(90deg,#00eaff 0%,#1bff6a 100%);
-            color:#181a22; font-family:'Orbitron',sans-serif; font-size:1em; font-weight:bold;
-            padding:0.45em 1em; border-radius:8px; border:none; box-shadow:0 0 6px #00eaff22;
-            cursor:pointer; transition:background 0.18s, color 0.18s, transform 0.18s;
-        }
-        .nyf-btn:hover, .nyf-btn:focus {
-            background:linear-gradient(90deg,#1bff6a 0%,#00eaff 100%);
-            color:#fff; transform:scale(1.04);
-        }
-        .nyf-form input[type="file"] { display:none; }
-        .nyf-emoji-btn { background:none; border:none; font-size:1.3em; cursor:pointer; margin-right:0.2em; }
-        .nyf-profile-modal-bg { position:fixed; left:0; top:0; width:100vw; height:100vh; background:rgba(10,18,28,0.97); z-index:200; display:flex; align-items:center; justify-content:center; }
-        .nyf-profile-modal { background:#181a22; border-radius:18px; box-shadow:0 0 32px #00eaff33; padding:2em 2em 1.5em 2em; max-width:350px; width:96vw; color:#fff; text-align:center; position:relative; }
-        .nyf-profile-modal input[type="text"] { width:90%; margin:0.7em 0; padding:0.5em 1em; border-radius:10px; border:1.5px solid #1bff6a; background:#232a3a; color:#fff; font-size:1.1em; }
-        .nyf-profile-modal input[type="file"] { margin:0.7em 0; }
-        .nyf-profile-modal img { width:80px; height:80px; border-radius:50%; object-fit:cover; margin-bottom:0.7em; border:2px solid #1bff6a; }
-        .nyf-profile-modal .nyf-btn { margin-top:1em; }
-        /* --- Responsive --- */
-        @media (max-width:900px) {
-            .nyf-sidebar { width:120px; font-size:0.93em; padding:0.7em 0.2em; }
-            .nyf-header { font-size:1em; padding:0.7em 0.7em; }
-        }
-        @media (max-width:700px) {
-            .nyf-root { height:auto; min-height:100vh; }
-            .nyf-header {
-                font-size:1em;
-                padding:0.5em 0.3em;
-                flex-direction:row;
-                align-items:center;
-                justify-content:space-between;
-                gap:0;
-                width:100vw;
-                box-sizing:border-box;
-            }
-            .nyf-sidebar, .nyf-sidebar-title, .nyf-section-list { display: none !important; }
-            /* RIMOSSO: .nyf-section-mobile-btn { display: none !important; } */
-            #nyf-wallet-visible {
-                display: none !important;
-            }
-            .nyf-main { flex-direction:column; width:100vw; min-width:0; }
-            .nyf-chat-area { min-width:0; width:100vw; }
-            .nyf-chatbox {
-                margin:7em 0 0.1em 0; /* Sposta la chat ancora più in basso su mobile */
-                padding:0.18em 0.03em 0.1em 0.03em;
-                font-size:1em;
-                border-radius:7px;
-                min-height:60vh;      /* aumentato */
-                max-height:80vh;      /* aumentato */
-                width:100vw;
-                box-sizing:border-box;
-            }
-            .nyf-form-wrap { margin:5em 0 0.04em 0; } /* Sposta la barra messaggi ancora più in basso */
-            .nyf-form {
-                max-width:100vw;
-                width:100vw;
-                padding:0.12em 0.01em;
-                gap:0.1em;
-                border-radius:7px;
-                box-sizing:border-box;
-            }
-            .nyf-form input[type="text"] {
-                font-size:1em;
-                padding:0.22em 0.4em;
-                border-radius:6px;
-                width:100%;
-                box-sizing:border-box;
-            }
-            .nyf-btn {
-                font-size:1em;
-                padding:0.18em 0.6em;
-                border-radius:7px;
-            }
-            .nyf-avatar { width:20px; height:20px; }
-            .nyf-message .attachments img { max-width:38vw; max-height:38vw; }
-            /* MOSTRA LE CATEGORIE MOBILE E RENDILE VISIBILI */
-            #nyf-categories-mobile {
-                display: block !important;
-                background: #181a22;
-                border-radius: 10px;
-                margin: 0.7em 0.5em 0.2em 0.5em;
-                padding: 0.5em 0.2em;
-                box-shadow: 0 0 8px #00eaff22;
-            }
-        }
-        /* Mostra sempre il bottone menu mobile su mobile */
-        @media (max-width:500px) {
-            .nyf-section-mobile-btn {
-                display: flex !important;
-                position: fixed !important;
-                top: 2.9em !important; /* Spostato più giù */
-                right: 0.7em !important;
-                left: auto !important;
-                z-index: 3000 !important;
-                margin: 0 !important;
-            }
-        }
-        @media (max-width:500px) {
-            .nyf-header { font-size:0.97em; padding:0.09em 0.01em; }
-            .nyf-section-btn { font-size:0.97em; min-width:48px; padding:0.13em 0.18em; }
-            .nyf-avatar { width:14px; height:14px; }
-            .nyf-chatbox { font-size:0.97em; min-height:30vh; max-height:45vh; }
-            .nyf-message-content { max-width:99vw; }
-        }
-        @media (max-width:400px) {
-            .nyf-header { font-size:0.93em; }
-            .nyf-section-btn { font-size:0.93em; min-width:32px; }
-            .nyf-chatbox { font-size:0.93em; }
-        }
-        /* Mobile popup */
-        .nyf-section-mobile-btn {
-            display: none;
-            position: fixed;
-            top: 0.5em;
-            left: 0.5em;
-            z-index: 1001;
-            background: linear-gradient(90deg,#1bff6a 0%,#00eaff 100%);
-            color: #181a22;
-            font-family: 'Orbitron',sans-serif;
-            font-size: 1.1em;
-            font-weight: bold;
-            padding: 0.5em 1.2em 0.5em 1.2em;
+        body { background: #181a1b; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; }
+        .container { display: flex; flex-direction: column; min-height: 100vh; }
+        .sidebar { background: #23272b; padding: 0.05em 0.2em 0.05em 0.2em; }
+        .sidebar h2 { color: #1bff6a; font-size: 0.95em; margin-bottom: 0.1em; text-align: left; }
+        .categories { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: row; gap: 0.3em; justify-content: center; align-items: center; min-height: 28px; }
+        .category { color: #7fffd4; font-size: 0.92em; padding: 0.12em 0.5em; border-radius: 10px 10px 0 0; cursor: pointer; transition: background 0.2s, color 0.2s; background: transparent; font-weight: 600; line-height: 1; }
+        .category.selected, .category:hover { background: linear-gradient(90deg, #1bff6a 0%, #00eaff 100%); color: #181a1b; box-shadow: 0 2px 6px #1bff6a22; }
+        .chat-section { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; width: 100vw; min-height: 0; }
+        .chat-title { font-size: 1em; margin: 0.4em 0 0.2em 0; }
+        .chat-card {
+            width: 95vw;
+            max-width: 900px;
+            background: #202225;
             border-radius: 18px;
-            border: none;
-            box-shadow: 0 0 12px #00eaff33;
-            cursor: pointer;
-            align-items: center;
-            gap: 0.7em;
-        }
-        .nyf-section-popup-bg {
-            display: none;
-            position: fixed;
-            left: 0; top: 0; width: 100vw; height: 100vh;
-            background: rgba(10,18,28,0.97);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-        .nyf-section-popup {
-            background: #181a22;
-            border-radius: 18px;
-            box-shadow: 0 0 32px #00eaff33;
-            padding: 1.2em 0.7em 1em 0.7em;
-            max-width: 95vw;
-            width: 320px;
-            color: #fff;
-            text-align: center;
+            box-shadow: 0 8px 32px #000a, 0 1.5px 0 #1bff6a44 inset;
+            padding: 0.5em 0.1em 0.5em 0.1em;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            margin: 0 auto;
             position: relative;
+        }
+        .messages {
+            width: 100%;
+            min-height: 320px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: #181a1b;
+            border-radius: 18px;
+            padding: 1.2em;
+            margin-bottom: 0.5em;
+            box-shadow: 0 2px 16px #00eaff22 inset, 0 0 0 2px #1bff6a;
+            font-size: 1.1em;
             display: flex;
             flex-direction: column;
             gap: 0.5em;
         }
-        .nyf-section-popup .nyf-section-btn {
-            display: block;
-            width: 100%;
-            margin: 0.2em 0;
-            font-size: 1.08em;
+        .messages::-webkit-scrollbar { width: 10px; background: #23272b; border-radius: 8px; }
+        .messages::-webkit-scrollbar-thumb { background: #1bff6a; border-radius: 8px; }
+        .msg { margin-bottom: 0.7em; display: flex; align-items: flex-end; }
+        .msg .avatar { width: 38px; height: 38px; border-radius: 50%; background: #333 url('https://i.imgur.com/0y0y0y0.png') center/cover no-repeat; margin-right: 0.7em; flex-shrink: 0; border: 2px solid #23272b; box-shadow: 0 1px 4px #0006; display: none; }
+        .msg.me { flex-direction: row-reverse; }
+        .msg.me .avatar { margin-left: 0.7em; margin-right: 0; }
+        .msg .bubble { background: #fff; color: #181a1b; border-radius: 18px 18px 4px 18px; padding: 0.6em 1.1em; max-width: 70vw; display: inline-block; box-shadow: 0 2px 8px #0002; font-size: 1.08em; word-break: break-word; }
+        .msg.me .bubble { background: #dcf8c6; color: #181a1b; border-radius: 18px 18px 18px 4px; }
+        .msg .msg-file { margin-top: 0.2em; }
+        .msg .msg-file img { max-width: 180px; max-height: 120px; border-radius: 10px; box-shadow: 0 1px 6px #0003; display: block; }
+        .msg .meta { font-size: 0.82em; color: #bafff7; margin-top: 0.18em; text-align: right; }
+        .msg.me .meta { color: #7fffd4; }
+        .msg .bubble:has(img) { padding: 0.2em; background: none; box-shadow: none; }
+        .msg .bubble.emoji-only { font-size: 2.2em; background: none; box-shadow: none; padding: 0.2em 0.5em; }
+        .chat-form {
+            display: flex;
+            gap: 0.2em;
+            width: 98%;
+            align-items: center;
+            background: #181a1b;
             border-radius: 10px;
-            padding: 0.7em 0.5em;
-            text-align: center;
-            border-bottom: none;
-            background: linear-gradient(90deg,#232a3a 0%,#181a22 100%);
-            color: #bafff7;
-            border: 1.5px solid #1bff6a22;
-            transition: background 0.15s, color 0.15s, border 0.15s;
-        }
-        .nyf-section-popup .nyf-section-btn.active,
-        .nyf-section-popup .nyf-section-btn:focus,
-        .nyf-section-popup .nyf-section-btn:hover {
-            background: linear-gradient(90deg,#1bff6a22 0%,#00eaff22 100%);
-            color: #1bff6a;
-            border: 1.5px solid #1bff6a;
-        }
-        .nyf-section-popup-close {
+            box-shadow: 0 2px 8px #1bff6a33;
+            margin: 0 auto;
             position: absolute;
-            top: 10px;
-            right: 18px;
-            background: none;
-            border: none;
-            color: #1bff6a;
-            font-size: 2em;
-            cursor: pointer;
+            left: 1%;
+            right: 1%;
+            bottom: 1.2em;
             z-index: 2;
+            box-sizing: border-box;
+            max-width: 880px;
+            padding: 0.15em 0.2em;
+            height: 38px;
         }
-        @media (max-width:500px) {
-            .nyf-section-popup { width: 98vw; max-width: 98vw; padding: 0.7em 0.1em 0.7em 0.1em; }
-            .nyf-section-mobile-btn { font-size: 1em; padding: 0.4em 0.7em; }
+        .chat-form label[for="file-input"] {
+            min-width: 28px;
+            min-height: 28px;
+            max-width: 28px;
+            max-height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            background: #23272b;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-right: 0.1em;
         }
-        /* Nascondi la scritta Nyfurion Community solo su mobile */
-        @media (max-width:700px) {
-            .nyf-header span {
-                display: none !important;
+        .chat-form label[for="file-input"]:hover {
+            background: #1bff6a33;
+        }
+        .chat-form input[type="file"] {
+            display: none;
+        }
+        .chat-form input[type="text"] {
+            font-size: 0.95em;
+            padding: 0.25em 0.7em;
+            border-radius: 8px;
+            min-height: 28px;
+            border: none;
+            background: #23272b;
+            color: #fff;
+            flex: 1;
+            margin-right: 0.1em;
+        }
+        .chat-form button {
+            font-size: 0.95em;
+            padding: 0.25em 0.9em;
+            border-radius: 8px;
+            min-width: 48px;
+            min-height: 28px;
+            background: linear-gradient(90deg, #1bff6a 0%, #00eaff 100%);
+            color: #181a1b;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .chat-form button:hover {
+            background: #1bff6a;
+            color: #23272b;
+        }
+        #register-popup {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(24,26,27,0.98);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #register-popup .popup-content {
+            background: #23272b;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px #000a, 0 1.5px 0 #1bff6a44 inset;
+            padding: 2.2em 2em 2em 2em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 320px;
+            max-width: 90vw;
+        }
+        #register-popup h2 {
+            color: #1bff6a;
+            margin-bottom: 1em;
+        }
+        #register-popup input[type="text"] {
+            padding: 0.5em 1em;
+            border-radius: 8px;
+            border: none;
+            background: #181a1b;
+            color: #fff;
+            font-size: 1.1em;
+            margin-bottom: 1em;
+            width: 220px;
+        }
+        #register-popup input[type="file"] {
+            margin-bottom: 1em;
+            color: #7fffd4;
+        }
+        #register-popup .avatar-preview {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: #333;
+            margin-bottom: 1em;
+            object-fit: cover;
+            border: 2px solid #1bff6a;
+        }
+        #register-popup button {
+            background: linear-gradient(90deg, #1bff6a 0%, #00eaff 100%);
+            color: #181a1b;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5em 1.5em;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.5em;
+        }
+        @media (max-width: 900px) {
+            .chat-card { width: 99vw; padding: 1.2em 0.5em 1em 0.5em; }
+        }
+        @media (max-width: 600px) {
+            .chat-title { font-size: 1.3em; margin: 0.7em 0 0.5em 0; }
+            .chat-card { padding: 0.7em 0.1em 0.7em 0.1em; }
+            .messages { min-height: 180px; max-height: 250px; font-size: 1em; overflow-y: visible; }
+            .sidebar { padding: 0.7em 0.2em 0.2em 0.2em; }
+            .category { font-size: 0.95em; padding: 0.5em 0.7em; }
+        }
+        @media (max-width: 480px) {
+            body { background: #181a1b; margin: 0; }
+            .container { padding: 0 !important; }
+            .sidebar { padding: 0.5em 0.2em 0.2em 0.2em; margin-bottom: 0.2em; }
+            .categories {
+                gap: 0.1em;
+                min-height: 28px;
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+                scrollbar-width: none;
+                margin-bottom: 0.2em;
             }
-            /* Nascondi la barra categorie mobile sotto il pulsante */
-            #nyf-categories-mobile {
-                display: none !important;
+            .categories::-webkit-scrollbar { display: none; }
+            .category {
+                font-size: 1em;
+                padding: 0.4em 0.7em;
+                border-radius: 16px 16px 0 0;
+                min-width: 80px;
+                text-align: center;
+            }
+            .chat-title {
+                font-size: 1.1em;
+                margin: 0.7em 0 0.5em 0;
+                text-align: center;
+            }
+            .chat-section {
+                padding: 0;
+                margin: 0;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+            }
+            .chat-card {
+                width: 96vw;
+                min-width: 0;
+                max-width: 96vw;
+                padding: 0.2em 0.01em 0.2em 0.01em;
+                border-radius: 12px;
+                box-shadow: 0 2px 16px #00eaff22 inset, 0 0 0 2px #1bff6a;
+                margin: 0 auto 0.5em auto;
+                background: #202225;
+                display: flex;
+                flex-direction: column;
+                min-height: 50vh;
+                max-height: 60vh;
+                justify-content: flex-start;
+            }
+            .messages {
+                min-height: 30vh;
+                max-height: 40vh;
+                font-size: 1.08em;
+                padding: 1em 0.5em 1em 0.5em;
+                border-radius: 10px;
+                background: #191b1c;
+                margin-bottom: 0.5em;
+                flex: 1;
+                overflow-y: visible;
+            }
+            .msg { margin-bottom: 0.7em; }
+            .msg .avatar {
+                width: 32px;
+                height: 32px;
+                display: block !important;
+                margin-right: 0.5em;
+            }
+            .msg .bubble {
+                font-size: 1.08em;
+                max-width: 80vw;
+                padding: 0.7em 1.1em;
+                border-radius: 18px 18px 8px 18px;
+                margin: 0;
+            }
+            .msg.me .bubble {
+                border-radius: 18px 18px 18px 8px;
+            }
+            .chat-form {
+                position: relative;
+                width: 96vw;
+                max-width: 96vw;
+                height: 48px;
+                background: #23272b;
+                border-radius: 10px;
+                box-shadow: 0 -2px 8px #1bff6a33;
+                padding: 0.2em 0.5em;
+                z-index: 100;
+                display: flex;
+                align-items: center;
+                gap: 0.3em;
+                margin: 0 auto 0.5em auto;
+                top: 0;
+            }
+            #register-popup .popup-content {
+                min-width: 180px;
+                padding: 1.2em 0.5em 1em 0.5em;
+            }
+            #register-popup input[type="text"] {
+                font-size: 1em;
+                width: 120px;
+            }
+            #register-popup .avatar-preview {
+                width: 48px;
+                height: 48px;
             }
         }
     </style>
 </head>
 <body>
-<div class="nyf-root">
-    <!-- Indirizzo wallet SEMPRE visibile e ben posizionato su mobile, sopra tutto il resto -->
-    <div id="nyf-wallet-mobile-visible" style="display:none;position:fixed;top:0;left:0;width:100vw;z-index:2002;padding:0.7em 0.7em 0.7em 2.7em;background:rgba(27,255,106,0.97);color:#181a22;font-size:1.09em;font-family:monospace;letter-spacing:0.02em;border-bottom:2px solid #1bff6a;box-shadow:0 2px 12px #00eaff33;word-break:break-all;align-items:center;gap:0.7em;">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:0.5em;"><rect x="3" y="7" width="18" height="10" rx="3" stroke="#1bff6a" stroke-width="2" fill="none"/><rect x="7" y="3" width="10" height="4" rx="2" stroke="#1bff6a" stroke-width="2" fill="none"/></svg>
-        <span id="nyf-wallet-mobile-visible-text"></span>
-    </div>
-    <button class="nyf-section-mobile-btn" id="nyf-section-mobile-btn" type="button" aria-label="Menu">
-        <span class="nyf-section-mobile-label" id="nyf-section-mobile-label"># General</span> &#9776;
-    </button>
-    <!-- Indirizzo wallet mobile subito dopo il pulsante -->
-    <div id="nyf-wallet-mobile" style="display:none;margin:0.5em 0.7em 0.2em 0.7em;padding:0.38em 0.9em;border-radius:12px;background:rgba(27,255,106,0.08);color:#1bff6a;font-size:1.01em;font-family:monospace;letter-spacing:0.02em;border:1.5px solid #1bff6a22;box-shadow:0 1px 6px #00eaff11;max-width:95vw;word-break:break-all;align-items:center;gap:0.5em;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;"><rect x="3" y="7" width="18" height="10" rx="3" stroke="#1bff6a" stroke-width="2" fill="none"/><rect x="7" y="3" width="10" height="4" rx="2" stroke="#1bff6a" stroke-width="2" fill="none"/></svg>
-        <span id="nyf-wallet-mobile-text"></span>
-    </div>
-    <div class="nyf-section-popup-bg" id="nyf-section-popup-bg">
-        <div class="nyf-section-popup">
-            <button class="nyf-section-popup-close" id="nyf-section-popup-close" aria-label="Close">&times;</button> 
-            <div style="font-size:1.13em;color:#1bff6a;font-weight:bold;margin-bottom:0.5em;">Scegli una sezione</div>
-            <div id="nyf-wallet-address" style="
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                gap:0.5em;
-                margin-bottom:0.7em;
-                padding:0.5em 0.7em;
-                border-radius:12px;
-                background:rgba(27,255,106,0.08);
-                color:#1bff6a;
-                font-size:1.01em;
-                font-family:monospace;
-                letter-spacing:0.02em;
-                border:1.5px solid #1bff6a22;
-                box-shadow:0 1px 6px #00eaff11;
-                max-width:95vw;
-                word-break:break-all;
-            ">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;"><rect x="3" y="7" width="18" height="10" rx="3" stroke="#1bff6a" stroke-width="2" fill="none"/><rect x="7" y="3" width="10" height="4" rx="2" stroke="#1bff6a" stroke-width="2" fill="none"/></svg>
-                <span id="nyf-wallet-address-text"></span>
-            </div>
-            <button class="nyf-section-btn" data-section="generale"># General</button>
-            <button class="nyf-section-btn" data-section="guardiani"># Guardians</button>
-            <button class="nyf-section-btn" data-section="ribelli"># Rebels</button>
-            <button class="nyf-section-btn" data-section="predatori"># Predators</button>
-            <button class="nyf-section-btn" data-section="nft"># NFT</button>
-            <button class="nyf-section-btn" data-section="eventi"># Events</button>
-        </div>
-    </div>
-    <div class="nyf-header" style="background:linear-gradient(90deg,#0b101a 0%,#232a3a 100%);border-bottom:1.5px solid #1bff6a22;min-height:54px;">
-        <div style="display:flex;align-items:center;gap:1.1em;width:100%;justify-content:space-between;">
-            <span style="font-size:1.25em;font-weight:bold;color:#1bff6a;letter-spacing:0.03em;">Nyfurion Community</span>
-            <div id="nyf-header-wallet" style="
-                display:flex;
-                align-items:center;
-                gap:0.5em;
-                padding:0.38em 0.9em;
-                border-radius:12px;
-                background:rgba(27,255,106,0.08);
-                color:#1bff6a;
-                font-size:1.01em;
-                font-family:monospace;
-                letter-spacing:0.02em;
-                border:1.5px solid #1bff6a22;
-                box-shadow:0 1px 6px #00eaff11;
-                max-width:60vw;
-                word-break:break-all;
-            ">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;"><rect x="3" y="7" width="18" height="10" rx="3" stroke="#1bff6a" stroke-width="2" fill="none"/><rect x="7" y="3" width="10" height="4" rx="2" stroke="#1bff6a" stroke-width="2" fill="none"/></svg>
-                <span id="nyf-header-wallet-text"></span>
-            </div>
-        </div>
-    </div>
-    <!-- INTERACTIVE DESKTOP START -->
-    <!-- INTERACTIVE DESKTOP BLOCK AND RELATED SCRIPT REMOVED -->
-    <!-- INTERACTIVE DESKTOP END -->
-    <div class="nyf-main">
-        <aside class="nyf-sidebar">
-            <div class="nyf-sidebar-title">Categories</div>
-            <ul class="nyf-section-list" id="nyf-section-list">
-                <li><button class="nyf-section-btn active" data-section="generale"># General</button></li>
-                <li><button class="nyf-section-btn" data-section="guardiani"># Guardians</button></li>
-                <li><button class="nyf-section-btn" data-section="ribelli"># Rebels</button></li>
-                <li><button class="nyf-section-btn" data-section="predatori"># Predators</button></li>
-                <li><button class="nyf-section-btn" data-section="nft"># NFT</button></li>
-                <li><button class="nyf-section-btn" data-section="eventi"># Events</button></li>
+    <div class="container">
+        <nav class="sidebar">
+            <h2>Categories</h2>
+            <ul class="categories" id="categories">
+                <li class="category selected" data-cat="General">General</li>
+                <li class="category" data-cat="Guardians">Guardians</li>
+                <li class="category" data-cat="Rebels">Rebels</li>
+                <li class="category" data-cat="Predators">Predators</li>
+                <li class="category" data-cat="NFT">NFT</li>
+                <li class="category" data-cat="Events">Events</li>
             </ul>
-        </aside>
-        <div class="nyf-chat-area">
-            <div class="nyf-chatbox" id="nyf-chatbox"></div>
-            <!-- Indirizzo wallet dopo la valigetta verde (wallet sopra la chat) -->
-            <div id="nyf-wallet-below-chat" style="display:none;margin:0.3em 0.7em 0.2em 0.7em;padding:0.38em 0.9em;border-radius:12px;background:rgba(27,255,106,0.08);color:#1bff6a;font-size:1.01em;font-family:monospace;letter-spacing:0.02em;border:1.5px solid #1bff6a22;box-shadow:0 1px 6px #00eaff11;max-width:95vw;word-break:break-all;align-items:center;gap:0.5em;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;"><rect x="3" y="7" width="18" height="10" rx="3" stroke="#1bff6a" stroke-width="2" fill="none"/><rect x="7" y="3" width="10" height="4" rx="2" stroke="#1bff6a" stroke-width="2" fill="none"/></svg>
-                <span id="nyf-wallet-below-chat-text"></span>
-            </div>
-            <div class="nyf-form-wrap">
-                <form id="nyf-form" class="nyf-form" autocomplete="off" style="display:none;">
-                    <input id="nyf-message" type="text" maxlength="300" placeholder="Write a message..." required>
-                    <label for="nyf-file" class="nyf-btn" style="padding:0.45em 0.7em;font-size:1.1em;">📎</label>
-                    <input id="nyf-file" type="file" accept="image/*,application/pdf" multiple>
-                    <button type="submit" class="nyf-btn">Send</button>
+        </nav>
+        <section class="chat-section">
+            <div class="chat-title" id="chat-title">General</div>
+            <div class="chat-card">
+                <!-- Un contenitore messaggi per ogni categoria -->
+                <div class="messages" id="messages-General"></div>
+                <div class="messages" id="messages-Guardians" style="display:none"></div>
+                <div class="messages" id="messages-Rebels" style="display:none"></div>
+                <div class="messages" id="messages-Predators" style="display:none"></div>
+                <div class="messages" id="messages-NFT" style="display:none"></div>
+                <div class="messages" id="messages-Events" style="display:none"></div>
+                <!-- WhatsApp style: avatar, bubble, emoji, file/image preview -->
+                <template id="msg-template">
+                    <div class="msg">
+                        <div class="avatar"></div>
+                        <div class="bubble"></div>
+                        <div class="msg-file"></div>
+                        <div class="meta"></div>
+                        <div class="msg-actions" style="display:none; gap:0.3em; margin-left:0.5em;">
+                            <button class="edit-btn" style="font-size:0.8em;">✏️</button>
+                            <button class="delete-btn" style="font-size:0.8em;">🗑️</button>
+                        </div>
+                    </div>
+                </template>
+                <form class="chat-form" id="chat-form" autocomplete="off" enctype="multipart/form-data">
+                    <label for="file-input">📎</label>
+                    <input type="file" id="file-input" />
+                    <input type="text" id="msg-input" placeholder="Scrivi un messaggio..." required />
+                    <button type="submit">Invia</button>
                 </form>
             </div>
-            <!-- CATEGORIE MOBILE DOPO LA BARRA MESSAGGI -->
-            <nav id="nyf-categories-mobile" style="display:none;">
-                <!-- Le categorie vengono inserite via JS solo su mobile -->
-            </nav>
+        </section>
+        <div id="register-popup">
+          <form class="popup-content" id="register-form" autocomplete="off">
+            <h2>Registrazione Community</h2>
+            <img src="https://i.imgur.com/0y0y0y0.png" class="avatar-preview" id="avatar-preview" alt="Avatar Preview">
+            <input type="file" id="avatar-input" accept="image/*">
+            <input type="text" id="username-input" placeholder="Inserisci il tuo nome" maxlength="20" required>
+            <button type="submit">Entra</button>
+          </form>
         </div>
     </div>
-</div>
-<div id="nyf-profile-modal-root"></div>
-<script src="wallet-access.js"></script>
-<script>
-window.initWalletAccess({
-    onConnect: function(address, signature) {
-        let el = document.getElementById('nyf-wallet-below-chat');
-        if (el) el.textContent = 'Wallet: ' + address;
-        window.nyfWallet = address;
-    },
-    buttonId: 'connect-wallet-btn',
-    redirectUrl: window.location.pathname
-});
-</script>
-<script>
-// --- Utility ---
-function abbreviateAddress(addr) {
-    if (!addr) return '';
-    if (addr.length > 20 && addr.startsWith('0x'))
-        return addr.slice(0, 6) + "..." + addr.slice(-4);
-    return addr;
-}
-function getQueryParam(name) {
-    const url = new URL(window.location.href);
-    return url.searchParams.get(name);
-}
-
-// --- Login & Profile ---
-let wallet = getQueryParam('wallet');
-let userData = JSON.parse(localStorage.getItem('nyfurionCommunityUser') || '{}');
-let user = wallet && userData[wallet] ? userData[wallet] : null;
-const userInfoDiv = document.getElementById('nyf-user-info');
-const profileModalRoot = document.getElementById('nyf-profile-modal-root');
-
-async function ensureWallet() {
-    if (!wallet) {
-        if (!(window.ethereum && window.ethereum.isMetaMask)) {
-            userInfoDiv.innerHTML = `<span style="color:#ff7c7c;">Connect MetaMask to access</span>`;
-            return false;
-        }
-        let accounts;
-        try {
-            accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        } catch {
-            userInfoDiv.innerHTML = `<span style="color:#ff7c7c;">Wallet not connected</span>`;
-            return false;
-        }
-        wallet = accounts[0];
-        window.location.search = "?wallet=" + encodeURIComponent(wallet);
-        return false;
-    }
-    return true;
-}
-
-function showProfileModal() {
-    // Does nothing, registration disabled
-}
-
-// --- setupUser modified to not require registration ---
-async function setupUser() {
-    if (!await ensureWallet()) return false;
-    userData = JSON.parse(localStorage.getItem('nyfurionCommunityUser') || '{}');
-    user = userData[wallet];
-    // If no profile, show only abbreviated wallet without popup
-    if (!user) {
-        userInfoDiv.innerHTML = `<span style="color:#ff7c7c;">Profile not registered. Read only.</span><span style="font-size:0.93em;color:#232a3a;background:#bafff7;border-radius:7px;padding:0.15em 0.7em;margin-left:0.5em;">${abbreviateAddress(wallet)}</span>`;
-        return true;
-    }
-    userInfoDiv.innerHTML = `<img class="nyf-avatar" src="${user.avatar}" alt="Avatar"><span>${user.name}</span><span style="font-size:0.93em;color:#232a3a;background:#bafff7;border-radius:7px;padding:0.15em 0.7em;margin-left:0.5em;">${abbreviateAddress(wallet)}</span>`;
-    return true;
-}
-
-// --- Sections ---
-const sectionList = document.getElementById('nyf-section-list');
-let currentSection = localStorage.getItem('nyfurionCommunitySection') || 'generale';
-sectionList.querySelectorAll('.nyf-section-btn').forEach(btn => {
-    btn.onclick = function() {
-        sectionList.querySelectorAll('.nyf-section-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        currentSection = this.getAttribute('data-section');
-        localStorage.setItem('nyfurionCommunitySection', currentSection);
-        renderChat();
-    };
-});
-sectionList.querySelector(`.nyf-section-btn[data-section="${currentSection}"]`)?.classList.add('active');
-
-// --- Chat Storage ---
-function getChat() {
-    try { return JSON.parse(localStorage.getItem('nyfurionCommunityChat') || '{}'); } catch { return {}; }
-}
-function setChat(obj) {
-    localStorage.setItem('nyfurionCommunityChat', JSON.stringify(obj));
-}
-
-// --- Chat Rendering ---
-// --- Chat Rendering stile WhatsApp ---
-function renderChat() {
-    const box = document.getElementById('nyf-chatbox');
-    const chatForm = document.getElementById('nyf-form');
-    if (chatForm) chatForm.style.display = 'flex';
-
-    // Wallet sopra la chat, più compatto su mobile
-    let walletDiv = document.getElementById('nyf-wallet-visible');
-    if (!walletDiv) {
-        walletDiv = document.createElement('div');
-        walletDiv.id = 'nyf-wallet-visible';
-        walletDiv.style.cssText = 'margin:0.2em 0 0.2em 0;padding:0.18em 0.5em;background:rgba(27,255,106,0.08);color:#1bff6a;font-family:monospace;font-size:0.93em;border-radius:7px;display:flex;align-items:center;gap:0.3em;word-break:break-all;max-width:98vw;';
-        box.parentNode.insertBefore(walletDiv, box);
-    }
-    walletDiv.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;"><rect x="3" y="7" width="18" height="10" rx="3" stroke="#1bff6a" stroke-width="2" fill="none"/><rect x="7" y="3" width="10" height="4" rx="2" stroke="#1bff6a" stroke-width="2" fill="none"/></svg> <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80vw;display:inline-block;">${wallet || ''}</span>`;
-
-    const allChats = getChat();
-    const arr = allChats[currentSection] || [];
-    box.innerHTML = arr.length === 0
-        ? "<div style='color:#aaa;text-align:center;margin-top:0.7em;font-size:0.95em;'>Nessun messaggio in questa sezione.</div>"
-        : arr.map((msg, idx) => {
-            const isMe = msg.wallet === wallet;
-            let safeText = (msg.text || '').replace(/</g,"&lt;").replace(/>/g,"&gt;");
-            let attachmentsHtml = '';
-            if (msg.attachments && Array.isArray(msg.attachments) && msg.attachments.length) {
-                attachmentsHtml = `<div class="attachments" style="margin-top:0.09em;">${msg.attachments.map(a =>
-                    a && a.type && a.type.startsWith('image/') ? `<img src="${a.data}" alt="img" style="max-width:44vw;max-height:44vw;border-radius:5px;margin-right:0.13em;margin-bottom:0.07em;border:1px solid #232a3a;">`
-                    : (a && a.data && a.name ? `<a href="${a.data}" target="_blank" style="color:#00eaff;text-decoration:underline;font-size:0.93em;">${a.name}</a>` : '')
-                ).join('')}</div>`;
-            }
-            return `
-            <div class="nyf-message${isMe ? ' me' : ''}" data-idx="${idx}" style="
-                display:flex;
-                align-items:flex-end;
-                gap:0.2em;
-                justify-content:${isMe ? 'flex-end' : 'flex-start'};
-                margin-bottom:0.18em;
-                width:100%;
-            ">
-                ${!isMe ? `<img class="nyf-avatar" src="${(userData[msg.wallet] && userData[msg.wallet].avatar) || ''}" alt="Avatar" style="flex-shrink:0;width:22px;height:22px;">` : ''}
-                <div class="nyf-message-content" style="
-                    background:${isMe ? 'linear-gradient(90deg,#1bff6a33 0%,#00eaff33 100%)' : 'rgba(35,42,58,0.93)'};
-                    border-radius:8px;
-                    padding:0.18em 0.5em;
-                    max-width:80vw;
-                    min-width:0;
-                    box-shadow:0 0 2px #00eaff11;
-                    border:1px solid #1bff6a22;
-                    ${isMe ? 'align-items:flex-end;text-align:right;' : ''}
-                    margin-bottom:0.05em;
-                    font-size:0.99em;
-                    word-break:break-word;
-                ">
-                    <span class="meta" style="display:flex;align-items:center;gap:0.18em;${isMe ? 'justify-content:flex-end;' : ''};font-size:0.93em;">
-                        ${(userData[msg.wallet] && userData[msg.wallet].name) || abbreviateAddress(msg.wallet)}
-                        <span class="date" style="font-size:0.89em;">${msg.date || ''}</span>
-                    </span>
-                    <div class="text" data-msg-text style="margin-top:0.04em;font-size:1em;">
-                        ${safeText}
-                    </div>
-                    ${attachmentsHtml}
-                    ${isMe ? `
-                        <div class="nyf-msg-actions" style="display:flex;gap:0.2em;margin-top:0.07em;justify-content:flex-end;">
-                            <button class="nyf-btn-edit" style="background:none;border:none;color:#1bff6a;font-size:1em;cursor:pointer;padding:0;" title="Modifica" aria-label="Modifica">&#9998;</button>
-                            <button class="nyf-btn-delete" style="background:none;border:none;color:#ff7c7c;font-size:1em;cursor:pointer;padding:0;" title="Elimina" aria-label="Elimina">&#128465;</button>
-                        </div>
-                    ` : ''}
-                </div>
-                ${isMe ? `<img class="nyf-avatar" src="${(userData[msg.wallet] && userData[msg.wallet].avatar) || ''}" alt="Avatar" style="flex-shrink:0;width:22px;height:22px;">` : ''}
-            </div>
-            `;
-        }).join('');
-    box.scrollTop = box.scrollHeight;
-
-    // Gestione modifica/cancella
-    box.querySelectorAll('.nyf-btn-edit').forEach(btn => {
-        btn.onclick = function(e) {
-            e.preventDefault();
-            const msgDiv = btn.closest('.nyf-message');
-            const idx = +msgDiv.getAttribute('data-idx');
-            const textDiv = msgDiv.querySelector('[data-msg-text]');
-            const oldText = (getChat()[currentSection] || [])[idx]?.text || '';
-            textDiv.innerHTML = `<input type="text" value="${oldText.replace(/"/g,'&quot;')}" style="width:90%;font-size:1em;padding:0.2em;border-radius:6px;border:1px solid #1bff6a;background:#232a3a;color:#fff;"> <button class="nyf-btn-save" style="background:#1bff6a;color:#181a22;border:none;border-radius:6px;padding:0.2em 0.7em;font-weight:bold;cursor:pointer;">Salva</button> <button class="nyf-btn-cancel" style="background:#232a3a;color:#fff;border:none;border-radius:6px;padding:0.2em 0.7em;cursor:pointer;">Annulla</button>`;
-            const input = textDiv.querySelector('input');
-            input.focus();
-            textDiv.querySelector('.nyf-btn-save').onclick = function() {
-                const newText = input.value.trim();
-                if (!newText) return;
-                let allChats = getChat();
-                allChats[currentSection][idx].text = newText;
-                setChat(allChats);
-                renderChat();
-            };
-            textDiv.querySelector('.nyf-btn-cancel').onclick = function() {
-                renderChat();
-            };
-            input.onkeydown = function(ev) {
-                if (ev.key === "Enter") textDiv.querySelector('.nyf-btn-save').click();
-                if (ev.key === "Escape") textDiv.querySelector('.nyf-btn-cancel').click();
-            };
-        };
+    <script>
+    // Gestione categorie e messaggi separati
+    const categories = ['General', 'Guardians', 'Rebels', 'Predators', 'NFT', 'Events'];
+    let currentCategory = 'General';
+    let messages = {};
+    categories.forEach(cat => {
+        messages[cat] = JSON.parse(localStorage.getItem('messages-' + cat) || '[]');
     });
-    box.querySelectorAll('.nyf-btn-delete').forEach(btn => {
-        btn.onclick = function(e) {
-            e.preventDefault();
-            const msgDiv = btn.closest('.nyf-message');
-            const idx = +msgDiv.getAttribute('data-idx');
-            if (confirm("Vuoi eliminare questo messaggio?")) {
-                let allChats = getChat();
-                allChats[currentSection].splice(idx, 1);
-                setChat(allChats);
-                renderChat();
-            }
-        };
-    });
-}
 
-// --- Chat Form ---
-// Sblocca sempre il form per l'invio dei messaggi
-const chatForm = document.getElementById('nyf-form');
-const msgInput = document.getElementById('nyf-message');
-const fileInput = document.getElementById('nyf-file');
-if (chatForm) chatForm.style.display = 'flex';
-
-// Abilita sempre il pulsante Send
-const sendBtn = chatForm.querySelector('button[type="submit"]');
-if (sendBtn) sendBtn.disabled = false;
-
-// --- ANTEPRIMA IMMAGINI PRIMA DELL'INVIO ---
-let previewDiv = null;
-fileInput.onchange = function() {
-    // Rimuovi eventuale anteprima precedente
-    if (previewDiv) {
-        previewDiv.remove();
-        previewDiv = null;
+    function switchCategory(cat) {
+        currentCategory = cat;
+        document.getElementById('chat-title').textContent = cat;
+        categories.forEach(c => {
+            document.getElementById('messages-' + c).style.display = (c === cat) ? '' : 'none';
+            const tab = document.querySelector('.category[data-cat="' + c + '"]');
+            if (tab) tab.classList.toggle('selected', c === cat);
+        });
+        renderMessages(cat);
     }
-    if (!fileInput.files || !fileInput.files.length) return;
-    previewDiv = document.createElement('div');
-    previewDiv.id = "nyf-file-preview";
-    previewDiv.style.cssText = "display:flex;flex-wrap:wrap;gap:0.4em;margin:0.4em 0 0.2em 0;align-items:center;";
-    for (let i = 0; i < fileInput.files.length; i++) {
-        const file = fileInput.files[i];
-        if (file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = function(ev) {
-                const img = document.createElement('img');
-                img.src = ev.target.result;
-                img.style.cssText = "max-width:60px;max-height:60px;border-radius:6px;border:1px solid #1bff6a22;";
-                previewDiv.appendChild(img);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            // Mostra solo il nome per file non immagine
-            const span = document.createElement('span');
-            span.textContent = file.name;
-            span.style.cssText = "color:#bafff7;font-size:0.93em;background:#232a3a;padding:0.2em 0.5em;border-radius:5px;";
-            previewDiv.appendChild(span);
-        }
-    }
-    // Inserisci la preview subito sotto la barra messaggi
-    const formWrap = document.querySelector('.nyf-form-wrap');
-    if (formWrap) formWrap.parentNode.insertBefore(previewDiv, formWrap.nextSibling);
-};
 
-// Invio messaggi
-chatForm.onsubmit = function(e) {
-    e.preventDefault();
-    let text = msgInput.value.trim();
-    // Permetti invio se c'è testo o file
-    if (!text && (!fileInput.files || fileInput.files.length === 0)) return;
-    let allChats = getChat();
-    if (!allChats[currentSection]) allChats[currentSection] = [];
-    let attachments = [];
-    if (fileInput.files && fileInput.files.length) {
-        let filesDone = 0;
-        for (let i = 0; i < fileInput.files.length; i++) {
-            const file = fileInput.files[i];
-            if (file.size > 2*1024*1024) { alert("File troppo grande (max 2MB)."); filesDone++; continue; }
-            const reader = new FileReader();
-            reader.onload = function(ev) {
-                attachments.push({ name: file.name, type: file.type, data: ev.target.result });
-                filesDone++;
-                if (filesDone === fileInput.files.length) {
-                    allChats[currentSection].push({
-                        wallet,
-                        text,
-                        date: new Date().toLocaleDateString('en-GB', {day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}),
-                        attachments
-                    });
-                    setChat(allChats);
-                    msgInput.value = '';
-                    fileInput.value = '';
-                    if (previewDiv) { previewDiv.remove(); previewDiv = null; }
-                    renderChat();
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-        return;
-    }
-    allChats[currentSection].push({
-        wallet,
-        text,
-        date: new Date().toLocaleDateString('en-GB', {day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}),
-        attachments:[]
-    });
-    setChat(allChats);
-    msgInput.value = '';
-    fileInput.value = '';
-    if (previewDiv) { previewDiv.remove(); previewDiv = null; }
-    renderChat();
-};
-
-fileInput.onchange = function() {
-    // Show file preview if needed
-};
-
-(async function init() {
-    if (!await setupUser()) {
-        document.getElementById('nyf-form').style.display = 'none';
-        return;
-    }
-    document.getElementById('nyf-form').style.display = 'flex';
-    renderChat();
-})();
-
-// --- MOBILE SECTION POPUP LOGIC ---
-const mobileBtn = document.getElementById('nyf-section-mobile-btn');
-const mobileLabel = document.getElementById('nyf-section-mobile-label');
-const popupBg = document.getElementById('nyf-section-popup-bg');
-const popupClose = document.getElementById('nyf-section-popup-close');
-const popupBtns = Array.from(document.querySelectorAll('.nyf-section-popup .nyf-section-btn'));
-
-function updateMobileSectionLabel() {
-    let label = "# General";
-    switch(currentSection) {
-        case "guardiani": label = "# Guardians"; break;
-        case "ribelli": label = "# Rebels"; break;
-        case "predatori": label = "# Predators"; break;
-        case "nft": label = "# NFT"; break;
-        case "eventi": label = "# Events"; break;
-    }
-    mobileLabel.textContent = label;
-}
-updateMobileSectionLabel();
-
-function showSectionPopup() {
-    popupBg.style.display = "flex";
-    showWalletAddress();
-    // Highlight current
-    popupBtns.forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-section') === currentSection);
-    });
-}
-function hideSectionPopup() {
-    popupBg.style.display = "none";
-}
-
-mobileBtn.onclick = showSectionPopup;
-popupClose.onclick = hideSectionPopup;
-popupBg.onclick = function(e) {
-    if (e.target === popupBg) hideSectionPopup();
-};
-popupBtns.forEach(btn => {
-    btn.onclick = function() {
-        currentSection = this.getAttribute('data-section');
-        localStorage.setItem('nyfurionCommunitySection', currentSection);
-        sectionList.querySelectorAll('.nyf-section-btn').forEach(b => b.classList.remove('active'));
-        // Aggiorna anche la sidebar desktop se visibile
-        let desktopBtn = sectionList.querySelector(`.nyf-section-btn[data-section="${currentSection}"]`);
-        if (desktopBtn) desktopBtn.classList.add('active');
-        updateMobileSectionLabel();
-        hideSectionPopup();
-        renderChat();
-    };
-});
-
-// Mostra l'indirizzo del wallet collegato nel popup mobile, header e sotto il pulsante mobile
-function showWalletAddress() {
-    const elPopup = document.getElementById('nyf-wallet-address-text');
-    const elHeader = document.getElementById('nyf-header-wallet-text');
-    const elMobile = document.getElementById('nyf-wallet-mobile');
-    const elMobileText = document.getElementById('nyf-wallet-mobile-text');
-    const elMobileVisible = document.getElementById('nyf-wallet-mobile-visible-text');
-    if (wallet) {
-        elPopup.textContent = wallet;
-        elHeader.textContent = wallet;
-        elMobileText.textContent = wallet;
-        elMobileVisible.textContent = wallet;
-        // Mostra solo su mobile
-        if (window.innerWidth <= 700) {
-            elMobile.style.display = "flex";
-            elMobileVisible.style.display = "flex";
-        } else {
-            elMobile.style.display = "none";
-            elMobileVisible.style.display = "none";
-        }
-    } else {
-        elPopup.textContent = '';
-        elHeader.textContent = '';
-        elMobileText.textContent = '';
-        elMobileVisible.textContent = '';
-        elMobile.style.display = "none";
-        elMobileVisible.style.display = "none";
-    }
-}
-window.addEventListener('resize', showWalletAddress);
-
-// Aggiorna l'indirizzo wallet all'avvio
-showWalletAddress();
-
-// CATEGORIE MOBILE DOPO LA BARRA MESSAGGI
-(function() {
-    function renderCategoriesMobile() {
-        const container = document.getElementById('nyf-categories-mobile');
-        if (!container) return;
-        if (window.innerWidth > 700) {
-            container.style.display = 'none';
+    function renderMessages(cat) {
+        const container = document.getElementById('messages-' + cat);
+        if (container) {
             container.innerHTML = '';
+            messages[cat].forEach((msg, idx) => {
+                let text, avatar;
+                if (typeof msg === 'string') {
+                    text = msg;
+                    const user = getUser();
+                    avatar = user && user.avatar ? user.avatar : 'https://i.imgur.com/0y0y0y0.png';
+                } else {
+                    text = msg.text;
+                    avatar = msg.avatar && msg.avatar !== '' ? msg.avatar : 'https://i.imgur.com/0y0y0y0.png';
+                }
+                const div = document.createElement('div');
+                div.className = 'msg';
+                div.style.display = 'flex';
+                div.style.alignItems = 'center';
+                div.style.marginBottom = '0.18em';
+                div.innerHTML = `
+                    <div style=\"display:flex;align-items:center;\">
+                      <img src=\"${avatar}\" class=\"avatar\" style=\"width:22px;height:22px;border-radius:50%;border:1px solid #1bff6a;margin-right:7px;object-fit:cover;display:block;\" alt=\"avatar\" />
+                    </div>
+                    <div style=\"background:#23272b; border-radius:9px; padding:0.32em 0.7em; min-width:28px; max-width:60vw; color:#fff; font-size:0.98em; display:flex; align-items:center; position:relative; box-shadow:0 1px 4px #0002; gap:0.5em;\">
+                      <span class='msg-text' style=\"word-break:break-word;\">${text}</span>
+                      <div class=\"msg-menu-wrap\" style=\"position:relative; margin-left:4px;\">
+                        <button class=\"msg-menu-btn\" style=\"background:transparent; border:none; cursor:pointer; padding:0 1.5px; display:flex; flex-direction:column; align-items:center; gap:1.5px; height:18px; justify-content:center;\">
+                          <span style=\"display:inline-block; width:3px; height:3px; background:#bafff7; border-radius:50%; margin:0;\"></span>
+                          <span style=\"display:inline-block; width:3px; height:3px; background:#bafff7; border-radius:50%; margin:0;\"></span>
+                          <span style=\"display:inline-block; width:3px; height:3px; background:#bafff7; border-radius:50%; margin:0;\"></span>
+                        </button>
+                        <div class=\"msg-menu-popup\" style=\"display:none; position:absolute; right:0; top:16px; background:#23272b; border-radius:7px; box-shadow:0 2px 8px #0006; min-width:90px; z-index:10;\">
+                          <button class=\"delete-btn\" style=\"width:100%; background:transparent; border:none; color:#ff4d4d; padding:6px 0; font-size:0.93em; border-radius:7px; cursor:pointer;\">Elimina</button>
+                        </div>
+                      </div>
+                    </div>
+                `;
+                // Gestione menu puntini
+                const menuBtn = div.querySelector('.msg-menu-btn');
+                const menuPopup = div.querySelector('.msg-menu-popup');
+                menuBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    document.querySelectorAll('.msg-menu-popup').forEach(p => { if(p!==menuPopup) p.style.display='none'; });
+                    menuPopup.style.display = menuPopup.style.display === 'block' ? 'none' : 'block';
+                };
+                document.addEventListener('click', function hideMenu(ev) {
+                    if (!div.contains(ev.target)) menuPopup.style.display = 'none';
+                }, { once: true });
+                // Elimina
+                div.querySelector('.delete-btn').onclick = function() {
+                    messages[cat].splice(idx, 1);
+                    localStorage.setItem('messages-' + cat, JSON.stringify(messages[cat]));
+                    renderMessages(cat);
+                };
+                container.appendChild(div);
+            });
+            container.scrollTop = container.scrollHeight;
+        }
+    }
+
+    // Registrazione utente
+    const registerPopup = document.getElementById('register-popup');
+    const registerForm = document.getElementById('register-form');
+    const avatarInput = document.getElementById('avatar-input');
+    const avatarPreview = document.getElementById('avatar-preview');
+    const usernameInput = document.getElementById('username-input');
+
+    function getUser() {
+        return JSON.parse(localStorage.getItem('community-user') || 'null');
+    }
+    function setUser(user) {
+        localStorage.setItem('community-user', JSON.stringify(user));
+    }
+    // Mostra popup se non registrato
+    window.addEventListener('DOMContentLoaded', () => {
+        const user = getUser();
+        if (!user) {
+            registerPopup.style.display = 'flex';
+        } else {
+            registerPopup.style.display = 'none';
+        }
+    });
+    // Preview avatar
+    avatarInput.onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                avatarPreview.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    // Salva utente
+    registerForm.onsubmit = function(e) {
+        e.preventDefault();
+        const name = usernameInput.value.trim();
+        let avatar = avatarPreview.src;
+        if (!name) return;
+        setUser({ name, avatar });
+        registerPopup.style.display = 'none';
+    };
+
+    document.querySelectorAll('.category').forEach(btn => {
+        btn.onclick = () => switchCategory(btn.dataset.cat);
+    });
+
+    // Preview immagine e invio foto direttamente nella barra input
+    let imagePreviewData = null;
+    const fileInput = document.getElementById('file-input');
+    const chatForm = document.getElementById('chat-form');
+    const msgInput = document.getElementById('msg-input');
+
+    // Crea container per la preview dentro la chat-form
+    let inlinePreview = document.createElement('div');
+    inlinePreview.id = 'inline-image-preview';
+    inlinePreview.style.display = 'none';
+    inlinePreview.style.flex = '1';
+    inlinePreview.style.alignItems = 'center';
+    inlinePreview.style.gap = '0.7em';
+    inlinePreview.style.background = '#23272b';
+    inlinePreview.style.borderRadius = '8px';
+    inlinePreview.style.padding = '0.1em 0.5em';
+    inlinePreview.style.marginRight = '0.1em';
+    inlinePreview.innerHTML = `
+      <img id="image-preview-inline" src="" style="max-width:38px; max-height:38px; border-radius:7px; box-shadow:0 1px 6px #00eaff55; border:2px solid #1bff6a; margin-right:0.5em;" alt="preview" />
+      <button id="send-image-btn-inline" style="background:linear-gradient(90deg,#1bff6a,#00eaff);color:#181a1b;border:none;border-radius:8px;padding:0.2em 0.8em;font-weight:600;cursor:pointer;">Invia foto</button>
+      <button id="cancel-image-btn-inline" style="background:#23272b;color:#fff;border:none;border-radius:8px;padding:0.2em 0.8em;font-weight:600;cursor:pointer;">Annulla</button>
+    `;
+    msgInput.parentNode.insertBefore(inlinePreview, msgInput);
+
+    fileInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                imagePreviewData = ev.target.result;
+                document.getElementById('image-preview-inline').src = imagePreviewData;
+                inlinePreview.style.display = 'flex';
+                msgInput.style.display = 'none';
+                // Rimuovi eventuali listener precedenti
+                const sendBtn = document.getElementById('send-image-btn-inline');
+                const cancelBtn = document.getElementById('cancel-image-btn-inline');
+                sendBtn.onclick = null;
+                cancelBtn.onclick = null;
+                // Listener invio foto
+                sendBtn.onclick = function(e) {
+                    e.preventDefault();
+                    if (!imagePreviewData) return;
+                    const user = getUser();
+                    const msgObj = {
+                        text: '',
+                        avatar: user && user.avatar ? user.avatar : 'https://i.imgur.com/0y0y0y0.png',
+                        image: imagePreviewData
+                    };
+                    messages[currentCategory].push(msgObj);
+                    localStorage.setItem('messages-' + currentCategory, JSON.stringify(messages[currentCategory]));
+                    imagePreviewData = null;
+                    inlinePreview.style.display = 'none';
+                    msgInput.style.display = '';
+                    fileInput.value = '';
+                    renderMessages(currentCategory);
+                };
+                // Listener annulla
+                cancelBtn.onclick = function(e) {
+                    e.preventDefault();
+                    imagePreviewData = null;
+                    inlinePreview.style.display = 'none';
+                    msgInput.style.display = '';
+                    fileInput.value = '';
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Modifica l'invio del form per gestire anche la preview immagine inline
+    chatForm.onsubmit = function(e) {
+        e.preventDefault();
+        if (imagePreviewData) {
+            document.getElementById('send-image-btn-inline').click();
             return;
         }
-        container.style.display = 'block';
-        container.innerHTML = `
-            <div class="nyf-sidebar-title">Categorie</div>
-            <ul class="nyf-section-list">
-                <li><button class="nyf-section-btn" data-section="generale"># General</button></li>
-                <li><button class="nyf-section-btn" data-section="guardiani"># Guardians</button></li>
-                <li><button class="nyf-section-btn" data-section="ribelli"># Rebels</button></li>
-                <li><button class="nyf-section-btn" data-section="predatori"># Predators</button></li>
-                <li><button class="nyf-section-btn" data-section="nft"># NFT</button></li>
-                <li><button class="nyf-section-btn" data-section="eventi"># Events</button></li>
-            </ul>
-        `;
-        // Attiva la categoria corrente
-        const btns = container.querySelectorAll('.nyf-section-btn');
-        btns.forEach(btn => {
-            btn.classList.toggle('active', btn.getAttribute('data-section') === (localStorage.getItem('nyfurionCommunitySection') || 'generale'));
-            btn.onclick = function() {
-                const section = this.getAttribute('data-section');
-                localStorage.setItem('nyfurionCommunitySection', section);
-                document.querySelectorAll('.nyf-section-btn').forEach(bb => bb.classList.remove('active'));
-                this.classList.add('active');
-                window.currentSection = section;
-                if (typeof renderChat === 'function') renderChat();
-            };
-        });
-    }
-    window.addEventListener('resize', renderCategoriesMobile);
-    window.addEventListener('DOMContentLoaded', renderCategoriesMobile);
-})();
-</script>
+        const text = msgInput.value.trim();
+        if (!text) return;
+        const user = getUser();
+        const msgObj = {
+            text,
+            avatar: user && user.avatar ? user.avatar : 'https://i.imgur.com/0y0y0y0.png'
+        };
+        messages[currentCategory].push(msgObj);
+        localStorage.setItem('messages-' + currentCategory, JSON.stringify(messages[currentCategory]));
+        msgInput.value = '';
+        renderMessages(currentCategory);
+    };
+
+    // Mostra la categoria di default
+    switchCategory('General');
+    </script>
+    <!-- Carica socket.io-client e collega la chat al backend -->
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="chat-frontend-socket.js"></script>
+</body>
 </html>

@@ -3,14 +3,19 @@ const fs = require('fs');
 const nodemailer = require('nodemailer');
 const bodyParser = require('body-parser');
 const path = require('path');
+const multer = require('multer');
+const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 const PORT = 3001;
 const SUBSCRIBERS_FILE = path.join(__dirname, 'subscribers.json');
 const ADMIN_PASSWORD = 'nyfurion2024'; // Cambia questa password!
+const upload = multer({ dest: path.join(__dirname, 'uploads') });
+const MSG_FILE = path.join(__dirname, 'messages.json');
 
 app.use(bodyParser.json());
 app.use(express.static(__dirname));
+if (!fs.existsSync(MSG_FILE)) fs.writeFileSync(MSG_FILE, '[]');
 
 // Utility: carica e salva email
 function loadSubscribers() {
@@ -84,6 +89,68 @@ app.post('/api/notify-all', async (req, res) => {
 app.get('/admin-notify', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin-notify.html'));
 });
+
+// --- INIZIO CHAT COMMUNITY NYFURION (MESSAGGI + FILE) ---
+app.get('/messages', (req, res) => {
+    const category = req.query.category || 'General';
+    const msgs = JSON.parse(fs.readFileSync(MSG_FILE));
+    const filtered = msgs.filter(m => (m.category || 'General') === category);
+    res.json(filtered.slice(-50));
+});
+
+app.post('/messages', upload.single('file'), (req, res) => {
+    const text = req.body.text || '';
+    let fileUrl = null, fileName = null;
+    if (req.file) {
+        fileUrl = '/uploads/' + req.file.filename;
+        fileName = req.file.originalname;
+    }
+    if (!text && !fileUrl) return res.status(400).end();
+    const msgs = JSON.parse(fs.readFileSync(MSG_FILE));
+    const now = new Date();
+    msgs.push({
+        id: uuidv4(),
+        text,
+        fileUrl,
+        fileName,
+        time: now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }),
+        me: false,
+        wallet: req.body.wallet || null,
+        avatar: req.body.avatar || null,
+        category: req.body.category || 'General'
+    });
+    fs.writeFileSync(MSG_FILE, JSON.stringify(msgs));
+    res.json({ ok: true });
+});
+
+// Cancella un messaggio
+app.delete('/messages/:id', (req, res) => {
+    const id = req.params.id;
+    let msgs = JSON.parse(fs.readFileSync(MSG_FILE));
+    const initialLength = msgs.length;
+    msgs = msgs.filter(m => m.id !== id);
+    fs.writeFileSync(MSG_FILE, JSON.stringify(msgs));
+    res.json({ ok: msgs.length < initialLength });
+});
+
+// Modifica un messaggio
+app.put('/messages/:id', (req, res) => {
+    const id = req.params.id;
+    const { text } = req.body;
+    let msgs = JSON.parse(fs.readFileSync(MSG_FILE));
+    let found = false;
+    msgs = msgs.map(m => {
+        if (m.id === id) {
+            found = true;
+            return { ...m, text };
+        }
+        return m;
+    });
+    fs.writeFileSync(MSG_FILE, JSON.stringify(msgs));
+    res.json({ ok: found });
+});
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// --- FINE CHAT COMMUNITY NYFURION ---
 
 app.listen(PORT, () => {
     console.log(`Notify server running on http://localhost:${PORT}`);

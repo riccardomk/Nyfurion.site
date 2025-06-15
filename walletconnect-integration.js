@@ -39,14 +39,4 @@ walletConnectScript.onload = web3ModalScript.onload = function() {
             alert('Connessione annullata o fallita.');
         }
     }
-
-    // Aggiungi il pulsante se non esiste già
-    if (!document.getElementById('connect-wallet-btn')) {
-        let btn = document.createElement('button');
-        btn.id = 'connect-wallet-btn';
-        btn.innerText = 'Connetti Wallet';
-        btn.style = 'position:fixed;top:18px;right:18px;z-index:9999;padding:0.7em 1.5em;background:#1bff6a;color:#181a22;font-family:Orbitron,sans-serif;font-size:1.1em;border:none;border-radius:10px;box-shadow:0 0 12px #00eaff;cursor:pointer;';
-        btn.onclick = onConnectWallet;
-        document.body.appendChild(btn);
-    }
 };

@@ -5,1192 +5,165 @@
     <title>Nyfurion Portal Experience</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap');
         html, body {
             margin: 0; padding: 0;
             width: 100vw; height: 100vh;
-            overflow: hidden;
-            background: #0b101a;
-            font-family: 'Orbitron', 'Cinzel', sans-serif;
+            background: #101214;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
         }
         body {
             min-height: 100vh;
-            color: #eaffd0;
-        }
-        #nyfurion-bg-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .nyfurion-main-ui {
-            position: relative;
-            z-index: 2;
-            width: 100vw;
-            height: 100vh;
+            color: #eaf2f1;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: flex-end;
+            justify-content: center;
+            animation: invert-colors 5s linear infinite; /* aumentata la durata */
         }
-        .nyfurion-portal-center {
-            position: absolute;
-            left: 50%;
+        @keyframes invert-colors {
+            0%, 100% {
+                background: #101214;
+                color: #eaf2f1;
+            }
+            50% {
+                background: #fff;
+                color: #101214;
+            }
+        }
+        .nyfurion-bg-text {
+            position: fixed;
             top: 38%;
+            left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 3;
+            font-size: 8vw;
+            font-weight: 900;
+            color: #23272b;
+            opacity: 0.10;
+            letter-spacing: 0.13em;
+            user-select: none;
+            pointer-events: none;
+            z-index: 0;
+            white-space: nowrap;
+            text-transform: uppercase;
+            font-family: 'Orbitron', 'Inter', 'Segoe UI', Arial, sans-serif;
+            animation: invert-bg-text 5s linear infinite; /* aumentata la durata */
+        }
+        @keyframes invert-bg-text {
+            0%, 100% {
+                color: #eaf2f1; /* bianco opaco */
+                opacity: 0.13;
+            }
+            50% {
+                color: #000;
+                opacity: 1;
+            }
+        }
+        .nyfurion-center-section {
+            display: flex;
+            flex-direction: row;
+            gap: 2.5em;
+            justify-content: center;
+            align-items: center;
+            margin-top: 7em;
+            position: relative;
+            z-index: 1;
+        }
+        .nyfurion-card {
+            background: #181a1b;
+            border-radius: 18px;
+            box-shadow: none;
+            padding: 1.3em 2em;
+            min-width: 160px;
+            min-height: 65px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            pointer-events: none;
-            width: 100vw;
-            max-width: 100vw;
-            box-sizing: border-box;
-        }
-        .nyfurion-portal-svg-wrap {
-            width: 340px; height: 340px;
-            margin-bottom: 1.5em;
-            pointer-events: auto;
-            cursor: pointer;
-            transition: filter 0.2s;
-        }
-        .nyfurion-portal-svg-wrap:focus,
-        .nyfurion-portal-svg-wrap:hover {
-            filter: drop-shadow(0 0 32px #00eaff88);
-        }
-        .nyfurion-portal-title {
-            font-size: 2.2em;
-            color: #eaffd0;
-            text-shadow: 0 0 24px #1bff6a, 0 0 32px #00eaff;
-            font-weight: bold;
-            letter-spacing: 0.04em;
-            margin-bottom: 0.2em;
-            text-align: center;
-            pointer-events: auto;
-            user-select: none;
-            width: 100vw;
-            max-width: 100vw;
-            box-sizing: border-box;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .nyfurion-portal-desc {
-            font-size: 1.18em;
-            color: #bafff7;
-            text-shadow: 0 0 8px #00eaff, 0 0 18px #1bff6a;
-            margin-bottom: 1.5em;
-            text-align: center;
-            pointer-events: auto;
-            user-select: none;
-            width: 100vw;
-            max-width: 100vw;
-            box-sizing: border-box;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .nyfurion-portal-buttons {
-            display: flex;
-            gap: 1.5em;
             justify-content: center;
-            margin-bottom: 2.5em;
-            pointer-events: auto;
-            width: 100vw;
-            max-width: 100vw;
-            box-sizing: border-box;
-        }
-        .nyfurion-btn {
-            background: linear-gradient(90deg,#00eaff 0%,#1bff6a 100%);
-            color: #181a22;
-            font-family: 'Orbitron',sans-serif;
-            font-size: 1.13em;
-            font-weight: bold;
-            padding: 0.7em 2.2em;
-            border-radius: 22px;
-            border: none;
-            box-shadow: 0 0 18px #00eaff33;
+            transition: background 0.15s, border-color 0.15s, transform 0.15s, box-shadow 0.15s;
             cursor: pointer;
-            transition: background 0.18s, color 0.18s, transform 0.18s, box-shadow 0.18s;
-            outline: none;
+            border: 1.5px solid #23272b;
+            animation: invert-card 5s linear infinite; /* aumentata la durata */
         }
-        .nyfurion-btn:hover, .nyfurion-btn:focus {
-            background: linear-gradient(90deg,#1bff6a 0%,#00eaff 100%);
-            color: #fff;
-            transform: scale(1.06);
-            box-shadow: 0 0 32px #1bff6a, 0 0 64px #00eaff66;
+        @keyframes invert-card {
+            0%, 100% {
+                background: #181a1b;
+                border-color: #23272b;
+            }
+            50% {
+                background: #fff;
+                border-color: #101214;
+            }
         }
-        /* Modal cinematiche */
-        .nyfurion-modal {
-            position: fixed;
-            left: 0; top: 0;
-            width: 100vw; height: 100vh;
-            background: rgba(10,18,28,0.97);
-            z-index: 100;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            animation: modalFadeIn 0.7s cubic-bezier(.4,1.6,.4,1);
-        }
-        @keyframes modalFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .nyfurion-modal-content {
-            background: rgba(24,26,34,0.98);
-            border-radius: 22px;
-            box-shadow: 0 0 64px #00eaff55;
-            padding: 2.5em 2.5em 2em 2.5em;
-            max-width: 480px;
-            width: 96vw;
-            color: #fff;
+        .nyfurion-card-title {
+            font-size: 1.15em;
+            font-weight: 600;
+            color: #eaf2f1;
+            letter-spacing: 0.01em;
             text-align: center;
-            position: relative;
-            overflow: hidden;
+            animation: invert-card-title 5s linear infinite; /* aumentata la durata */
         }
-        .nyfurion-modal-close {
-            position: absolute;
-            top: 18px; right: 24px;
-            background: none;
-            border: none;
-            color: #1bff6a;
-            font-size: 2.2em;
-            cursor: pointer;
-            z-index: 2;
-            transition: color 0.2s;
+        @keyframes invert-card-title {
+            0%, 100% {
+                color: #eaf2f1;
+            }
+            50% {
+                color: #101214;
+            }
         }
-        .nyfurion-modal-close:hover { color: #ffe87c; }
-        .nyfurion-modal-title {
-            font-size: 1.5em;
-            color: #1bff6a;
-            margin-bottom: 0.7em;
-            text-shadow: 0 0 12px #1bff6a, 0 0 24px #00eaff;
-            font-family: 'Orbitron',sans-serif;
+        .nyfurion-card:hover {
+            background: #23272b;
+            border-color: #2ec4b6;
+            transform: scale(1.06) translateY(-6px);
+            box-shadow: 0 8px 32px 0 rgba(46,196,182,0.18);
         }
-        .nyfurion-modal-desc {
-            font-size: 1.08em;
-            color: #eaffd0;
-            margin-bottom: 1.2em;
+        .nyfurion-card:active {
+            transform: scale(0.98) translateY(2px);
+            box-shadow: 0 2px 8px 0 rgba(46,196,182,0.10);
         }
-        /* Animazione onde in basso */
-        #nyfurion-waves-canvas {
-            position: fixed;
-            left: 0; bottom: 0;
-            width: 100vw; height: 38vh;
-            z-index: 1;
-            pointer-events: none;
+        .nyfurion-card:focus {
+            outline: 2px solid #2ec4b6;
+            outline-offset: 2px;
         }
-        @media (max-width: 700px) {
-            .nyfurion-portal-svg-wrap { width: 180px; height: 180px; }
-            .nyfurion-modal-content { padding: 1.2em 0.5em 1em 0.5em; }
-            .nyfurion-portal-center {
+        @media (max-width: 900px) {
+            .nyfurion-center-section {
+                flex-direction: column;
+                gap: 2.2em;
+                width: 90vw;
+                margin: 0 auto;
+                margin-top: 2.5em;
+                align-items: center;
+            }
+            .nyfurion-bg-text {
+                font-size: 2.5em;
+                top: 18%;
                 left: 50%;
-                top: 38%;
                 transform: translate(-50%, -50%);
-                width: 100vw !important;
-                max-width: 100vw !important;
-                padding-left: 0 !important;
-                padding-right: 0 !important;
+                width: 100vw;
+                text-align: center;
             }
-            .nyfurion-portal-title,
-            .nyfurion-portal-desc,
-            .nyfurion-portal-buttons {
-                width: 100vw !important;
-                max-width: 100vw !important;
-                margin-left: 0 !important;
-                margin-right: 0 !important;
-                box-sizing: border-box !important;
+            .nyfurion-card {
+                min-width: 0;
+                width: 90vw;
+                max-width: 340px;
+                min-height: 70px;
+                margin: 0 auto;
+                font-size: 1em;
             }
-            .nyfurion-portal-buttons {
-                gap: 0.7em !important;
-                padding-left: 0.5em !important;
-                padding-right: 0.5em !important;
-            }
-        }
-        #quiz-ranking-main {
-            display:block;
-            position:fixed;
-            top:40px;
-            left:0;
-            height:calc(100vh - 50px);
-            width:240px;
-            max-width:240px;
-            transition: left 0.3s, max-width 0.3s, width 0.3s, opacity 0.3s;
-        }
-        #quiz-ranking-main.ranking-closed {
-            max-width: 0 !important;
-            width: 0 !important;
-            min-width: 0 !important;
-            opacity: 1 !important;
-            overflow: visible !important;
-            padding: 0 !important;
-            border: none !important;
-            background: transparent !important;
-            box-shadow: none !important;
-            z-index: 9999 !important;
-        }
-        #quiz-ranking-main.ranking-closed #quiz-ranking-header {
-            position: fixed !important;
-            top: 18px !important;
-            left: 0 !important;
-            width: 38px !important;
-            height: 56px !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            background: rgba(18,22,32,0.98) !important;
-            border-radius: 0 12px 12px 0 !important;
-            box-shadow: 2px 0 8px #1bff6a33;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: flex-start !important;
-            z-index: 10000 !important;
-        }
-        #quiz-ranking-main.ranking-closed #quiz-ranking-header span:not(#quiz-ranking-arrow) {
-            display: none !important;
-        }
-        #quiz-ranking-main.ranking-closed #quiz-ranking-table-main,
-        #quiz-ranking-main.ranking-closed #reset-ranking-btn {
-            display: none !important;
-        }
-        #quiz-ranking-arrow {
-            display: inline-block;
-            transition: transform 0.3s;
-            color: #ffe87c;
-            background: none;
-            border: none;
-            font-size: 1.5em;
-            margin-left: 0.1em;
-            margin-top: 0.1em;
-            z-index: 100;
-            cursor: pointer;
-            /* Migliora visibilità su mobile */
-            filter: drop-shadow(0 0 4px #181a22) drop-shadow(0 0 8px #1bff6a);
-        }
-        #quiz-ranking-main.ranking-open #quiz-ranking-arrow {
-            transform: rotate(0deg);
-        }
-        #quiz-ranking-main.ranking-closed #quiz-ranking-arrow {
-            transform: rotate(180deg);
-        }
-        @media (max-width: 600px) {
-            #quiz-ranking-main {
-                max-width: 98vw !important;
-                width: 98vw !important;
-                left: 0 !important;
-                top: 8px !important;
-                padding: 0.5em 0.2em 0.7em 0.2em !important;
-                border-radius: 0 10px 10px 0 !important;
-                font-size: 0.98em !important;
-            }
-            #quiz-ranking-main.ranking-closed {
-                max-width: 0 !important;
-                width: 0 !important;
-                min-width: 0 !important;
-                height: 0 !important;
-                padding: 0 !important;
-                background: transparent !important;
-                border-radius: 0 !important;
-                box-shadow: none !important;
-                top: 0 !important;
-                left: 0 !important;
-                z-index: 9999 !important;
-                overflow: visible !important;
-            }
-            #quiz-ranking-main.ranking-closed #quiz-ranking-arrow {
-                font-size: 2em !important;
-                margin-left: 0.1em !important;
-                margin-top: 0.1em !important;
-                color: #ffe87c !important;
-                background: none !important;
-                border: none !important;
-                box-shadow: none !important;
-                outline: none !important;
+            .nyfurion-card-title {
+                font-size: 1.1em;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Google Translate Widget hidden to trigger browser auto-translate bar -->
-    <div id="google_translate_element" style="display:none;"></div>
-    <script type="text/javascript">
-      function googleTranslateElementInit() {
-        new google.translate.TranslateElement({
-          pageLanguage: 'en',
-          includedLanguages: 'en,it',
-          layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-          autoDisplay: false
-        }, 'google_translate_element');
-      }
-    </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-    <!-- End Google Translate Widget -->
-    <script>
-    // --- RESET ALL LOCALSTORAGE HISTORY (TEMPORARY, ON USER REQUEST) ---
-    // localStorage.removeItem('nyfurionLeaderboard'); // RIMOSSO: ora lo storico viene mantenuto!
-    localStorage.removeItem('nyfurionQuizRanking');
-    localStorage.removeItem('nyfurionPlayerName');
-    localStorage.removeItem('nyfurionCommunityUser');
-    localStorage.removeItem('nyfurionCommunityChat');
-    localStorage.removeItem('nyfurionCommunitySection');
-    localStorage.removeItem('nyfurionCommunityRulesAccepted');
-    // FULL BLOCK: require crypto wallet (MetaMask) on page entry
-    (function() {
-        async function requireWallet() {
-            if (!(window.ethereum && window.ethereum.isMetaMask)) {
-                alert("You must connect MetaMask to access this page.");
-                window.open('https://metamask.io/download/', '_blank');
-                // Block everything else
-                document.body.innerHTML = "<div style='color:#ffe87c;font-size:1.3em;text-align:center;margin-top:20vh;'>MetaMask is required to access.<br>Install MetaMask and reload the page.</div>";
-                throw new Error("MetaMask not installed");
-            }
-            let accounts;
-            try {
-                accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            } catch {
-                alert("You must connect your wallet to access.");
-                document.body.innerHTML = "<div style='color:#ffe87c;font-size:1.3em;text-align:center;margin-top:20vh;'>Wallet required.<br>Connect MetaMask and reload the page.</div>";
-                throw new Error("Wallet not connected");
-            }
-            if (!accounts || !accounts[0]) {
-                alert("You must connect your wallet to access.");
-                document.body.innerHTML = "<div style='color:#ffe87c;font-size:1.3em;text-align:center;margin-top:20vh;'>Wallet required.<br>Connect MetaMask and reload the page.</div>";
-                throw new Error("Wallet not connected");
-            }
-            // Save wallet for future use (optional)
-            localStorage.setItem('nyfurionPlayerName', accounts[0]);
-            // Show wallet in button (if present)
-            var btn = document.getElementById('metamask-btn-text');
-            if (btn) btn.textContent = accounts[0].slice(0, 6) + "..." + accounts[0].slice(-4);
-        }
-        // Start check immediately
-        requireWallet();
-        // Disable quiz button if no wallet connected
-        window.addEventListener('DOMContentLoaded', function() {
-            var btnQuiz = document.getElementById('btn-quiz');
-            if (btnQuiz) {
-                btnQuiz.onclick = function() {
-                    let wallet = localStorage.getItem('nyfurionPlayerName');
-                    if (!wallet) {
-                        alert("You must connect your wallet to access the quiz.");
-                        return false;
-                    }
-                    window.open('quiz-interactive.html', '_blank');
-                };
-            }
-        });
-    })();
-    </script>
-    <canvas id="nyfurion-bg-canvas"></canvas>
-    <script>
-    // Particelle mistiche realistiche
-    (function(){
-        const canvas = document.getElementById('nyfurion-bg-canvas');
-        if (!canvas) return;
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resize();
-        window.addEventListener('resize', resize);
-        const ctx = canvas.getContext('2d');
-        let t = 0;
-        // Particelle con glow, scie e movimento fluido
-        const PARTICLES = Array.from({length: 38}, () => ({
-            x: Math.random()*canvas.width,
-            y: Math.random()*canvas.height,
-            r: 1.7 + Math.random()*3.2,
-            color: Math.random()>0.5 ? '#00eaff' : '#1bff6a',
-            alpha: 0.5 + Math.random()*0.5,
-            speed: 0.18 + Math.random()*0.32,
-            angle: Math.random()*Math.PI*2,
-            trail: []
-        }));
-        function drawGlow(x, y, r, color, alpha) {
-            const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
-            grad.addColorStop(0, color);
-            grad.addColorStop(1, 'rgba(0,0,0,0)');
-            ctx.save();
-            ctx.globalAlpha = alpha*0.7;
-            ctx.beginPath();
-            ctx.arc(x, y, r, 0, Math.PI*2);
-            ctx.fillStyle = grad;
-            ctx.shadowColor = color;
-            ctx.shadowBlur = 18;
-            ctx.fill();
-            ctx.restore();
-        }
-        function draw() {
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            // Effetto bagliore centrale mistico
-            drawGlow(canvas.width/2, canvas.height/2, canvas.width/2.1, '#00eaff', 0.08);
-            drawGlow(canvas.width/2, canvas.height/2, canvas.width/3, '#1bff6a', 0.06);
-            // Particelle
-            PARTICLES.forEach(p=>{
-                // Movimento fluido e leggermente orbitale
-                p.angle += 0.004 + p.speed*0.012;
-                p.x += Math.cos(p.angle)*p.speed*2 + Math.sin(t/60+p.y/99)*0.7;
-                p.y += Math.sin(p.angle)*p.speed*2 + Math.cos(t/40+p.x/111)*0.5;
-                // Gestione bordo
-                if(p.x<0) p.x=canvas.width;
-                if(p.x>canvas.width) p.x=0;
-                if(p.y<0) p.y=canvas.height;
-                if(p.y>canvas.height) p.y=0;
-                // Aggiorna trail
-                p.trail.push({x: p.x, y: p.y, alpha: p.alpha});
-                if(p.trail.length > 18) p.trail.shift();
-                // Scia
-                for(let i=0;i<p.trail.length-1;i++){
-                    const pt1 = p.trail[i], pt2 = p.trail[i+1];
-                    ctx.save();
-                    ctx.globalAlpha = pt1.alpha*0.13*(i/p.trail.length);
-                    ctx.strokeStyle = p.color;
-                    ctx.lineWidth = 1.2;
-                    ctx.beginPath();
-                    ctx.moveTo(pt1.x, pt1.y);
-                    ctx.lineTo(pt2.x, pt2.y);
-                    ctx.shadowColor = p.color;
-                    ctx.shadowBlur = 8;
-                    ctx.stroke();
-                    ctx.restore();
-                }
-                // Glow e corpo particella
-                drawGlow(p.x, p.y, p.r*5, p.color, p.alpha);
-                ctx.save();
-                ctx.globalAlpha = p.alpha;
-                ctx.beginPath();
-                ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-                ctx.fillStyle = p.color;
-                ctx.shadowColor = p.color;
-                ctx.shadowBlur = 16;
-                ctx.fill();
-                ctx.restore();
-            });
-        }
-        function animate() {
-            t += 1;
-            draw();
-            requestAnimationFrame(animate);
-        }
-        animate();
-    })();
-    </script>
-    <!-- Wallet button top right, minimal, harmonious, responsive -->
-    <!-- Wallet button rimosso su richiesta -->
-    <style>
-        .nyfurion-wallet-btn {
-            position: fixed;
-            top: 18px;
-            right: 18px;
-            z-index: 200;
-            background: linear-gradient(90deg,#00eaff 0%,#1bff6a 100%);
-            color: #181a22;
-            font-family: 'Orbitron',sans-serif;
-            font-size: 1em;
-            font-weight: 700;
-            padding: 0.22em 1.1em 0.22em 0.8em;
-            border-radius: 50px;
-            border: none;
-            box-shadow: 0 0 18px #00eaff77, 0 0 0 #1bff6a;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5em;
-            transition: background 0.18s, color 0.18s, box-shadow 0.18s;
-            min-width: 0;
-            min-height: 0;
-            outline: none;
-            text-shadow: 0 1px 8px #00eaff33;
-            letter-spacing: 0.03em;
-        }
-        .nyfurion-wallet-btn:hover, .nyfurion-wallet-btn:focus {
-            background: linear-gradient(90deg,#1bff6a 0%,#00eaff 100%);
-            color: #fff;
-            box-shadow: 0 0 24px #1bff6a99, 0 0 0 #00eaff;
-        }
-        .nyfurion-wallet-label {
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            font-size: 1em;
-            padding-right: 2px;
-            color: inherit;
-        }
-        .nyfurion-wallet-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 20px; height: 20px;
-        }
-        @media (max-width: 700px) {
-            .nyfurion-wallet-btn {
-                top: 10px;
-                right: 8px;
-                font-size: 0.97em;
-                padding: 0.22em 0.7em 0.22em 0.5em;
-                border-radius: 11px;
-                gap: 0.35em;
-            }
-            .nyfurion-wallet-label {
-                font-size: 0.97em;
-            }
-            .nyfurion-wallet-icon {
-                width: 20px; height: 20px;
-            }
-        }
-    </style>
-    <div class="nyfurion-main-ui">
-        <!-- QUIZ NAME REGISTRATION MODAL -->
-        <!-- RIMOSSO IL MODALE DI REGISTRAZIONE NOME QUIZ -->
-        <div class="nyfurion-portal-center">
-            <div class="nyfurion-portal-svg-wrap" id="portal-svg-wrap" tabindex="0" aria-label="Nyfurion Portal">
-                <!-- Cinematic Portal SVG -->
-                <svg id="nyfurion-portal-svg" width="100%" height="100%" viewBox="0 0 340 340">
-                    <defs>
-                        <radialGradient id="portalGlow" cx="50%" cy="50%" r="50%">
-                            <stop offset="0%" stop-color="#00fff7" stop-opacity="1"/>
-                            <stop offset="60%" stop-color="#1bff6a" stop-opacity="0.7"/>
-                            <stop offset="100%" stop-color="#181d26" stop-opacity="0"/>
-                        </radialGradient>
-                        <linearGradient id="portalRings" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#00eaff"/>
-                            <stop offset="100%" stop-color="#1bff6a"/>
-                        </linearGradient>
-                        <filter id="portalBlur" x="-30%" y="-30%" width="160%" height="160%">
-                            <feGaussianBlur stdDeviation="8"/>
-                        </filter>
-                        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                            <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
-                            <feMerge>
-                                <feMergeNode in="coloredBlur"/>
-                                <feMergeNode in="SourceGraphic"/>
-                            </feMerge>
-                        </filter>
-                    </defs>
-                    <!-- Glow -->
-                    <circle cx="170" cy="170" r="120" fill="url(#portalGlow)" filter="url(#portalBlur)" opacity="0.95"/>
-                    <!-- Anelli energetici -->
-                    <ellipse id="ring1" cx="170" cy="170" rx="105" ry="105" fill="none" stroke="url(#portalRings)" stroke-width="8" opacity="0.7"/>
-                    <ellipse id="ring2" cx="170" cy="170" rx="80" ry="80" fill="none" stroke="#00eaff" stroke-width="4" opacity="0.5"/>
-                    <ellipse id="ring3" cx="170" cy="170" rx="55" ry="55" fill="none" stroke="#1bff6a" stroke-width="2.5" opacity="0.4"/>
-                    <!-- Fulmine centrale animato -->
-                    <polyline id="lightning-main" points="170,60 170,170 170,280" stroke="#fff" stroke-width="3.2" fill="none" opacity="0.9" filter="url(#glow)"/>
-                    <!-- Nucleo centrale -->
-                    <circle id="portal-core" cx="170" cy="170" r="38" fill="#fff" opacity="0.92" filter="url(#glow)"/>
-                    <!-- Simbolo Nyfurion: "N" stilizzata -->
-                    <text id="portal-n-symbol" x="170" y="185" text-anchor="middle" font-size="62" font-family="'Orbitron',sans-serif" fill="#00eaff" opacity="0.88" style="font-weight:bold;letter-spacing:0.04em;filter:drop-shadow(0 0 8px #1bff6a);user-select:none;">N</text>
-                    <!-- Particelle orbitanti -->
-                    <g id="portal-particles"></g>
-                </svg>
-            </div>
-            <div class="nyfurion-portal-title" id="portal-title-animated">
-                Nyfurion Quiz Portal
-            </div>
-            <div class="nyfurion-portal-desc" id="portal-desc-animated">
-                Discover how much you know about the collection!
-            </div>
-            <div class="nyfurion-portal-buttons">
-                <button class="nyfurion-btn" id="btn-quiz">Quiz</button>
-                <button class="nyfurion-btn" id="btn-community">Community</button>
-                <button class="nyfurion-btn" id="btn-club">Club</button>
-            </div>
+    <div class="nyfurion-bg-text">Nyfurion</div>
+    <div class="nyfurion-center-section">
+        <div class="nyfurion-card" onclick="window.open('community.html','_blank')">
+            <div class="nyfurion-card-title">Community</div>
         </div>
-        <!-- FIXED QUIZ LEADERBOARD LEFT, MINIMAL -->
-        <div id="quiz-ranking-main" class="ranking-open" style="
-            display:block;
-            position:fixed;
-            top:40px;
-            left:0;
-            height:calc(100vh - 50px);
-            width:240px;
-            max-width:96vw;
-            background:rgba(18,22,32,0.93);
-            border-radius:0 14px 14px 0;
-            box-shadow: 6px 0 18px #00eaff18;
-            z-index:20;
-            padding:0.7em 0.5em 0.7em 0.8em;
-            overflow-y:auto;
-            border-right:2px solid #1bff6a22;
-            transition: left 0.3s, max-width 0.3s, width 0.3s;
-        ">
-            <div id="quiz-ranking-header" style="display:flex;align-items:center;gap:0.5em;cursor:pointer;margin-bottom:0.7em;">
-                <span id="quiz-ranking-arrow" style="font-size:1.3em;transition:transform 0.3s;">&#9664;</span>
-                <span style="font-size:1.08em;color:#1bff6a;font-family:'Orbitron',sans-serif;text-align:left;letter-spacing:0.02em;">
-                    <span style="vertical-align:middle;display:inline-block;margin-right:0.2em;">🏆</span>
-                    <span>Leaderboard</span>
-                </span>
-            </div>
-            <div id="quiz-ranking-table-main" style="
-                width:100%;
-                background:rgba(24,26,34,0.93);
-                border-radius: 10px;
-                box-shadow: 0 0 8px #00eaff11;
-                font-size:1em;
-                padding: 0.4em 0.2em 0.4em 0.2em;
-                overflow-x:auto;
-            ">
-                <!-- Populated via JS -->
-            </div>
+        <div class="nyfurion-card" onclick="window.open('club-prime.html','_self')">
+            <div class="nyfurion-card-title">Club</div>
         </div>
     </div>
-    <!-- MODAL: Community -->
-    <div class="nyfurion-modal" id="modal-community">
-        <div class="nyfurion-modal-content">
-            <button class="nyfurion-modal-close" onclick="closeModal('modal-community')">&times;</button>
-            <div class="nyfurion-modal-title">Nyfurion Community</div>
-            <div class="nyfurion-modal-desc">
-                Join the community!<br>
-                <a href="https://discord.com/channels/1369074617150607441/1369074617674629133" target="_blank" style="color:#7289da;font-weight:bold;text-decoration:none;">Discord</a> |
-                <a href="https://www.instagram.com/nyfurion_club/" target="_blank" style="color:#e1306c;font-weight:bold;text-decoration:none;">Instagram</a> |
-                <a href="https://opensea.io/collection/nyfurion" target="_blank" style="color:#00eaff;font-weight:bold;text-decoration:none;">OpenSea</a>
-            </div>
-            <div style="margin-top:1.5em;">
-                <img src="https://cdn.nyfurion.com/ipfs/bafybeiaup4omd7tcnlgjkxamvd74352ii26pzc5erawv3l5q3ouykr76za" alt="Community" style="width:100%;max-width:260px;border-radius:18px;box-shadow:0 0 18px #1bff6a55;">
-            </div>
-        </div>
-    </div>
-    <!-- MODAL: Lore -->
-    <!--
-    <div class="nyfurion-modal" id="modal-lore">
-        <div class="nyfurion-modal-content">
-            <button class="nyfurion-modal-close" onclick="closeModal('modal-lore')">&times;</button>
-            <div class="nyfurion-modal-title">Lore di Nyfurion</div>
-            <div class="nyfurion-modal-desc" style="max-height:38vh;overflow-y:auto;text-align:left;">
-                <b>Il Portale Unico</b><br>
-                Nel cuore di Nyfurion pulsa il Portale Unico, fonte di energia e mistero. Solo i Guardiani possono varcarlo.<br><br>
-                <b>Le Fazioni</b><br>
-                <span style="color:#1bff6a;">Guardiani</span>: protettori dell'equilibrio.<br>
-                <span style="color:#00eaff;">Ribelli</span>: cercano la libertà assoluta.<br>
-                <span style="color:#ffe87c;">Predatori Ombra</span>: agenti del caos.<br><br>
-                <b>La Regina</b><br>
-                Osserva e decide il destino del regno.<br>
-                <br>
-                <i>Scopri la storia completa su <a href="https://publuu.com/flip-book/885246/1939412" target="_blank" style="color:#1bff6a;">questo libro digitale</a>.</i>
-            </div>
-        </div>
-    </div>
-    -->
-    <!-- MODAL: Esplora -->
-    <!--
-    <div class="nyfurion-modal" id="modal-explore">
-        <div class="nyfurion-modal-content">
-            <button class="nyfurion-modal-close" onclick="closeModal('modal-explore')">&times;</button>
-            <div class="nyfurion-modal-title">Esplora Nyfurion</div>
-            <div class="nyfurion-modal-desc">
-                <b>Collezione NFT:</b><br>
-                <a href="https://opensea.io/collection/nyfurion" target="_blank" style="color:#00eaff;font-weight:bold;text-decoration:none;">OpenSea</a><br>
-                <b>Libro digitale:</b><br>
-                <a href="https://publuu.com/flip-book/885246/1939412" target="_blank" style="color:#1bff6a;font-weight:bold;text-decoration:none;">Sfoglia la storia</a>
-            </div>
-            <div style="margin-top:1.5em;">
-                <img src="https://cdn.nyfurion.com/ipfs/bafybeicpmvbhyzbfl37dihbxe7xggqtyhhff46riqjblcuzl32f6ne2ynm" alt="NFT" style="width:100%;max-width:120px;border-radius:12px;box-shadow:0 0 12px #00eaff55;">
-            </div>
-        </div>
-    </div>
-    -->
-    <!-- Community registration popup in English -->
-    <div id="nyf-community-registration-popup" style="display:none;position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:10001;background:rgba(10,18,28,0.97);align-items:center;justify-content:center;">
-      <div style="background:#181a22;color:#fff;padding:2.2em 2em 1.5em 2em;border-radius:18px;box-shadow:0 0 32px #00eaff99;max-width:350px;width:95vw;text-align:center;position:relative;display:flex;flex-direction:column;align-items:center;">
-        <h2 style="color:#1bff6a;font-family:'Orbitron',sans-serif;margin-bottom:1em;">Community Registration</h2>
-        <div style="margin-bottom:1em;font-size:1.08em;">
-          Choose a username and a profile picture to access the community chat.<br>
-          <b>Warning:</b> registration can be done only once and the name <b>cannot be changed</b>.<br>
-          <span style="color:#ffe87c;">Each wallet address will have its own name and photo, saved and linked to your wallet.</span>
-        </div>
-        <div style="margin-bottom:1em;width:100%;">
-          <input id="nyf-community-reg-name" type="text" maxlength="18" placeholder="Username (min 3 characters)" style="width:90%;padding:0.6em 1em;border-radius:10px;border:1.5px solid #1bff6a;background:#232a3a;color:#fff;font-size:1.1em;" autocomplete="off">
-        </div>
-        <div style="margin-bottom:1em;width:100%;">
-          <input id="nyf-community-reg-avatar" type="file" accept="image/*" style="color:#fff;">
-        </div>
-        <div id="nyf-community-reg-avatar-preview" style="margin-bottom:1em;"></div>
-        <button class="nyf-btn" id="nyf-community-reg-save" style="width:90%;max-width:220px;" disabled>Save profile</button>
-      </div>
-    </div>
-    <script>
-    // --- Cinematic BG: particelle e bagliori ---
-    (function(){
-        const canvas = document.getElementById('nyfurion-bg-canvas');
-        if (!canvas) return;
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resize();
-        window.addEventListener('resize', resize);
-        const ctx = canvas.getContext('2d');
-        let t = 0;
-        const PARTICLES = Array.from({length: 32}, () => ({
-            x: Math.random()*canvas.width,
-            y: Math.random()*canvas.height,
-            r: 1.2 + Math.random()*2.2,
-            color: Math.random()>0.5 ? "#00eaff" : "#1bff6a",
-            speed: 0.3 + Math.random()*0.5
-        }));
-        function draw() {
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            PARTICLES.forEach(p=>{
-                p.x += Math.sin(t/30+p.y/99)*p.speed;
-                p.y += Math.cos(t/40+p.x/111)*p.speed*0.5;
-                if(p.x<0) p.x=canvas.width;
-                if(p.x>canvas.width) p.x=0;
-                if(p.y<0) p.y=canvas.height;
-                if(p.y>canvas.height) p.y=0;
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-                ctx.fillStyle = p.color;
-                ctx.shadowColor = p.color;
-                ctx.shadowBlur = 16;
-                ctx.globalAlpha = 0.7;
-                ctx.fill();
-                ctx.restore();
-            });
-        }
-        function animate() {
-            t += 1;
-            draw();
-            requestAnimationFrame(animate);
-        }
-        animate();
-    })();
-
-    // --- Onde Cinematiche ---
-    (function(){
-        const canvas = document.getElementById('nyfurion-waves-canvas');
-        if (!canvas) return;
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = canvas.offsetHeight;
-        }
-        resize();
-        window.addEventListener('resize', resize);
-        const ctx = canvas.getContext('2d');
-        let t = 0;
-        function draw() {
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            for(let i=0;i<3;i++){
-                ctx.save();
-                ctx.globalAlpha = 0.18 + i*0.13;
-                ctx.beginPath();
-                for(let x=0;x<=canvas.width;x+=4){
-                    const y = canvas.height/2 + Math.sin((x/180)*Math.PI + t*0.7 + i)*38 + Math.cos((x/90)*Math.PI + t*0.5 + i)*22 + i*32;
-                    ctx.lineTo(x,y);
-                }
-                ctx.lineTo(canvas.width,canvas.height);
-                ctx.lineTo(0,canvas.height);
-                ctx.closePath();
-                ctx.fillStyle = i===0 ? "#1bff6a" : (i===1 ? "#00eaff" : "#bafff7");
-                ctx.shadowColor = ctx.fillStyle;
-                ctx.shadowBlur = 44 + i*12;
-                ctx.fill();
-                ctx.restore();
-            }
-        }
-        function animate() {
-            t += 0.018;
-            draw();
-            requestAnimationFrame(animate);
-        }
-        animate();
-    })();
-
-    // --- Portale SVG Cinematico ---
-    (function(){
-        const svg = document.getElementById('nyfurion-portal-svg');
-        const ring1 = document.getElementById('ring1');
-        const ring2 = document.getElementById('ring2');
-        const ring3 = document.getElementById('ring3');
-        const lightning = document.getElementById('lightning-main');
-        const core = document.getElementById('portal-core');
-        const nSymbol = document.getElementById('portal-n-symbol');
-        const particlesGroup = document.getElementById('portal-particles');
-        let angle = 0, angle2 = 0, angle3 = 0, lightningPhase = 0, pulse = 0;
-        let orbitParticles = Array.from({length: 14}, (_,i)=>({
-            angle: Math.random()*Math.PI*2,
-            radius: 105 + Math.random()*30,
-            speed: 0.008 + Math.random()*0.008,
-            color: Math.random()>0.5 ? "#00eaff" : "#1bff6a"
-        }));
-        function animatePortal() {
-            angle += 0.005;
-            angle2 -= 0.003;
-            angle3 += 0.01;
-            lightningPhase += 0.06;
-            pulse = 1 + Math.sin(Date.now()/400)*0.07;
-            ring1.setAttribute("transform", `rotate(${angle*60} 170 170)`);
-            ring2.setAttribute("transform", `rotate(${angle2*60} 170 170)`);
-            ring3.setAttribute("transform", `rotate(${angle3*60} 170 170)`);
-            let lightningPoints = [
-                [170,60],
-                [170+Math.sin(lightningPhase)*14, 120],
-                [170-Math.cos(lightningPhase/2)*18, 170],
-                [170+Math.sin(lightningPhase/1.5)*18, 220],
-                [170,280]
-            ];
-            lightning.setAttribute("points", lightningPoints.map(p=>p.join(",")).join(" "));
-            core.setAttribute("r", 38*pulse);
-            core.setAttribute("opacity", 0.85+0.12*Math.abs(Math.sin(Date.now()/600)));
-            nSymbol.setAttribute("fill", `url(#portalRings)`);
-            nSymbol.setAttribute("opacity", 0.85+0.12*Math.abs(Math.cos(Date.now()/700)));
-            let html = "";
-            orbitParticles.forEach(p=>{
-                p.angle += p.speed;
-                let x = 170 + Math.cos(p.angle)*p.radius;
-                let y = 170 + Math.sin(p.angle)*p.radius;
-                html += `<circle cx="${x}" cy="${y}" r="5" fill="${p.color}" opacity="0.7" filter="url(#glow)"/>`;
-            });
-            particlesGroup.innerHTML = html;
-            requestAnimationFrame(animatePortal);
-        }
-        animatePortal();
-    })();
-
-    // --- Titolo animato ---
-    (function(){
-        const el = document.getElementById('portal-title-animated');
-        if(!el) return;
-        const text = "Nyfurion Quiz Portal";
-        let html = "";
-        for(let i=0;i<text.length;i++){
-            let c = text[i];
-            if(c===" ") html += " ";
-            else html += `<span class="portal-title-char" style="opacity:0;display:inline-block;transform:translateY(-18px);transition:opacity 0.22s ${i*30}ms,transform 0.32s ${i*30}ms;">${c}</span>`;
-        }
-        el.innerHTML = html;
-        setTimeout(()=>{
-            el.querySelectorAll('.portal-title-char').forEach(span=>{
-                span.style.opacity = 1;
-                span.style.transform = "translateY(0)";
-            });
-        },100);
-    })();
-
-    // Bottoni: apertura modali cinematiche
-    function openModal(id) {
-        document.getElementById(id).style.display = 'flex';
-        setTimeout(()=>{document.getElementById(id).focus();}, 50);
-    }
-    function closeModal(id) {
-        document.getElementById(id).style.display = 'none';
-    }
-
-    // --- Classifica quiz: visualizzazione e gestione locale ---
-    (function(){
-        // NON chiedere più il nome utente quiz!
-        // Rimuovi askQuizNameIfNeeded e la logica di registrazione nome
-        // --- AGGIORNAMENTO AUTOMATICO CLASSIFICA DA quiz-interactive.html ---
-        function syncLeaderboardToRanking() {
-            // Prendi la classifica dal localStorage usata dal quiz-interactive
-            let leaderboard = [];
-            try { leaderboard = JSON.parse(localStorage.getItem('nyfurionLeaderboard') || '[]'); } catch {}
-            // Prendi la classifica attuale di questa pagina
-            let ranking = [];
-            try { ranking = JSON.parse(localStorage.getItem('nyfurionQuizRanking') || '[]'); } catch {}
-
-            // Raggruppa per nome: somma i punteggi dei 5 quiz e calcola la media percentuale
-            let userMap = {};
-            leaderboard.forEach(entry => {
-                if (!userMap[entry.name]) {
-                    userMap[entry.name] = {
-                        name: entry.name,
-                        totalScore: 0,
-                        totalPercent: 0,
-                        quizCount: 0,
-                        lastDate: entry.date
-                    };
-                }
-                userMap[entry.name].totalScore += entry.score;
-                userMap[entry.name].totalPercent += entry.percent;
-                userMap[entry.name].quizCount += 1;
-                if (entry.date > userMap[entry.name].lastDate) {
-                    userMap[entry.name].lastDate = entry.date;
-                }
-            });
-
-            // Crea la classifica aggregata (solo chi ha almeno 1 quiz)
-            let mergedRanking = Object.values(userMap).map(u => ({
-                name: u.name,
-                score: u.totalScore,
-                lastDate: u.lastDate
-            }));
-
-            // Ordina per punteggio decrescente
-            mergedRanking.sort((a, b) => b.score - a.score);
-
-            // Tieni solo i migliori 50
-            mergedRanking = mergedRanking.slice(0, 50);
-
-            localStorage.setItem('nyfurionQuizRanking', JSON.stringify(mergedRanking));
-        }
-
-        function getRanking() {
-            try { return JSON.parse(localStorage.getItem('nyfurionQuizRanking') || '[]'); } catch { return []; }
-        }
-        function renderRanking() {
-            syncLeaderboardToRanking();
-            const quizRankingTableMain = document.getElementById('quiz-ranking-table-main');
-            const arr = getRanking();
-            if (!quizRankingTableMain) return;
-            if (!arr.length) {
-                quizRankingTableMain.innerHTML = "<div style='color:#aaa;text-align:center;padding:1.2em 0;'>Nessun punteggio ancora.</div>";
-                return;
-            }
-            quizRankingTableMain.innerHTML = `
-                <div style="display:flex;flex-direction:column;gap:0.2em;">
-                    ${arr.slice(0,10).map((r,i)=>`
-                        <div style="
-                            display:flex;align-items:center;justify-content:space-between;
-                            background:${i===0?'#1bff6a22':'rgba(24,26,34,0.93)'};
-                            border-radius:7px;
-                            box-shadow:${i===0?'0 0 8px #1bff6a33':'none'};
-                            font-weight:${i===0?'bold':'normal'};
-                            color:${i===0?'#ffe87c':'#fff'};
-                            border:${i===0?'1.5px solid #1bff6a':'1px solid #232a3a'};
-                            padding:0.35em 0.3em 0.35em 0.5em;
-                            margin-bottom:0.1em;
-                            font-size:1em;
-                        ">
-                            <span style="width:1.7em;text-align:center;font-size:1.07em;${i===0?'color:#ffe87c;':''}">
-                                ${i+1}
-                                ${i===0?' <span style=\'font-size:1.1em;\'>🥇</span>':''}
-                                ${i===1?' <span style=\'font-size:1em;\'>🥈</span>':''}
-                                ${i===2?' <span style=\'font-size:1em;\'>🥉</span>':''}
-                            </span>
-                            <span style="flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
-                                ${r.name}
-                            </span>
-                            <span style="width:3.5em;text-align:center;font-family:'Orbitron',sans-serif;">
-                                ${r.score}
-                            </span>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
-        var rankingMain = document.getElementById('quiz-ranking-main');
-        var rankingHeader = document.getElementById('quiz-ranking-header');
-        if (window.innerWidth <= 700) {
-            rankingMain.classList.remove('ranking-open');
-            rankingMain.classList.add('ranking-closed');
-        }
-        rankingHeader.addEventListener('click', function(e) {
-            e.stopPropagation();
-            rankingMain.classList.toggle('ranking-closed');
-            rankingMain.classList.toggle('ranking-open');
-            if (window.innerWidth <= 700 && rankingMain.classList.contains('ranking-open')) {
-                window.scrollTo({top: 0, behavior: 'smooth'});
-            }
-        });
-        renderRanking();
-        setInterval(renderRanking, 1500);
-    })();
-
-    // Sostituisci la logica quiz: ora apre quiz-interactive.html in una nuova scheda
-    document.getElementById('btn-quiz').onclick = function() {
-        window.open('quiz-interactive.html', '_blank');
-    };
-
-    // --- Apertura Club Prime ---
-    document.getElementById('btn-club').onclick = function() {
-        window.open('club-prime.html', '_blank');
-    };
-
-    // --- Popup stile sito per registrazione community ---
-    function showCommunityRegistrationPopup(wallet, cb) {
-        const popup = document.getElementById('nyf-community-registration-popup');
-        popup.style.display = 'flex';
-
-        let avatarData = '';
-        let nameValid = false;
-        let avatarValid = false;
-
-        const nameInput = document.getElementById('nyf-community-reg-name');
-        const avatarInput = document.getElementById('nyf-community-reg-avatar');
-        const saveBtn = document.getElementById('nyf-community-reg-save');
-        const previewDiv = document.getElementById('nyf-community-reg-avatar-preview');
-
-        // Reset fields every time popup opens
-        nameInput.value = '';
-        avatarInput.value = '';
-        previewDiv.innerHTML = '';
-        saveBtn.disabled = true;
-        avatarData = '';
-        nameValid = false;
-        avatarValid = false;
-
-        function validate() {
-            saveBtn.disabled = !(nameValid && avatarValid);
-        }
-
-        nameInput.oninput = function() {
-            const name = nameInput.value.trim();
-            nameValid = name.length >= 3;
-            validate();
-        };
-
-        avatarInput.onchange = function(e) {
-            const file = e.target.files[0];
-            if (!file) { avatarValid = false; validate(); previewDiv.innerHTML = ''; return; }
-            if (!file.type.startsWith('image/')) {
-                alert("The selected file is not an image.");
-                avatarInput.value = '';
-                avatarValid = false;
-                previewDiv.innerHTML = '';
-                validate();
-                return;
-            }
-            if (file.size > 200*1024) {
-                alert("Image too large (max 200KB).");
-                avatarInput.value = '';
-                avatarValid = false;
-                previewDiv.innerHTML = '';
-                validate();
-                return;
-            }
-            const reader = new FileReader();
-            reader.onload = function(ev) {
-                avatarData = ev.target.result;
-                previewDiv.innerHTML = `<img src="${avatarData}" alt="Avatar" style="width:80px;height:80px;border-radius:50%;border:2px solid #1bff6a;">`;
-                avatarValid = true;
-                validate();
-            };
-            reader.readAsDataURL(file);
-        };
-
-        saveBtn.onclick = function() {
-            const name = nameInput.value.trim();
-            if (!nameValid) {
-                alert("The name must be at least 3 characters.");
-                return;
-            }
-            let userData = JSON.parse(localStorage.getItem('nyfurionCommunityUser') || '{}');
-            if (Object.values(userData).some(u => u.name === name)) {
-                alert("This name has already been chosen by another user.");
-                return;
-            }
-            if (!avatarValid) {
-                alert("Choose a valid profile image.");
-                return;
-            }
-            // Save name and avatar for this wallet only
-            userData[wallet] = { name, avatar: avatarData };
-            localStorage.setItem('nyfurionCommunityUser', JSON.stringify(userData));
-            popup.style.display = 'none';
-            alert("Registration completed! Your name and avatar cannot be changed.");
-            if (cb) cb();
-        };
-    }
-
-    // --- Community access logic ---
-    document.getElementById('btn-community').onclick = async function() {
-        // Require wallet connection (MetaMask)
-        if (!(window.ethereum && window.ethereum.isMetaMask)) {
-            alert("Connect MetaMask to access the Community.");
-            return;
-        }
-        let accounts;
-        try {
-            accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        } catch {
-            alert("You must connect MetaMask to access.");
-            return;
-        }
-        const wallet = accounts[0];
-        // Each wallet has its own registration (name+photo)
-        let userData = JSON.parse(localStorage.getItem('nyfurionCommunityUser') || '{}');
-        if (!userData[wallet]) {
-            showCommunityRegistrationPopup(wallet, function() {
-                window.open(`community.html?wallet=${encodeURIComponent(wallet)}`, '_blank');
-            });
-            return;
-        }
-        window.open(`community.html?wallet=${encodeURIComponent(wallet)}`, '_blank');
-    };
-    // Chiudi modale con ESC
-    document.querySelectorAll('.nyfurion-modal').forEach(modal=>{
-        modal.addEventListener('keydown', function(e){
-            if(e.key === "Escape") closeModal(modal.id);
-        });
-    });
-    </script>
-    <script src="wallet-access.js"></script>
-    <script>
-    window.initWalletAccess({
-        onConnect: function(address, signature) {
-            let btn = document.getElementById('btn-connect-metamask');
-            if (btn) btn.textContent = address.slice(0,6)+'...'+address.slice(-4);
-            window.nyfWallet = address;
-            // Abilita tutti i pulsanti principali solo se wallet connesso
-            const enableBtns = ['btn-quiz','btn-community','btn-club'];
-            enableBtns.forEach(id => {
-                let b = document.getElementById(id);
-                if (b) b.disabled = false;
-            });
-        },
-        buttonId: 'btn-connect-metamask',
-        redirectUrl: window.location.pathname // redirect sulla stessa pagina dopo login
-    });
-    // Disabilita i pulsanti finché il wallet non è connesso
-    ['btn-quiz','btn-community','btn-club'].forEach(id => {
-        let b = document.getElementById(id);
-        if (b) b.disabled = true;
-    });
-    // Carica la classifica dal server
-    async function loadLeaderboardFromServer() {
-        try {
-            const res = await fetch('https://nyfurion.com/api/leaderboard');
-            if (!res.ok) throw new Error('Errore server');
-            return await res.json();
-        } catch {
-            // fallback locale
-            try { return JSON.parse(localStorage.getItem('nyfurionLeaderboard') || '[]'); } catch { return []; }
-        }
-    }
-    // Esempio di utilizzo: mostrare la classifica
-    // (da integrare dove visualizzi la leaderboard)
-    // loadLeaderboardFromServer().then(data => console.log(data));
-    </script>
-    <script>
-function submitQuizAndUpdateLeaderboard(score) {
-    // Invia il punteggio al backend
-    fetch('/api/submit-score', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ score: score })
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Dopo aver inviato il punteggio, aggiorna la leaderboard
-        updateLeaderboard();
-    });
-}
-
-function updateLeaderboard() {
-    fetch('/api/leaderboard')
-        .then(response => response.json())
-        .then(leaderboard => {
-            localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
-            renderLeaderboard(leaderboard);
-        })
-        .catch(() => {
-            const saved = localStorage.getItem('leaderboard');
-            if (saved) renderLeaderboard(JSON.parse(saved));
-        });
-}
-
-function renderLeaderboard(leaderboard) {
-    const leaderboardDiv = document.getElementById('leaderboard');
-    if (!leaderboardDiv) return;
-    leaderboardDiv.innerHTML = '';
-    leaderboard.forEach((entry, idx) => {
-        const row = document.createElement('div');
-        row.textContent = `${idx + 1} ${entry.username}: ${entry.score}`;
-        leaderboardDiv.appendChild(row);
-    });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const saved = localStorage.getItem('leaderboard');
-    if (saved) renderLeaderboard(JSON.parse(saved));
-    updateLeaderboard();
-});
-    </script>
 </body>
 </html>
