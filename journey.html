@@ -77,12 +77,12 @@
         }
         setInterval(toggleColors, 2500); // Cambia ogni 2.5 secondi
 
-        // Reindirizza su qualsiasi click se desktop
-        if (window.innerWidth > 800) {
-            document.body.addEventListener('click', function() {
-                window.location.href = 'club-prime.html';
-            });
+        // Reindirizza su qualsiasi click o tap, sia desktop che mobile
+        function redirectToClubPrime() {
+            window.location.href = 'club-prime.html';
         }
+        document.body.addEventListener('click', redirectToClubPrime);
+        document.body.addEventListener('touchstart', redirectToClubPrime);
     </script>
 </body>
 </html>
