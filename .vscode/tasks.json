@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Deploy sito con Java (esempio)",
+			"command": "java -jar deployer.jar",
+			"args": [],
+			"group": "build",
+			"problemMatcher": []
+		}
+	]
+}

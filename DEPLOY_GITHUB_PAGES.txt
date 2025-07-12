@@ -1,0 +1,16 @@
+# GitHub Pages
+# Pubblica la cartella come sito statico
+
+# 1. Crea il file CNAME (opzionale, solo se vuoi un dominio personalizzato)
+# 2. Assicurati che index.html sia nella root
+# 3. Attiva GitHub Pages dalle impostazioni del repository:
+#    - Vai su Settings > Pages
+#    - Scegli branch 'main' e cartella '/ (root)'
+#    - Salva
+# 4. Il sito sarà online su https://riccardomk.github.io/Nyfurion.site/
+
+# Per aggiornare:
+# - Fai push su main
+# - Attendi qualche minuto per la pubblicazione
+
+# Il modello 3D viene caricato da Dropbox, quindi non ci sono limiti di hosting.
