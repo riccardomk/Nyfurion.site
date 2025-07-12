@@ -35,10 +35,10 @@
 
     function loadModel() {
         const loader = new GLTFLoader();
-        loader.load('public/wall.glb', (wallGltf) => {
-            loader.load('public/pavimento.glb', (pavimentoGltf) => {
-                loader.load('public/quadri.glb', (quadriGltf) => {
-                    loader.load('public/scritte.glb', (scritteGltf) => {
+        loader.load('/wall.glb', (wallGltf) => {
+            loader.load('/pavimento.glb', (pavimentoGltf) => {
+                loader.load('/quadri.glb', (quadriGltf) => {
+                    loader.load('/scritte.glb', (scritteGltf) => {
                         // Centra tutti i modelli
                         wallGltf.scene.position.set(0, 0, 0);
                         pavimentoGltf.scene.position.set(0, 0, 0);
