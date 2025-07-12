@@ -35,90 +35,102 @@
 
     function loadModel() {
         const loader = new GLTFLoader();
-        loader.load('wall.glb', (wallGltf) => {
-            loader.load('pavimento.glb', (pavimentoGltf) => {
-                // Centra entrambi i modelli
-                wallGltf.scene.position.set(0, 0, 0);
-                pavimentoGltf.scene.position.set(0, 0, 0);
+        loader.load('public/wall.glb', (wallGltf) => {
+            loader.load('public/pavimento.glb', (pavimentoGltf) => {
+                loader.load('public/quadri.glb', (quadriGltf) => {
+                    loader.load('public/scritte.glb', (scritteGltf) => {
+                        // Centra tutti i modelli
+                        wallGltf.scene.position.set(0, 0, 0);
+                        pavimentoGltf.scene.position.set(0, 0, 0);
+                        quadriGltf.scene.position.set(0, 0, 0);
+                        scritteGltf.scene.position.set(0, 0, 0);
 
-                // Unisci le scene in un unico gruppo
-                const group = new THREE.Group();
-                group.add(wallGltf.scene);
-                group.add(pavimentoGltf.scene);
+                        // Unisci le scene in un unico gruppo
+                        const group = new THREE.Group();
+                        group.add(wallGltf.scene);
+                        group.add(pavimentoGltf.scene);
+                        group.add(quadriGltf.scene);
+                        group.add(scritteGltf.scene);
 
-                // Calcola bounding box combinata
-                const box0 = new THREE.Box3().setFromObject(group);
-                const size0 = new THREE.Vector3();
-                box0.getSize(size0);
-                // Scala il gruppo per dimensioni perfette da videogioco
-                let targetHeight;
-                if (size0.y > 2.7) {
-                    targetHeight = 2.7;
-                } else if (size0.y < 1.7) {
-                    targetHeight = 1.7;
-                } else {
-                    targetHeight = size0.y;
-                }
-                const scale = targetHeight / size0.y;
-                group.scale.set(scale, scale, scale);
+                        // Calcola bounding box combinata
+                        const box0 = new THREE.Box3().setFromObject(group);
+                        const size0 = new THREE.Vector3();
+                        box0.getSize(size0);
+                        // Scala il gruppo per dimensioni perfette da videogioco
+                        let targetHeight;
+                        if (size0.y > 2.7) {
+                            targetHeight = 2.7;
+                        } else if (size0.y < 1.7) {
+                            targetHeight = 1.7;
+                        } else {
+                            targetHeight = size0.y;
+                        }
+                        const scale = targetHeight / size0.y;
+                        group.scale.set(scale, scale, scale);
 
-                // Calcola bounding box DOPO la scalatura
-                const box = new THREE.Box3().setFromObject(group);
-                const center = new THREE.Vector3();
-                box.getCenter(center);
-                const size = new THREE.Vector3();
-                box.getSize(size);
-                // Sposta il gruppo in modo che il centro sia (0,0,0)
-                group.position.set(-center.x, -box.min.y, -center.z);
-                scene.add(group);
+                        // Calcola bounding box DOPO la scalatura
+                        const box = new THREE.Box3().setFromObject(group);
+                        const center = new THREE.Vector3();
+                        box.getCenter(center);
+                        const size = new THREE.Vector3();
+                        box.getSize(size);
+                        // Sposta il gruppo in modo che il centro sia (0,0,0)
+                        group.position.set(-center.x, -box.min.y, -center.z);
+                        scene.add(group);
 
-                // --- Luci negli angoli per profondità ---
-                if (modelBoundingBox) {
-                    renderer.shadowMap.enabled = true;
-                    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-                    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-                    renderer.toneMappingExposure = 1.08;
-                    renderer.outputEncoding = THREE.sRGBEncoding;
-                    renderer.setPixelRatio(window.devicePixelRatio > 1.5 ? 1.5 : window.devicePixelRatio);
-                    renderer.setSize(window.innerWidth, window.innerHeight, false);
-                    renderer.antialias = window.devicePixelRatio <= 1.5;
-                }
-                // Ricalcola bounding box dopo la traslazione
-                const boxFinal = new THREE.Box3().setFromObject(group);
-                const centerFinal = new THREE.Vector3();
-                boxFinal.getCenter(centerFinal);
-                // Punto di spawn: centro gruppo, sul pavimento, altezza occhi
-                eyeHeight = 1.0;
-                const spawn = new THREE.Vector3(
-                    centerFinal.x,
-                    boxFinal.min.y + eyeHeight,
-                    centerFinal.z
-                );
-                modelBoundingBox = boxFinal;
-                groundY = boxFinal.min.y;
-                modelMesh = group;
-                setupDoorsFromModel(group);
-                addRealisticLighting(scene, renderer, modelMesh);
-                updateModelMaterials(modelMesh);
-                // Spawn sempre centrato
-                camera.position.copy(spawn);
-                camera.lookAt(centerFinal.x, boxFinal.min.y + eyeHeight, centerFinal.z + 1);
-                controls.getObject().position.copy(spawn);
-                controls.getObject().lookAt(centerFinal.x, boxFinal.min.y + eyeHeight, centerFinal.z + 1);
-                controls.getObject().position.y = boxFinal.min.y + eyeHeight;
-                spawnTargetY = spawn.y;
-                spawnFalling = true;
-                // --- Inizializza o aggiorna la minimappa con il nuovo modello ---
-                if (minimap) {
-                    if (minimap.domElement && minimap.domElement.parentNode) {
-                        minimap.domElement.parentNode.removeChild(minimap.domElement);
-                    }
-                }
-                minimap = new Minimap(scene, controls.getObject(), modelBoundingBox);
-                minimap.initRenderer();
-                // ---
-                console.log('Spawn point:', spawn);
-                console.log('Model center:', centerFinal, 'Model size:', size, 'Model position:', group.position);
+                        // --- Luci negli angoli per profondità ---
+                        if (modelBoundingBox) {
+                            renderer.shadowMap.enabled = true;
+                            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                            renderer.toneMappingExposure = 1.08;
+                            renderer.outputEncoding = THREE.sRGBEncoding;
+                            renderer.setPixelRatio(window.devicePixelRatio > 1.5 ? 1.5 : window.devicePixelRatio);
+                            renderer.setSize(window.innerWidth, window.innerHeight, false);
+                            renderer.antialias = window.devicePixelRatio <= 1.5;
+                        }
+                        // Ricalcola bounding box dopo la traslazione
+                        const boxFinal = new THREE.Box3().setFromObject(group);
+                        const centerFinal = new THREE.Vector3();
+                        boxFinal.getCenter(centerFinal);
+                        // Punto di spawn: centro gruppo, sul pavimento, altezza occhi
+                        eyeHeight = 1.0;
+                        const spawn = new THREE.Vector3(
+                            centerFinal.x,
+                            boxFinal.min.y + eyeHeight,
+                            centerFinal.z
+                        );
+                        modelBoundingBox = boxFinal;
+                        groundY = boxFinal.min.y;
+                        modelMesh = group;
+                        setupDoorsFromModel(group);
+                        addRealisticLighting(scene, renderer, modelMesh);
+                        updateModelMaterials(modelMesh);
+                        // Spawn sempre centrato
+                        camera.position.copy(spawn);
+                        camera.lookAt(centerFinal.x, boxFinal.min.y + eyeHeight, centerFinal.z + 1);
+                        controls.getObject().position.copy(spawn);
+                        controls.getObject().lookAt(centerFinal.x, boxFinal.min.y + eyeHeight, centerFinal.z + 1);
+                        controls.getObject().position.y = boxFinal.min.y + eyeHeight;
+                        spawnTargetY = spawn.y;
+                        spawnFalling = true;
+                        // --- Inizializza o aggiorna la minimappa con il nuovo modello ---
+                        if (minimap) {
+                            if (minimap.domElement && minimap.domElement.parentNode) {
+                                minimap.domElement.parentNode.removeChild(minimap.domElement);
+                            }
+                        }
+                        minimap = new Minimap(scene, controls.getObject(), modelBoundingBox);
+                        minimap.initRenderer();
+                        // ---
+                        console.log('Spawn point:', spawn);
+                        console.log('Model center:', centerFinal, 'Model size:', size, 'Model position:', group.position);
+                    }, undefined, (error) => {
+                        console.error('Errore caricamento modello scritte.glb:', error);
+                    });
+                }, undefined, (error) => {
+                    console.error('Errore caricamento modello quadri.glb:', error);
+                });
             }, undefined, (error) => {
                 console.error('Errore caricamento modello pavimento.glb:', error);
             });
