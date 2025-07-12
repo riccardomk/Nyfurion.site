@@ -4,6 +4,9 @@
   "description": "Nyfurion.com è un portale Web3 innovativo che sfrutta la tecnologia *IPFS* e *GitHub* per garantire un hosting sicuro, scalabile e completamente decentralizzato.",
   "main": "index.js",
   "scripts": {
+    "dev": "vite",
+    "start": "vite preview",
+    "build": "vite build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -13,7 +16,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/riccardomk/Nyfurion.site/issues"
   },
@@ -24,6 +27,11 @@
     "express": "^5.1.0",
     "nodemailer": "^7.0.3",
     "socket.io": "^4.8.1",
+    "three": "^0.156.1",
+    "three-stdlib": "^2.21.0",
     "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0"
   }
 }

@@ -259,6 +259,17 @@
     </div>
     </div>
 </section>
+    <!-- Pulsante per il Game Viewer -->
+    <div style="width:100vw;display:flex;justify-content:center;margin-top:2em;">
+        <button id="open-game-viewer" class="btn btn-success" style="font-size:1.3em;padding:0.7em 2.2em;border-radius:18px;box-shadow:0 0 18px #39ff14,0 0 32px #00eaff;letter-spacing:0.08em;font-family:'Orbitron','Cinzel',sans-serif;font-weight:bold;transition:background 0.22s,box-shadow 0.22s;">
+            FAME VIEWER
+        </button>
+    </div>
+    <script>
+    document.getElementById('open-game-viewer').addEventListener('click', function() {
+        window.open('game-viewer.html', '_blank');
+    });
+    </script>
     <!-- ...existing code... -->
     <style>
         /* ...existing code... */
