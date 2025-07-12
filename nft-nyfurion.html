@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistiche NFT Nyfurion</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { background:#0b101a; color:#eaffd0; font-family:'Orbitron',sans-serif; margin:0; }
+        .container { max-width:900px; margin:2em auto; background:#181a22; border-radius:18px; box-shadow:0 0 32px #00eaff33; padding:2em; }
+        h1 { color:#1bff6a; text-align:center; margin-bottom:1.2em; }
+        .section-title { color:#00eaff; font-size:1.2em; margin:1.5em 0 0.5em 0; }
+        .nft-list { display:flex; flex-wrap:wrap; gap:1em; }
+        .nft-card { background:#232a3a; border-radius:10px; padding:0.7em 0.5em; text-align:center; box-shadow:0 0 8px #00eaff22; width:120px; }
+        .nft-card img { width:80px; height:80px; object-fit:cover; border-radius:8px; box-shadow:0 0 8px #1bff6a33; }
+        .nft-card .nft-name { margin-top:0.4em; font-size:1em; color:#bafff7; }
+        .nft-card .nft-link { display:inline-block; margin-top:0.3em; color:#00eaff; font-size:0.98em; text-decoration:none; }
+        .nft-card.missing { background:#2a1a1a; box-shadow:0 0 8px #ff7c7c22; }
+        .nft-card.missing .nft-name { color:#ffe87c; }
+        .nft-card.missing .nft-link { color:#ff7c7c; }
+        .connect-btn { background:linear-gradient(90deg,#00eaff 0%,#1bff6a 100%); color:#181a22; font-weight:bold; border:none; border-radius:12px; padding:0.7em 2em; font-size:1.1em; cursor:pointer; margin:1.5em auto 0 auto; display:block; }
+        .connect-btn:hover { background:linear-gradient(90deg,#1bff6a 0%,#00eaff 100%); color:#fff; }
+        .info { color:#bafff7; font-size:1.05em; margin:1em 0; text-align:center; }
+        @media (max-width:700px) {
+            .container { padding:0.7em 0.2em; }
+            .nft-list { justify-content:center; }
+            .nft-card { width:90px; }
+            .nft-card img { width:60px; height:60px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Statistiche NFT Nyfurion</h1>
+        <div id="wallet-info" class="info">Collega MetaMask per vedere i tuoi NFT Nyfurion.</div>
+        <button id="connect-btn" class="connect-btn">Collega MetaMask</button>
+        <div id="owned-section"></div>
+        <div id="missing-section"></div>
+        <div id="all-section"></div>
+    </div>
+    <script src="wallet-access.js"></script>
+    <script>
+    window.initWalletAccess({
+        onConnect: function(address, signature) {
+            let el = document.getElementById('wallet-info');
+            if (el) el.innerHTML = 'Wallet collegato: <span style="color:#1bff6a">'+address.slice(0,6)+'...'+address.slice(-4)+'</span>';
+            let btn = document.getElementById('connect-btn');
+            if (btn) btn.style.display = 'none';
+            window.nyfWallet = address;
+        },
+        buttonId: 'connect-btn',
+        redirectUrl: window.location.pathname
+    });
+
+    // Configurazione collezione
+    const CONTRACT_ADDRESS = "0x156D6B772980768AA69296E222CaF17aBf84B501";
+    const OPENSEA_COLLECTION = "nyfurion";
+    const NYF_COLLECTION = Array.from({length: 10}, (_,i)=>i+1); // Modifica se la collezione ha più NFT
+
+    const connectBtn = document.getElementById('connect-btn');
+    const walletInfo = document.getElementById('wallet-info');
+    const ownedSection = document.getElementById('owned-section');
+    const missingSection = document.getElementById('missing-section');
+    const allSection = document.getElementById('all-section');
+
+    let userAddress = null;
+
+    async function connectMetaMask() {
+        if (!window.ethereum || !window.ethereum.isMetaMask) {
+            walletInfo.innerHTML = 'MetaMask non trovato. <a href="https://metamask.io/download/" target="_blank" style="color:#1bff6a;">Scarica MetaMask</a>';
+            return;
+        }
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            userAddress = accounts[0];
+            walletInfo.innerHTML = `Wallet collegato: <span style="color:#1bff6a">${userAddress.slice(0,6)}...${userAddress.slice(-4)}</span>`;
+            connectBtn.style.display = 'none';
+            showNFTStats();
+        } catch {
+            walletInfo.innerHTML = 'Connessione a MetaMask annullata.';
+        }
+    }
+
+    async function showNFTStats() {
+        ownedSection.innerHTML = '';
+        missingSection.innerHTML = '';
+        allSection.innerHTML = '';
+        walletInfo.innerHTML = 'Caricamento NFT...';
+
+        // Recupera NFT posseduti tramite OpenSea API v2
+        let ownedNFTs = [];
+        try {
+            // OpenSea API v2 restituisce token_id come stringa decimale, attenzione a zeri iniziali
+            const url = `https://api.opensea.io/api/v2/chain/ethereum/account/${userAddress}/nfts?collection=${OPENSEA_COLLECTION}&limit=100`;
+            const resp = await fetch(url);
+            const data = await resp.json();
+            ownedNFTs = (data.nfts || []).filter(nft =>
+                nft.contract === CONTRACT_ADDRESS.toLowerCase() ||
+                nft.contract === CONTRACT_ADDRESS ||
+                (nft.contract_address && nft.contract_address.toLowerCase() === CONTRACT_ADDRESS.toLowerCase())
+            ).map(nft => ({
+                id: nft.identifier || nft.token_id,
+                image: nft.image_url || nft.image_original_url || (nft.metadata && nft.metadata.image) || `https://cdn.nyfurion.com/nft/${nft.identifier || nft.token_id}.png`,
+                name: nft.name || `NYF #${nft.identifier || nft.token_id}`
+            }));
+        } catch {
+            walletInfo.innerHTML = 'Errore nel recupero NFT. Riprova più tardi.';
+            return;
+        }
+
+        // Normalizza gli ID (alcuni provider li danno come stringa, altri come numero)
+        const ownedIds = ownedNFTs.map(n => String(Number(n.id)));
+        const missingIds = NYF_COLLECTION.filter(id => !ownedIds.includes(String(id)));
+
+        // NFT posseduti
+        ownedSection.innerHTML = `<div class="section-title">NFT che possiedi:</div>` +
+            (ownedNFTs.length
+                ? `<div class="nft-list">${ownedNFTs.map(nft => `
+                    <div class="nft-card">
+                        <img src="${nft.image}" alt="${nft.name}">
+                        <div class="nft-name">${nft.name}</div>
+                        <a class="nft-link" href="https://opensea.io/assets/ethereum/${CONTRACT_ADDRESS}/${nft.id}" target="_blank">Vedi su OpenSea</a>
+                    </div>
+                `).join('')}</div>`
+                : `<div class="info" style="color:#aaa;">Nessun NFT Nyfurion trovato nel tuo wallet.</div>`
+            );
+
+        // NFT mancanti
+        if (missingIds.length) {
+            missingSection.innerHTML = `<div class="section-title" style="color:#ff7c7c;">NFT che ti mancano:</div>
+                <div class="nft-list">
+                    ${missingIds.map(id => `
+                        <div class="nft-card missing">
+                            <img src="https://cdn.nyfurion.com/nft/${id}.png" alt="NYF #${id}">
+                            <div class="nft-name">NYF #${id}</div>
+                            <a class="nft-link" href="https://opensea.io/assets/ethereum/${CONTRACT_ADDRESS}/${id}" target="_blank">Compra su OpenSea</a>
+                        </div>
+                    `).join('')}
+                </div>`;
+        } else {
+            missingSection.innerHTML = `<div class="info" style="color:#1bff6a;">Complimenti! Possiedi tutti gli NFT Nyfurion della collezione.</div>`;
+        }
+
+        // Tutti gli NFT della collezione
+        allSection.innerHTML = `<div class="section-title" style="color:#ffe87c;">Tutti gli NFT della collezione:</div>
+            <div class="nft-list">
+                ${NYF_COLLECTION.map(id => `
+                    <div class="nft-card${ownedIds.includes(String(id)) ? '' : ' missing'}">
+                        <img src="https://cdn.nyfurion.com/nft/${id}.png" alt="NYF #${id}">
+                        <div class="nft-name">NYF #${id}</div>
+                        <a class="nft-link" href="https://opensea.io/assets/ethereum/${CONTRACT_ADDRESS}/${id}" target="_blank">OpenSea</a>
+                    </div>
+                `).join('')}
+            </div>`;
+        walletInfo.innerHTML = '';
+    }
+
+    connectBtn.onclick = connectMetaMask;
+    </script>
+</body>
+</html>

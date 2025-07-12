@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Journey</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Importa il font Orbitron da Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Orbitron:700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            transition: background 1.5s, color 1.5s;
+        }
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            transition: background 1.5s, color 1.5s;
+        }
+        h1 {
+            font-family: 'Orbitron', Arial, Helvetica, sans-serif;
+            font-size: 6vw;
+            text-align: center;
+            margin: 0;
+            letter-spacing: 2px;
+            transition: color 1.5s;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .subtitle {
+            font-family: 'Orbitron', Arial, Helvetica, sans-serif;
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            color: inherit;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            transition: color 1.5s;
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 12vw;
+            }
+            .subtitle {
+                font-size: 3.5vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>NYFURION</h1>
+        <div class="subtitle">Click to continue</div>
+    </div>
+    <script>
+        // Loop alternato tra bianco/nero
+        let isWhite = true;
+        function toggleColors() {
+            if (isWhite) {
+                document.body.style.background = "#222";
+                document.querySelector('h1').style.color = "#fff";
+            } else {
+                document.body.style.background = "#fff";
+                document.querySelector('h1').style.color = "#000";
+            }
+            isWhite = !isWhite;
+        }
+        setInterval(toggleColors, 2500); // Cambia ogni 2.5 secondi
+
+        // Reindirizza su qualsiasi click o tap, sia desktop che mobile
+        function redirectToClubPrime() {
+            window.location.href = 'club-prime.html';
+        }
+        document.body.addEventListener('click', redirectToClubPrime);
+        document.body.addEventListener('touchstart', redirectToClubPrime);
+    </script>
+</body>
+</html>

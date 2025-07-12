@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Notify All Subscribers</title>
+    <style>
+        body { background:#181a22; color:#fff; font-family:sans-serif; padding:2em; }
+        input, textarea { width:100%; margin-bottom:1em; padding:0.5em; border-radius:8px; border:1px solid #1bff6a; }
+        button { padding:0.7em 2em; border-radius:12px; border:none; background:#1bff6a; color:#181a22; font-weight:bold; cursor:pointer; }
+    </style>
+</head>
+<body>
+    <h2>Send Notification to All Subscribers</h2>
+    <form id="notifyAllForm">
+        <input type="password" id="adminPass" placeholder="Admin password" required>
+        <input type="text" id="subject" placeholder="Subject" value="Nyfurion Club is now available!">
+        <textarea id="message" rows="4" placeholder="Message">The Club Prime area is now open! Visit us now!</textarea>
+        <button type="submit">Send Notification</button>
+    </form>
+    <div id="result"></div>
+    <script>
+    document.getElementById('notifyAllForm').onsubmit = async function(e) {
+        e.preventDefault();
+        const password = document.getElementById('adminPass').value;
+        const subject = document.getElementById('subject').value;
+        const message = document.getElementById('message').value;
+        const res = await fetch('/api/notify-all', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({password, subject, message})
+        });
+        const data = await res.json();
+        document.getElementById('result').innerText = data.ok ? 'Notification sent!' : ('Error: ' + (data.error || 'Unknown'));
+    };
+    </script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nyfurion Club Prime – NFT Holders Only</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Orbitron:700,400&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%; margin: 0; padding: 0; width: 100vw; min-height: 100vh;
+            background: #0b101a;
+            font-family: 'Orbitron', Arial, sans-serif;
+            color: #eaffd0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden; /* Previene tagli e scroll orizzontale */
+        }
+        .prime-container {
+            background: rgba(24,26,34,0.98);
+            border-radius: 18px;
+            box-shadow: 0 0 24px #00eaff33;
+            padding: 2em 1.2em 1.5em 1.2em;
+            max-width: 340px;
+            width: 96vw;
+            text-align: center;
+            margin-bottom: 2em; /* Spazio extra per evitare tagli su mobile */
+        }
+        .prime-logo {
+            width: 54px; height: 54px;
+            border-radius: 50%;
+            margin-bottom: 1em;
+            box-shadow: 0 0 18px #1bff6a55;
+            background: #fff;
+            object-fit: contain;
+        }
+        .prime-title {
+            font-size: 1.25em;
+            font-weight: 700;
+            color: #00eaff;
+            margin-bottom: 0.7em;
+            letter-spacing: 0.04em;
+        }
+        .prime-desc {
+            font-size: 1em;
+            color: #bafff7;
+            margin-bottom: 1.2em;
+            line-height: 1.5;
+        }
+        .prime-btn {
+            background: linear-gradient(90deg,#00eaff 0%,#1bff6a 100%);
+            color: #181a22;
+            font-family: 'Orbitron',sans-serif;
+            font-size: 1em;
+            font-weight: bold;
+            padding: 0.6em 1.5em;
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 0 8px #00eaff33;
+            cursor: pointer;
+            transition: background 0.18s, color 0.18s, transform 0.18s;
+            outline: none;
+        }
+        .prime-btn:hover, .prime-btn:focus {
+            background: linear-gradient(90deg,#1bff6a 0%,#00eaff 100%);
+            color: #fff;
+            transform: scale(1.04);
+        }
+        #notifyMsg {
+            margin-top: 1em;
+            color: #1bff6a;
+            font-size: 0.98em;
+            display: none;
+        }
+        .nyfurion-wallet-btn {
+            position: fixed;
+            top: 14px;
+            right: 14px;
+            z-index: 200;
+            background: rgba(18,22,32,0.92);
+            color: #fff;
+            font-family: 'Orbitron',sans-serif;
+            font-size: 0.88em;
+            font-weight: 700;
+            padding: 0.13em 0.7em 0.13em 0.5em;
+            border-radius: 50px;
+            border: 1.5px solid #00eaff;
+            box-shadow: 0 0 8px #00eaff33;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3em;
+            transition: background 0.18s, color 0.18s, border 0.18s, box-shadow 0.18s;
+            min-width: 0;
+            min-height: 0;
+            outline: none;
+            text-shadow: none;
+            letter-spacing: 0.01em;
+        }
+        .nyfurion-wallet-btn:hover, .nyfurion-wallet-btn:focus {
+            background: #232a3a;
+            color: #1bff6a;
+            border-color: #00eaff;
+            box-shadow: 0 0 10px #1bff6a55;
+        }
+        .nyfurion-wallet-label {
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            font-size: 0.88em;
+            padding-right: 2px;
+            color: #fff;
+            transition: color 0.18s;
+        }
+        .nyfurion-wallet-btn:hover .nyfurion-wallet-label {
+            color: #1bff6a;
+        }
+        .nyfurion-wallet-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 15px; height: 15px;
+        }
+        @media (max-width: 400px) {
+            .prime-container {
+                padding: 1.2em 0.3em 1em 0.3em;
+                max-width: 99vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="prime-container">
+        <img src="https://cdn.nyfurion.com/ipfs/bafkreicpmvbhyzbfl37dihbxe7xggqtyhhff46riqjblcuzl32f6ne2ynm" alt="Nyfurion Prime Logo" class="prime-logo">
+        <div class="prime-title">CLUB PRIME – NFT HOLDERS</div>
+        <div class="prime-desc">
+            Welcome to the exclusive Nyfurion Club Prime.<br>
+            <b>Only NFT holders</b> can access this area.<br><br>
+            Get ready for special NFTs.<br>
+            <span style="color:#ffe87c;">Your NFT is your key.</span>
+        </div>
+        <form id="notifyForm" style="margin-bottom:1em;">
+            <input type="email" id="notifyEmail" placeholder="Enter your email" required style="padding:0.5em 1em;border-radius:8px;border:1px solid #1bff6a;font-size:1em;">
+            <button type="submit" class="prime-btn" style="margin-left:0.5em;">Notify me when available</button>
+        </form>
+        <div id="notifyMsg" style="display:none;">You will be notified when Club Prime is ready!</div>
+    </div>
+    <script>
+    document.getElementById('notifyForm').onsubmit = async function(e) {
+        e.preventDefault();
+        var email = document.getElementById('notifyEmail').value.trim();
+        if (!email) return;
+        const res = await fetch('http://localhost:3001/api/subscribe', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({email})
+        });
+        if (res.ok) {
+            document.getElementById('notifyMsg').style.display = 'block';
+            document.getElementById('notifyForm').style.display = 'none';
+            document.getElementById('notifyMsg').textContent = 'Iscrizione avvenuta con successo! Riceverai una notifica quando Club Prime sarà disponibile.';
+        } else {
+            const data = await res.json().catch(()=>({}));
+            alert('Errore iscrizione: ' + (data.error || 'Riprova.'));
+        }
+    };
+    </script>
+    <script src="wallet-access.js"></script>
+    <script>
+    // Bottone per accesso wallet
+    let walletBtn = document.createElement('button');
+    walletBtn.id = 'connect-wallet-btn';
+    walletBtn.className = 'nyfurion-wallet-btn';
+    walletBtn.innerHTML = `<span class="nyfurion-wallet-label">Connetti Wallet</span>`;
+    document.body.appendChild(walletBtn);
+    window.initWalletAccess({
+        onConnect: function(address, signature) {
+            walletBtn.innerHTML = `<span class='nyfurion-wallet-label'>${address.slice(0,6)}...${address.slice(-4)}</span>`;
+            walletBtn.disabled = true;
+            walletBtn.style.opacity = 0.7;
+            window.nyfWallet = address;
+        },
+        buttonId: 'connect-wallet-btn',
+        redirectUrl: window.location.pathname
+    });
+    </script>
+</body>
+</html>
