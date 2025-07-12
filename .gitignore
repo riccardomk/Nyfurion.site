@@ -14,7 +14,7 @@ Thumbs.db
 .env
 .env.local
 # Ignora output di build (se usi strumenti di build)
-dist/
+# dist/ (commentato per deploy su gh-pages)
 build/
 # ...puoi aggiungere altre cartelle temporanee se ne usi...
 
