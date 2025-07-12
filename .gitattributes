@@ -1,3 +1,1 @@
-# Non tracciare file .glb con Git LFS, repository solo per codice
 *.glb filter=lfs diff=lfs merge=lfs -text
-
