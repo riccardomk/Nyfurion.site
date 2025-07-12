@@ -15,11 +15,15 @@
     <script type="module">
     import * as THREE from 'three';
     import { GLTFLoader } from 'three-stdlib';
+    import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
+    // import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory.js';
+    // import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory.js';
     import { PointerLockControls } from 'three-stdlib';
     import { Minimap } from './minimap.js';
     import { loadEnvironmentMap } from './loadEnvironment.js';
 
-    let camera, scene, renderer, controls, velocity, direction, moveForward, moveBackward, moveLeft, moveRight, prevTime;
+let camera, scene, renderer, controls, velocity, direction, moveForward, moveBackward, moveLeft, moveRight, prevTime;
+let isVR = false;
     let modelBoundingBox = null;
     let groundY = 0;
     let playerRadius = 0.25;
@@ -35,7 +39,7 @@
 
     function loadModel() {
         const loader = new GLTFLoader();
-        loader.load('model.glb', (gltf) => {
+        loader.load('https://dl.dropboxusercontent.com/scl/fi/xigzdy2i86kk8fhnzdcc5/model.glb?rlkey=1fq9h7nadp4phzv3ksrvb2g0e&st=g63a8724', (gltf) => {
             // Centra il modello nella scena
             gltf.scene.position.set(0, 0, 0);
             // Calcola bounding box originale
@@ -62,6 +66,18 @@
             // Sposta il modello in modo che il centro sia (0,0,0)
             gltf.scene.position.set(-center.x, -box.min.y, -center.z);
             scene.add(gltf.scene);
+            // --- Luci negli angoli per profondità ---
+            if (modelBoundingBox) {
+                // ...nessuna luce custom aggiunta...
+                renderer.shadowMap.enabled = true;
+                renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                renderer.toneMappingExposure = 1.08;
+                renderer.outputEncoding = THREE.sRGBEncoding;
+                renderer.setPixelRatio(window.devicePixelRatio > 1.5 ? 1.5 : window.devicePixelRatio);
+                renderer.setSize(window.innerWidth, window.innerHeight, false);
+                renderer.antialias = window.devicePixelRatio <= 1.5;
+            }
             // Ricalcola bounding box dopo la traslazione
             const boxFinal = new THREE.Box3().setFromObject(gltf.scene);
             const centerFinal = new THREE.Vector3();
@@ -397,44 +413,21 @@
         scene.background = new THREE.Color(0x181a22);
         renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('game-canvas'), antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.xr.enabled = true;
+        document.body.appendChild(VRButton.createButton(renderer));
         // Carica environment map HDRI per riflessi e materiali PBR
         loadEnvironmentMap(renderer, scene);
-        // Luci professionali PBR
-        // AmbientLight solo di complemento
-        const ambLight = new THREE.AmbientLight(0xffffff, 0.45); // intensità bassa
-        scene.add(ambLight);
-        // DirectionalLight molto intensa dall'alto
-        const dirLight = new THREE.DirectionalLight(0xffffff, 3.2);
-        dirLight.position.set(0, 12, 0);
-        dirLight.castShadow = true;
-        dirLight.shadow.mapSize.width = 4096;
-        dirLight.shadow.mapSize.height = 4096;
-        dirLight.shadow.bias = -0.0012;
-        dirLight.shadow.radius = 12;
-        dirLight.shadow.camera.near = 0.1;
-        dirLight.shadow.camera.far = 120;
-        dirLight.shadow.camera.left = -30;
-        dirLight.shadow.camera.right = 30;
-        dirLight.shadow.camera.top = 30;
-        dirLight.shadow.camera.bottom = -30;
-        scene.add(dirLight);
-        // SpotLight laterale, fascio stretto, distanza > 100
-        const spot = new THREE.SpotLight(0xffffff, 7.5, 160, Math.PI/8, 0.12, 1.3);
-        spot.position.set(18, 18, 12);
-        spot.target.position.set(0, 0, 0);
-        spot.castShadow = true;
-        spot.shadow.mapSize.width = 2048;
-        spot.shadow.mapSize.height = 2048;
-        spot.shadow.bias = -0.001;
-        scene.add(spot);
-        scene.add(spot.target);
-        // HemisphereLight per schiarire ombre
-        const hemiLight = new THREE.HemisphereLight(0xffffff, 0xf0f0f0, 0.7);
-        scene.add(hemiLight);
-        // Controlli prima persona
+        // Luci professionali PBR (già gestite in addRealisticLighting)
+        // Controlli: FPS per desktop, VR per immersive
+        if (navigator.xr) {
+            navigator.xr.isSessionSupported('immersive-vr').then((supported) => {
+                isVR = supported;
+            });
+        }
+        // PointerLockControls solo se non VR
         controls = new PointerLockControls(camera, document.body);
         document.body.addEventListener('click', function() {
-            if (!controls.isLocked) controls.lock();
+            if (!controls.isLocked && !renderer.xr.isPresenting) controls.lock();
         });
         scene.add(controls.getObject());
         // Movimenti
@@ -505,87 +498,98 @@
     }
 
     function animate() {
-        requestAnimationFrame(animate);
-        const time = performance.now();
-        const delta = (time - prevTime) / 1000;
-        prevTime = time;
-        // Effetto caduta allo spawn
-        if (spawnFalling && spawnTargetY !== null) {
-            const obj = controls.getObject();
-            if (obj.position.y > spawnTargetY) {
-                obj.position.y -= Math.max(0.12, (obj.position.y - spawnTargetY) * 0.13);
-                if (obj.position.y <= spawnTargetY) {
+        if (renderer.xr.isPresenting) {
+            // In VR: ciclo gestito da WebXR, niente controlli FPS, niente overlay HTML
+            renderer.setAnimationLoop(function () {
+                // Qui puoi aggiungere logica VR custom (teleport, grab, ecc.)
+                updateMysticEffects();
+                if (minimap) minimap.update();
+                renderer.render(scene, camera);
+            });
+        } else {
+            requestAnimationFrame(animate);
+            const time = performance.now();
+            const delta = (time - prevTime) / 1000;
+            prevTime = time;
+            // Effetto caduta allo spawn
+            if (spawnFalling && spawnTargetY !== null) {
+                const obj = controls.getObject();
+                if (obj.position.y > spawnTargetY) {
+                    obj.position.y -= Math.max(0.12, (obj.position.y - spawnTargetY) * 0.13);
+                    if (obj.position.y <= spawnTargetY) {
+                        obj.position.y = spawnTargetY;
+                        spawnFalling = false;
+                    }
+                } else {
                     obj.position.y = spawnTargetY;
                     spawnFalling = false;
                 }
-            } else {
-                obj.position.y = spawnTargetY;
-                spawnFalling = false;
             }
-        }
-        // Movimento FPS classico (niente gravità)
-        if (!spawnFalling) {
-            let move = new THREE.Vector3();
-            const forward = new THREE.Vector3();
-            camera.getWorldDirection(forward);
-            forward.y = 0; forward.normalize();
-            const right = new THREE.Vector3().crossVectors(forward, camera.up).normalize();
-            let isWalking = false;
-            if (moveForward) { move.add(forward); isWalking = true; }
-            if (moveBackward) { move.add(forward.clone().negate()); isWalking = true; }
-            if (moveLeft) { move.add(right.clone().negate()); isWalking = true; }
-            if (moveRight) { move.add(right); isWalking = true; }
-            move.normalize();
-            // Velocità camminata realistica
-            const walkSpeed = 0.014;
-            move.multiplyScalar(walkSpeed);
-            // Collisione mesh-based tramite raycasting
-            let canMove = true;
-            if (modelMesh && move.lengthSq() > 0) {
+            // Movimento FPS classico (niente gravità)
+            if (!spawnFalling) {
+                let move = new THREE.Vector3();
+                const forward = new THREE.Vector3();
+                camera.getWorldDirection(forward);
+                forward.y = 0; forward.normalize();
+                const right = new THREE.Vector3().crossVectors(forward, camera.up).normalize();
+                let isWalking = false;
+                if (moveForward) { move.add(forward); isWalking = true; }
+                if (moveBackward) { move.add(forward.clone().negate()); isWalking = true; }
+                if (moveLeft) { move.add(right.clone().negate()); isWalking = true; }
+                if (moveRight) { move.add(right); isWalking = true; }
+                move.normalize();
+                // Velocità camminata realistica
+                const walkSpeed = 0.014;
+                move.multiplyScalar(walkSpeed);
+                // Collisione mesh-based tramite raycasting
+                let canMove = true;
+                if (modelMesh && move.lengthSq() > 0) {
+                    const obj = controls.getObject();
+                    const rayOrigin = obj.position.clone();
+                    rayOrigin.y = groundY + eyeHeight;
+                    const rayDir = move.clone().normalize();
+                    const raycaster = new THREE.Raycaster(rayOrigin, rayDir, 0, playerRadius + 0.1);
+                    const intersects = raycaster.intersectObject(modelMesh, true);
+                    if (intersects.length > 0) {
+                        canMove = false;
+                    }
+                    if (canMove && modelBoundingBox && !modelBoundingBox.containsPoint(obj.position.clone().add(move))) {
+                        canMove = false;
+                    }
+                }
                 const obj = controls.getObject();
-                const rayOrigin = obj.position.clone();
-                rayOrigin.y = groundY + eyeHeight;
-                const rayDir = move.clone().normalize();
-                const raycaster = new THREE.Raycaster(rayOrigin, rayDir, 0, playerRadius + 0.1);
-                const intersects = raycaster.intersectObject(modelMesh, true);
-                if (intersects.length > 0) {
-                    canMove = false;
+                if (canMove) {
+                    obj.position.add(move);
                 }
-                if (canMove && modelBoundingBox && !modelBoundingBox.containsPoint(obj.position.clone().add(move))) {
-                    canMove = false;
+                // Head bobbing: oscillazione verticale durante la camminata
+                if (isWalking && move.lengthSq() > 0) {
+                    walkTime += delta * 7.5;
+                } else {
+                    walkTime = 0;
                 }
+                const bobbing = isWalking ? Math.sin(walkTime) * 0.045 : 0;
+                obj.position.y = groundY + eyeHeight + bobbing;
             }
-            const obj = controls.getObject();
-            if (canMove) {
-                obj.position.add(move);
-            }
-            // Head bobbing: oscillazione verticale durante la camminata
-            if (isWalking && move.lengthSq() > 0) {
-                walkTime += delta * 7.5;
-            } else {
-                walkTime = 0;
-            }
-            const bobbing = isWalking ? Math.sin(walkTime) * 0.045 : 0;
-            obj.position.y = groundY + eyeHeight + bobbing;
+            // Aggiorna porte
+            updateDoors(controls.getObject().position);
+            // Aggiorna effetti mistici
+            updateMysticEffects();
+            // Aggiorna minimappa
+            if (minimap) minimap.update();
+            // Rendering
+            renderer.render(scene, camera);
+            // Overlay E
+            drawEOverlay();
         }
-        // Aggiorna porte
-        updateDoors(controls.getObject().position);
-        // Aggiorna effetti mistici
-        updateMysticEffects();
-        // Aggiorna minimappa
-        if (minimap) minimap.update();
-        // Rendering
-        renderer.render(scene, camera);
-        // Overlay E
-        drawEOverlay();
     }
 
     // Funzione per illuminazione realistica
     function addRealisticLighting(scene, renderer, modelMesh) {
+        // === AAA Realistic Lighting System ===
         renderer.physicallyCorrectLights = true;
         renderer.outputEncoding = THREE.sRGBEncoding;
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 0.98;
+        renderer.toneMappingExposure = 1.08;
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         // Nitidezza texture moderata
@@ -601,34 +605,69 @@
             });
         }
         // Nebbia atmosferica
-        scene.fog = new THREE.FogExp2(0x181a22, 0.09);
-        // Luci principali
-        const ambLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.fog = new THREE.FogExp2(0x181a22, 0.08);
+
+        // 1. Illuminazione globale realistica
+        const hemiLight = new THREE.HemisphereLight(0xfafaff, 0x181a22, 0.55); // cielo chiaro, terra scura
+        scene.add(hemiLight);
+        const ambLight = new THREE.AmbientLight(0xffffff, 0.18); // solo per schiarire le ombre
         scene.add(ambLight);
-        const dirLight = new THREE.DirectionalLight(0xffffff, 3);
-        dirLight.position.set(0, 10, 0);
+
+        // 2. Fari direzionali e spot dinamici
+        const dirLight = new THREE.DirectionalLight(0xfffbe6, 2.2);
+        dirLight.position.set(7, 12, -6);
         dirLight.castShadow = true;
         dirLight.shadow.mapSize.width = 4096;
         dirLight.shadow.mapSize.height = 4096;
-        dirLight.shadow.bias = -0.0012;
-        dirLight.shadow.radius = 12;
+        dirLight.shadow.bias = -0.0008;
+        dirLight.shadow.radius = 14;
         dirLight.shadow.camera.near = 0.1;
-        dirLight.shadow.camera.far = 60;
-        dirLight.shadow.camera.left = -12;
-        dirLight.shadow.camera.right = 12;
-        dirLight.shadow.camera.top = 12;
-        dirLight.shadow.camera.bottom = -12;
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        dirLight.shadow.camera.far = 80;
+        dirLight.shadow.camera.left = -18;
+        dirLight.shadow.camera.right = 18;
+        dirLight.shadow.camera.top = 18;
+        dirLight.shadow.camera.bottom = -18;
         scene.add(dirLight);
-        const spot = new THREE.SpotLight(0xffffff, 5, 120, Math.PI/9, 0.18, 1.2);
-        spot.position.set(8, 7, 0);
+
+        // SpotLight per accenti focali
+        const spot = new THREE.SpotLight(0xffeedd, 3.5, 32, Math.PI/10, 0.18, 1.5);
+        spot.position.set(-8, 7, 8);
         spot.target.position.set(0, 0, 0);
         spot.castShadow = true;
         spot.shadow.mapSize.width = 2048;
         spot.shadow.mapSize.height = 2048;
+        spot.shadow.bias = -0.001;
         scene.add(spot);
         scene.add(spot.target);
+
+        // 3. Illuminazione ambientale diffusa (RectAreaLight negli angoli)
+        // NB: RectAreaLight necessita di MeshPhysicalMaterial o MeshStandardMaterial
+        const rectAreaLights = [];
+        if (typeof THREE.RectAreaLight !== 'undefined') {
+            const areaColor = 0xfff6e0;
+            const areaIntensity = 0.45;
+            const areaWidth = 2.8;
+            const areaHeight = 1.2;
+            const positions = [
+                [6, 2.2, 6,  -1, 0, -1],
+                [-6, 2.2, 6,  1, 0, -1],
+                [6, 2.2, -6, -1, 0, 1],
+                [-6, 2.2, -6, 1, 0, 1]
+            ];
+            positions.forEach(([x, y, z, nx, ny, nz]) => {
+                const rect = new THREE.RectAreaLight(areaColor, areaIntensity, areaWidth, areaHeight);
+                rect.position.set(x, y, z);
+                rect.lookAt(x + nx, y + ny, z + nz);
+                scene.add(rect);
+                rectAreaLights.push(rect);
+            });
+        }
+
+        // 4. Contrasto visivo e atmosfera: zone in penombra
+        // (già gestito da ombre soft e luci distribuite)
+
+        // 5. Performance: nessuna luce eccessiva, ombre solo su luci principali
+
         // Aggiorna materiali del modello: bianco puro, roughness basso
         if (modelMesh) {
             modelMesh.traverse(child => {
@@ -636,25 +675,19 @@
                     let mat = child.material;
                     if (Array.isArray(mat)) {
                         mat.forEach(m => {
-                            if (m.map) {
-                                // Verifica che la texture sia bianca
-                                m.color = new THREE.Color(0xffffff);
-                            }
-                            m.roughness = 0.2;
-                            m.metalness = 0.1;
+                            m.roughness = 0.22;
+                            m.metalness = 0.13;
                             m.needsUpdate = true;
                         });
                     } else {
-                        if (mat.map) {
-                            mat.color = new THREE.Color(0xffffff);
-                        }
-                        mat.roughness = 0.2;
-                        mat.metalness = 0.1;
+                        mat.roughness = 0.22;
+                        mat.metalness = 0.13;
                         mat.needsUpdate = true;
                     }
                 }
             });
         }
+        // === END AAA Lighting ===
     }
 
     function updateModelMaterials(model) {
