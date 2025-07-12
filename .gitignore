@@ -22,3 +22,4 @@ build/
 # - Tutti i file del sito (HTML, CSS, JS, immagini, ecc.)
 # - Il backend (tranne node_modules e logs)
 # - File di configurazione (package.json, server.js, ecc.)
+model.glb
