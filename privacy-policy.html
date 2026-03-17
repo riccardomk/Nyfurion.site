@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Privacy Policy - Nyfurion</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="https://ipfs.io/ipfs/bafkreif52w6ucsqdbbwstt22fellwobdnnztceenycprkurkr4bo3q3lcq" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/coolvetica" />
+  <style>
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      background: #000;
+    }
+    .nyfurion-bg-animated {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .privacy-center {
+      position: relative;
+      z-index: 1;
+      width: 100vw;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 3em;
+    }
+    .privacy-title {
+      font-family: 'CoolveticaRg-Regular', Arial, sans-serif;
+      font-size: 2.2em;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 1.2em;
+      letter-spacing: 0.01em;
+      line-height: 1.05;
+      font-weight: 900;
+      text-shadow: 0 0 18px #fff, 0 0 32px #00ffe7;
+      animation: nyfurion-glow 2.2s ease-in-out infinite;
+    }
+    @keyframes nyfurion-glow {
+      0%, 100% {
+        text-shadow: 0 0 18px #fff, 0 0 32px #00ffe7;
+      }
+      50% {
+        text-shadow: 0 0 6px #fff, 0 0 12px #00ffe7;
+      }
+    }
+    .privacy-content {
+      font-family: 'CoolveticaRg-Regular', Arial, sans-serif;
+      max-width: 700px;
+      width: 96vw;
+      background: none;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 0;
+      font-size: 1.1em;
+      line-height: 1.7;
+      text-align: left;
+      color: #eaf1e9;
+      margin: 0 auto 3em auto;
+    }
+    @media (max-width: 600px) {
+      .privacy-title {
+        font-size: 1.3em;
+      }
+      .privacy-content {
+        font-size: 0.95em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas class="nyfurion-bg-animated" id="nyfurionBgCanvas"></canvas>
+  <div class="privacy-center">
+    <div class="privacy-title">Privacy Policy</div>
+    <div class="privacy-content">
+      <p>Questa informativa sulla privacy descrive come raccogliamo, utilizziamo e proteggiamo i dati personali degli utenti del sito Nyfurion.</p>
+      <h3>1. Raccolta dei dati</h3>
+      <p>Non raccogliamo dati personali sensibili. I dati raccolti sono limitati a quelli necessari per il funzionamento del sito e per migliorare l'esperienza utente.</p>
+      <h3>2. Utilizzo dei dati</h3>
+      <p>I dati raccolti vengono utilizzati esclusivamente per finalità tecniche, statistiche e di sicurezza. Non vengono ceduti a terzi.</p>
+      <h3>3. Cookie</h3>
+      <p>Il sito può utilizzare cookie tecnici e di analisi per migliorare la navigazione. Puoi gestire le preferenze dei cookie tramite le impostazioni del browser.</p>
+      <h3>4. Sicurezza</h3>
+      <p>Adottiamo misure di sicurezza per proteggere i dati da accessi non autorizzati.</p>
+      <h3>5. Diritti dell'utente</h3>
+      <p>Puoi richiedere la cancellazione o la modifica dei tuoi dati scrivendo a info@nyfurion.com.</p>
+      <h3>6. Modifiche</h3>
+      <p>La presente informativa può essere aggiornata. Le modifiche saranno pubblicate su questa pagina.</p>
+      <br><br>
+      <em>Ultimo aggiornamento: agosto 2025</em>
+    </div>
+  </div>
+<script>
+// Sfondo animato: gradienti e particelle luminose
+const canvas = document.getElementById('nyfurionBgCanvas');
+const ctx = canvas.getContext('2d');
+let w = window.innerWidth;
+let h = window.innerHeight;
+canvas.width = w;
+canvas.height = h;
+
+function resizeCanvas() {
+  w = window.innerWidth;
+  h = window.innerHeight;
+  canvas.width = w;
+  canvas.height = h;
+}
+window.addEventListener('resize', resizeCanvas);
+
+// Particelle luminose
+const particles = Array.from({length: 32}, () => ({
+  x: Math.random() * w,
+  y: Math.random() * h,
+  r: 1.2 + Math.random() * 2.8,
+  dx: (Math.random() - 0.5) * 0.7,
+  dy: (Math.random() - 0.5) * 0.7,
+  glow: `rgba(0,255,230,${0.18 + Math.random() * 0.22})`
+}));
+
+function drawBg() {
+  // Gradienti animati
+  const grad = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, Math.max(w,h)*0.7);
+  grad.addColorStop(0, '#001a1a');
+  grad.addColorStop(0.45, '#002a2a');
+  grad.addColorStop(0.7, '#000');
+  grad.addColorStop(1, '#000');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,w,h);
+
+  // Particelle luminose
+  for (const p of particles) {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r + Math.sin(Date.now()/600+p.x)*0.7, 0, 2*Math.PI);
+    ctx.shadowColor = p.glow;
+    ctx.shadowBlur = 16;
+    ctx.fillStyle = p.glow;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+}
+
+function animate() {
+  drawBg();
+  for (const p of particles) {
+    p.x += p.dx;
+    p.y += p.dy;
+    if (p.x < 0 || p.x > w) p.dx *= -1;
+    if (p.y < 0 || p.y > h) p.dy *= -1;
+  }
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+</html>

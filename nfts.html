@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NFTs NYF - Nyfurion X Reborn</title>
+  <link rel="icon" type="image/png" href="https://ipfs.io/ipfs/bafkreif52w6ucsqdbbwstt22fellwobdnnztceenycprkurkr4bo3q3lcq" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --matte-black: #080809;
+      --deep-black: #0D0D0E;
+      --accent-red: #E30B17;
+      --accent-cyan: #00E5FF;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      background-color: var(--matte-black);
+      background-image: linear-gradient(rgba(8, 8, 9, 0.85), rgba(8, 8, 9, 0.85)), url('nfts-nyf-bg.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      color: #F2F2F2;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.8;
+    }
+    
+    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
+    
+    ::selection {
+      background: var(--accent-cyan);
+      color: black;
+    }
+    
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--matte-black); }
+    ::-webkit-scrollbar-thumb { background: #1a1a1c; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-red); }
+    
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(13, 13, 14, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 1.5rem 2rem;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .header-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent-red);
+    }
+    
+    .back-btn {
+      padding: 0.75rem 1.5rem;
+      background: var(--deep-black);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: #F2F2F2;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s;
+      border-radius: 2px;
+    }
+    
+    .back-btn:hover {
+      border-color: var(--accent-red);
+      color: var(--accent-red);
+    }
+    
+    /* Container */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 9rem 2rem 5rem;
+    }
+    
+    .page-title {
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(to bottom, #ffffff, #a0a0a0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: center;
+    }
+    
+    .page-subtitle {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+    
+    /* Price Box */
+    .price-box {
+      background: rgba(13, 13, 14, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+    
+    .price-box h2 {
+      font-size: 1.5rem;
+      color: var(--accent-cyan);
+      margin-bottom: 1rem;
+    }
+    
+    .price-box p {
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 0.5rem;
+    }
+    
+    .price-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent-red);
+      margin: 1.5rem 0;
+    }
+    
+    .cta-button {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 1rem 2rem;
+      background: var(--accent-red);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+    
+    .cta-button:hover {
+      background: #ff1a26;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(227, 11, 23, 0.3);
+    }
+    
+    /* Motto */
+    .motto {
+      text-align: center;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 4rem;
+      padding: 2rem;
+      background: rgba(0, 229, 255, 0.05);
+      border-left: 3px solid var(--accent-cyan);
+      border-radius: 4px;
+    }
+    
+    .highlight-cyan {
+      color: var(--accent-cyan);
+      font-weight: 600;
+    }
+    
+    /* Section */
+    .section {
+      margin-bottom: 4rem;
+    }
+    
+    .section h2 {
+      font-size: 1.8rem;
+      color: #ffffff;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .section h3 {
+      font-size: 1.3rem;
+      color: var(--accent-cyan);
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .section p {
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 1rem;
+      line-height: 1.8;
+    }
+    
+    .section ul {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 1.5rem;
+    }
+    
+    .section li {
+      padding-left: 2rem;
+      margin-bottom: 0.8rem;
+      position: relative;
+    }
+    
+    .section li::before {
+      content: "▹";
+      position: absolute;
+      left: 0.5rem;
+      color: var(--accent-red);
+      font-size: 1.2rem;
+    }
+    
+    .highlight {
+      color: var(--accent-red);
+      font-weight: 600;
+    }
+    
+    .info-box {
+      background: rgba(0, 229, 255, 0.08);
+      border-left: 3px solid var(--accent-cyan);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-radius: 4px;
+    }
+    
+    .warning-box {
+      background: rgba(227, 11, 23, 0.08);
+      border-left: 3px solid var(--accent-red);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-radius: 4px;
+    }
+    
+    .creator-note {
+      margin-top: 4rem;
+      padding: 2rem;
+      background: rgba(13, 13, 14, 0.5);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+      font-size: 0.9rem;
+      color: #a0a0a0;
+    }
+    
+    .creator-note a {
+      color: var(--accent-cyan);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .creator-note a:hover {
+      color: var(--accent-red);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 8rem 1.5rem 3rem;
+      }
+      
+      .price-box {
+        padding: 1.5rem;
+      }
+      
+      .price-value {
+        font-size: 1.8rem;
+      }
+      
+      .section h2 {
+        font-size: 1.5rem;
+      }
+      
+      .section h3 {
+        font-size: 1.1rem;
+      }
+      
+      .cta-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-title">NFTs NYF</div>
+    <a href="index.html" class="back-btn">← Back Home</a>
+  </header>
+  
+  <!-- Main Content -->
+  <div class="container">
+    <h1 class="page-title">NYFURION X REBORN</h1>
+    <p class="page-subtitle">Official NFT Collection — Full Commercial License</p>
+    
+    <div class="price-box">
+      <h2>Collection Information</h2>
+      <p>Open Offer Collection</p>
+      <div class="price-value">Floor Price: 0.01 ETH</div>
+      <p>Each fragment represents a unique element of the Nyfurion narrative universe</p>
+      <a href="https://opensea.io/collection/nyfurionxreborn" target="_blank" class="cta-button">View Collection on OpenSea</a>
+    </div>
+    
+    <div class="motto">
+      <strong>"Make your business shine with Nyfurion's legendary icons — impossible to go unnoticed"</strong>
+      <br><br>
+      <span class="highlight-cyan">NYFURION X REBORN MOTTO - We are one "1"</span>
+    </div>
+    
+    <!-- Commercial License -->
+    <div class="section">
+      <h2>NYFURION X REBORN – COMMERCIAL LICENSE</h2>
+      <p><em>Last updated: August 2025</em></p>
+      <p><strong>Creator:</strong> Riccardo – Founder of the Nyfurion narrative universe</p>
+      
+      <h3>1.0 - GRANTED RIGHTS</h3>
+      <p><strong class="highlight-cyan">1.1</strong> - The owner of a Nyfurion x Reborn Fragment (NFT) holds <span class="highlight">full commercial rights</span> to use their artwork in any personal or professional project.</p>
+      
+      <p><strong class="highlight-cyan">1.2</strong> - You are free to create and monetize without limitations:</p>
+      <ul>
+        <li><strong>1.3</strong> - Video games, apps, digital experiences, and metaverse projects</li>
+        <li><strong>1.4</strong> - Comics, graphic novels, animations, and narrative content</li>
+        <li><strong>1.5</strong> - Restaurants, venues, clubs, wines, alcohol, and any type of commercial activity</li>
+        <li><strong>1.6</strong> - Merchandising, secondary brands, and co-branding projects</li>
+        <li><strong>1.7</strong> - Digital or physical art, installations, exhibitions</li>
+        <li><strong>1.8</strong> - Social media content, media, and promotional initiatives</li>
+        <li><strong>1.9</strong> - Any other form of creative or commercial project, even if not specifically listed</li>
+      </ul>
+      
+      <div class="info-box">
+        <p><strong>No additional authorization is required:</strong> each fragment is free to take on new creative forms through its holder.</p>
+      </div>
+    </div>
+    
+    <!-- Limitations -->
+    <div class="section">
+      <h2>X LIMITATIONS</h2>
+      
+      <div class="warning-box">
+        <h3>2.0 - USE OF THE NAME</h3>
+        <p>You <strong>may not use "Nyfurion" as the main brand</strong>. Secondary use is allowed to identify your NFT (e.g., "Nyfurion Fragment #237" or "#234 Nyfurion") and any other name associated with the fragment, provided that the main brand is not Nyfurion alone.</p>
+      </div>
+      
+      <h3>2.1 - OFFICIAL SERIES</h3>
+      <p>You may not create TV series or projects declared officially part of the canonical Nyfurion series. These remain the <span class="highlight">exclusive domain of the Creator</span>.</p>
+      
+      <h3>2.3 - LORE</h3>
+      <p>You may not modify or claim the official Nyfurion lore as canonical. Your works must be presented as <strong>unofficial</strong>.</p>
+      
+      <h3>2.4 - PROHIBITED CONTENT</h3>
+      <p>You may not associate the fragment with violent, offensive, discriminatory, or illegal projects.</p>
+      
+      <h3>2.5 - LOGOS AND ASSETS</h3>
+      <p>You may freely use the image of your Nyfurion Fragment, but you may not use official logos, registered trademarks, or global Nyfurion assets without written authorization from the Creator.</p>
+    </div>
+    
+    <!-- Legal Notes -->
+    <div class="section">
+      <h2>2.6 - LEGAL NOTES / NYFX*</h2>
+      
+      <p><strong class="highlight-cyan">2.7</strong> - Commercial rights <span class="highlight">follow the ownership of the NFT</span>: if you sell the fragment, the rights automatically transfer to the new holder.</p>
+      
+      <p><strong class="highlight-cyan">2.8</strong> - The license is <strong>worldwide, personal, and non-exclusive</strong>: it applies only to the fragment owned and does not transfer the overall intellectual property of the Nyfurion universe.</p>
+      
+      <p><strong class="highlight-cyan">2.9</strong> - If your fragment is selected for an official project, you may receive a symbolic share of the revenues.</p>
+    </div>
+    
+    <div class="creator-note">
+      <p>Creator: Riccardo – Founder of the Nyfurion narrative universe</p>
+      <p>For questions or commercial partnerships: <a href="./contatti.html" style="color: var(--accent-cyan);">Contact Us</a></p>
+    </div>
+  </div>
+</body>
+</html>

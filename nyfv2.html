@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NYFV2 — Nyfurion</title>
+  <link rel="icon" type="image/png" href="https://ipfs.io/ipfs/bafkreif52w6ucsqdbbwstt22fellwobdnnztceenycprkurkr4bo3q3lcq" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --matte-black: #080809;
+      --deep-black: #0D0D0E;
+      --accent-red: #E30B17;
+      --accent-cyan: #00E5FF;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+    
+    body {
+      background-color: var(--matte-black);
+      background-image: linear-gradient(rgba(8, 8, 9, 0.85), rgba(8, 8, 9, 0.85)), url('nyfv2-bg.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      color: #F2F2F2;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
+    
+    /* Header Fixed */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(13, 13, 14, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 1.5rem 2rem;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .header-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent-red);
+    }
+    
+    .back-btn {
+      padding: 0.75rem 1.5rem;
+      background: var(--deep-black);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: #F2F2F2;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s;
+      border-radius: 2px;
+    }
+    
+    .back-btn:hover {
+      border-color: var(--accent-red);
+      color: var(--accent-red);
+    }
+    
+    /* Main Content */
+    .container {
+      text-align: center;
+      z-index: 10;
+      padding: 2rem;
+    }
+    
+    .page-title {
+      font-size: clamp(3rem, 10vw, 8rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 2rem;
+      background: linear-gradient(to bottom, #ffffff, var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    
+    .subtitle {
+      font-size: 1.25rem;
+      color: #c0c0c0;
+      margin-bottom: 3rem;
+      letter-spacing: 0.1em;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .action-btn {
+      padding: 1rem 2.5rem;
+      background: var(--accent-red);
+      border: none;
+      border-radius: 4px;
+      color: #ffffff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-block;
+    }
+    
+    .action-btn:hover {
+      background: #c00915;
+      transform: translateY(-2px);
+    }
+    
+    .action-btn.secondary {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #F2F2F2;
+    }
+    
+    .action-btn.secondary:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      background: transparent;
+    }
+    
+    /* Info Text */
+    .info-text {
+      margin-top: 3rem;
+      font-size: 1rem;
+      color: #a0a0a0;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.8;
+    }
+    
+    .info-highlight {
+      color: var(--accent-cyan);
+      font-weight: 600;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header {
+        padding: 1rem;
+      }
+      
+      .container {
+        padding: 1rem;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .action-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-title">NYFV2</div>
+    <a href="index.html" class="back-btn">← Back Home</a>
+ </header>
+  
+  <!-- Main Content -->
+  <div class="container">
+    <h1 class="page-title">NYFV2</h1>
+    <p class="subtitle">Fragmented Collection — 100 Unique NFTs</p>
+    
+    <div class="action-buttons">
+      <a href="https://opensea.io/collection/nyfx-reborn-v2" target="_blank" class="action-btn">
+        View on OpenSea
+      </a>
+      <a href="lore.html" class="action-btn secondary">
+        Explore Lore
+      </a>
+    </div>
+    
+    <div class="info-text">
+      NYFV2 is a <span class="info-highlight">fragmented collection</span> of 100 unique NFTs, directly connected to the narrative universe of Nyfurion. This series offers collectors the opportunity to enter the world of Nyfurion through selected and mysterious fragments. Each piece is a gateway to the evolving story.
+    </div>
+  </div>
+</body>
+</html>

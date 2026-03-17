@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Profezia del Vuoto - Nyfurion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(rgba(8,8,9,0.85), rgba(8,8,9,0.85)), url('books-bg.png');
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+    }
+    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
+    
+    ::selection {
+      background: #00e5ff;
+      color: black;
+    }
+    
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #080809; }
+    ::-webkit-scrollbar-thumb { background: #1a1a1c; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #E30B17; }
+    
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(13, 13, 14, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 1.5rem 2rem;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .header-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #E30B17;
+    }
+    
+    .back-btn {
+      padding: 0.75rem 1.5rem;
+      background: #0D0D0E;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: #F2F2F2;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s;
+      border-radius: 2px;
+    }
+    
+    .back-btn:hover {
+      border-color: #E30B17;
+      color: #E30B17;
+    }
+    
+    .container-prophecy {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 9rem 2rem 5rem;
+    }
+    .title-prophecy {
+      text-align: center;
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+      background: linear-gradient(to bottom, #ffffff, #a0a0a0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .subtitle-prophecy {
+      text-align: center;
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 4rem;
+      line-height: 1.6;
+    }
+    .prophecy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    .prophecy-card {
+      background: rgba(13, 13, 14, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      min-height: 280px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      transition: all 0.3s ease;
+      opacity: 0;
+      animation: fadeInUp 0.6s ease forwards;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .prophecy-card:nth-child(1) { animation-delay: 0.1s; }
+    .prophecy-card:nth-child(2) { animation-delay: 0.2s; }
+    .prophecy-card:nth-child(3) { animation-delay: 0.3s; }
+    .prophecy-card:nth-child(4) { animation-delay: 0.4s; }
+    .prophecy-card:nth-child(5) { animation-delay: 0.5s; }
+    .prophecy-card:nth-child(6) { animation-delay: 0.6s; }
+    .prophecy-card:nth-child(7) { animation-delay: 0.7s; }
+    .prophecy-card:nth-child(8) { animation-delay: 0.8s; }
+    .prophecy-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0, 229, 255, 0.2);
+      border-color: rgba(0, 229, 255, 0.3);
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @media (max-width: 1200px) {
+      .prophecy-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 900px) {
+      .container-prophecy {
+        padding: 6rem 1.5rem 4rem;
+      }
+      .prophecy-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
+      }
+    }
+    @media (max-width: 600px) {
+      .prophecy-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-title">Profezia</div>
+    <a href="books.html" class="back-btn">← Torna ai Libri</a>
+  </header>
+  
+  <!-- Main Content -->
+  <div class="container-prophecy">
+    <div class="title-prophecy">LA PROFEZIA DEL VUOTO</div>
+    <div class="subtitle-prophecy">I segreti nascosti del Vuoto rivelati attraverso frammenti di profezia.</div>
+    <div class="prophecy-grid">
+      <a href="profezia-1.html" class="prophecy-card">
+        <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 600;">L'Ultimo Guardiano</h3>
+        <span style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.5);">L'Era dell'Origine</span>
+      </a>
+      <a href="profezia-2.html" class="prophecy-card">
+        <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 600;">LA VEGGENTE DELLE OMBRE</h3>
+        <span style="font-size: 0.85rem; color: #7ad1e6; background: rgba(0,229,255,0.12); padding: 0.4rem 1.2rem; border-radius: 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; letter-spacing: 0.12em; margin-top: 0.5rem; display: inline-block;">L'ERA DEL TRADIMENTO</span>
+      </a>
+      <a href="profezia-3.html" class="prophecy-card">
+        <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 600;">IL FORGIATORE DI STELLE</h3>
+        <span style="font-size: 0.85rem; color: #e3b13b; background: rgba(255,215,0,0.12); padding: 0.4rem 1.2rem; border-radius: 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; letter-spacing: 0.12em; margin-top: 0.5rem; display: inline-block;">L'ERA DELLA RINASCITA</span>
+      </a>
+      <a href="profezia-4.html" class="prophecy-card">
+        <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 600;">L'EREDE DIMENTICATO</h3>
+        <span style="font-size: 0.85rem; color: #3ad1c6; background: rgba(0,229,255,0.12); padding: 0.4rem 1.2rem; border-radius: 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; letter-spacing: 0.12em; margin-top: 0.5rem; display: inline-block;">L'ERA DEL MISTERO</span>
+      </a>
+      <a href="profezia-5.html" class="prophecy-card">
+        <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 600;">LA CUSTODE DEL CREPUSCOLO</h3>
+        <span style="font-size: 0.85rem; color: #e34b6b; background: rgba(227,11,23,0.12); padding: 0.4rem 1.2rem; border-radius: 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; letter-spacing: 0.12em; margin-top: 0.5rem; display: inline-block;">L'ERA DELL'EQUILIBRIO</span>
+      </a>
+      <a href="profezia-6.html" class="prophecy-card">
+        <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 600;">IL PRIMO RE</h3>
+        <span style="font-size: 0.85rem; color: #e3b13b; background: rgba(255,215,0,0.12); padding: 0.4rem 1.2rem; border-radius: 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; letter-spacing: 0.12em; margin-top: 0.5rem; display: inline-block;">L'ERA DELLA CORONA</span>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

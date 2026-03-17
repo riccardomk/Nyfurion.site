@@ -1,0 +1,102 @@
+{
+  "id": "padel-italia",
+  "title": "Official Padel Italia",
+  "category": {
+    "IT": "Design Editoriale",
+    "EN": "Editorial Design"
+  },
+  "year": "2024",
+  "role": {
+    "IT": "Direttore Creativo & Designer Grafico",
+    "EN": "Creative Director & Graphic Designer"
+  },
+  "brief": {
+    "IT": "Official Padel Italia N°14 – Direzione Creativa Editoriale. Ideazione e realizzazione completa della rivista, dalla progettazione grafica alla valorizzazione dei contenuti editoriali e fotografici. Un progetto commissionato che ha richiesto una visione creativa strategica, sintesi grafica raffinata e comunicazione visiva d'impatto. La rivista è stata apprezzata per la qualità grafica, la chiarezza comunicativa e la sintonia con le esigenze del cliente.",
+    "EN": "Official Padel Italia N°14 – Creative Editorial Direction. Complete ideation and realization of the magazine, from graphic design to enhancement of editorial and photographic content. A commissioned project requiring strategic creative vision, refined graphic synthesis, and impactful visual communication. The magazine was appreciated for graphic quality, communication clarity, and alignment with client needs."
+  },
+  "deliverables": {
+    "IT": [
+      "Design da zero: definizione griglia, gerarchia visiva e stile tipografico",
+      "Direzione creativa: composizione pagine e narrazione visiva fluida",
+      "Montaggio fotografico: ottimizzazione immagini e valorizzazione estetica",
+      "Progettazione indice editoriale in Adobe Illustrator",
+      "Preparazione per stampa e gestione file produttivi"
+    ],
+    "EN": [
+      "Design from scratch: grid definition, visual hierarchy and typographic style",
+      "Creative direction: page composition and fluid visual narrative",
+      "Photo montage: image optimization and aesthetic enhancement",
+      "Editorial index design in Adobe Illustrator",
+      "Print preparation and production file management"
+    ]
+  },
+  "process": {
+    "IT": [
+      "Analisi del brief e definizione della strategia visiva coerente con il tono editoriale",
+      "Progettazione grafica: layout moderno, funzionale e coerente per tutte le sezioni",
+      "Evoluzione del design dell'indice: due alternative sviluppate per testare soluzioni visive equilibrate",
+      "Ottimizzazione della composizione: bilanciamento tra elementi testuali e illustrativi",
+      "Direzione creativa completa: dalla tipografia alla fotografia, dalla palette colore all'impaginazione finale",
+      "Feedback positivi per leggibilità, coerenza visiva e qualità grafica complessiva"
+    ],
+    "EN": [
+      "Brief analysis and definition of visual strategy coherent with editorial tone",
+      "Graphic design: modern, functional and consistent layout for all sections",
+      "Index design evolution: two alternatives developed to test balanced visual solutions",
+      "Composition optimization: balance between textual and illustrative elements",
+      "Complete creative direction: from typography to photography, from color palette to final layout",
+      "Positive feedback for readability, visual consistency and overall graphic quality"
+    ]
+  },
+  "outcome": {
+    "IT": "La rivista Official Padel Italia N°14 rappresenta un progetto di design editoriale maturo e coeso. Il lavoro ha ricevuto riscontri positivi per la qualità grafica, la leggibilità intuitiva, la coerenza visiva e la capacità di comunicare efficacemente i contenuti. Un successo sia dal punto di vista visivo che editoriale, confermando una gestione strategica della direzione creativa.",
+    "EN": "Official Padel Italia N°14 magazine represents a mature and cohesive editorial design project. The work received positive feedback for graphic quality, intuitive readability, visual consistency, and effective content communication. A success both visually and editorially, confirming strategic creative direction management."
+  },
+  "tools": [
+    "Adobe InDesign",
+    "Adobe Photoshop",
+    "Adobe Illustrator"
+  ],
+  "mainImage": "./images/padel1.png",
+  "gallery": [
+    {
+      "url": "./images/padel-cover.png",
+      "label": "Indice official padel italia n°14",
+      "style": {
+        "backgroundColor": "#1a1a1a",
+        "padding": "30px",
+        "borderRadius": "12px",
+        "minHeight": "500px",
+        "border": "1px solid rgba(227, 11, 23, 0.3)",
+        "overflow": "hidden",
+        "animation": "slideHorizontal 15s ease-in-out infinite"
+      }
+    },
+    {
+      "url": "./images/padel-2.png",
+      "label": "Rivista Padel Italia Ufficiale n°14",
+      "style": {
+        "backgroundColor": "#1a1a1a",
+        "padding": "30px",
+        "borderRadius": "12px",
+        "minHeight": "500px",
+        "border": "1px solid rgba(227, 11, 23, 0.3)",
+        "overflow": "hidden",
+        "animation": "slideHorizontal 15s ease-in-out infinite"
+      }
+    },
+    {
+      "url": "./images/padel-3.png",
+      "label": "Rivista Padel Italia Ufficiale n°14",
+      "style": {
+        "backgroundColor": "#1a1a1a",
+        "padding": "30px",
+        "borderRadius": "12px",
+        "minHeight": "500px",
+        "border": "1px solid rgba(227, 11, 23, 0.3)",
+        "overflow": "hidden",
+        "animation": "slideHorizontal 15s ease-in-out infinite"
+      }
+    }
+  ]
+}

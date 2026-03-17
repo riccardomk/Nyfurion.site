@@ -1,0 +1,162 @@
+﻿
+<!DOCTYPE html>
+<html lang="en" style="background-color: #080809 !important;">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      html, body, #root {
+        background: #080809 !important;
+        background-color: #080809 !important;
+        color: #F2F2F2 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 100vh !important;
+        border: none !important;
+        position: relative;
+      }
+      /* Grain overlay */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 1000;
+        opacity: 0.08;
+        background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+        background-size: cover;
+      }
+      
+      :root {
+        --matte-black: #080809;
+        --accent-red: #E30B17;
+      }
+      
+      h1, h2, h3, .font-heading {
+        font-family: 'Space+Grotesk', sans-serif;
+      }
+      
+      ::selection {
+        background: #00E5FF;
+        color: black;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 4px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--matte-black);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #1a1a1c;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--accent-red);
+      }
+    </style>
+    <title>RICCARDO DUCA â€" Graphic Designer & Digital Artist</title>    <style>
+      @keyframes slideHorizontal {
+        0% { transform: translateX(0); }
+        50% { transform: translateX(-30px); }
+        100% { transform: translateX(0); }
+      }
+      .animated-gallery-img {
+        animation: slideHorizontal 15s ease-in-out infinite;
+      }
+    </style>    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "framer-motion": "https://esm.sh/framer-motion@^11.11.11"
+  }
+}
+</script>
+    <script type="module" crossorigin src="./assets/index-DmYQ69Su.js?v=1739480800"></script>
+  <script src="./load-projects.js"></script>
+  <script src="./project-editor.js"></script>
+  <script>
+    // Clear everything and force reload
+    sessionStorage.clear();
+    localStorage.removeItem('rd-projects-v3');
+    console.log('✅ Cache cleared! Il portfolio caricherà i dati aggiornati dal bundle.');
+  </script>
+  <script>
+    // AGGRESSIVE BLACK BACKGROUND ENFORCEMENT
+    function forceBlackBackground() {
+      // Force on html, body, root
+      const elements = [document.documentElement, document.body, document.getElementById('root')];
+      elements.forEach(el => {
+        if (el) {
+          el.style.setProperty('background', '#080809', 'important');
+          el.style.setProperty('background-color', '#080809', 'important');
+          el.style.setProperty('color', '#F2F2F2', 'important');
+        }
+      });
+      
+      // Force on all divs that might be containers
+      document.querySelectorAll('div, section, footer, header, main, article').forEach(el => {
+        const bgColor = window.getComputedStyle(el).backgroundColor;
+        if (bgColor === 'rgb(255, 255, 255)' || bgColor === 'white' || bgColor === 'rgba(255, 255, 255, 1)') {
+          el.style.setProperty('background-color', '#080809', 'important');
+          el.style.setProperty('background', '#080809', 'important');
+        }
+      });
+    }
+    
+    // Execute immediately
+    forceBlackBackground();
+    
+    // Execute on DOM ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', forceBlackBackground);
+    }
+    
+    // Watch for DOM changes with MutationObserver
+    const observer = new MutationObserver(forceBlackBackground);
+    observer.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['style', 'class']
+    });
+    
+    // Also run every 100ms for the first 5 seconds
+    let count = 0;
+    const interval = setInterval(() => {
+      forceBlackBackground();
+      count++;
+      if (count > 50) clearInterval(interval);
+    }, 100);
+    
+    // Run on window load
+    window.addEventListener('load', forceBlackBackground);
+  </script>
+</head>
+  <body style="background: #080809 !important; background-color: #080809 !important; color: #F2F2F2 !important; margin: 0; padding: 0;">
+    <div id="root" style="background: #080809 !important; background-color: #080809 !important; width: 100%; min-height: 100vh;"></div>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,116 @@
+{
+  "id": "rpg-yacht",
+  "title": "RPG Yacht",
+  "category": {
+    "IT": "Visualizzazione 3D",
+    "EN": "3D Visualization"
+  },
+  "year": "2025",
+  "role": {
+    "IT": "3D Graphic Designer",
+    "EN": "3D Graphic Designer"
+  },
+  "brief": {
+    "IT": "RPG Yacht – Progetto su Commissione / Visualizzazione Strutture Marine. Sviluppo di visual 3D e identità di lusso per il settore nautico. Focus sulla resa fotorealistica delle strutture e coerenza del brand premium.",
+    "EN": "RPG Yacht – Commissioned Project / Marine Structure Visualization. Development of 3D visuals and luxury identity for the nautical sector."
+  },
+  "deliverables": {
+    "IT": [
+      "3D Modeling",
+      "Texturing",
+      "Lighting",
+      "Brand Identity"
+    ],
+    "EN": [
+      "3D Modeling",
+      "Texturing",
+      "Lighting",
+      "Brand Identity"
+    ]
+  },
+  "process": {
+    "IT": [
+      "Modellazione poligonale complessa",
+      "Studio materiali metallici",
+      "Renderizzazione EEVEE Blender"
+    ],
+    "EN": [
+      "Complex polygonal modeling",
+      "Metallic material study",
+      "Blender EEVEE rendering"
+    ]
+  },
+  "outcome": {
+    "IT": "Un ecosistema visivo che trasmette lusso, precisione e avanguardia tecnologica.",
+    "EN": "A visual ecosystem conveying luxury, precision, and technological vanguard."
+  },
+  "tools": [
+    "Blender",
+    "Photoshop",
+    "Illustrator"
+  ],
+  "videoUrl": "./videos/rpg-yacht-presentation.mov",
+  "mainImage": "https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=1920&auto=format&fit=crop",
+  "gallery": [
+    {
+      "url": "./images/rpg-yacht-1.png",
+      "label": "Blender Rendering EEVEE 1"
+    },
+    {
+      "url": "./images/rpg-yacht-2.png",
+      "label": "Blender Rendering EEVEE 2"
+    },
+    {
+      "url": "./images/rpg-yacht-3.png",
+      "label": "Blender Rendering EEVEE 3"
+    },
+    {
+      "url": "./images/rpg-yacht-4.png",
+      "label": "Blender Rendering EEVEE 4"
+    },
+    {
+      "url": "./images/rpg-yacht-5.png",
+      "label": "Blender Rendering EEVEE 5"
+    },
+    {
+      "url": "./images/rpg-yacht-6.png",
+      "label": "Blender Rendering EEVEE 6"
+    },
+    {
+      "url": "./images/rpg-yacht-7.png",
+      "label": "Blender Rendering EEVEE 7"
+    },
+    {
+      "url": "./images/rpg-yacht-8.png",
+      "label": "Blender Rendering EEVEE 8"
+    },
+    {
+      "url": "./images/rpg-yacht-9.png",
+      "label": "Blender Rendering EEVEE 9"
+    },
+    {
+      "url": "./images/rpg-yacht-10.png",
+      "label": "Blender Rendering EEVEE 10"
+    },
+    {
+      "url": "./images/rpg-yacht-11.png",
+      "label": "Blender Rendering EEVEE 11"
+    },
+    {
+      "url": "./images/rpg-yacht-12.png",
+      "label": "Blender Rendering EEVEE 12"
+    },
+    {
+      "url": "./images/rpg-yacht-13.png",
+      "label": "Blender Rendering EEVEE 13"
+    },
+    {
+      "url": "./images/rpg-yacht-14.png",
+      "label": "Blender Rendering EEVEE 14"
+    },
+    {
+      "url": "./images/rpg-yacht-15.png",
+      "label": "Blender Rendering EEVEE 15"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "id": "di-lenarda",
+  "title": "F.lli Di Lenarda",
+  "category": {
+    "IT": "Identity & Illustration",
+    "EN": "Identity & Illustration"
+  },
+  "year": "2023",
+  "role": {
+    "IT": "Art Director & Illustrator",
+    "EN": "Art Director & Illustrator"
+  },
+  "brief": {
+    "IT": "Progetto su commissione per l'azienda agricola F.lli Di Lenarda, attiva in Friuli Venezia Giulia. L'obiettivo era sviluppare un logo illustrato capace di rappresentare pienamente l'identità e i valori dell'azienda.",
+    "EN": "Commissioned project for the F.lli Di Lenarda farm in Friuli. The goal was to develop an illustrated logo representing the identity and values of the farm."
+  },
+  "collaborationText": {
+    "IT": "Dopo un'attenta analisi del contesto territoriale e produttivo, ho elaborato una proposta visiva originale e mirata. Il risultato fonde tradizione agricola e design contemporaneo.",
+    "EN": "After a careful analysis of the territory, I developed a targeted visual proposal. The result blends agricultural tradition and contemporary design."
+  },
+  "deliverables": {
+    "IT": [
+      "Logo illustrato: stilizzazione iconica della mucca",
+      "Brand Identity: equilibrio tra tradizione e modernità",
+      "Variant study: proposte multiple per versatilità di stampa",
+      "Packaging Design: applicazione su prodotti caseari"
+    ],
+    "EN": [
+      "Illustrated logo: iconic cow stylization",
+      "Brand Identity: balance between tradition and modernity",
+      "Variant study: multiple proposals for print versatility",
+      "Packaging Design: application on dairy products"
+    ]
+  },
+  "process": {
+    "IT": [
+      "Ricerca storica e territoriale friulana.",
+      "Sketch manuali per definire il tratto illustrativo.",
+      "Vettorializzazione e pulizia del segno grafico.",
+      "Sviluppo varianti cromatiche per contesti digitali/stampa."
+    ],
+    "EN": [
+      "Friulian historical and territorial research.",
+      "Manual sketches to define the illustrative style.",
+      "Vectorization and cleanup of the graphic mark.",
+      "Development of color variants for digital/print."
+    ]
+  },
+  "outcome": {
+    "IT": "Un logo distintivo con un segno grafico riconoscibile, coerente e adatto alla comunicazione moderna del settore agricolo.",
+    "EN": "A distinctive logo with a recognizable, consistent graphic mark, suitable for modern agricultural communication."
+  },
+  "tools": [
+    "Illustrator",
+    "Lightroom"
+  ],
+  "mainImage": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1920&auto=format&fit=crop",
+  "logoUrl": "./images/dilenarda-logo-finale.png",
+  "gallery": [
+    {
+      "url": "./images/dilenarda-1.png",
+      "label": "Proposta Logo"
+    },
+    {
+      "url": "./images/dilenarda-4.png",
+      "label": "Proposta Logo 04"
+    },
+    {
+      "url": "./images/dilenarda-5.png",
+      "label": "Logo Finale"
+    },
+    {
+      "url": "./images/dilenarda-6.png",
+      "label": "Variante Logo"
+    }
+  ]
+}

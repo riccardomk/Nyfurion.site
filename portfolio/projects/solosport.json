@@ -1,0 +1,155 @@
+{
+  "id": "solo-sport",
+  "title": "SoloSport",
+  "category": {
+    "IT": "Branding",
+    "EN": "Branding"
+  },
+  "year": "2024",
+  "role": {
+    "IT": "Graphic Designer",
+    "EN": "Graphic Designer"
+  },
+  "brief": {
+    "IT": "SoloSport è un progetto di branding sportivo originale nato dalla passione personale per lo sport e il design. L'obiettivo era creare un'identità visiva moderna, distintiva e versatile per un portale tematico dedicato all'informazione sportiva, con focus su riconoscibilità, dinamismo e minimalismo. Our motto? #NoSportNoFunLivingOn",
+    "EN": "SoloSport is an original sports branding project born from a personal passion for sports and design. The goal was to create a modern, distinctive and versatile visual identity for a thematic portal dedicated to sports information, focusing on recognizability, dynamism and minimalism. Our motto? #NoSportNoFunLivingOn"
+  },
+  "deliverables": {
+    "IT": [
+      "Logo Design: sintesi geometrica cerchio/suddivisioni",
+      "Visual Identity: palette cromatica #E30B17 e #1D1E1B",
+      "Pattern Design: dinamismo vettoriale applicato",
+      "3D Modeling: renderizzazione logo premium",
+      "UI Concept: portale SoloSport.liveSport"
+    ],
+    "EN": [
+      "Logo Design: geometric synthesis circle/subdivisions",
+      "Visual Identity: #E30B17 and #1D1E1B palette",
+      "Pattern Design: applied vector dynamism",
+      "3D Modeling: premium logo rendering",
+      "UI Concept: SoloSport.liveSport portal"
+    ]
+  },
+  "process": {
+    "IT": [
+      "Studio a mano libera: esplorazione forme e dinamismo.",
+      "Sintesi geometrica: fusione cerchio (totalità) e tagli (pluralità).",
+      "Digitalizzazione: costruzione vettoriale millimetrica.",
+      "Rendering 3D: texturizzazione e illuminazione studio."
+    ],
+    "EN": [
+      "Freehand study: exploring shapes and dynamism.",
+      "Geometric synthesis: circle (totality) and cuts (plurality).",
+      "Digitization: precise vector construction.",
+      "3D Rendering: texturing and studio lighting."
+    ]
+  },
+  "outcome": {
+    "IT": "SoloSport rappresenta una visione strategica del branding contemporaneo: coerenza, riconoscibilità e applicabilità reale nel mondo digitale.",
+    "EN": "SoloSport represents a strategic vision of contemporary branding: consistency, recognizability, and real-world applicability."
+  },
+  "tools": [
+    "Illustrator",
+    "Blender",
+    "Photoshop"
+  ],
+  "mainImage": "./images/solosport/solosport-hero.png",
+  "logoUrl": "./images/logosp.png",
+  "gallery": [
+    {
+      "url": "./images/solosport/solosport-hero.png",
+      "label": "SoloSport Hero",
+      "style": {
+        "backgroundColor": "#1a1a1a",
+        "padding": "40px",
+        "borderRadius": "24px",
+        "display": "flex",
+        "alignItems": "center",
+        "justifyContent": "center",
+        "minHeight": "600px",
+        "position": "relative",
+        "border": "1px solid rgba(227, 11, 23, 0.4)",
+        "boxShadow": "0 0 40px rgba(227, 11, 23, 0.6), 0 0 80px rgba(227, 11, 23, 0.3), inset 0 0 20px rgba(227, 11, 23, 0.1)"
+      }
+    },
+    {
+      "url": "./images/solosport/solosport-1.png",
+      "label": "SoloSport Visual",
+      "style": {
+        "backgroundColor": "#1a1a1a",
+        "padding": "40px",
+        "borderRadius": "24px",
+        "display": "flex",
+        "alignItems": "center",
+        "justifyContent": "center",
+        "minHeight": "600px",
+        "position": "relative",
+        "border": "1px solid rgba(227, 11, 23, 0.4)",
+        "boxShadow": "0 0 40px rgba(227, 11, 23, 0.6), 0 0 80px rgba(227, 11, 23, 0.3), inset 0 0 20px rgba(227, 11, 23, 0.1)"
+      }
+    },
+    {
+      "url": "./images/solosport/solosport-2.png",
+      "label": "SoloSport Design",
+      "style": {
+        "backgroundColor": "#1a1a1a",
+        "padding": "40px",
+        "borderRadius": "24px",
+        "display": "flex",
+        "alignItems": "center",
+        "justifyContent": "center",
+        "minHeight": "600px",
+        "position": "relative",
+        "border": "1px solid rgba(227, 11, 23, 0.4)",
+        "boxShadow": "0 0 40px rgba(227, 11, 23, 0.6), 0 0 80px rgba(227, 11, 23, 0.3), inset 0 0 20px rgba(227, 11, 23, 0.1)"
+      }
+    },
+    {
+      "url": "./images/logosp.png",
+      "label": "Logo SoloSport",
+      "style": {
+        "backgroundColor": "#1a1a1a",
+        "padding": "40px",
+        "borderRadius": "24px",
+        "display": "flex",
+        "alignItems": "center",
+        "justifyContent": "center",
+        "minHeight": "400px",
+        "position": "relative",
+        "border": "1px solid rgba(227, 11, 23, 0.4)",
+        "boxShadow": "0 0 40px rgba(227, 11, 23, 0.6), 0 0 80px rgba(227, 11, 23, 0.3), inset 0 0 20px rgba(227, 11, 23, 0.1)"
+      }
+    },
+    {
+      "url": "./images/pattern.png",
+      "label": "Pattern SoloSport",
+      "style": {
+        "backgroundColor": "#1a1a1a",
+        "padding": "40px",
+        "borderRadius": "24px",
+        "display": "flex",
+        "alignItems": "center",
+        "justifyContent": "center",
+        "minHeight": "500px",
+        "border": "1px solid rgba(227, 11, 23, 0.4)",
+        "boxShadow": "0 0 40px rgba(227, 11, 23, 0.6), 0 0 80px rgba(227, 11, 23, 0.3), inset 0 0 20px rgba(227, 11, 23, 0.1)"
+      }
+    },
+    {
+      "url": "./images/solosport/solosport-chatgpt.png",
+      "label": "SoloSport Concept Art",
+      "style": {
+        "backgroundColor": "#1a1a1a",
+        "padding": "40px",
+        "borderRadius": "24px",
+        "display": "flex",
+        "alignItems": "center",
+        "justifyContent": "center",
+        "minHeight": "600px",
+        "position": "relative",
+        "border": "1px solid rgba(227, 11, 23, 0.4)",
+        "boxShadow": "0 0 40px rgba(227, 11, 23, 0.6), 0 0 80px rgba(227, 11, 23, 0.3), inset 0 0 20px rgba(227, 11, 23, 0.1)"
+      }
+    }
+  ]
+}

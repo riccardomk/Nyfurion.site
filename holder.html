@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nyfurion Holder Lounge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #080809;
+      color: #F2F2F2;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+    }
+    .holder-lounge {
+      background: rgba(13, 13, 14, 0.95);
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.2rem;
+      margin-bottom: 1.2rem;
+      color: #00E5FF;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .desc {
+      color: #b0b0b0;
+      margin-bottom: 2.2rem;
+      font-size: 1.1rem;
+    }
+    .connect-btn {
+      background: linear-gradient(135deg, #00E5FF, #E30B17);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 1rem 2.5rem;
+      font-size: 1.1rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-bottom: 1.5rem;
+      transition: background 0.3s;
+    }
+    .connect-btn:hover {
+      background: linear-gradient(135deg, #E30B17, #00E5FF);
+    }
+    .info {
+      color: #a0ffea;
+      margin-top: 1.5rem;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="holder-lounge">
+    <h1>Holder Lounge</h1>
+    <div class="desc">Area esclusiva per i possessori di NFT Nyfurion.<br>Collega il tuo wallet per accedere ai contenuti riservati.</div>
+    <button class="connect-btn" onclick="alert('Funzione di verifica NFT in arrivo!')">Connetti Wallet</button>
+    <div class="info">Solo chi possiede almeno un NFT Nyfurion può accedere.</div>
+  </div>
+</body>
+</html>

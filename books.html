@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nyfurion — Books</title>
+  <link rel="icon" type="image/png" href="https://cdn.nyfurion.com/ipfs/bafkreif52w6ucsqdbbwstt22fellwobdnnztceenycprkurkr4bo3q3lcq" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --matte-black: #080809;
+      --deep-black: #0D0D0E;
+      --accent-red: #E30B17;
+      --accent-cyan: #00E5FF;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      background-color: var(--matte-black);
+      background-image: linear-gradient(rgba(8, 8, 9, 0.85), rgba(8, 8, 9, 0.85)), url('books-bg.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      color: #F2F2F2;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.8;
+    }
+    
+    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
+    
+    ::selection {
+      background: var(--accent-cyan);
+      color: black;
+    }
+    
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--matte-black); }
+    ::-webkit-scrollbar-thumb { background: #1a1a1c; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-red); }
+    
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(13, 13, 14, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 1.5rem 2rem;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .header-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent-red);
+    }
+    
+    .back-btn {
+      padding: 0.75rem 1.5rem;
+      background: var(--deep-black);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: #F2F2F2;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s;
+      border-radius: 2px;
+    }
+    
+    .back-btn:hover {
+      border-color: var(--accent-red);
+      color: var(--accent-red);
+    }
+    
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 9rem 2rem 5rem;
+    }
+    
+    .page-title {
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+      background: linear-gradient(to bottom, #ffffff, #a0a0a0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .page-subtitle {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 4rem;
+      line-height: 1.6;
+    }
+    
+    /* Books Grid */
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .book-card {
+      background: rgba(13, 13, 14, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity: 0;
+      transform: translateY(40px);
+      animation: fadeInUp 0.8s forwards;
+    }
+    
+    .book-card:nth-child(1) { animation-delay: 0.1s; }
+    .book-card:nth-child(2) { animation-delay: 0.2s; }
+    .book-card:nth-child(3) { animation-delay: 0.3s; }
+    .book-card:nth-child(4) { animation-delay: 0.4s; }
+    .book-card:nth-child(5) { animation-delay: 0.5s; }
+    .book-card:nth-child(6) { animation-delay: 0.6s; }
+    .book-card:nth-child(7) { animation-delay: 0.7s; }
+    .book-card:nth-child(8) { animation-delay: 0.8s; }
+    .book-card:nth-child(9) { animation-delay: 0.9s; }
+    
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .book-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--accent-red);
+      box-shadow: 0 20px 40px rgba(227, 11, 23, 0.15);
+    }
+    
+    .book-cover {
+      width: 100%;
+      aspect-ratio: 2/3;
+      background: linear-gradient(135deg, #1a1a1c 0%, #0D0D0E 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .book-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s;
+    }
+    
+    .book-card:hover .book-cover img {
+      transform: scale(1.05);
+    }
+    
+    .book-cover-placeholder {
+      font-size: 4rem;
+      color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .book-info {
+      padding: 2rem;
+    }
+    
+    .book-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      margin-bottom: 0.75rem;
+    }
+    
+    .book-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin-bottom: 1rem;
+      color: #ffffff;
+      line-height: 1.3;
+    }
+    
+    .book-description {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #c0c0c0;
+      margin-bottom: 1.5rem;
+    }
+    
+    .book-meta {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    
+    .book-status {
+      font-size: 0.75rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 3px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    
+    .status-published {
+      background: rgba(0, 229, 255, 0.1);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+    }
+    
+    .status-coming {
+      background: rgba(227, 11, 23, 0.1);
+      color: var(--accent-red);
+      border: 1px solid rgba(227, 11, 23, 0.2);
+    }
+    
+    .status-writing {
+      background: rgba(255, 255, 255, 0.05);
+      color: #a0a0a0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .in-produzione-btn-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+    
+    .in-produzione-btn {
+      background: linear-gradient(135deg, var(--accent-red), #ff1a26);
+      color: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 6px;
+      box-shadow: 0 4px 20px rgba(227, 11, 23, 0.25);
+      cursor: default;
+      letter-spacing: 0.1em;
+      transition: all 0.3s;
+    }
+    
+    .book-date {
+      font-size: 0.85rem;
+      color: #808080;
+    }
+    
+    .book-link {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--accent-red);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 3px;
+      transition: all 0.3s;
+    }
+    
+    .book-link:hover {
+      background: #ff1a26;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(227, 11, 23, 0.3);
+    }
+    
+    /* Club Button */
+    .club-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 2rem 0 3rem;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, var(--accent-red), #ff1a26);
+      color: #ffffff;
+      text-decoration: none;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 40px rgba(227, 11, 23, 0.3);
+    }
+    
+    .club-button:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(227, 11, 23, 0.5);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    
+    .club-button .key-icon {
+      font-size: 1.5rem;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+    
+    /* Section Headers */
+    .section-divider {
+      margin: 5rem 0 3rem;
+      text-align: center;
+    }
+    
+    .section-title-books {
+      font-size: 2rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+    }
+    
+    .section-subtitle-books {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 0.05em;
+    }
+    
+    /* License Card Specific */
+    .license-card {
+      grid-column: 1 / -1;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .license-card .book-cover {
+      background: linear-gradient(135deg, rgba(227, 11, 23, 0.1), rgba(0, 229, 255, 0.1));
+    }
+    
+    .license-card .book-cover-placeholder {
+      font-size: 5rem;
+      color: var(--accent-cyan);
+    }
+    
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .books-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .header {
+        padding: 1rem;
+      }
+      
+      .container {
+        padding: 6rem 1rem 2rem;
+      }
+      
+      .books-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-title">Books</div>
+    <a href="index.html" class="back-btn">← Back Home</a>
+  </header>
+  
+  <!-- Main Content -->
+  <div class="container">
+    <h1 class="page-title">Nyfurion Books</h1>
+    <p class="page-subtitle">La saga completa di Nyfurion attraverso i libri della serie.</p>
+    
+    <!-- Club Button -->
+    <a href="https://www.instagram.com/nyfurion_club/?__pwa=1" target="_blank" class="club-button">
+      <span class="key-icon">🔑</span>
+      <span>Unisciti al Club</span>
+    </a>
+    
+    <!-- Books Grid -->
+    <div class="books-grid">
+      
+      <!-- Book 1 -->
+      <div class="book-card">
+        <div class="book-cover">
+          <img src="book1-cover.png" alt="Nyfurion – L'ascesa del re">
+        </div>
+        <div class="book-info">
+          <div class="book-label">Libro 1</div>
+          <h2 class="book-title">Nyfurion – L'ascesa del re</h2>
+          <p class="book-description">
+            La nascita di Nyfurion e l'inizio dell'avventura nel mondo degli NFT.
+          </p>
+          <div class="book-meta">
+            <span class="book-status status-published">Pubblicato</span>
+            <span class="book-date">2025</span>
+          </div>
+          <a href="https://payhip.com/NyfurionXReborn" target="_blank" class="book-link">Visualizza</a>
+        </div>
+      </div>
+      
+      <!-- Book 2 -->
+      <div class="book-card">
+        <div class="book-cover">
+          <img src="book2-cover.png" alt="The Reborn">
+        </div>
+        <div class="book-info">
+          <div class="book-label">Libro 2</div>
+          <h2 class="book-title">The Reborn</h2>
+          <p class="book-description">
+            ...
+          </p>
+          <div class="book-meta">
+            <span class="book-status status-writing">In scrittura</span>
+            <span class="book-date">TBA</span>
+          </div>
+          <div class="in-produzione-btn-wrapper">
+            <button class="in-produzione-btn">in produzione</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Storia: La Profezia del Vuoto (spostata qui) -->
+      <div class="book-card">
+        <div class="book-cover">
+            <div class="book-cover book-prophecy" style="position: relative;">
+              <img src="profezia-cover.png" alt="Copertina Profezia" style="width:100%; height:100%; object-fit:cover; border-radius: 16px;">
+              <a href="profezia-del-vuoto.html" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,229,255,0.85); color: #111; font-weight: 700; font-size: 1.3rem; padding: 1rem 2.5rem; border-radius: 12px; text-decoration: none; box-shadow: 0 2px 16px 0 rgba(0,0,0,0.18);">APRI</a>
+            </div>
+        </div>
+        <div class="book-info">
+          <div class="book-label">Racconto</div>
+              <h2 class="book-title">La Profezia del Vuoto</h2>
+            <p class="book-description"></p>
+          <div class="book-meta">
+            <span class="book-status status-published">Disponibile</span>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- Second Section: Hidden Secrets -->
+    <div class="section-divider">
+      <h2 class="section-title-books">Segreti Nascosti</h2>
+      <p class="section-subtitle-books">Storie per scoprire le origini</p>
+    </div>
+    
+      <!-- Sezione rimossa su richiesta -->
+    
+    <!-- License Section -->
+    <div class="section-divider">
+      <h2 class="section-title-books">Licenza NFT</h2>
+      <p class="section-subtitle-books">Contratto di licenza per l'utilizzo degli NFT</p>
+    </div>
+    
+    <div class="books-grid">
+      
+      <!-- License Card -->
+      <div class="book-card license-card">
+        <div class="book-cover">
+          <img src="licenza1.png" alt="Licenza NFT" style="width:100%;height:100%;display:block;object-fit:cover;" />
+        </div>
+        <div class="book-info">
+          <div class="book-label">Documento Legale</div>
+          <h2 class="book-title">Licenza d'Uso NFT</h2>
+          <p class="book-description">
+            Contratto ufficiale che regola i diritti e gli obblighi legati all'acquisto e utilizzo 
+            degli NFT della collezione Nyfurion X Reborn. Include termini di proprietà, diritti commerciali 
+            e limitazioni d'uso.
+          </p>
+          <div class="book-meta">
+            <span class="book-status status-published">Documento Ufficiale</span>
+          </div>
+          <a href="https://drive.google.com/file/d/1MT2iBK9I55Yh9vYOdwqEMOfVnMziUJ8g/view" class="book-link" target="_blank" rel="noopener">Visualizza PDF</a>
+        </div>
+      </div>
+      
+    </div>
+    
+  </div>
+</body>
+</html>
