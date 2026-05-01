@@ -1,0 +1,13 @@
+# Segreti — MAI pushare
+cloudflare-worker/.dev.vars
+cloudflare-worker/node_modules/
+
+# File VS Code chat
+## GitHub Copilot Chat.md
+
+# File grandi / inutili per il sito
+*.hdr
+*.glb
+PROMPT-AI-CHARACTER-BUILDER.txt
+scan-assets.bat
+scan-assets.js

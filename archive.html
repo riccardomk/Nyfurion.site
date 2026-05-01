@@ -1,0 +1,734 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nyfurion Holder Archive</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:        #080809;
+      --surface:   rgba(255,255,255,0.04);
+      --border:    rgba(255,255,255,0.10);
+      --cyan:      #00E5FF;
+      --cyan-dim:  rgba(0,229,255,0.18);
+      --text:      #d8f0ff;
+      --muted:     rgba(255,255,255,0.38);
+      --error:     #ff4d6d;
+      --warning:   #ffbb00;
+      --success:   #39ff9c;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 16px 80px;
+    }
+
+    /* ── Header ── */
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    header .label {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 12px;
+    }
+    header h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+    }
+    header p {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      max-width: 480px;
+      line-height: 1.6;
+    }
+
+    /* ── Card generica ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      width: 100%;
+      max-width: 560px;
+      backdrop-filter: blur(12px);
+    }
+
+    /* ── Step connect ── */
+    #step-connect { text-align: center; }
+    #step-connect p { color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; }
+
+    /* ── Scanning state ── */
+    #step-scanning {
+      display: none;
+      text-align: center;
+      padding: 16px 0;
+    }
+    #step-scanning .scan-label {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .spinner-lg {
+      width: 40px; height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--cyan);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      margin: 0 auto;
+    }
+
+    /* ── Token selection ── */
+    #step-tokens { display: none; }
+    #step-tokens .tokens-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 10px;
+    }
+    .token-card {
+      background: rgba(0,229,255,0.06);
+      border: 1px solid rgba(0,229,255,0.22);
+      border-radius: 12px;
+      padding: 16px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .token-card:hover {
+      background: var(--cyan-dim);
+      border-color: var(--cyan);
+      transform: translateY(-2px);
+    }
+    .token-card .tc-num {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--cyan);
+    }
+    .token-card .tc-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── Step files (dopo selezione token) ── */
+    #step-files { display: none; }
+    #step-files-title {
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    /* ── Status box ── */
+    #status-box {
+      display: none;
+      margin-top: 20px;
+      padding: 16px 20px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      border: 1px solid transparent;
+    }
+    #status-box.info    { background: rgba(0,229,255,0.08); border-color: rgba(0,229,255,0.3); color: #b8f4ff; }
+    #status-box.success { background: rgba(57,255,156,0.08); border-color: rgba(57,255,156,0.3); color: #b8ffe0; }
+    #status-box.warning { background: rgba(255,187,0,0.08); border-color: rgba(255,187,0,0.3); color: #ffe9a0; }
+    #status-box.error   { background: rgba(255,77,109,0.08); border-color: rgba(255,77,109,0.3); color: #ffb0bf; }
+
+    /* ── Wallet badge ── */
+    #wallet-badge {
+      display: none;
+      margin-bottom: 20px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    #wallet-badge span {
+      font-family: monospace;
+      color: var(--cyan);
+    }
+
+    /* ── File grid ── */
+    #file-grid {
+      display: none;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 24px;
+      width: 100%;
+      max-width: 560px;
+    }
+    .file-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      text-align: left;
+    }
+    .file-card:hover {
+      border-color: var(--cyan);
+      background: var(--cyan-dim);
+    }
+    .file-card .fc-type {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 6px;
+    }
+    .file-card .fc-label {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    .file-card .fc-hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── Bottoni ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 12px 28px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--cyan);
+      color: #060810;
+      border-color: var(--cyan);
+      font-weight: 700;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+    }
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.3);
+    }
+    .btn-outline:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    #btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Spinner ── */
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(6,8,16,0.3);
+      border-top-color: #060810;
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Disclaimer ── */
+    footer {
+      margin-top: 48px;
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-align: center;
+      max-width: 480px;
+      line-height: 1.6;
+    }
+    footer a { color: var(--cyan); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 480px) {
+      #file-grid { grid-template-columns: 1fr; }
+      .card { padding: 20px; }
+      #btn-row { flex-direction: column; }
+    }
+
+    /* ── Access Denied state ── */
+    #denied-block {
+      display: none;
+      text-align: center;
+      padding: 8px 0;
+    }
+    #denied-block .denied-icon {
+      font-size: 2.8rem;
+      margin-bottom: 16px;
+    }
+    #denied-block .denied-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--error);
+      margin-bottom: 12px;
+      letter-spacing: 0.04em;
+    }
+    #denied-block .denied-msg {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 380px;
+      margin: 0 auto 20px;
+    }
+    .card.card--denied {
+      border-color: rgba(255,77,109,0.4);
+      background: rgba(255,77,109,0.04);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="label">Official Holder Area</div>
+    <h1>Nyfurion<br>Holder Archive</h1>
+    <p>Connect your wallet to access the exclusive files reserved for current Nyfurion X holders.</p>
+  </header>
+
+  <!-- Wallet badge -->
+  <div id="wallet-badge">Connected: <span id="wallet-address"></span></div>
+
+  <!-- Card principale -->
+  <div class="card" id="main-card">
+
+    <!-- Step 1: Connect wallet -->
+    <div id="step-connect">
+      <p>Connect your wallet to access the Nyfurion Holder Archive.</p>
+      <button class="btn btn-primary" id="btn-connect">Connect Wallet</button>
+    </div>
+
+    <!-- Step 2: Scanning wallet -->
+    <div id="step-scanning">
+      <div class="spinner-lg"></div>
+      <div class="scan-label">Verifying ownership on-chain…</div>
+    </div>
+
+    <!-- Step 3: Token selection (se il wallet ha più token) -->
+    <div id="step-tokens">
+      <div class="tokens-label">Your Nyfurion X — select a token to access its archive</div>
+      <div class="token-grid" id="token-grid"></div>
+    </div>
+
+    <!-- Step 4: Files / claim (dopo selezione) -->
+    <div id="step-files">
+      <div id="step-files-title"></div>
+      <div id="status-box"></div>
+      <div id="btn-row">
+        <button class="btn btn-outline" id="btn-back">← Back</button>
+        <button class="btn btn-outline" id="btn-claim" style="display:none">Claim On-Chain</button>
+      </div>
+    </div>
+
+    <!-- Access Denied (nessun NFT nel wallet) -->
+    <div id="denied-block">
+      <div class="denied-icon">🔒</div>
+      <div class="denied-title">Access Denied</div>
+      <div class="denied-msg" id="denied-msg">This wallet does not hold any Nyfurion X token. Only verified holders can access this area.</div>
+    </div>
+
+  </div>
+
+  <!-- File grid (mostrata dopo accesso confermato) -->
+  <div id="file-grid"></div>
+
+  <footer>
+    Files are served privately and protected. Access requires on-chain ownership verification.<br>
+    <a href="/license" target="_blank">Official License</a> · <a href="/archive-info" target="_blank">How it works</a>
+  </footer>
+
+  <!-- ethers.js v6 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.11.1/dist/ethers.umd.min.js"></script>
+
+  <script>
+    // ─── Config ───────────────────────────────────────────────────────────────
+    const WORKER_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:8787'
+      : 'https://nyfurion.com/api';
+
+    const CLAIM_CONTRACT_ADDRESS = '0xdF2c679F5b40373016FCE49702f1f354689E4007';
+    const CLAIM_ABI = [
+      'function claimArchive(uint256 tokenId) external',
+    ];
+
+    // ─── State ────────────────────────────────────────────────────────────────
+    let provider     = null;
+    let signer       = null;
+    let wallet       = null;
+    let sessionToken = null;
+    let activeTokenId = null;
+
+    // ─── DOM refs ─────────────────────────────────────────────────────────────
+    const stepConnect   = document.getElementById('step-connect');
+    const stepScanning  = document.getElementById('step-scanning');
+    const stepTokens    = document.getElementById('step-tokens');
+    const stepFiles     = document.getElementById('step-files');
+    const stepFilesTitle= document.getElementById('step-files-title');
+    const btnConnect    = document.getElementById('btn-connect');
+    const btnClaim      = document.getElementById('btn-claim');
+    const btnBack       = document.getElementById('btn-back');
+    const statusBox     = document.getElementById('status-box');
+    const fileGrid      = document.getElementById('file-grid');
+    const tokenGridEl   = document.getElementById('token-grid');
+    const walletBadge   = document.getElementById('wallet-badge');
+    const walletAddrEl  = document.getElementById('wallet-address');
+    const deniedBlock   = document.getElementById('denied-block');
+    const deniedMsg     = document.getElementById('denied-msg');
+    const mainCard      = document.getElementById('main-card');
+
+    // ─── Connect Wallet ───────────────────────────────────────────────────────
+    btnConnect.addEventListener('click', connectWallet);
+
+    async function connectWallet() {
+      if (!window.ethereum) {
+        alert('No Web3 wallet detected. Please install MetaMask.');
+        return;
+      }
+      setButtonLoading(btnConnect, true, 'Connecting…');
+      try {
+        provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send('eth_requestAccounts', []);
+
+        const network = await provider.getNetwork();
+        if (network.chainId !== 1n) {
+          alert('Please switch to Ethereum Mainnet in your wallet.');
+          setButtonLoading(btnConnect, false, 'Connect Wallet');
+          return;
+        }
+
+        signer = await provider.getSigner();
+        wallet = await signer.getAddress();
+
+        // Mostra wallet badge e scanning
+        walletAddrEl.textContent  = shortAddress(wallet);
+        walletBadge.style.display = 'block';
+        stepConnect.style.display = 'none';
+        stepScanning.style.display = 'block';
+
+        // Autenticazione firma
+        sessionToken = await authenticateWithWorker();
+        if (!sessionToken) {
+          resetToConnect();
+          return;
+        }
+
+        // Scansione token posseduti — blocca subito se zero
+        await scanWalletTokens();
+
+      } catch (err) {
+        console.error(err);
+        alert('Connection failed or rejected.');
+        resetToConnect();
+      }
+    }
+
+    // ─── Autenticazione (nonce → firma → sessionToken) ────────────────────────
+    async function authenticateWithWorker() {
+      try {
+        const nonceRes = await fetch(`${WORKER_BASE}/api/nonce?wallet=${wallet}`);
+        if (!nonceRes.ok) throw new Error('nonce failed');
+        const { nonce, message } = await nonceRes.json();
+
+        const signature = await signer.signMessage(message);
+
+        const verifyRes = await fetch(`${WORKER_BASE}/api/verify-wallet`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ wallet, signature, nonce }),
+        });
+        if (!verifyRes.ok) return null;
+        const data = await verifyRes.json();
+        return data.sessionToken || null;
+
+      } catch (err) {
+        console.error(err);
+        if (err.code === 4001) alert('Signature rejected. You must sign to authenticate.');
+        else alert('Authentication error. Please try again.');
+        return null;
+      }
+    }
+
+    // ─── Scan token posseduti — blocca subito se zero ─────────────────────────
+    async function scanWalletTokens() {
+      try {
+        const res = await fetch(`${WORKER_BASE}/api/my-tokens`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ wallet, sessionToken }),
+        });
+
+        if (!res.ok) {
+          if (res.status === 401) { resetToConnect(); return; }
+          showDenied('Error verifying ownership. Please try again.');
+          return;
+        }
+
+        const { tokens } = await res.json();
+
+        stepScanning.style.display = 'none';
+
+        if (!tokens || tokens.length === 0) {
+          // Nessun NFT → accesso negato immediato
+          showDenied(`Wallet ${shortAddress(wallet)} does not hold any Nyfurion X token. Access is reserved for verified holders only.`);
+          return;
+        }
+
+        if (tokens.length === 1) {
+          // Un solo token → vai diretto al check
+          await selectToken(tokens[0]);
+        } else {
+          // Più token → mostra selezione
+          renderTokenGrid(tokens);
+        }
+
+      } catch (err) {
+        console.error(err);
+        stepScanning.style.display = 'none';
+        showDenied('Network error while verifying ownership.');
+      }
+    }
+
+    // ─── Render token selection grid ──────────────────────────────────────────
+    function renderTokenGrid(tokens) {
+      tokenGridEl.innerHTML = '';
+      for (const id of tokens) {
+        const card = document.createElement('div');
+        card.className = 'token-card';
+        card.innerHTML = `<div class="tc-num">#${id}</div><div class="tc-label">Nyfurion X</div>`;
+        card.addEventListener('click', () => selectToken(id));
+        tokenGridEl.appendChild(card);
+      }
+      stepTokens.style.display = 'block';
+    }
+
+    // ─── Seleziona token → check-access → mostra file o claim ────────────────
+    async function selectToken(tokenId) {
+      activeTokenId = tokenId;
+      stepTokens.style.display  = 'none';
+      stepScanning.style.display = 'block';
+
+      try {
+        const res = await fetch(`${WORKER_BASE}/api/check-access`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ wallet, tokenId, sessionToken }),
+        });
+        const data = await res.json();
+
+        stepScanning.style.display = 'none';
+
+        if (!res.ok) {
+          if (res.status === 401) { resetToConnect(); return; }
+          showDenied(data.error || 'Error checking access.');
+          return;
+        }
+
+        if (!data.isOwner) {
+          showDenied(`Nyfurion X #${tokenId} is no longer in this wallet.`);
+          return;
+        }
+
+        // Mostra step files
+        stepFilesTitle.textContent = `Nyfurion X #${tokenId}`;
+        stepFiles.style.display = 'block';
+
+        if (!data.hasClaimed) {
+          showStatus('You hold this token. Claim your archive on-chain to unlock the files.', 'info');
+          btnClaim.style.display = 'inline-flex';
+        } else if (data.canAccess) {
+          showStatus('Archive unlocked.', 'success');
+          btnClaim.style.display = 'none';
+          await loadFiles(tokenId);
+        }
+
+      } catch (err) {
+        console.error(err);
+        stepScanning.style.display = 'none';
+        showDenied('Network error. Please try again.');
+      }
+    }
+
+    // ─── Back → torna alla selezione token ────────────────────────────────────
+    btnBack.addEventListener('click', async () => {
+      stepFiles.style.display = 'none';
+      fileGrid.style.display  = 'none';
+      fileGrid.innerHTML      = '';
+      hideStatus();
+      stepScanning.style.display = 'block';
+      await scanWalletTokens();
+    });
+
+    // ─── Claim on-chain ───────────────────────────────────────────────────────
+    btnClaim.addEventListener('click', async () => {
+      const tokenId = activeTokenId;
+      setButtonLoading(btnClaim, true, 'Claiming…');
+      showStatus('Confirm the transaction in your wallet (no ETH cost for this action).', 'info');
+      try {
+        const contract = new ethers.Contract(CLAIM_CONTRACT_ADDRESS, CLAIM_ABI, signer);
+        const tx = await contract.claimArchive(tokenId);
+        showStatus('Transaction sent. Waiting for confirmation…', 'info');
+        await tx.wait();
+        showStatus(`Archive claimed! Nyfurion X #${tokenId} is now unlocked.`, 'success');
+        btnClaim.style.display = 'none';
+        await loadFiles(tokenId);
+      } catch (err) {
+        console.error(err);
+        if (err.code === 4001 || err.code === 'ACTION_REJECTED') {
+          showStatus('Transaction rejected by user.', 'warning');
+        } else {
+          showStatus('Claim failed. Please try again.', 'error');
+        }
+      } finally {
+        setButtonLoading(btnClaim, false, 'Claim On-Chain');
+      }
+    });
+
+    // ─── Load file list da archive.json ───────────────────────────────────────
+    async function loadFiles(tokenId) {
+      const fileKey = `token-${String(tokenId).padStart(3, '0')}/archive.json`;
+      try {
+        const res = await fetch(`${WORKER_BASE}/api/get-file`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ wallet, tokenId, fileKey, sessionToken }),
+        });
+        if (!res.ok) {
+          const d = await res.json();
+          showStatus(d.error || 'Could not load archive index.', 'error');
+          return;
+        }
+        const archive = await res.json();
+        renderFileGrid(archive, tokenId);
+      } catch (err) {
+        console.error(err);
+        showStatus('Failed to load file list.', 'error');
+      }
+    }
+
+    // ─── Render file cards ────────────────────────────────────────────────────
+    function renderFileGrid(archive, tokenId) {
+      fileGrid.innerHTML = '';
+      if (!archive.files || archive.files.length === 0) return;
+      for (const file of archive.files) {
+        const card = document.createElement('div');
+        card.className = 'file-card';
+        card.innerHTML = `
+          <div class="fc-type">${file.type}</div>
+          <div class="fc-label">${file.label}</div>
+          <div class="fc-hint">Click to open</div>
+        `;
+        card.addEventListener('click', () => downloadFile(tokenId, file));
+        fileGrid.appendChild(card);
+      }
+      fileGrid.style.display = 'grid';
+    }
+
+    // ─── Download file ────────────────────────────────────────────────────────
+    async function downloadFile(tokenId, file) {
+      try {
+        const res = await fetch(`${WORKER_BASE}/api/get-file`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ wallet, tokenId, fileKey: file.key, sessionToken }),
+        });
+        if (!res.ok) {
+          const d = await res.json();
+          showStatus(d.error || 'Access denied.', 'error');
+          return;
+        }
+        const blob = await res.blob();
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+        a.download = file.key.split('/').pop();
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+      } catch (err) {
+        console.error(err);
+        showStatus('Download failed. Please try again.', 'error');
+      }
+    }
+
+    // ─── Denied block ─────────────────────────────────────────────────────────
+    function showDenied(msg) {
+      stepScanning.style.display = 'none';
+      stepTokens.style.display   = 'none';
+      stepFiles.style.display    = 'none';
+      fileGrid.style.display     = 'none';
+      deniedMsg.textContent      = msg;
+      deniedBlock.style.display  = 'block';
+      mainCard.classList.add('card--denied');
+    }
+
+    // ─── UI helpers ───────────────────────────────────────────────────────────
+    function showStatus(msg, type) {
+      statusBox.textContent   = msg;
+      statusBox.className     = type;
+      statusBox.style.display = 'block';
+    }
+    function hideStatus() { statusBox.style.display = 'none'; }
+
+    function setButtonLoading(btn, loading, label) {
+      btn.disabled  = loading;
+      btn.innerHTML = loading ? `<span class="spinner"></span> ${label}` : label;
+    }
+
+    function shortAddress(addr) { return addr.slice(0, 6) + '…' + addr.slice(-4); }
+
+    function resetToConnect() {
+      stepConnect.style.display   = 'block';
+      stepScanning.style.display  = 'none';
+      stepTokens.style.display    = 'none';
+      stepFiles.style.display     = 'none';
+      deniedBlock.style.display   = 'none';
+      mainCard.classList.remove('card--denied');
+      walletBadge.style.display   = 'none';
+      fileGrid.style.display      = 'none';
+      fileGrid.innerHTML          = '';
+      sessionToken = null; wallet = null; signer = null; activeTokenId = null;
+      btnConnect.disabled  = false;
+      btnConnect.textContent = 'Connect Wallet';
+    }
+
+    // ─── MetaMask account/chain change ────────────────────────────────────────
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', () => location.reload());
+      window.ethereum.on('chainChanged',   () => location.reload());
+    }
+  </script>
+
+</body>
+</html>

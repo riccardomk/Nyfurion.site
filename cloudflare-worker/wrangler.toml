@@ -1,0 +1,26 @@
+name = "nyfurion-holder-archive"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# ─── R2 Binding ───────────────────────────────────────────────────────────────
+[[r2_buckets]]
+binding = "NYFURION_R2"
+bucket_name = "nyfurion-holder-archive"
+
+# ─── KV Namespace (nonce store + rate limiting) ───────────────────────────────
+# Prima del deploy esegui:
+#   npx wrangler kv namespace create NONCE_KV
+# Poi sostituisci PLACEHOLDER con l'ID restituito.
+[[kv_namespaces]]
+binding    = "NONCE_KV"
+id         = "f97f283ccc9f41988521c930869e0627"
+preview_id = "f97f283ccc9f41988521c930869e0627"
+
+# ─── Variabili d'ambiente (non segrete) ───────────────────────────────────────
+[vars]
+OLD_CONTRACT   = "0x37176275788CFe00B355fF74575753D2E2E50203"
+CLAIM_CONTRACT = "0xdF2c679F5b40373016FCE49702f1f354689E4007"
+
+# ─── Segreti (impostare con wrangler secret put, MAI qui) ─────────────────────
+# wrangler secret put RPC_URL
+# wrangler secret put WORKER_SECRET

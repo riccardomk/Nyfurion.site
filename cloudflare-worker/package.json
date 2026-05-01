@@ -1,0 +1,9 @@
+{
+  "name": "nyfurion-holder-archive-worker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@noble/curves": "^1.4.0"
+  }
+}
