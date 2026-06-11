@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nyfurion Custom — Sistema Personaggi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #080809;
+      color: #F2F2F2;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 3rem 1rem 5rem;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #00E5FF;
+      text-decoration: none;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      margin-bottom: 2.5rem;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .back-btn:hover { opacity: 1; }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #00E5FF, #E30B17);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.8rem;
+    }
+    .hero p {
+      color: #8a8a9a;
+      font-size: 1.1rem;
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .section {
+      margin-bottom: 3rem;
+    }
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #00E5FF;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+    .section-title .num {
+      background: rgba(0, 229, 255, 0.1);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      border-radius: 6px;
+      padding: 0.15rem 0.6rem;
+      font-size: 0.85rem;
+      color: #00E5FF;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 1.4rem 1.2rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .card:hover {
+      border-color: rgba(0, 229, 255, 0.25);
+      background: rgba(0, 229, 255, 0.04);
+    }
+    .card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.7rem;
+    }
+    .card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+    .card p {
+      color: #8a8a9a;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .tag {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.85rem;
+      color: #c0c0d0;
+    }
+    .tag.yes { border-color: rgba(0, 229, 255, 0.4); color: #00E5FF; background: rgba(0,229,255,0.06); }
+    .tag.no  { border-color: rgba(227, 11, 23, 0.4); color: #ff5566; background: rgba(227,11,23,0.06); }
+
+    .base-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .base-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #00E5FF;
+      margin-bottom: 0.8rem;
+    }
+    .slot-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .slot {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 0.25rem 0.7rem;
+      font-size: 0.82rem;
+      color: #b0b0c0;
+    }
+
+    .steps {
+      counter-reset: step;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .step {
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 1.2rem 1.4rem;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #00E5FF, #E30B17);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #fff;
+    }
+    .step-content h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #fff;
+      margin-bottom: 0.3rem;
+    }
+    .step-content p {
+      color: #8a8a9a;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .level-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .level-card {
+      border-radius: 12px;
+      padding: 1.4rem 1.2rem;
+      text-align: center;
+    }
+    .level-card.l1 { background: rgba(0,229,255,0.06); border: 1px solid rgba(0,229,255,0.2); }
+    .level-card.l2 { background: rgba(255,200,0,0.06); border: 1px solid rgba(255,200,0,0.2); }
+    .level-card.l3 { background: rgba(227,11,23,0.06); border: 1px solid rgba(227,11,23,0.2); }
+    .level-card .badge {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .level-card.l1 .badge { color: #00E5FF; }
+    .level-card.l2 .badge { color: #ffc800; }
+    .level-card.l3 .badge { color: #ff5566; }
+    .level-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+    .level-card p { color: #8a8a9a; font-size: 0.85rem; line-height: 1.45; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      margin: 2.5rem 0;
+    }
+
+    .cta-box {
+      background: linear-gradient(135deg, rgba(0,229,255,0.08), rgba(227,11,23,0.08));
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+    .cta-box h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 0.7rem;
+    }
+    .cta-box p {
+      color: #8a8a9a;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #00E5FF, #E30B17);
+      color: #fff;
+      text-decoration: none;
+      border: none;
+      border-radius: 8px;
+      padding: 0.9rem 2.2rem;
+      font-size: 1rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .cta-btn:hover { opacity: 0.85; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <a href="holder.html" class="back-btn">← Holder Lounge</a>
+
+    <div class="hero">
+      <h1>Nyfurion Custom</h1>
+      <p>Il sistema ufficiale per creare e vendere personaggi custom del mondo Nyfurion. Partenza semplice, scalabilità totale.</p>
+    </div>
+
+    <!-- BLOCCO 1 — BASE PERSONAGGI -->
+    <div class="section">
+      <div class="section-title"><span class="num">01</span> Base Personaggi</div>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">🧍</div>
+          <h3>Umanoide</h3>
+          <p>Figura base umana, posa neutra frontale. Slot per outfit, capelli, occhi, simboli.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🦎</div>
+          <h3>Bestia / Rettile</h3>
+          <p>Creatura antropomorfa. Testa e mani bestiali, corpo umanizzato.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚔️</div>
+          <h3>Guerriero</h3>
+          <p>Posa da combattimento, armatura base inclusa. Alta personalizzazione.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">✨</div>
+          <h3>Maestro / Elite</h3>
+          <p>Look premium, dettagli mistici. Per personaggi rari o di alto rango.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- BLOCCO 2 — PARTI PERSONALIZZABILI -->
+    <div class="section">
+      <div class="section-title"><span class="num">02</span> Parti Personalizzabili</div>
+      <div class="card-grid">
+        <div class="card"><div class="card-icon">👁️</div><h3>Occhi</h3><p>Colore, forma, effetto luminoso, pupilla.</p></div>
+        <div class="card"><div class="card-icon">💬</div><h3>Bocca / Espressione</h3><p>Neutra, aggressiva, mistica, sorriso.</p></div>
+        <div class="card"><div class="card-icon">💈</div><h3>Capelli / Testa</h3><p>Stile, colore, corna, casco, cappuccio.</p></div>
+        <div class="card"><div class="card-icon">🥋</div><h3>Maglia / Armatura</h3><p>5 outfit per base, colori personalizzabili.</p></div>
+        <div class="card"><div class="card-icon">🔰</div><h3>Simboli / Patch</h3><p>Loghi, sigilli, rune del mondo Nyfurion.</p></div>
+        <div class="card"><div class="card-icon">💎</div><h3>Accessori</h3><p>Catene, armi, guanti, maschere, ali.</p></div>
+        <div class="card"><div class="card-icon">🌟</div><h3>Effetti</h3><p>Aura, fuoco, ghiaccio, energia, ombra.</p></div>
+        <div class="card"><div class="card-icon">🏙️</div><h3>Sfondo</h3><p>3 sfondi ufficiali Nyfurion per base.</p></div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- REGOLE DEL CANONE -->
+    <div class="section">
+      <div class="section-title"><span class="num">03</span> Regole del Canone</div>
+      <div style="margin-bottom:1rem;">
+        <p style="color:#8a8a9a; margin-bottom:0.8rem; font-size:0.9rem;">AMMESSO ✓</p>
+        <div class="tag-list">
+          <span class="tag yes">Rettili</span>
+          <span class="tag yes">Felini</span>
+          <span class="tag yes">Guerrieri umani</span>
+          <span class="tag yes">Esseri mistici</span>
+          <span class="tag yes">Personalizzazione guidata</span>
+          <span class="tag yes">Palette ufficiali</span>
+        </div>
+      </div>
+      <div>
+        <p style="color:#8a8a9a; margin-bottom:0.8rem; font-size:0.9rem;">NON AMMESSO ✗</p>
+        <div class="tag-list">
+          <span class="tag no">Stili fuori canone</span>
+          <span class="tag no">Meme / random</span>
+          <span class="tag no">Creazione totalmente libera</span>
+          <span class="tag no">Loghi esterni</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- SCHEDE BASE -->
+    <div class="section">
+      <div class="section-title"><span class="num">04</span> Schede Base</div>
+
+      <div class="base-card">
+        <h3>Base 01 — Guardian</h3>
+        <div class="slot-row">
+          <span class="slot">Torso standard</span>
+          <span class="slot">3 outfit</span>
+          <span class="slot">5 simboli</span>
+          <span class="slot">4 palette</span>
+          <span class="slot">6 accessori</span>
+        </div>
+      </div>
+
+      <div class="base-card">
+        <h3>Base 02 — Predator</h3>
+        <div class="slot-row">
+          <span class="slot">Corpo bestiale</span>
+          <span class="slot">3 outfit</span>
+          <span class="slot">4 simboli</span>
+          <span class="slot">3 palette</span>
+          <span class="slot">5 accessori</span>
+        </div>
+      </div>
+
+      <div class="base-card">
+        <h3>Base 03 — Mystical</h3>
+        <div class="slot-row">
+          <span class="slot">Forma mistica</span>
+          <span class="slot">3 outfit</span>
+          <span class="slot">6 simboli</span>
+          <span class="slot">5 palette</span>
+          <span class="slot">4 accessori</span>
+          <span class="slot">3 effetti</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- FLUSSO OPERATIVO -->
+    <div class="section">
+      <div class="section-title"><span class="num">05</span> Flusso Operativo</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Definire le regole del mondo</h4>
+            <p>Specie ammesse, colori ufficiali, stile e simboli del canone Nyfurion.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Creare la scheda personaggio base</h4>
+            <p>Nome base, categoria, stile, pose disponibili e slot personalizzabili.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Creare i layer</h4>
+            <p>PNG trasparente 2000×2000px. Base nuda + outfit + patch + accessori + sfondo, tutti allineati.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>Ordine cliente</h4>
+            <p>Il cliente scrive: base, colore, outfit, patch, accessori, mood. Tu monti e mandi anteprima.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h4>Export finale</h4>
+            <p>PNG ad alta risoluzione + versione NFT se richiesta. Consegna e archiviazione.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- LIVELLI DI VENDITA -->
+    <div class="section">
+      <div class="section-title"><span class="num">06</span> Livelli di Vendita</div>
+      <div class="level-grid">
+        <div class="level-card l1">
+          <div class="badge">Livello 1</div>
+          <h3>Base Pronto</h3>
+          <p>Personaggio base già pronto dal catalogo.</p>
+        </div>
+        <div class="level-card l2">
+          <div class="badge">Livello 2</div>
+          <h3>Custom Catalogo</h3>
+          <p>Personaggio custom da scelta guidata tra gli slot ufficiali.</p>
+        </div>
+        <div class="level-card l3">
+          <div class="badge">Livello 3</div>
+          <h3>Premium</h3>
+          <p>Personalizzazione totale approvata dall'autore.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- CTA -->
+    <div class="cta-box">
+      <h2>Pronto a partire?</h2>
+      <p>Il sistema Nyfurion Custom è operativo. Contattaci per avviare il tuo ordine personalizzato o per collaborare come artista ufficiale.</p>
+      <a href="contacts.html" class="cta-btn">Contattaci</a>
+    </div>
+
+  </div>
+</body>
+</html>

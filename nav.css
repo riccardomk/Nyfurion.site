@@ -1,0 +1,83 @@
+/* ============================================================
+   NYFURION — SHARED NAVBAR (horizontal scroll rail, right to left)
+   Identical on phone / tablet / desktop. Used by every page.
+   Requires --accent-red defined on the page (it is, site-wide).
+   ============================================================ */
+#topnav {
+  position:fixed; top:0; left:0; width:100%; z-index:1500;
+  background:rgba(8,8,9,0.72); backdrop-filter:blur(22px) saturate(120%);
+  -webkit-backdrop-filter:blur(22px) saturate(120%);
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  padding-top:env(safe-area-inset-top);
+  --accent-red:#E30B17;
+}
+/* the scroll viewport: single row, fades at both edges, hidden scrollbar */
+#topnav .nav-scroll {
+  overflow-x:auto; overflow-y:hidden; scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch; cursor:grab;
+  scrollbar-width:none; -ms-overflow-style:none;
+  -webkit-mask:linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+          mask:linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+}
+#topnav .nav-scroll::-webkit-scrollbar { display:none; height:0; }
+#topnav .nav-scroll.grabbing { cursor:grabbing; }
+/* the track: centered when it fits, scrolls when it overflows */
+#topnav .nav-track {
+  display:inline-flex; align-items:center; gap:clamp(1.4rem,3vw,2.6rem);
+  min-width:max-content; margin:0 auto;
+  padding:1.15rem clamp(1.8rem,5vw,3rem);
+}
+#topnav a {
+  font-family:'Space Grotesk', sans-serif; font-size:0.7rem; font-weight:500;
+  letter-spacing:0.22em; text-transform:uppercase; color:rgba(242,242,242,0.78);
+  transition:color 0.35s; position:relative; padding:0.3rem 0; min-height:34px;
+  display:inline-flex; align-items:center; justify-content:center; white-space:nowrap;
+  flex:0 0 auto; -webkit-user-select:none; user-select:none; text-decoration:none;
+}
+#topnav a:hover { color:#fff; }
+#topnav a.nav-home {
+  color:#fff; border:1.2px solid var(--accent-red);
+  padding:0.42rem 1.1rem; border-radius:40px;
+  background:linear-gradient(135deg, rgba(227,11,23,0.08), rgba(227,11,23,0.02));
+  font-weight:600; letter-spacing:0.16em;
+  transition:all 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+#topnav a.nav-home:hover {
+  background:rgba(227,11,23,0.18); box-shadow:0 0 20px rgba(227,11,23,0.4); transform:translateY(-2px);
+}
+#topnav a.nav-home::after { display:none; }
+#topnav a.active { color:#fff; }
+#topnav a::after {
+  content:''; position:absolute; left:50%; bottom:0; width:0; height:1px;
+  background:var(--accent-red); transition:all 0.35s ease; transform:translateX(-50%);
+}
+#topnav a:hover::after, #topnav a.active::after { width:100%; }
+#topnav a.nav-cta {
+  color:#fff; border:1px solid rgba(255,255,255,0.22);
+  padding:0.5rem 1.2rem; border-radius:40px; letter-spacing:0.18em;
+}
+#topnav a.nav-cta::after { display:none; }
+#topnav a.nav-cta:hover { border-color:var(--accent-red); background:rgba(227,11,23,0.12); }
+#topnav .nav-sep { flex:0 0 auto; width:1px; height:14px; background:rgba(255,255,255,0.15); }
+/* thin red progress line that fills as the rail scrolls right to left */
+#topnav .nav-prog { height:1.5px; width:100%; background:transparent; position:relative; overflow:hidden; }
+#topnav .nav-prog::before {
+  content:''; position:absolute; left:0; top:0; height:100%;
+  width:var(--p,0%); background:linear-gradient(to right, transparent, var(--accent-red));
+  transition:width 0.15s linear; opacity:0;
+}
+#topnav .nav-prog.show::before { opacity:1; }
+@media (max-width:860px){
+  #topnav .nav-track { gap:1.4rem; padding:0.85rem 1.4rem; }
+  #topnav a { font-size:0.62rem; letter-spacing:0.12em; min-height:38px; }
+  #topnav a.nav-home { padding:0.4rem 0.95rem; font-size:0.6rem; border-width:1px; }
+  #topnav a.nav-cta { padding:0.5rem 0.9rem; }
+}
+@media (max-width:560px){
+  #topnav .nav-track { gap:1.15rem; padding:0.75rem 1.2rem; }
+  #topnav a { min-height:34px; font-size:0.56rem; letter-spacing:0.1em; }
+  #topnav a.nav-cta { padding:0.42rem 0.8rem; }
+}
+@media (max-width:340px){
+  #topnav .nav-track { gap:0.95rem; }
+}

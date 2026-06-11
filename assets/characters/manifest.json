@@ -1,0 +1,41 @@
+{
+  "base": [
+    {
+      "id": "base_1",
+      "label": "Base 1",
+      "file": "base_1.png"
+    },
+    {
+      "id": "base_2",
+      "label": "Base 2",
+      "file": "base_2.png"
+    },
+    {
+      "id": "base_3",
+      "label": "Base 3",
+      "file": "base_3.png"
+    },
+    {
+      "id": "base_4",
+      "label": "Base 4",
+      "file": "base_4.png"
+    },
+    {
+      "id": "base_5",
+      "label": "Base 5",
+      "file": "base_5.png"
+    },
+    {
+      "id": "base_6",
+      "label": "Base 6",
+      "file": "base_6.png"
+    }
+  ],
+  "bodyExtras": [],
+  "head": [],
+  "eyes": [],
+  "hair": [],
+  "headElements": [],
+  "outfit": [],
+  "accessory": []
+}

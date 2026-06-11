@@ -2,300 +2,664 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nyfurion — Lore</title>
-  <!-- Favicon IPFS rimossa su richiesta -->
+  <title>Nyfurion — The Lore</title>
+  <link rel="icon" type="image/png" href="https://cdn.nyfurion.com/ipfs/bafkreif52w6ucsqdbbwstt22fellwobdnnztceenycprkurkr4bo3q3lcq" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+  <!-- Two fonts only: Space Grotesk (UI/headings, same as whole site) + Cormorant Garamond (the book text) -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="nav.css">
   <style>
     :root {
       --matte-black: #080809;
       --deep-black: #0D0D0E;
       --accent-red: #E30B17;
       --accent-cyan: #00E5FF;
+      --ink: #d9d4c8;            /* warm parchment ink */
+      --book-height: min(64vh, 560px);
+      --book-display-scale: 1;
+      --book-page-pad-y: clamp(1.35rem, 2.25vw, 1.8rem);
+      --book-page-pad-x: clamp(1.55rem, 2.85vw, 2.2rem);
+      --book-body-size: clamp(1.08rem, 1.18vw, 1.18rem);
+      --book-body-leading: 1.48;
+      --book-paragraph-gap: 0.6rem;
+      --page-turn-duration: 0.9s;
     }
-    
+    html.book-ultra-compact {
+      --book-height: min(60vh, 510px);
+      --book-page-pad-y: 1.35rem;
+      --book-page-pad-x: 1.55rem;
+      --book-body-size: clamp(1.05rem, 1.15vw, 1.15rem);
+      --book-body-leading: 1.45;
+      --book-paragraph-gap: 0.52rem;
+    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      background-color: var(--matte-black);
-      background-image: linear-gradient(rgba(8, 8, 9, 0.85), rgba(8, 8, 9, 0.85)), url('lore-bg.png');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
-      color: #F2F2F2;
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
-    }
-    
-    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
-    
-    /* Header */
+    html { scroll-behavior: smooth; }
+    body { background: var(--matte-black); color: #ECECEC; font-family: 'Space Grotesk', sans-serif; overflow-x: hidden; }
+    ::selection { background: var(--accent-cyan); color: #000; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--matte-black); }
+    ::-webkit-scrollbar-thumb { background: #1a1a1c; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-red); }
+
+    #progress-bar { position: fixed; top: 0; left: 0; height: 3px; width: 0%; background: linear-gradient(to right, var(--accent-red), var(--accent-cyan)); z-index: 300; transition: width 0.1s; }
+
     .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(13, 13, 14, 0.95);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 1.5rem 2rem;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      position: fixed; top: 0; left: 0; width: 100%;
+      background: rgba(8,8,9,0.7); backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      padding: 1.2rem 2rem; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    
-    .header-title {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--accent-red);
-    }
-    
+    .header-title { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent-red); }
     .back-btn {
-      padding: 0.75rem 1.5rem;
-      background: var(--deep-black);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      color: #F2F2F2;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: all 0.3s;
-      border-radius: 2px;
+      padding: 0.6rem 1.4rem; background: rgba(13,13,14,0.6); border: 1px solid rgba(255,255,255,0.08);
+      color: #F2F2F2; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+      text-decoration: none; transition: all 0.3s; border-radius: 2px;
     }
-    
-    .back-btn:hover {
-      border-color: var(--accent-red);
-      color: var(--accent-red);
+    .back-btn:hover { border-color: var(--accent-red); color: var(--accent-red); }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative; min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center; padding: 6rem 1.5rem;
+      background:
+        linear-gradient(rgba(8,8,9,0.62), rgba(8,8,9,0.82) 55%, rgba(8,8,9,0.99)), url('assets/characters/portraits/12.png');
+      background-size: cover; background-position: center top; background-attachment: fixed;
     }
-    
-    /* Main Content */
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 8rem 2rem 4rem;
+    .hero .eyebrow { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.55em; text-transform: uppercase; color: #8a8a8a; margin-bottom: 2rem; opacity: 0; animation: fade 1.2s .2s forwards; }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif; font-weight: 500;
+      font-size: clamp(3.4rem, 13vw, 9rem); letter-spacing: 0.01em; line-height: 0.92; color: #f4eee2;
+      margin-bottom: 2rem; opacity: 0; animation: fade 1.2s .4s forwards;
     }
-    
-    .page-title {
-      font-size: clamp(3rem, 8vw, 6rem);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 3rem;
-      background: linear-gradient(to bottom, #ffffff, #a0a0a0);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .hero .tag { max-width: 600px; font-family: 'Cormorant Garamond', serif; font-size: clamp(1.3rem,2.6vw,1.7rem); font-style: italic; line-height: 1.6; color: #d6d6d6; opacity: 0; animation: fade 1.2s .7s forwards; }
+    .scroll-hint { position: absolute; bottom: 2.5rem; font-size: 1.5rem; color: rgba(255,255,255,0.45); animation: bounce 2s infinite; text-decoration: none; }
+    @keyframes fade { to { opacity: 1; } }
+    @keyframes bounce { 0%,100% { transform: translateY(0);} 50% { transform: translateY(10px);} }
+
+    /* ===== STORY ===== */
+    .story { position: relative; }
+
+    /* book page — reading column, editorial */
+    .verse {
+      max-width: 600px; margin: 0 auto; padding: 3.5rem 2rem;
+      opacity: 0; transform: translateY(36px); transition: opacity 1.1s ease, transform 1.1s ease;
     }
-    
-    /* Story Sections */
-    .story-section {
-      margin-bottom: 4rem;
-      opacity: 0;
-      transform: translateY(40px);
-      animation: fadeInUp 0.8s forwards;
+    .verse.visible { opacity: 1; transform: translateY(0); }
+    .verse p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.4rem, 2.3vw, 1.7rem); line-height: 1.8; color: var(--ink); margin-bottom: 1.4rem;
+      text-align: left;
     }
-    
-    /* Video Container */
-    .video-container {
-      margin-bottom: 4rem;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      background: rgba(13, 13, 14, 0.5);
-      opacity: 0;
-      transform: translateY(40px);
-      animation: fadeInUp 0.8s forwards;
+    .verse p:last-child { margin-bottom: 0; }
+    /* Drop cap — refined, monochrome, same family */
+    .verse.opening p:first-of-type::first-letter {
+      font-family: 'Cormorant Garamond', serif; font-weight: 500;
+      float: left; font-size: 5.2em; line-height: 0.62; padding: 0.04em 0.16em 0 0;
+      color: #f3ede0;
     }
-    
-    .video-container video {
-      width: 100%;
-      height: auto;
-      display: block;
+    /* a single, quiet accent: highlighted names just slightly warmer/lighter, italic */
+    .verse p .hl, .verse p .hl-red { color: #f2ede2; font-style: italic; }
+    .verse a.hl, .verse a.hl-red { color: #f2ede2; font-style: italic; text-decoration: none; border-bottom: 1px solid rgba(227,11,23,0.45); padding-bottom: 1px; }
+    .verse a.hl:hover, .verse a.hl-red:hover { border-bottom-color: var(--accent-red); }
+
+    /* chapter heading — restrained, editorial */
+    .act { text-align: center; padding: 8rem 1.5rem 1rem; }
+    .act .act-num {
+      font-size: 0.7rem; font-weight: 500; letter-spacing: 0.6em; text-transform: uppercase;
+      color: #6b6b6b; margin-bottom: 1.6rem;
     }
-    
-    .story-section:nth-child(1) { animation-delay: 0.1s; }
-    .story-section:nth-child(2) { animation-delay: 0.2s; }
-    .story-section:nth-child(3) { animation-delay: 0.3s; }
-    .story-section:nth-child(4) { animation-delay: 0.4s; }
-    .story-section:nth-child(5) { animation-delay: 0.5s; }
-    
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
+    .act h2 {
+      font-family: 'Cormorant Garamond', serif; font-weight: 500;
+      font-size: clamp(2.2rem, 5.5vw, 3.8rem); letter-spacing: 0.01em; line-height: 1.05; color: #f3ede0;
+    }
+    /* hairline rule under title — one thin red mark, nothing else */
+    .ornament { width: 1px; height: 46px; margin: 1.8rem auto 0; background: linear-gradient(to bottom, var(--accent-red), transparent); }
+    .ornament span { display: none; }
+
+    /* cinematic image break (kept as you liked it) */
+    .scene {
+      position: relative; height: 90vh; margin: 3rem 0;
+      background-size: cover; background-position: center 18%; background-attachment: fixed;
+      display: flex; align-items: flex-end; justify-content: center;
+    }
+    .scene::before { content:""; position:absolute; inset:0; background: linear-gradient(to bottom, rgba(8,8,9,0.85) 0%, transparent 30%, transparent 55%, rgba(8,8,9,0.95) 100%); }
+    .scene .scene-caption { position: relative; z-index: 2; text-align: center; padding-bottom: 6rem; max-width: 720px; padding-left:1.5rem; padding-right:1.5rem; }
+    .scene .scene-caption .who { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.4em; text-transform: uppercase; color: #9a9a9a; margin-bottom: 1.1rem; }
+    .scene .scene-caption .quote { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500; font-size: clamp(1.7rem, 4vw, 2.7rem); color: #f4eee2; line-height: 1.4; text-shadow: 0 2px 30px rgba(0,0,0,0.7); }
+
+    /* CTA — sober, editorial */
+    .lore-cta { max-width: 620px; margin: 5rem auto 8rem; padding: 0 2rem; text-align: center; }
+    .lore-cta h2 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(2rem,4vw,3rem); color:#f3ede0; margin-bottom: 1.2rem; letter-spacing: 0.01em; }
+    .lore-cta p { font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-style:italic; color:#a8a298; margin: 0 auto 2.5rem; max-width: 460px; line-height:1.7; }
+    .btn-primary, .btn-ghost {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; text-decoration: none;
+      padding: 1rem 2.2rem; border-radius: 1px; transition: all 0.4s cubic-bezier(0.16,1,0.3,1); display: inline-block; margin: 0.4rem;
+    }
+    .btn-primary { background: var(--accent-red); color: #fff; border: 1px solid var(--accent-red); }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(227,11,23,0.3); }
+    .btn-ghost { background: transparent; color: #cfcabf; border: 1px solid rgba(255,255,255,0.18); }
+    .btn-ghost:hover { border-color: #f3ede0; color: #f3ede0; }
+
+    /* ===== CINEMATIC HORIZONTAL TRANSITION ===== */
+    #transition { position: relative; height: 250vh; }       /* tall = scroll distance for the effect */
+    .transition-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+    .t-panel {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      padding: 1rem; will-change: transform, opacity;
+    }
+    .t-book { flex-direction: column; padding-top: 5rem; }   /* clear the fixed header */
+    .t-eyebrow { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.5em; text-transform: uppercase; color: #8f8f8f; margin-bottom: 1.4rem; text-shadow: 0 0 18px rgba(255,255,255,0.1); }
+    /* panel A — lore exit */
+    .t-lore-inner { max-width: 620px; text-align: center; }
+    .t-lore-title { font-family:'Cormorant Garamond',serif; font-weight:500; font-size: clamp(2.2rem,5vw,3.6rem); color:#f3ede0; line-height:1.1; margin-bottom: 1.4rem; }
+    .t-lore-sub { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.35rem; color:#a8a298; line-height:1.7; }
+    .t-arrow { margin-top: 2.5rem; font-size: 2rem; color: var(--accent-red); animation: nudge 1.6s infinite; }
+    @keyframes nudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(12px);} }
+    /* panel B — centered flipbook */
+    .book-center { text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .book-center > .t-eyebrow { margin-bottom: 1.15rem; color: #b8b8b8; }
+
+    /* ===== FLIPBOOK ===== */
+    .flipbook {
+      position: relative; height: var(--book-height); aspect-ratio: 3/4; width: auto; margin: 0 auto;
+      perspective: 2800px; cursor: pointer;
+      transform: scale(var(--book-display-scale));
+      transform-origin: center center;
+    }
+    /* ambient glow behind the book fills the empty space elegantly */
+    .flipbook::before {
+      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+      width:150%; height:135%; z-index:-1; pointer-events:none;
+      background: radial-gradient(ellipse at center, rgba(227,11,23,0.10), rgba(0,229,255,0.04) 38%, transparent 68%);
+      filter: blur(20px);
+    }
+    .flipbook::after { content:""; position:absolute; inset:0; pointer-events:none; }
+    .fb-stack { position: absolute; inset: 0; transform-style: preserve-3d; }
+    .fb-page {
+      position: absolute; inset: 0; border-radius: 3px 10px 10px 3px; overflow: hidden;
+      background: linear-gradient(120deg, #efe6d2 0%, #e7dcc4 100%);
+      box-shadow: 0 40px 90px rgba(0,0,0,0.7);
+    }
+    .fb-under { z-index: 1; }
+    .fb-under::after {
+      content:""; position:absolute; inset:0; z-index:8; pointer-events:none; opacity:0;
+      background: linear-gradient(90deg, rgba(0,0,0,0.2), rgba(0,0,0,0) 34%, rgba(255,255,255,0.12) 64%, rgba(0,0,0,0.08));
+    }
+    .flipbook.turning-next .fb-under::after { animation: underPageShade var(--page-turn-duration) ease forwards; }
+    .flipbook.turning-prev .fb-under::after {
+      animation: underPageShade var(--page-turn-duration) ease forwards;
+    }
+    .fb-top {
+      z-index: 2; transform-origin: left center; transform-style: preserve-3d; overflow: hidden;
+      will-change: transform, filter, box-shadow;
+    }
+    .fb-back {
+      position:absolute; inset:0; z-index:1; border-radius:3px 10px 10px 3px;
+      background:
+        linear-gradient(to left, rgba(120,90,40,0.12), transparent 8%),
+        linear-gradient(135deg, #f3ead7 0%, #eadfc7 100%);
+      transform: rotateY(180deg) translateZ(0.6px);
+      backface-visibility:hidden; -webkit-backface-visibility:hidden;
+      box-shadow: inset 18px 0 28px rgba(112,79,30,0.12), inset -10px 0 20px rgba(255,255,255,0.25);
+    }
+    .fb-top .fb-shade {
+      position:absolute; inset:0; z-index:10; pointer-events:none; opacity:0;
+      backface-visibility:hidden; -webkit-backface-visibility:hidden;
+    }
+    .fb-top.flip-next {
+      transform-origin: left center;
+      animation: flipNext var(--page-turn-duration) cubic-bezier(0.4,0.15,0.3,1) forwards;
+    }
+    .fb-top.flip-prev {
+      transform-origin: left center;
+      animation: flipPrev var(--page-turn-duration) cubic-bezier(0.4,0.15,0.3,1) forwards;
+    }
+    .fb-top.flip-next .fb-shade {
+      background: linear-gradient(90deg, rgba(0,0,0,0.34), rgba(0,0,0,0.04) 45%, rgba(255,255,255,0.2) 72%, rgba(0,0,0,0.22));
+      animation: shadeTurn var(--page-turn-duration) ease forwards;
+    }
+    .fb-top.flip-prev .fb-shade {
+      background: linear-gradient(90deg, rgba(0,0,0,0.34), rgba(0,0,0,0.04) 45%, rgba(255,255,255,0.2) 72%, rgba(0,0,0,0.22));
+      animation: shadeTurn var(--page-turn-duration) ease forwards;
+    }
+    @keyframes flipNext {
+      from { transform: rotateY(0deg); }
+      to   { transform: rotateY(-180deg); }
+    }
+    @keyframes flipPrev {
+      from { transform: rotateY(-180deg); }
+      to   { transform: rotateY(0deg); }
+    }
+    @keyframes shadeTurn { 0%,100%{opacity:0;} 35%{opacity:0.36;} 58%{opacity:0.62;} 82%{opacity:0.22;} }
+    @keyframes underPageShade { 0%,100%{opacity:0;} 46%{opacity:0.35;} 70%{opacity:0.18;} }
+    .fb-top .fb-cover, .fb-top .fb-paper {
+      z-index:2; backface-visibility: hidden; -webkit-backface-visibility:hidden; transform: translateZ(0.7px);
+      box-shadow: inset -8px 0 16px rgba(255,255,255,0.2);
+    }
+
+    /* cover */
+    .fb-cover { position: absolute; inset: 0; }
+    .fb-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .fb-spine { position:absolute; left:0; top:0; bottom:0; width:16px; background: linear-gradient(to right, rgba(0,0,0,0.7), transparent); }
+
+    /* paper page */
+    .fb-paper {
+      position: absolute; inset: 0; padding: var(--book-page-pad-y) var(--book-page-pad-x);
+      display: flex; flex-direction: column;
+      background:
+        linear-gradient(to right, rgba(120,90,40,0.12), transparent 7%),
+        linear-gradient(135deg, #f7efdd 0%, #f1e7d0 100%);
+      color: #2a2114;
+    }
+    .fb-ch-label { text-align:center; font-family:'Space Grotesk',sans-serif; font-size:0.52rem; font-weight:600; letter-spacing:0.24em; text-transform:uppercase; color:#9a7b3c; margin-bottom:0.32rem; }
+    .fb-ch-title { text-align:center; font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(1.02rem,1.85vw,1.34rem); color:#3a2f1e; line-height:1.02; margin-bottom:0.48rem; }
+    .fb-ch-rule { width:28px; height:1px; background:var(--accent-red); margin:0 auto 0.7rem; }
+    .fb-body { font-family:'Cormorant Garamond',serif; font-weight:500; font-size:var(--book-body-size); line-height:var(--book-body-leading); color:#2a2114; flex:1; overflow:hidden; text-align:justify; }
+    .fb-body p { margin-bottom:var(--book-paragraph-gap); }
+    .fb-body.dropcap p:first-of-type::first-letter { float:left; font-size:2.8em; line-height:0.62; padding:0.04em 0.08em 0 0; color:var(--accent-red); font-weight:700; }
+    .fb-folio { text-align:center; font-family:'Cormorant Garamond',serif; font-size:0.76rem; color:#8a7550; margin-top:0.32rem; }
+    html.book-ultra-compact .fb-ch-label { font-size:0.5rem; margin-bottom:0.3rem; }
+    html.book-ultra-compact .fb-ch-title { font-size:clamp(0.98rem,1.55vw,1.22rem); margin-bottom:0.44rem; }
+    html.book-ultra-compact .fb-ch-rule { margin-bottom:0.6rem; }
+    html.book-ultra-compact .fb-body.dropcap p:first-of-type::first-letter { font-size:2.55em; }
+    html.book-ultra-compact .fb-folio { font-size:0.72rem; margin-top:0.28rem; }
+
+    /* hidden measuring box = EXACT clone of a real page (so text never overflows) */
+    #fb-measure {
+      position: absolute; left: -9999px; top: 0; visibility: hidden;
+      height: var(--book-height); width: calc(var(--book-height) * 3 / 4);
+      padding: var(--book-page-pad-y) var(--book-page-pad-x);
+      box-sizing: border-box;
+    }
+    /* in measure, body grows naturally (no flex:1) so scrollHeight reflects true height */
+    #fb-measure .fb-body { overflow: visible; }
+
+    /* controls */
+    .fb-controls { display:flex; align-items:center; justify-content:center; gap:1.2rem; margin-top:3.2rem; }
+    .r-btn {
+      background:transparent; border:1px solid rgba(255,255,255,0.2); color:#cfcabf; cursor:pointer;
+      font-family:'Space Grotesk',sans-serif; font-size:0.85rem; font-weight:600; letter-spacing:0.1em;
+      min-width:44px; padding:0.6rem 1rem; border-radius:2px; transition:all 0.3s;
+    }
+    .r-btn:hover:not(:disabled) { border-color:var(--accent-red); color:#fff; }
+    .r-btn:disabled { opacity:0.3; cursor:not-allowed; }
+    .r-progress { font-family:'Space Grotesk',sans-serif; font-size:0.72rem; letter-spacing:0.15em; color:#8a8276; min-width:90px; text-align:center; }
+
+    @media (max-width: 900px) {
+      :root {
+        --book-height: min(63vh, 500px);
+        --book-display-scale: 1;
+        --book-page-pad-y: 1rem;
+        --book-page-pad-x: 1.05rem;
+        --book-body-size: clamp(0.92rem, 2.9vw, 1.04rem);
+        --book-body-leading: 1.42;
+        --book-paragraph-gap: 0.48rem;
       }
-    }
-    
-    .story-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--accent-red);
-      margin-bottom: 0.75rem;
-    }
-    
-    .story-title {
-      font-size: 2rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      margin-bottom: 1.5rem;
-      color: #ffffff;
-    }
-    
-    .story-content {
-      font-size: 1.1rem;
-      line-height: 1.9;
-      color: #c0c0c0;
-      margin-bottom: 1.5rem;
-    }
-    
-    .story-highlight {
-      color: var(--accent-cyan);
-      font-weight: 600;
-    }
-    
-    .divider {
-      width: 60px;
-      height: 2px;
-      background: linear-gradient(to right, var(--accent-red), transparent);
-      margin: 3rem 0;
-    }
-    
-    /* Footer */
-    .lore-footer {
-      margin-top: 4rem;
-      padding: 2rem;
-      background: rgba(13, 13, 14, 0.5);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      text-align: center;
-      font-size: 0.875rem;
-      line-height: 1.8;
-      color: #a0a0a0;
-    }
-    
-    .lore-footer strong {
-      color: #ffffff;
-      display: block;
-      margin-top: 1rem;
-    }
-    
-    /* Responsive */
-    @media (max-width: 768px) {
-      .header {
-        padding: 1rem;
-      }
-      
-      .container {
-        padding: 6rem 1rem 2rem;
-      }
-      
-      .story-title {
-        font-size: 1.5rem;
-      }
-      
-      .story-content {
-        font-size: 1rem;
-      }
+      .hero, .scene { background-attachment: scroll; }
+      .scene { height: 72vh; }
+      .verse { padding: 3.5rem 1.4rem; }
+      .verse p { text-align: left; }
+      .book-stage { grid-template-columns: 1fr; gap: 1.5rem; text-align:center; }
+      .book-cover-3d { max-width: 200px; margin: 0 auto; transform:none; }
+      .reader .r-page p { text-align: left; }
+      #transition { height: 220vh; }
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="header">
-    <div class="header-title">Lore</div>
-    <a href="index.html" class="back-btn">← Back Home</a>
-  </header>
-  
-  <!-- Main Content -->
-  <div class="container">
-    <h1 class="page-title">Nyfurion Lore</h1>
-    
-    <!-- Video Trailer rimosso su richiesta -->
-    
-    <div class="story-section">
-      <div class="story-label">Chapter I</div>
-      <h2 class="story-title">The War of Balance and the Fate of the Guardians</h2>
-      <p class="story-content">
-        <span class="story-highlight">Nyfurion</span>, the realm suspended between light and darkness, was not always a battlefield. Once, under the guidance of the King of Nyfurion, it thrived in harmony—no wars, no divisions. The sovereign, gifted with unparalleled wisdom, knew he could not rule forever. He had to choose an heir.
-      </p>
-      <p class="story-content">
-        He was the father of three children, each with a different vision of the world. When the day of succession arrived, he chose the eldest—the one who demonstrated discipline, justice, and inner strength: <span class="story-highlight">the Legendary Supreme</span>. But this decision did not come without consequences.
-      </p>
-      <div class="divider"></div>
+  <div id="progress-bar"></div>
+
+  <nav id="topnav">
+    <div class="nav-scroll" id="navScroll">
+      <div class="nav-track">
+        <a href="index.html" class="nav-home">Home</a>
+        <a href="lore.html" class="active">Lore</a>
+        <a href="characters.html">Characters</a>
+        <a href="roadmap.html">Roadmap</a>
+        <a href="nfts.html">NFTs</a>
+        <a href="contacts.html">Contact</a>
+        <span class="nav-sep"></span>
+        <a href="index.html#choose" class="nav-cta">Choose Your Side</a>
+      </div>
     </div>
-    
-    <div class="story-section">
-      <div class="story-label">Chapter II</div>
-      <h2 class="story-title">The Rise of Dark Power</h2>
-      <p class="story-content">
-        The second born, the most ambitious, the most tormented, had long awaited the day he would inherit power. When he was excluded, he was overcome with rage. A void grew within him, a deep thirst for revenge. That day, the <span class="story-highlight">Dark Power of Evil</span> was born—the one who would defy order and shatter balance.
-      </p>
-      <p class="story-content">
-        He refused to accept his father's decision. He gathered followers among those who did not want to be ruled, those who saw the Legendary Supreme as a tyrant disguised as a savior. Thus, the <span class="story-highlight">Baby Rebels</span> emerged—young warriors who despise imposed order and reject civilization. To them, chaos is freedom.
-      </p>
-      <p class="story-content">
-        But in this war between good and evil, there is one figure watching from the shadows: <span class="story-highlight">The Queen</span>, the third descendant, who has never fought but holds in her hands the last spark of primordial power. She takes no side, but if Nyfurion falls, she will decide the kingdom's fate.
-      </p>
-      <div class="divider"></div>
+    <div class="nav-prog" id="navProg" aria-hidden="true"></div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="eyebrow">The Chronicle of the Realm</div>
+    <h1>The Lore of<br>Nyfurion</h1>
+    <p class="tag">A realm suspended between light and darkness. A kingdom born to last forever, until a single choice set it ablaze.</p>
+    <a href="#start" class="scroll-hint">▾</a>
+  </section>
+
+  <div class="story" id="start">
+
+    <!-- ACT I -->
+    <div class="act"><div class="act-num">Act One</div><h2>The War of Balance</h2><div class="ornament"><span>❖</span></div></div>
+
+    <div class="verse opening">
+      <p>Nyfurion, the realm suspended between light and darkness, was not always a battlefield. Once, under the guidance of a wise king, <span class="hl-red">Ash</span>, it thrived in harmony. No wars. No divisions. A kingdom born to last forever.</p>
     </div>
-    
-    <div class="story-section">
-      <div class="story-label">Chapter III</div>
-      <h2 class="story-title">The Creation of the Guardians</h2>
-      <p class="story-content">
-        As conflict spread, the Legendary Supreme realized he could not face it alone. Armies were not enough. Courage was not enough. The heart of Nyfurion had to be sealed.
-      </p>
-      <p class="story-content">
-        At the center of the realm existed a forbidden gateway: the <span class="story-highlight">Unique Portal</span>. No one knew what lay beyond it, but it was said to contain absolute power—something capable of rewriting reality itself. If Dark Power reached it, Nyfurion would fall.
-      </p>
-      <p class="story-content">
-        That was when <span class="story-highlight">The Guardians of the Portal</span> were chosen. They were not ordinary warriors. Each had followed a precise path, honed their skills, and sacrificed their existence to protect the gateway. The Eternal Guardian, the only one who has seen the Portal open and close. He survived and still awaits the day when it will be needed again.
-      </p>
-      <div class="divider"></div>
+
+    <!-- SCENE: ASH -->
+    <div class="scene" style="background-image:url('assets/characters/portraits/12.png');">
+      <div class="scene-caption">
+        <div class="who">Ash · The First True King</div>
+        <div class="quote">"Power without love is only destruction. I choose to protect, not to rule."</div>
+      </div>
     </div>
-    
-    <div class="story-section">
-      <div class="story-label">Chapter IV</div>
-      <h2 class="story-title">The Shadow Predators and the Silent War</h2>
-      <p class="story-content">
-        As war intensifies, another danger grows in the streets of Nyfurion. The <span class="story-highlight">Shadow Predators</span> are infiltrators with no faction. They serve neither good nor evil but steal everything of value from the homes of neutrals, weakening and isolating them.
-      </p>
-      <p class="story-content">
-        They do not wish to rule Nyfurion. They only seek to profit from its downfall. No one sees them. No one stops them.
-      </p>
-      <div class="divider"></div>
+
+    <div class="verse">
+      <p>But peace is never eternal. A slow illness crept into the King, sentencing him to death. Tormented and full of doubt, Ash was forced to choose a single heir among his three children.</p>
+      <p>He chose the one who carried discipline, justice, and inner strength: <a href="characters.html#tyri" class="hl">Tyri, the Legendary Supreme</a>. That choice would shatter a family, and light a war that still burns.</p>
     </div>
-    
-    <div class="story-section">
-      <div class="story-label">Chapter V</div>
-      <h2 class="story-title">The Fate of Nyfurion</h2>
-      <p class="story-content">
-        Now, the realm teeters on the brink of ruin. The Legendary Supreme fights to protect order. Dark Power advances, dragging the Rebels with him. The Guardians maintain the seal on the Portal. The Baby Warriors of Peace struggle to preserve civilization, guided by the Masters of Discipline.
-      </p>
-      <p class="story-content">
-        But all this may not be enough. Because the Queen has yet to choose. If she intervenes, Nyfurion may find a new balance. If she remains in the shadows, conflict will be eternal.
-      </p>
-      <p class="story-content">
-        But nothing in Nyfurion is truly safe anymore.
-      </p>
+
+    <!-- ACT II -->
+    <div class="act"><div class="act-num">Act Two</div><h2>The Rise of Dark Power</h2><div class="ornament"><span>❖</span></div></div>
+
+    <div class="verse opening">
+      <p>The firstborn, the most ambitious, the most tormented, had awaited that throne his entire life. When he was passed over, rage consumed him. A void opened within. A thirst for revenge. That day, <span class="hl-red">Nyv, the Dark Power of Evil</span>, was born.</p>
     </div>
-    
-    <div class="lore-footer">
-      Thank you for your attention.<br>
-      Thank you for taking the time to check out the NFT collection. I truly appreciate your interest and support. Stay tuned for upcoming updates!
-      <strong>Copyright © 2025 Riccardo Duca — All rights reserved.</strong>
+
+    <!-- SCENE: NYV -->
+    <div class="scene" style="background-image:url('assets/characters/portraits/98.png'); background-position:center 12%;">
+      <div class="scene-caption">
+        <div class="who">Nyv · The Dark Power of Evil</div>
+        <div class="quote">"I am what remains when hope dies."</div>
+      </div>
     </div>
+
+    <div class="verse">
+      <p>He tore open time itself and built an empire of shadow beyond the rift. He gathered those who refused to be ruled: the <span class="hl-red">Baby Rebels</span>, the DPOE, young warriors who believe chaos is freedom.</p>
+      <p>And yet, one figure watches from the shadows. <a href="characters.html#rey" class="hl">The Queen, Rey</a>. The daughter who holds the last spark of primordial power. She takes no side. But if Nyfurion falls, she alone will decide its fate.</p>
+    </div>
+
+    <!-- ACT III -->
+    <div class="act"><div class="act-num">Act Three</div><h2>The Guardians of the Portal</h2><div class="ornament"><span>❖</span></div></div>
+
+    <div class="verse opening">
+      <p>As conflict spread, Tyri understood he could not stand alone. Armies were not enough. Courage was not enough. The heart of Nyfurion had to be sealed, for at the center of the realm lay a forbidden gateway: the <span class="hl">Unique Portal</span>.</p>
+      <p>No one knew what waited beyond it. Only that it held a power capable of <span class="hl">rewriting reality itself</span>. Should Dark Power reach it, the realm would fall. And so the <span class="hl">Guardians of the Portal</span> were chosen, sworn to defend the gateway with their very existence.</p>
+    </div>
+
+    <!-- ACT IV -->
+    <div class="act"><div class="act-num">Act Four</div><h2>The Shadow Predators</h2><div class="ornament"><span>❖</span></div></div>
+
+    <!-- SCENE: SHADOW -->
+    <div class="scene" style="background-image:url('assets/characters/portraits/20.png');">
+      <div class="scene-caption">
+        <div class="who">The Shadow Predators</div>
+        <div class="quote">"They serve neither light nor dark. Only the fall."</div>
+      </div>
+    </div>
+
+    <div class="verse opening">
+      <p>As war intensifies, a quieter danger spreads through the streets. The <span class="hl-red">Shadow Predators</span>, infiltrators with no faction. They do not wish to rule Nyfurion. They only seek to profit from its downfall, stealing all that is precious from the homes of neutrals, weakening them, isolating them.</p>
+      <p>No one sees them. No one stops them.</p>
+    </div>
+
+    <!-- ACT V -->
+    <div class="act"><div class="act-num">Act Five</div><h2>The Fate of Nyfurion</h2><div class="ornament"><span>❖</span></div></div>
+
+    <div class="verse opening">
+      <p>Now the realm teeters on the brink of ruin. Tyri fights to protect order. Nyv advances, dragging the Rebels with him. The Guardians hold the seal. The <span class="hl">Young Warriors of Peace</span> struggle to preserve all that remains.</p>
+    </div>
+
+    <!-- SCENE: REY -->
+    <div class="scene" style="background-image:url('assets/characters/portraits/97.png');">
+      <div class="scene-caption">
+        <div class="who">Rey · The Queen who must choose</div>
+        <div class="quote">"Enough."</div>
+      </div>
+    </div>
+
+    <div class="verse">
+      <p>But all of this may not be enough. Because <a href="characters.html#rey" class="hl">the Queen</a> has yet to choose. If she intervenes, Nyfurion may find a new balance. If she remains in the shadows, the conflict will be eternal.</p>
+      <p>And nothing in Nyfurion is truly safe anymore.</p>
+    </div>
+
   </div>
+
+  <!-- CTA -->
+  <div class="lore-cta">
+    <h2>The Choice Will Be Yours</h2>
+    <p>The saga is far from over. Meet the souls who shape this world, and decide which side you stand on.</p>
+    <a href="characters.html" class="btn-primary">Meet the Characters</a>
+    <a href="index.html#choose" class="btn-ghost">Choose Your Side</a>
+  </div>
+
+  <!-- ===== CINEMATIC HORIZONTAL TRANSITION: lore slides left, book enters from right ===== -->
+  <section id="transition">
+    <div class="transition-sticky">
+      <!-- panel A: the lore exits to the left -->
+      <div class="t-panel t-lore" id="t-lore">
+        <div class="t-lore-inner">
+          <div class="t-eyebrow">Keep scrolling</div>
+          <h2 class="t-lore-title">Now, read how it all began</h2>
+          <p class="t-lore-sub">The chronicle you have just read was only the shadow of a greater tale. Scroll on, and the first book of Nyfurion opens before you.</p>
+          <div class="t-arrow">→</div>
+        </div>
+      </div>
+      <!-- panel B: the real flipbook enters from the right -->
+      <div class="t-panel t-book" id="t-book">
+        <div class="book-center">
+          <div class="t-eyebrow">The First Book · Ash, the Beginning</div>
+
+          <!-- FLIPBOOK -->
+          <div class="flipbook" id="flipbook">
+            <div class="fb-stack">
+              <div class="fb-page fb-under" id="fb-under"></div>
+              <div class="fb-page fb-top" id="fb-top"></div>
+            </div>
+          </div>
+
+          <div class="fb-controls">
+            <button class="r-btn" id="fb-prev" disabled>‹</button>
+            <span class="r-progress" id="fb-progress">Cover</span>
+            <button class="r-btn" id="fb-next">›</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- hidden measuring element for pagination -->
+      <div id="fb-measure" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <script>
+    /* reading progress bar */
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+    });
+    /* reveal verses */
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.verse').forEach(v => obs.observe(v));
+
+    /* ===== Horizontal cinematic transition: lore exits left, flipbook enters right ===== */
+    const transition = document.getElementById('transition');
+    const tLore = document.getElementById('t-lore');
+    const tBook = document.getElementById('t-book');
+    function onScrollTransition(){
+      const rect = transition.getBoundingClientRect();
+      const total = transition.offsetHeight - window.innerHeight;
+      let p = (-rect.top) / total;
+      p = Math.max(0, Math.min(1, p));
+      const slide = Math.min(1, p / 0.7);
+      tLore.style.transform = 'translateX(' + (-slide * 100) + 'vw)';
+      tLore.style.opacity = String(1 - slide);
+      tBook.style.transform = 'translateX(' + ((1 - slide) * 100) + 'vw)';
+      tBook.style.opacity = String(slide);
+    }
+    window.addEventListener('scroll', onScrollTransition);
+    window.addEventListener('resize', onScrollTransition);
+    onScrollTransition();
+
+    /* ===== REAL FLIPBOOK: cover + auto-paginated pages ===== */
+    let BOOK = null;
+    // auto-detect language from device/region (reflects the user's country)
+    let lang = (navigator.language||'en').toLowerCase().startsWith('it') ? 'it' : 'en';
+    let SHEETS = [];   // each sheet = {type:'cover'|'page', ...}
+    let idx = 0;
+    let flipping = false;
+    const MAX_BOOK_PAGES = 69;
+    const PAGE_TURN_MS = 900;
+
+    const fbTop=document.getElementById('fb-top'), fbUnder=document.getElementById('fb-under'),
+          fbPrev=document.getElementById('fb-prev'), fbNext=document.getElementById('fb-next'),
+          fbProg=document.getElementById('fb-progress'),
+          measure=document.getElementById('fb-measure'), flipbook=document.getElementById('flipbook');
+
+    function coverHTML(){
+      return '<div class="fb-cover"><img src="book1-cover.png" alt="Ash, the Beginning" onerror="this.style.display=\'none\'"><span class="fb-spine"></span></div>';
+    }
+    function pageHTML(p){
+      let inner = '';
+      if(p.chapter){ inner += '<div class="fb-ch-label">'+(lang==='it'?'Capitolo ':'Chapter ')+p.chapterNum+'</div><div class="fb-ch-title">'+p.chapter+'</div><div class="fb-ch-rule"></div>'; }
+      inner += '<div class="fb-body'+(p.dropcap?' dropcap':'')+'">'+p.html+'</div>';
+      inner += '<div class="fb-folio">'+p.folio+'</div>';
+      return '<div class="fb-paper">'+inner+'</div>';
+    }
+    function renderHTML(i){
+      if(i<0||i>=SHEETS.length) return '';
+      const s=SHEETS[i];
+      return s.type==='cover' ? coverHTML() : pageHTML(s);
+    }
+    function turnLayerHTML(i){
+      return renderHTML(i) + '<div class="fb-back" aria-hidden="true"></div><div class="fb-shade" aria-hidden="true"></div>';
+    }
+
+    /* Build paginated sheets by measuring a REAL page clone (no text ever overflows) */
+    function fits(headerHTML, dropcap, bodyHTML){
+      // recreate exactly what a real .fb-paper contains, measure if it overflows
+      measure.innerHTML = headerHTML
+        + '<div class="fb-body'+(dropcap?' dropcap':'')+'">'+bodyHTML+'</div>'
+        + '<div class="fb-folio">0</div>';
+      // the body is flex:1; overflow happens when total content exceeds the box
+      return measure.scrollHeight <= measure.clientHeight + 1;
+    }
+    function buildSheets(){
+      const chaps = BOOK[lang] || BOOK.en;
+      SHEETS = [{type:'cover'}];
+      let folio = 1;
+      chaps.forEach((c, ci) => {
+        let pending = c.paras.slice();          // words to place
+        let firstPageOfChapter = true;
+        while(pending.length){
+          const header = firstPageOfChapter
+            ? '<div class="fb-ch-label">x</div><div class="fb-ch-title">'+c.title+'</div><div class="fb-ch-rule"></div>'
+            : '';
+          const dropcap = firstPageOfChapter;
+          let buffer = [];
+          // greedily add paragraphs while they still fit
+          while(pending.length){
+            const test = buffer.concat(['<p>'+pending[0]+'</p>']).join('');
+            if(fits(header, dropcap, test) || buffer.length===0){
+              // if it fits OR the page is empty (a single long paragraph must go somewhere)
+              if(!fits(header, dropcap, test) && buffer.length===0){
+                // single paragraph too long: split it by sentences across pages
+                const words = pending[0].split(' ');
+                let part=[], placed=[];
+                for(let w=0; w<words.length; w++){
+                  const t = buffer.concat(['<p>'+part.concat([words[w]]).join(' ')+'</p>']).join('');
+                  if(fits(header,dropcap,t)){ part.push(words[w]); }
+                  else { break; }
+                }
+                buffer.push('<p>'+part.join(' ')+'</p>');
+                pending[0] = words.slice(part.length).join(' ');
+                if(!pending[0]) pending.shift();
+                break;
+              }
+              buffer.push('<p>'+pending.shift()+'</p>');
+            } else break;
+          }
+          SHEETS.push({ type:'page', chapter: firstPageOfChapter?c.title:null, chapterNum: ci+1,
+                        dropcap: dropcap, html: buffer.join(''), folio: folio++ });
+          firstPageOfChapter = false;
+        }
+      });
+    }
+    function buildSheetsWithinLimit(){
+      document.documentElement.classList.remove('book-ultra-compact');
+      buildSheets();
+      if(SHEETS.length - 1 > MAX_BOOK_PAGES){
+        document.documentElement.classList.add('book-ultra-compact');
+        buildSheets();
+      }
+      if(SHEETS.length - 1 > MAX_BOOK_PAGES){
+        console.warn('Flipbook still exceeds '+MAX_BOOK_PAGES+' pages:', SHEETS.length - 1);
+      }
+    }
+
+    function show(i){
+      idx = Math.max(0, Math.min(SHEETS.length-1, i));
+      flipbook.classList.remove('turning-next','turning-prev');
+      fbTop.classList.remove('flip-next','flip-prev');
+      fbTop.innerHTML = turnLayerHTML(idx);
+      fbUnder.innerHTML = renderHTML(idx+1);
+      fbPrev.disabled = idx===0;
+      fbNext.disabled = idx===SHEETS.length-1;
+      if(idx===0) fbProg.textContent = (lang==='it'?'Copertina':'Cover');
+      else fbProg.textContent = (lang==='it'?'Pagina ':'Page ') + idx + ' / ' + (SHEETS.length-1);
+    }
+    function turn(dir){
+      if(flipping) return;
+      const ni = idx + dir;
+      if(ni<0 || ni>=SHEETS.length) return;
+      flipping = true;
+      flipbook.classList.add(dir>0 ? 'turning-next' : 'turning-prev');
+      if(dir>0){
+        // next: underside already shows destination; top flips away
+        fbUnder.innerHTML = renderHTML(ni);
+        fbTop.classList.add('flip-next');
+      } else {
+        // prev: top becomes destination and flips IN from the left
+        fbUnder.innerHTML = renderHTML(idx);
+        fbTop.innerHTML = turnLayerHTML(ni);
+        fbTop.classList.add('flip-prev');
+      }
+      setTimeout(()=>{
+        fbTop.classList.remove('flip-next','flip-prev');
+        flipbook.classList.remove('turning-next','turning-prev');
+        show(ni);
+        flipping = false;
+      }, PAGE_TURN_MS);
+    }
+    fbNext.addEventListener('click',(e)=>{ e.stopPropagation(); turn(1); });
+    fbPrev.addEventListener('click',(e)=>{ e.stopPropagation(); turn(-1); });
+    // CLICK ON THE BOOK: right half = next, left half = previous
+    flipbook.addEventListener('click',(e)=>{
+      const r = flipbook.getBoundingClientRect();
+      const x = e.clientX - r.left;
+      if(x > r.width/2) turn(1); else turn(-1);
+    });
+    // keyboard arrows when book in view
+    window.addEventListener('keydown',(e)=>{
+      const r=flipbook.getBoundingClientRect();
+      if(r.top<window.innerHeight*0.6 && r.bottom>0){
+        if(e.key==='ArrowRight') turn(1);
+        if(e.key==='ArrowLeft') turn(-1);
+      }
+    });
+
+    fetch('assets/book1.json').then(r=>r.json()).then(d=>{
+      BOOK=d;
+      // wait a tick so measure box has its size
+      requestAnimationFrame(()=>{ buildSheetsWithinLimit(); show(0); });
+    }).catch(()=>{ fbTop.innerHTML='<div class="fb-paper"><p>The book could not be loaded.</p></div>'; });
+    window.addEventListener('resize', ()=>{ if(BOOK){ const cur=idx; buildSheetsWithinLimit(); show(Math.min(cur,SHEETS.length-1)); } });
+  </script>
+  <script src="nav.js" defer></script>
 </body>
 </html>

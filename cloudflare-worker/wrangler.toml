@@ -1,6 +1,11 @@
 name = "nyfurion-holder-archive"
 main = "worker.js"
 compatibility_date = "2024-01-01"
+workers_dev = false
+
+routes = [
+  { pattern = "nyfurion.com/api/*", zone_name = "nyfurion.com" }
+]
 
 # ─── R2 Binding ───────────────────────────────────────────────────────────────
 [[r2_buckets]]

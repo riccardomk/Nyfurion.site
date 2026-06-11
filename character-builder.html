@@ -1,0 +1,1394 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nyfurion Lounge Builder</title>
+  <style>
+    :root {
+      --bg: #07090d;
+      --panel: rgba(17, 20, 28, 0.82);
+      --panel-strong: rgba(15, 18, 25, 0.92);
+      --line: rgba(255,255,255,0.08);
+      --text: #f5f7fb;
+      --muted: #9ba5b7;
+      --accent: #8266ff;
+      --accent-2: #34c8ff;
+      --shadow: 0 18px 50px rgba(0,0,0,0.35);
+      --radius: 24px;
+      --scene-top: #1d2b50;
+      --scene-bottom: #0d1119;
+      --ambient: rgba(135, 166, 255, 0.22);
+      --window-glow: rgba(165, 196, 255, 0.3);
+      --floor-reflection: rgba(132, 170, 255, 0.08);
+      --lamp: rgba(255, 219, 164, 0.18);
+      --character-glow: rgba(130, 102, 255, 0.3);
+      --cam-x: -10deg;
+      --cam-y: 0deg;
+      --cam-z: 0px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(130,102,255,0.18), transparent 24%),
+        radial-gradient(circle at top right, rgba(52,200,255,0.12), transparent 22%),
+        linear-gradient(180deg, #080a0f, #05070b 60%);
+      overflow: hidden;
+    }
+
+    .app-shell {
+      height: 100vh;
+      padding: 18px;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 14px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 14px;
+      align-items: center;
+      padding: 16px 20px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: 0.02em;
+    }
+
+    .brand p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .time-switcher,
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .pill,
+    .top-btn,
+    .option-btn,
+    .save-btn {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 11px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.22s ease;
+    }
+
+    .pill:hover,
+    .top-btn:hover,
+    .option-btn:hover,
+    .save-btn:hover,
+    .pill.active,
+    .option-btn.active {
+      border-color: rgba(130,102,255,0.5);
+      background: linear-gradient(180deg, rgba(130,102,255,0.18), rgba(52,200,255,0.1));
+      box-shadow: 0 0 0 1px rgba(130,102,255,0.18) inset, 0 12px 28px rgba(130,102,255,0.16);
+    }
+
+    .main-layout {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 300px 1fr 280px;
+      gap: 14px;
+      transition: grid-template-columns 0.28s ease;
+    }
+
+    body.left-collapsed .main-layout {
+      grid-template-columns: 74px 1fr 280px;
+    }
+
+    body.right-collapsed .main-layout {
+      grid-template-columns: 300px 1fr 74px;
+    }
+
+    body.left-collapsed.right-collapsed .main-layout {
+      grid-template-columns: 74px 1fr 74px;
+    }
+
+    .panel {
+      min-height: 0;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(17,20,28,0.9), rgba(11,14,20,0.88));
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .panel-toggle {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 9;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.08);
+      color: #edf2ff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .panel-toggle:hover {
+      border-color: rgba(130,102,255,0.45);
+      box-shadow: 0 0 0 1px rgba(130,102,255,0.18) inset;
+    }
+
+    .panel-compact-label {
+      display: none;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: #e0e8fa;
+      text-align: center;
+      height: 100%;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      padding-top: 58px;
+    }
+
+    body.left-collapsed .left-panel .panel-scroll,
+    body.right-collapsed .right-panel .panel-scroll {
+      display: none;
+    }
+
+    body.left-collapsed .left-panel .panel-compact-label,
+    body.right-collapsed .right-panel .panel-compact-label {
+      display: flex;
+    }
+
+    .panel-scroll {
+      height: 100%;
+      overflow: auto;
+      padding: 18px;
+    }
+
+    .panel-title {
+      margin: 0 0 16px;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #d5ddf1;
+    }
+
+    .group {
+      margin-bottom: 18px;
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .group h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .hint {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .option-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .scene-panel {
+      position: relative;
+      overflow: hidden;
+      border-radius: 30px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      box-shadow: var(--shadow);
+      min-height: 0;
+      perspective: 1400px;
+    }
+
+    .scene {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, var(--scene-top), var(--scene-bottom) 65%);
+      transition: 0.35s ease;
+      overflow: hidden;
+      isolation: isolate;
+      transform-style: preserve-3d;
+      transform: translateZ(var(--cam-z)) rotateX(var(--cam-x)) rotateY(var(--cam-y));
+      transform-origin: 50% 62%;
+      cursor: grab;
+    }
+
+    .scene.dragging {
+      cursor: grabbing;
+    }
+
+    .room-ceiling,
+    .room-side {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.55;
+    }
+
+    .room-ceiling {
+      left: 10%;
+      right: 10%;
+      top: -18%;
+      height: 30%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.02));
+      transform: translateZ(-70px) rotateX(88deg);
+      border-radius: 20px;
+    }
+
+    .room-side {
+      top: 8%;
+      bottom: 22%;
+      width: 16%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.01));
+    }
+
+    .room-side.left {
+      left: -3%;
+      transform: translateZ(-60px) rotateY(86deg);
+      transform-origin: left center;
+    }
+
+    .room-side.right {
+      right: -3%;
+      transform: translateZ(-60px) rotateY(-86deg);
+      transform-origin: right center;
+    }
+
+    .ambient-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 24%, var(--ambient), transparent 36%);
+      pointer-events: none;
+      transition: 0.35s ease;
+    }
+
+    .back-wall {
+      position: absolute;
+      inset: 0 0 28% 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015)),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.012) 0 2px, transparent 2px 150px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .ceiling-light {
+      position: absolute;
+      top: -90px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 420px;
+      height: 210px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.14), transparent 60%);
+      filter: blur(14px);
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .window {
+      position: absolute;
+      top: 88px;
+      width: 220px;
+      height: 240px;
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.03)),
+        radial-gradient(circle at center, var(--window-glow), transparent 70%);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03), 0 18px 45px rgba(0,0,0,0.22);
+      overflow: hidden;
+      transition: 0.35s ease;
+    }
+
+    .window.left { left: 6%; }
+    .window.right { right: 6%; }
+
+    .window::before,
+    .window::after {
+      content: "";
+      position: absolute;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .window::before {
+      width: 100%;
+      height: 2px;
+      top: 50%;
+      left: 0;
+    }
+
+    .window::after {
+      width: 2px;
+      height: 100%;
+      top: 0;
+      left: 50%;
+    }
+
+    .shelf {
+      position: absolute;
+      top: 368px;
+      width: 220px;
+      height: 12px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(88,56,32,0.9), rgba(50,28,15,0.95));
+      box-shadow: 0 10px 30px rgba(0,0,0,0.24);
+    }
+
+    .shelf.left { left: 6%; }
+    .shelf.right { right: 6%; }
+
+    .deco,
+    .plant,
+    .lamp {
+      position: absolute;
+      bottom: 12px;
+    }
+
+    .deco {
+      width: 32px;
+      height: 54px;
+      border-radius: 14px 14px 10px 10px;
+      background: linear-gradient(180deg, rgba(108,196,255,0.95), rgba(56,96,160,0.9));
+      box-shadow: 0 0 18px rgba(108,196,255,0.16);
+    }
+
+    .deco.small { width: 24px; height: 38px; }
+    .deco.left-a { left: 24px; }
+    .deco.left-b { left: 66px; }
+    .deco.right-a { right: 24px; }
+    .deco.right-b { right: 66px; }
+
+    .plant {
+      width: 74px;
+      height: 118px;
+      border-radius: 0 0 20px 20px;
+      background: linear-gradient(180deg, rgba(90,62,38,0.95), rgba(45,28,15,0.95));
+    }
+
+    .plant::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 72px;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(80,180,120,0.95), rgba(36,94,60,0.95));
+      clip-path: polygon(50% 0%, 65% 22%, 88% 18%, 76% 42%, 96% 54%, 71% 63%, 78% 92%, 50% 74%, 21% 92%, 28% 62%, 4% 54%, 24% 42%, 12% 18%, 35% 22%);
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,0.2));
+    }
+
+    .plant.left { left: 36px; bottom: 94px; }
+    .plant.right { right: 36px; bottom: 94px; }
+
+    .floor {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 32%;
+      background:
+        linear-gradient(180deg, rgba(12,15,22,0), rgba(8,10,14,0.16)),
+        linear-gradient(180deg, rgba(80,52,30,0.95), rgba(28,18,12,0.98));
+    }
+
+    .floor::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 140px),
+        linear-gradient(180deg, transparent, rgba(0,0,0,0.2));
+      opacity: 0.4;
+    }
+
+    .rug {
+      position: absolute;
+      left: 50%;
+      bottom: 52px;
+      transform: translateX(-50%);
+      width: min(58%, 560px);
+      height: 148px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.08), transparent 65%),
+        linear-gradient(180deg, rgba(46,52,80,0.95), rgba(18,20,30,0.98));
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 24px 40px rgba(0,0,0,0.24), inset 0 0 38px rgba(130,102,255,0.08);
+    }
+
+    .platform {
+      position: absolute;
+      left: 50%;
+      bottom: 108px;
+      transform: translateX(-50%);
+      width: 360px;
+      height: 110px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 38%, rgba(255,255,255,0.08), transparent 58%),
+        linear-gradient(180deg, rgba(58,66,96,0.95), rgba(18,20,30,0.98));
+      box-shadow: 0 18px 40px rgba(0,0,0,0.25), inset 0 0 40px rgba(130,102,255,0.12);
+      border: 1px solid rgba(255,255,255,0.08);
+      z-index: 4;
+    }
+
+    .platform::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 22px;
+      transform: translateX(-50%);
+      width: 240px;
+      height: 26px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.12), transparent 70%);
+    }
+
+    .character-anchor {
+      position: absolute;
+      left: 50%;
+      bottom: 142px;
+      transform: translateX(-50%);
+      width: 420px;
+      height: 590px;
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    .char-shadow {
+      position: absolute;
+      left: 50%;
+      bottom: 4px;
+      transform: translateX(-50%);
+      width: 260px;
+      height: 42px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0.48), transparent 72%);
+      filter: blur(10px);
+    }
+
+    .character-glow {
+      position: absolute;
+      left: 50%;
+      bottom: 84px;
+      transform: translateX(-50%);
+      width: 330px;
+      height: 460px;
+      border-radius: 42%;
+      background: radial-gradient(circle at center, var(--character-glow), transparent 60%);
+      filter: blur(18px);
+      opacity: 0.8;
+    }
+
+    .character {
+      position: absolute;
+      left: 50%;
+      bottom: 34px;
+      transform: translateX(-50%);
+      width: 280px;
+      height: 520px;
+    }
+
+    .layer {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: 0.25s ease;
+    }
+
+    .legs {
+      bottom: 0;
+      width: 128px;
+      height: 182px;
+      border-radius: 42px 42px 24px 24px;
+      background: linear-gradient(180deg, #33415f, #181f31);
+    }
+
+    .body {
+      bottom: 112px;
+      width: 220px;
+      height: 244px;
+      border-radius: 80px 80px 34px 34px;
+      background: linear-gradient(180deg, #57688c, #28334f);
+      box-shadow: 0 0 34px rgba(130,102,255,0.12);
+    }
+
+    .outfit {
+      bottom: 116px;
+      width: 250px;
+      height: 254px;
+      border-radius: 76px 76px 28px 28px;
+      background: linear-gradient(180deg, rgba(130,102,255,0.38), rgba(29,22,56,0.84));
+      border: 2px solid rgba(255,255,255,0.08);
+    }
+
+    .shoulder.left,
+    .shoulder.right {
+      bottom: 266px;
+      width: 72px;
+      height: 72px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(130,102,255,0.72), rgba(28,21,56,0.95));
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .shoulder.left { left: 18px; transform: none; }
+    .shoulder.right { right: 18px; left: auto; transform: none; }
+
+    .head {
+      top: 42px;
+      width: 176px;
+      height: 184px;
+      border-radius: 50% 50% 46% 46%;
+      background: linear-gradient(180deg, #95a5d1, #627399);
+      border: 1px solid rgba(255,255,255,0.08);
+      z-index: 3;
+    }
+
+    .hair {
+      top: 12px;
+      width: 194px;
+      height: 88px;
+      z-index: 4;
+    }
+
+    .hair::before,
+    .hair::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 78px;
+      height: 86px;
+      border-radius: 18px 18px 0 0;
+      background: linear-gradient(180deg, #8266ff, #3b2c8d);
+    }
+
+    .hair::before { left: 12px; transform: rotate(-18deg); }
+    .hair::after { right: 12px; transform: rotate(18deg); }
+
+    .eyes {
+      top: 116px;
+      width: 110px;
+      height: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 5;
+    }
+
+    .eye {
+      width: 26px;
+      height: 12px;
+      border-radius: 12px;
+      background: #9eb0ff;
+      box-shadow: 0 0 16px currentColor;
+    }
+
+    .mouth {
+      top: 164px;
+      width: 44px;
+      height: 12px;
+      border-bottom: 3px solid rgba(14,18,26,0.62);
+      border-radius: 0 0 18px 18px;
+      z-index: 5;
+    }
+
+    .symbol {
+      bottom: 230px;
+      width: 74px;
+      height: 74px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(130,102,255,0.92), rgba(52,200,255,0.66));
+      border: 2px solid rgba(255,255,255,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 800;
+      color: white;
+      text-shadow: 0 0 18px rgba(255,255,255,0.25);
+      z-index: 6;
+    }
+
+    .scene-hud {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      top: 18px;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      pointer-events: none;
+    }
+
+    .camera-hud {
+      position: absolute;
+      left: 18px;
+      bottom: 18px;
+      z-index: 10;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      pointer-events: auto;
+    }
+
+    .camera-btn {
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(10,13,19,0.66);
+      color: #dce7ff;
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .camera-btn:hover {
+      border-color: rgba(52,200,255,0.45);
+    }
+
+    .hud-box {
+      pointer-events: auto;
+      padding: 10px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(12,15,20,0.5);
+      backdrop-filter: blur(16px);
+      color: #dce4f5;
+      font-size: 13px;
+    }
+
+    .right-panel .summary-card {
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      margin-bottom: 14px;
+    }
+
+    .summary-card h3 {
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+
+    .summary-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      font-size: 14px;
+    }
+
+    .summary-item span:last-child {
+      color: #dfe7ff;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .save-btn {
+      width: 100%;
+      padding: 15px 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      border: none;
+      box-shadow: 0 16px 34px rgba(130,102,255,0.22);
+      margin-top: 8px;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin-top: 12px;
+    }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .stat {
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .stat small {
+      display: block;
+      color: var(--muted);
+      margin-bottom: 4px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .stat strong {
+      font-size: 14px;
+    }
+
+    body.morning {
+      --scene-top: #8ab8ff;
+      --scene-bottom: #dce8ff;
+      --ambient: rgba(255, 238, 191, 0.22);
+      --window-glow: rgba(255, 248, 224, 0.42);
+      --floor-reflection: rgba(255,255,255,0.12);
+      --lamp: rgba(255, 226, 175, 0.08);
+    }
+
+    body.noon {
+      --scene-top: #9fd2ff;
+      --scene-bottom: #e8f5ff;
+      --ambient: rgba(170, 226, 255, 0.18);
+      --window-glow: rgba(216, 244, 255, 0.42);
+      --floor-reflection: rgba(255,255,255,0.14);
+      --lamp: rgba(255,255,255,0.03);
+    }
+
+    body.evening {
+      --scene-top: #23335f;
+      --scene-bottom: #0b1019;
+      --ambient: rgba(128, 103, 255, 0.22);
+      --window-glow: rgba(144, 153, 255, 0.28);
+      --floor-reflection: rgba(113, 137, 255, 0.08);
+      --lamp: rgba(255, 208, 132, 0.18);
+    }
+
+    @media (max-width: 1280px) {
+      .main-layout { grid-template-columns: 320px 1fr; }
+      .right-panel { grid-column: span 2; }
+      .scene-panel { min-height: 720px; }
+      .panel-toggle,
+      .panel-compact-label { display: none; }
+    }
+
+    @media (max-width: 920px) {
+      body { overflow: auto; }
+      .app-shell { height: auto; }
+      .topbar, .main-layout { grid-template-columns: 1fr; }
+      .scene-panel { min-height: 680px; }
+      .window.left, .window.right, .shelf.left, .shelf.right, .plant.left, .plant.right { display: none; }
+    }
+  </style>
+</head>
+<body class="evening">
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <h1>Nyfurion Lounge Builder</h1>
+        <p>Editor 2D con scena in stile videogioco, personaggio centrale e ambiente premium da salotto.</p>
+      </div>
+
+      <div class="time-switcher" data-group="time">
+        <button class="pill" data-time="morning">Mattina</button>
+        <button class="pill" data-time="noon">Mezzogiorno</button>
+        <button class="pill active" data-time="evening">Sera</button>
+      </div>
+
+      <div class="top-actions">
+        <button class="top-btn">Reset</button>
+        <button class="top-btn">Export UI</button>
+      </div>
+    </header>
+
+    <section class="main-layout">
+      <aside class="panel left-panel">
+        <button class="panel-toggle" id="toggleLeft" title="Compatta pannello sinistro">‹</button>
+        <div class="panel-compact-label">Character Editor</div>
+        <div class="panel-scroll">
+          <h2 class="panel-title">Character Editing</h2>
+
+          <div class="group">
+            <h3>Base Class</h3>
+            <p class="hint">Definisce silhouette, struttura e presenza del personaggio al centro della scena.</p>
+            <div class="option-grid" data-group="base">
+              <button class="option-btn active" data-value="guardian">Guardian</button>
+              <button class="option-btn" data-value="master">Master</button>
+              <button class="option-btn" data-value="beast">Beast</button>
+              <button class="option-btn" data-value="mystic">Mystic</button>
+            </div>
+          </div>
+
+          <div class="group">
+            <h3>Color Theme</h3>
+            <p class="hint">Modifica palette, riflessi e tono visivo del personaggio.</p>
+            <div class="option-grid" data-group="theme">
+              <button class="option-btn active" data-value="violet">Violet Core</button>
+              <button class="option-btn" data-value="blue">Electric Blue</button>
+              <button class="option-btn" data-value="red">Crimson Flame</button>
+              <button class="option-btn" data-value="gold">Shadow Gold</button>
+            </div>
+          </div>
+
+          <div class="group">
+            <h3>Hair / Crown</h3>
+            <p class="hint">Gestione parte superiore della testa in stile hero editor.</p>
+            <div class="option-grid" data-group="hair">
+              <button class="option-btn active" data-value="crest">Crest</button>
+              <button class="option-btn" data-value="horns">Horns</button>
+              <button class="option-btn" data-value="halo">Halo</button>
+              <button class="option-btn" data-value="none">None</button>
+            </div>
+          </div>
+
+          <div class="group">
+            <h3>Eyes</h3>
+            <p class="hint">Sistema visivo 2D con variazioni istantanee come nei creator dei videogiochi.</p>
+            <div class="option-grid" data-group="eyes">
+              <button class="option-btn active" data-value="standard">Standard</button>
+              <button class="option-btn" data-value="sharp">Sharp</button>
+              <button class="option-btn" data-value="visor">Visor</button>
+              <button class="option-btn" data-value="orb">Orb Glow</button>
+            </div>
+          </div>
+
+          <div class="group">
+            <h3>Outfit</h3>
+            <p class="hint">Layer centrale del look, pensato per essere sostituito poi con PNG veri.</p>
+            <div class="option-grid" data-group="outfit">
+              <button class="option-btn active" data-value="armor">Armor</button>
+              <button class="option-btn" data-value="jacket">Jacket</button>
+              <button class="option-btn" data-value="robe">Robe</button>
+              <button class="option-btn" data-value="core">Core Suit</button>
+            </div>
+          </div>
+
+          <div class="group">
+            <h3>Chest Symbol</h3>
+            <p class="hint">Slot centrale per patch, sigillo o fragment mark.</p>
+            <div class="option-grid" data-group="symbol">
+              <button class="option-btn active" data-value="sigil">Sigil</button>
+              <button class="option-btn" data-value="star">Star</button>
+              <button class="option-btn" data-value="ring">Ring</button>
+              <button class="option-btn" data-value="void">Void</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="scene-panel">
+        <div class="scene-hud">
+          <div class="hud-box">Centered character stage</div>
+          <div class="hud-box" id="timeLabel">Sera</div>
+        </div>
+
+        <div class="scene" id="scene">
+          <div class="room-ceiling"></div>
+          <div class="room-side left"></div>
+          <div class="room-side right"></div>
+          <div class="ambient-glow"></div>
+          <div class="ceiling-light"></div>
+          <div class="back-wall"></div>
+
+          <div class="window left"></div>
+          <div class="window right"></div>
+
+          <div class="shelf left">
+            <div class="deco left-a"></div>
+            <div class="deco small left-b"></div>
+          </div>
+          <div class="shelf right">
+            <div class="deco right-a"></div>
+            <div class="deco small right-b"></div>
+          </div>
+
+          <div class="plant left"></div>
+          <div class="plant right"></div>
+
+          <div class="floor"></div>
+          <div class="rug"></div>
+          <div class="platform"></div>
+
+          <div class="character-anchor">
+            <div class="char-shadow"></div>
+            <div class="character-glow" id="characterGlow"></div>
+            <div class="character" id="character">
+              <div class="layer legs" id="legs"></div>
+              <div class="layer body" id="body"></div>
+              <div class="layer outfit" id="outfitLayer"></div>
+              <div class="layer shoulder left" id="shoulderLeft"></div>
+              <div class="layer shoulder right" id="shoulderRight"></div>
+              <div class="layer head" id="head"></div>
+              <div class="layer hair" id="hairLayer"></div>
+              <div class="layer eyes" id="eyesLayer">
+                <div class="eye" id="eyeLeft"></div>
+                <div class="eye" id="eyeRight"></div>
+              </div>
+              <div class="layer mouth"></div>
+              <div class="layer symbol" id="symbolLayer">N</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="camera-hud">
+          <button class="camera-btn" id="camReset">Reset View</button>
+          <button class="camera-btn" id="camLeft">Ruota ◀</button>
+          <button class="camera-btn" id="camRight">Ruota ▶</button>
+        </div>
+      </main>
+
+      <aside class="panel right-panel">
+        <button class="panel-toggle" id="toggleRight" title="Compatta pannello destro">›</button>
+        <div class="panel-compact-label">Current Setup</div>
+        <div class="panel-scroll">
+          <h2 class="panel-title">Current Setup</h2>
+
+          <div class="summary-card">
+            <h3>Character Summary</h3>
+            <div class="summary-list">
+              <div class="summary-item"><span>Base</span><span id="summaryBase">Guardian</span></div>
+              <div class="summary-item"><span>Theme</span><span id="summaryTheme">Violet Core</span></div>
+              <div class="summary-item"><span>Hair / Crown</span><span id="summaryHair">Crest</span></div>
+              <div class="summary-item"><span>Eyes</span><span id="summaryEyes">Standard</span></div>
+              <div class="summary-item"><span>Outfit</span><span id="summaryOutfit">Armor</span></div>
+              <div class="summary-item"><span>Symbol</span><span id="summarySymbol">Sigil</span></div>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <h3>Scene Stats</h3>
+            <div class="mini-stats">
+              <div class="stat"><small>Mode</small><strong>2D Builder</strong></div>
+              <div class="stat"><small>Scene</small><strong>Lounge</strong></div>
+              <div class="stat"><small>Time</small><strong id="summaryTime">Sera</strong></div>
+            </div>
+          </div>
+
+          <button class="save-btn">Save Character Setup</button>
+          <p class="note">
+            Questa interfaccia e pensata come base premium. Il passaggio successivo sara collegare ciascun layer a PNG reali del personaggio, mantenendo questa UI da salotto e questo posizionamento perfettamente centrale in scena.
+          </p>
+        </div>
+      </aside>
+    </section>
+  </div>
+
+  <script>
+    const state = {
+      base: 'guardian',
+      theme: 'violet',
+      hair: 'crest',
+      eyes: 'standard',
+      outfit: 'armor',
+      symbol: 'sigil',
+      time: 'evening'
+    };
+
+    const labels = {
+      base: { guardian: 'Guardian', master: 'Master', beast: 'Beast', mystic: 'Mystic' },
+      theme: { violet: 'Violet Core', blue: 'Electric Blue', red: 'Crimson Flame', gold: 'Shadow Gold' },
+      hair: { crest: 'Crest', horns: 'Horns', halo: 'Halo', none: 'None' },
+      eyes: { standard: 'Standard', sharp: 'Sharp', visor: 'Visor', orb: 'Orb Glow' },
+      outfit: { armor: 'Armor', jacket: 'Jacket', robe: 'Robe', core: 'Core Suit' },
+      symbol: { sigil: 'Sigil', star: 'Star', ring: 'Ring', void: 'Void' },
+      time: { morning: 'Mattina', noon: 'Mezzogiorno', evening: 'Sera' }
+    };
+
+    const themeMap = {
+      violet: {
+        legs: 'linear-gradient(180deg, #33415f, #181f31)',
+        body: 'linear-gradient(180deg, #57688c, #28334f)',
+        head: 'linear-gradient(180deg, #95a5d1, #627399)',
+        outfit: 'linear-gradient(180deg, rgba(130,102,255,0.38), rgba(29,22,56,0.84))',
+        shoulder: 'linear-gradient(180deg, rgba(130,102,255,0.72), rgba(28,21,56,0.95))',
+        hair: 'linear-gradient(180deg, #8266ff, #3b2c8d)',
+        symbol: 'linear-gradient(135deg, rgba(130,102,255,0.92), rgba(52,200,255,0.66))',
+        eye: '#9eb0ff',
+        glow: 'rgba(130,102,255,0.3)'
+      },
+      blue: {
+        legs: 'linear-gradient(180deg, #24455a, #122532)',
+        body: 'linear-gradient(180deg, #4a8aa2, #245266)',
+        head: 'linear-gradient(180deg, #89c8df, #5d9cb7)',
+        outfit: 'linear-gradient(180deg, rgba(52,200,255,0.4), rgba(12,45,65,0.86))',
+        shoulder: 'linear-gradient(180deg, rgba(52,200,255,0.7), rgba(12,45,65,0.95))',
+        hair: 'linear-gradient(180deg, #51c7ff, #1c6689)',
+        symbol: 'linear-gradient(135deg, rgba(52,200,255,0.95), rgba(178,246,255,0.66))',
+        eye: '#89f2ff',
+        glow: 'rgba(52,200,255,0.28)'
+      },
+      red: {
+        legs: 'linear-gradient(180deg, #552d31, #241116)',
+        body: 'linear-gradient(180deg, #98535e, #582530)',
+        head: 'linear-gradient(180deg, #d8959f, #ae5f6d)',
+        outfit: 'linear-gradient(180deg, rgba(255,91,91,0.42), rgba(68,15,18,0.88))',
+        shoulder: 'linear-gradient(180deg, rgba(255,91,91,0.74), rgba(68,15,18,0.95))',
+        hair: 'linear-gradient(180deg, #ff7f7f, #8d2525)',
+        symbol: 'linear-gradient(135deg, rgba(255,104,104,0.95), rgba(255,196,92,0.68))',
+        eye: '#ff9f9f',
+        glow: 'rgba(255,91,91,0.28)'
+      },
+      gold: {
+        legs: 'linear-gradient(180deg, #52462b, #231c10)',
+        body: 'linear-gradient(180deg, #97835a, #5d4b28)',
+        head: 'linear-gradient(180deg, #e2cf9f, #b69a63)',
+        outfit: 'linear-gradient(180deg, rgba(230,191,88,0.42), rgba(65,50,12,0.88))',
+        shoulder: 'linear-gradient(180deg, rgba(230,191,88,0.72), rgba(65,50,12,0.95))',
+        hair: 'linear-gradient(180deg, #f3d684, #9a7a1d)',
+        symbol: 'linear-gradient(135deg, rgba(245,205,96,0.96), rgba(255,242,182,0.72))',
+        eye: '#ffe394',
+        glow: 'rgba(245,205,96,0.26)'
+      }
+    };
+
+    const bodyEl = document.getElementById('body');
+    const legsEl = document.getElementById('legs');
+    const headEl = document.getElementById('head');
+    const outfitEl = document.getElementById('outfitLayer');
+    const shoulderLeft = document.getElementById('shoulderLeft');
+    const shoulderRight = document.getElementById('shoulderRight');
+    const hairEl = document.getElementById('hairLayer');
+    const symbolEl = document.getElementById('symbolLayer');
+    const eyeLeft = document.getElementById('eyeLeft');
+    const eyeRight = document.getElementById('eyeRight');
+    const eyesLayer = document.getElementById('eyesLayer');
+    const characterGlow = document.getElementById('characterGlow');
+    const timeLabel = document.getElementById('timeLabel');
+    const sceneEl = document.getElementById('scene');
+    const toggleLeftBtn = document.getElementById('toggleLeft');
+    const toggleRightBtn = document.getElementById('toggleRight');
+    const camResetBtn = document.getElementById('camReset');
+    const camLeftBtn = document.getElementById('camLeft');
+    const camRightBtn = document.getElementById('camRight');
+    const resetBtn = document.querySelector('.top-actions .top-btn:first-child');
+    const exportBtn = document.querySelector('.top-actions .top-btn:last-child');
+
+    const camera = {
+      x: -10,
+      y: 0,
+      z: 0
+    };
+
+    const defaultState = {
+      base: 'guardian',
+      theme: 'violet',
+      hair: 'crest',
+      eyes: 'standard',
+      outfit: 'armor',
+      symbol: 'sigil',
+      time: 'evening'
+    };
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function applyCamera() {
+      document.documentElement.style.setProperty('--cam-x', camera.x + 'deg');
+      document.documentElement.style.setProperty('--cam-y', camera.y + 'deg');
+      document.documentElement.style.setProperty('--cam-z', camera.z + 'px');
+    }
+
+    function resetCharacterControlsUI() {
+      document.querySelectorAll('[data-group]').forEach(function(group) {
+        var key = group.dataset.group;
+        var expectedValue = key === 'time' ? state.time : state[key];
+        group.querySelectorAll('button').forEach(function(btn) {
+          var btnValue = key === 'time' ? btn.dataset.time : btn.dataset.value;
+          btn.classList.toggle('active', btnValue === expectedValue);
+        });
+      });
+    }
+
+    function resetBuilder() {
+      Object.keys(defaultState).forEach(function(key) {
+        state[key] = defaultState[key];
+      });
+      camera.x = -10;
+      camera.y = 0;
+      camera.z = 0;
+      resetCharacterControlsUI();
+      applyCamera();
+      applyAll();
+    }
+
+    function exportSetup() {
+      const payload = {
+        createdAt: new Date().toISOString(),
+        state: Object.assign({}, state),
+        camera: Object.assign({}, camera)
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'nyfurion-lounge-setup.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function applyTheme() {
+      const theme = themeMap[state.theme];
+      legsEl.style.background = theme.legs;
+      bodyEl.style.background = theme.body;
+      headEl.style.background = theme.head;
+      outfitEl.style.background = theme.outfit;
+      shoulderLeft.style.background = theme.shoulder;
+      shoulderRight.style.background = theme.shoulder;
+      symbolEl.style.background = theme.symbol;
+      eyeLeft.style.background = theme.eye;
+      eyeRight.style.background = theme.eye;
+      eyeLeft.style.color = theme.eye;
+      eyeRight.style.color = theme.eye;
+      characterGlow.style.background = 'radial-gradient(circle at center, ' + theme.glow + ', transparent 60%)';
+      document.documentElement.style.setProperty('--hair-dynamic', theme.hair);
+    }
+
+    function applyBase() {
+      const character = document.getElementById('character');
+      if (state.base === 'guardian') {
+        character.style.width = '280px'; character.style.height = '520px';
+        headEl.style.width = '176px'; headEl.style.height = '184px';
+        bodyEl.style.width = '220px'; bodyEl.style.height = '244px';
+      }
+      if (state.base === 'master') {
+        character.style.width = '270px'; character.style.height = '534px';
+        headEl.style.width = '164px'; headEl.style.height = '196px';
+        bodyEl.style.width = '208px'; bodyEl.style.height = '256px';
+      }
+      if (state.base === 'beast') {
+        character.style.width = '296px'; character.style.height = '522px';
+        headEl.style.width = '194px'; headEl.style.height = '170px';
+        bodyEl.style.width = '230px'; bodyEl.style.height = '246px';
+      }
+      if (state.base === 'mystic') {
+        character.style.width = '276px'; character.style.height = '526px';
+        headEl.style.width = '170px'; headEl.style.height = '190px';
+        bodyEl.style.width = '214px'; bodyEl.style.height = '248px';
+      }
+    }
+
+    function applyHair() {
+      const beforeGradient = themeMap[state.theme].hair;
+      hairEl.innerHTML = '';
+      hairEl.style.display = 'block';
+      hairEl.style.filter = 'none';
+      hairEl.style.border = 'none';
+      hairEl.style.borderRadius = '0';
+      hairEl.style.background = 'transparent';
+
+      if (state.hair === 'none') { hairEl.style.display = 'none'; return; }
+
+      if (state.hair === 'crest') {
+        hairEl.style.width = '194px'; hairEl.style.height = '88px';
+        hairEl.innerHTML = '<div></div><div></div>';
+        hairEl.querySelectorAll('div').forEach(function(div, i) {
+          div.style.position = 'absolute'; div.style.top = '0';
+          div.style.width = '78px'; div.style.height = '86px';
+          div.style.borderRadius = '18px 18px 0 0';
+          div.style.background = beforeGradient;
+          div.style[i === 0 ? 'left' : 'right'] = '12px';
+          div.style.transform = i === 0 ? 'rotate(-18deg)' : 'rotate(18deg)';
+        });
+      }
+
+      if (state.hair === 'horns') {
+        hairEl.style.width = '214px'; hairEl.style.height = '100px';
+        hairEl.innerHTML = '<div></div><div></div>';
+        hairEl.querySelectorAll('div').forEach(function(div, i) {
+          div.style.position = 'absolute'; div.style.top = '0';
+          div.style.width = '48px'; div.style.height = '100px';
+          div.style.borderRadius = '80% 80% 10% 10%';
+          div.style.background = beforeGradient;
+          div.style[i === 0 ? 'left' : 'right'] = '26px';
+          div.style.transform = i === 0 ? 'rotate(-24deg)' : 'rotate(24deg)';
+        });
+      }
+
+      if (state.hair === 'halo') {
+        hairEl.style.width = '184px'; hairEl.style.height = '64px';
+        hairEl.style.borderRadius = '50%';
+        hairEl.style.border = '6px solid rgba(255,255,255,0.65)';
+        hairEl.style.filter = 'drop-shadow(0 0 16px rgba(255,255,255,0.18))';
+        hairEl.style.background = 'transparent';
+      }
+    }
+
+    function applyEyes() {
+      if (state.eyes === 'standard') {
+        eyesLayer.style.width = '110px';
+        [eyeLeft, eyeRight].forEach(function(el) { el.style.width = '26px'; el.style.height = '12px'; el.style.borderRadius = '12px'; });
+      }
+      if (state.eyes === 'sharp') {
+        eyesLayer.style.width = '118px';
+        [eyeLeft, eyeRight].forEach(function(el) { el.style.width = '30px'; el.style.height = '8px'; el.style.borderRadius = '2px'; });
+      }
+      if (state.eyes === 'visor') {
+        eyesLayer.style.width = '118px';
+        [eyeLeft, eyeRight].forEach(function(el) { el.style.width = '48px'; el.style.height = '12px'; el.style.borderRadius = '10px'; });
+      }
+      if (state.eyes === 'orb') {
+        eyesLayer.style.width = '102px';
+        [eyeLeft, eyeRight].forEach(function(el) { el.style.width = '18px'; el.style.height = '18px'; el.style.borderRadius = '50%'; });
+      }
+    }
+
+    function applyOutfit() {
+      if (state.outfit === 'armor') { outfitEl.style.width = '250px'; outfitEl.style.height = '254px'; outfitEl.style.borderRadius = '76px 76px 28px 28px'; }
+      if (state.outfit === 'jacket') { outfitEl.style.width = '236px'; outfitEl.style.height = '236px'; outfitEl.style.borderRadius = '34px 34px 22px 22px'; }
+      if (state.outfit === 'robe') { outfitEl.style.width = '264px'; outfitEl.style.height = '276px'; outfitEl.style.borderRadius = '58px 58px 18px 18px'; }
+      if (state.outfit === 'core') { outfitEl.style.width = '214px'; outfitEl.style.height = '220px'; outfitEl.style.borderRadius = '24px'; }
+    }
+
+    function applySymbol() {
+      var symbols = { sigil: 'N', star: '\u2726', ring: '\u25C9', void: 'V' };
+      symbolEl.textContent = symbols[state.symbol];
+    }
+
+    function applyTime() {
+      document.body.classList.remove('morning', 'noon', 'evening');
+      document.body.classList.add(state.time);
+      timeLabel.textContent = labels.time[state.time];
+      document.getElementById('summaryTime').textContent = labels.time[state.time];
+      document.querySelectorAll('[data-group="time"] .pill').forEach(function(btn) {
+        btn.classList.toggle('active', btn.dataset.time === state.time);
+      });
+    }
+
+    function updateSummary() {
+      document.getElementById('summaryBase').textContent = labels.base[state.base];
+      document.getElementById('summaryTheme').textContent = labels.theme[state.theme];
+      document.getElementById('summaryHair').textContent = labels.hair[state.hair];
+      document.getElementById('summaryEyes').textContent = labels.eyes[state.eyes];
+      document.getElementById('summaryOutfit').textContent = labels.outfit[state.outfit];
+      document.getElementById('summarySymbol').textContent = labels.symbol[state.symbol];
+    }
+
+    function applyAll() {
+      applyTheme(); applyBase(); applyHair(); applyEyes(); applyOutfit(); applySymbol(); applyTime(); updateSummary();
+    }
+
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let startCamX = 0;
+    let startCamY = 0;
+
+    sceneEl.addEventListener('mousedown', function(e) {
+      if (e.target.closest('button')) return;
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      startCamX = camera.x;
+      startCamY = camera.y;
+      sceneEl.classList.add('dragging');
+    });
+
+    window.addEventListener('mousemove', function(e) {
+      if (!isDragging) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      camera.y = clamp(startCamY + dx * 0.09, -22, 22);
+      camera.x = clamp(startCamX - dy * 0.07, -20, 8);
+      applyCamera();
+    });
+
+    window.addEventListener('mouseup', function() {
+      isDragging = false;
+      sceneEl.classList.remove('dragging');
+    });
+
+    sceneEl.addEventListener('wheel', function(e) {
+      e.preventDefault();
+      camera.z = clamp(camera.z + (e.deltaY > 0 ? -22 : 22), -180, 120);
+      applyCamera();
+    }, { passive: false });
+
+    camLeftBtn.addEventListener('click', function() {
+      camera.y = clamp(camera.y - 6, -22, 22);
+      applyCamera();
+    });
+
+    camRightBtn.addEventListener('click', function() {
+      camera.y = clamp(camera.y + 6, -22, 22);
+      applyCamera();
+    });
+
+    camResetBtn.addEventListener('click', function() {
+      camera.x = -10;
+      camera.y = 0;
+      camera.z = 0;
+      applyCamera();
+    });
+
+    toggleLeftBtn.addEventListener('click', function() {
+      document.body.classList.toggle('left-collapsed');
+      toggleLeftBtn.textContent = document.body.classList.contains('left-collapsed') ? '›' : '‹';
+    });
+
+    toggleRightBtn.addEventListener('click', function() {
+      document.body.classList.toggle('right-collapsed');
+      toggleRightBtn.textContent = document.body.classList.contains('right-collapsed') ? '‹' : '›';
+    });
+
+    resetBtn.addEventListener('click', resetBuilder);
+    exportBtn.addEventListener('click', exportSetup);
+
+    document.querySelectorAll('[data-group]').forEach(function(group) {
+      group.addEventListener('click', function(e) {
+        var btn = e.target.closest('button');
+        if (!btn) return;
+        if (group.dataset.group === 'time') { state.time = btn.dataset.time; applyTime(); return; }
+        var key = group.dataset.group;
+        state[key] = btn.dataset.value;
+        group.querySelectorAll('button').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        applyAll();
+      });
+    });
+
+    applyCamera();
+    applyAll();
+  </script>
+</body>
+</html>

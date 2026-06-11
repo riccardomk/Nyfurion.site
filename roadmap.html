@@ -2,633 +2,377 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nyfurion — Roadmap</title>
-  <link rel="icon" type="image/png" href="https://ipfs.io/ipfs/bafkreif52w6ucsqdbbwstt22fellwobdnnztceenycprkurkr4bo3q3lcq" />
+  <link rel="icon" type="image/png" href="https://cdn.nyfurion.com/ipfs/bafkreif52w6ucsqdbbwstt22fellwobdnnztceenycprkurkr4bo3q3lcq" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="nav.css">
   <style>
     :root {
       --matte-black: #080809;
       --deep-black: #0D0D0E;
       --accent-red: #E30B17;
       --accent-cyan: #00E5FF;
+      --ink: #d9d4c8;
     }
-    
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      background-color: var(--matte-black);
-      background-image: linear-gradient(rgba(8, 8, 9, 0.85), rgba(8, 8, 9, 0.85)), url('roadmap-bg.png');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
-      color: #F2F2F2;
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
-      line-height: 1.8;
-    }
-    
-    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
-    
-    ::selection {
-      background: var(--accent-cyan);
-      color: black;
-    }
-    
+    html { scroll-behavior: smooth; }
+    body { background: var(--matte-black); color: #ECECEC; font-family: 'Space Grotesk', sans-serif; overflow-x: hidden; }
+    ::selection { background: var(--accent-cyan); color: #000; }
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: var(--matte-black); }
     ::-webkit-scrollbar-thumb { background: #1a1a1c; border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--accent-red); }
-    
-    /* Header */
+
+    #progress-bar { position: fixed; top: 0; left: 0; height: 3px; width: 0%; background: linear-gradient(to right, var(--accent-red), var(--accent-cyan)); z-index: 300; transition: width 0.1s; }
+
+    /* ===== CINEMATIC INTRO — immersive, one word at a time ===== */
+    #cine-intro {
+      position: fixed; inset: 0; z-index: 1000; background: #000; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #cine-intro.done { display: none; }
+
+    /* fullscreen background image */
+    .cine-video {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;
+      transform: scale(1.04); /* avoid edge gaps */
+    }
+    .cine-vignette { position:absolute; inset:0; z-index:2; pointer-events:none;
+      background:
+        radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55)),
+        linear-gradient(to bottom, rgba(0,0,0,0.45), transparent 30%, transparent 65%, rgba(0,0,0,0.6)); }
+    #cine-intro::after {
+      content:""; position:absolute; inset:0; z-index:3; pointer-events:none; opacity:0.045;
+      background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+    }
+
+    /* each line is absolutely centered, shown one at a time */
+    .cine-line {
+      position: absolute; inset: 0; z-index: 4; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+    }
+    .cine-word {
+      font-family: 'Cormorant Garamond', serif; font-weight: 600; color: #fff;
+      line-height: 1; text-align: center; padding: 0 1rem;
+      text-shadow: 0 2px 30px rgba(0,0,0,0.85), 0 0 70px rgba(0,0,0,0.6);
+    }
+    .cine-word.brand { font-size: clamp(3rem, 15vw, 12rem); letter-spacing: clamp(0.12em,2vw,0.4em); text-indent: clamp(0.12em,2vw,0.4em); }
+
+    /* fast, fluid reveal */
+    .cine-line.play { animation: wordCycle var(--dur,1.1s) cubic-bezier(0.22,1,0.36,1) forwards; }
+    @keyframes wordCycle {
+      0%   { opacity:0; transform: scale(1.03); letter-spacing: 0.55em; }
+      55%  { opacity:1; transform: scale(1); }
+      100% { opacity:1; transform: scale(1); }
+    }
+    .cine-line .cine-word::after {
+      content:""; position:absolute; left:50%; bottom:-0.35em; height:1px; width:0;
+      background: linear-gradient(to right, transparent, var(--accent-red), transparent);
+      transform: translateX(-50%);
+    }
+    .cine-line.play .cine-word::after { animation: lineSweep var(--dur,1.1s) ease forwards; }
+    @keyframes lineSweep { 0%{width:0;opacity:0;} 60%{width:72%;opacity:0.95;} 100%{width:72%;opacity:0.95;} }
+
+    /* CLEAN CUT: the whole intro slides out to the LEFT, revealing the roadmap behind it */
+    #cine-intro.slide-out { animation: introSlide 0.7s cubic-bezier(0.7,0,0.2,1) forwards; }
+    @keyframes introSlide {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    #cine-skip {
+      position: absolute; bottom: 1.6rem; right: 1.6rem; z-index: 7;
+      background: transparent; border: 1px solid rgba(255,255,255,0.18); color: #b8b2a6; cursor: pointer;
+      font-family:'Space Grotesk',sans-serif; font-size:0.65rem; font-weight:600; letter-spacing:0.2em; text-transform:uppercase;
+      padding: 0.55rem 1.2rem; border-radius: 40px; transition: all 0.3s; opacity: 0; animation: skipIn 1s ease 1.2s forwards;
+    }
+    @keyframes skipIn { to { opacity: 0.7; } }
+    #cine-skip:hover { border-color: var(--accent-red); color: #fff; opacity: 1; }
+    body.intro-lock { overflow: hidden; }
+
     .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(13, 13, 14, 0.95);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 1.5rem 2rem;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      position: fixed; top: 0; left: 0; width: 100%;
+      background: rgba(8,8,9,0.7); backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      padding: 1.2rem 2rem; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-    }
-    
-    .header-title {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--accent-red);
-    }
-    
+    .header-title { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent-red); }
     .back-btn {
-      padding: 0.75rem 1.5rem;
-      background: var(--deep-black);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      color: #F2F2F2;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: all 0.3s;
-      border-radius: 2px;
+      padding: 0.6rem 1.4rem; background: rgba(13,13,14,0.6); border: 1px solid rgba(255,255,255,0.08);
+      color: #F2F2F2; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+      text-decoration: none; transition: all 0.3s; border-radius: 2px;
     }
-    
-    .back-btn:hover {
-      border-color: var(--accent-red);
-      color: var(--accent-red);
+    .back-btn:hover { border-color: var(--accent-red); color: var(--accent-red); }
+
+    /* HERO */
+    .hero {
+      min-height: 70vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 9rem 1.5rem 4rem;
     }
-    
-    /* Main Content */
-    .container {
-      max-width: 950px;
-      margin: 0 auto;
-      padding: 13.5rem 2rem 5rem;
+    .hero .eyebrow { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.5em; text-transform: uppercase; color: #8a8a8a; margin-bottom: 1.6rem; }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif; font-weight: 500;
+      font-size: clamp(3rem, 10vw, 7rem); letter-spacing: 0.01em; line-height: 0.95; color: #f4eee2; margin-bottom: 1.6rem;
     }
-    
-    .page-title {
-      font-size: clamp(3rem, 8vw, 6rem);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 1rem;
-      background: linear-gradient(to bottom, #ffffff, #a0a0a0);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .hero p { max-width: 580px; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(1.2rem,2.4vw,1.55rem); color: #b0a99c; line-height: 1.6; }
+
+    /* TIMELINE */
+    .timeline { max-width: 880px; margin: 0 auto; padding: 2rem 1.5rem 5rem; position: relative; }
+    /* central vertical line */
+    .timeline::before {
+      content:""; position:absolute; left: 28px; top: 0; bottom: 0; width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.14) 8%, rgba(255,255,255,0.14) 92%, transparent);
     }
-    
-    .page-subtitle {
-      font-size: 1.1rem;
-      color: rgba(255, 255, 255, 0.6);
-      margin-bottom: 4rem;
-      line-height: 1.6;
-    }
-    
-    /* Roadmap Sections */
-    .roadmap-section {
-      margin-bottom: 5rem;
+    @media(min-width: 780px){ .timeline::before { left: 50%; transform: translateX(-0.5px); } }
+
+    .node {
+      position: relative; padding-left: 70px; margin-bottom: 4.5rem;
       opacity: 0;
-      transform: translateY(40px);
-      animation: fadeInUp 0.8s forwards;
+      /* starts rotated clockwise + small, then spins COUNTER-CLOCKWISE to straighten */
+      transform: rotate(14deg) scale(0.82);
+      transition: opacity 0.45s ease, transform 0.7s cubic-bezier(0.34,1.4,0.5,1);
+      transform-origin: center center;
     }
-    
-    .roadmap-section:nth-child(1) { animation-delay: 0.1s; }
-    .roadmap-section:nth-child(2) { animation-delay: 0.15s; }
-    .roadmap-section:nth-child(3) { animation-delay: 0.2s; }
-    .roadmap-section:nth-child(4) { animation-delay: 0.25s; }
-    .roadmap-section:nth-child(5) { animation-delay: 0.3s; }
-    .roadmap-section:nth-child(6) { animation-delay: 0.35s; }
-    .roadmap-section:nth-child(7) { animation-delay: 0.4s; }
-    .roadmap-section:nth-child(8) { animation-delay: 0.45s; }
-    
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .node.visible { opacity: 1; transform: rotate(0deg) scale(1); }
+    @media(min-width: 780px){
+      .node { width: 50%; padding-left: 0; transform-origin: center center; }
+      .node.left  { left: 0; padding-right: 3.5rem; text-align: right; }
+      .node.right { left: 50%; padding-left: 3.5rem; }
     }
-    
-    .section-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--accent-red);
-      margin-bottom: 0.75rem;
+
+    /* dot on the line */
+    .node .dot {
+      position: absolute; top: 4px; left: 21px; width: 15px; height: 15px; border-radius: 50%;
+      background: var(--matte-black); border: 2px solid #555; z-index: 2;
     }
-    
-    .section-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 2rem;
-      margin-bottom: 1rem;
+    @media(min-width: 780px){
+      .node.left .dot { left: auto; right: -7.5px; }
+      .node.right .dot { left: -7.5px; }
     }
-    
-    .section-title {
-      font-size: 2rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      color: #ffffff;
-      flex: 1;
-      line-height: 1.3;
+    .node.done .dot { border-color: var(--accent-cyan); box-shadow: 0 0 0 4px rgba(0,229,255,0.1); }
+    .node.active .dot { border-color: var(--accent-red); box-shadow: 0 0 0 4px rgba(227,11,23,0.12); animation: pulse 2s infinite; }
+    .node.future .dot { border-color: #6b6b6b; }
+    @keyframes pulse { 0%,100%{box-shadow:0 0 0 4px rgba(227,11,23,0.12);} 50%{box-shadow:0 0 0 8px rgba(227,11,23,0.04);} }
+
+    .ver { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: #6b6b6b; margin-bottom: 0.5rem; }
+    .node h2 {
+      font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(1.5rem, 3vw, 2.1rem);
+      color: #f3ede0; line-height: 1.15; margin-bottom: 0.8rem;
     }
-    
-    .section-meta {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 0.5rem;
-      flex-shrink: 0;
+    .status {
+      display: inline-block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+      padding: 0.3rem 0.8rem; border-radius: 40px; margin-bottom: 1rem;
     }
-    
-    .release-date {
-      font-size: 0.85rem;
-      color: var(--accent-cyan);
-      font-weight: 500;
+    .status.done   { color: var(--accent-cyan); border: 1px solid rgba(0,229,255,0.35); }
+    .status.active { color: var(--accent-red); border: 1px solid rgba(227,11,23,0.4); }
+    .status.future { color: #8a8a8a; border: 1px solid rgba(255,255,255,0.15); }
+    .node p { font-family: 'Cormorant Garamond', serif; font-size: 1.18rem; line-height: 1.7; color: #b4ada0; }
+    .node .highlight { color: #f0e9da; font-style: italic; }
+
+    /* FINAL CTA */
+    .road-cta { max-width: 640px; margin: 2rem auto 7rem; padding: 0 2rem; text-align: center; }
+    .road-cta h2 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(2rem,4vw,3rem); color:#f3ede0; margin-bottom: 1.2rem; }
+    .road-cta p { font-family:'Cormorant Garamond',serif; font-size:1.35rem; font-style:italic; color:#a8a298; margin: 0 auto 2.5rem; max-width: 480px; line-height:1.7; }
+    .btn-primary, .btn-ghost {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; text-decoration: none;
+      padding: 1rem 2.2rem; border-radius: 1px; transition: all 0.4s cubic-bezier(0.16,1,0.3,1); display: inline-block; margin: 0.4rem;
     }
-    
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.7rem;
-      font-weight: 600;
-      padding: 0.4rem 0.9rem;
-      border-radius: 20px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    .status-badge.completed {
-      background: rgba(0, 229, 255, 0.12);
-      color: var(--accent-cyan);
-      border: 1px solid rgba(0, 229, 255, 0.3);
-    }
-    
-    .status-badge.ongoing {
-      background: rgba(227, 11, 23, 0.12);
-      color: var(--accent-red);
-      border: 1px solid rgba(227, 11, 23, 0.3);
-    }
-    
-    .status-badge.live {
-      background: rgba(255, 230, 0, 0.12);
-      color: #ffe600;
-      border: 1px solid rgba(255, 230, 0, 0.3);
-    }
-    
-    .status-icon {
-      font-size: 0.9rem;
-    }
-    
-    .section-content {
-      color: #c0c0c0;
-      font-size: 1.05rem;
-      line-height: 1.9;
-      margin-bottom: 1.5rem;
-    }
-    
-    .section-content p {
-      margin-bottom: 1.2rem;
-    }
-    
-    .section-content strong {
-      color: #fff;
-      font-weight: 600;
-    }
-    
-    .goal-box {
-      background: rgba(13, 13, 14, 0.5);
-      border-radius: 6px;
-      border-left: 3px solid var(--accent-red);
-      padding: 1.2rem 1.5rem;
-      margin: 1.5rem 0;
-      color: rgba(255, 255, 255, 0.85);
-    }
-    
-    .goal-box p {
-      margin: 0;
-      font-size: 0.95rem;
-    }
-    
-    .subsection {
-      margin-top: 2rem;
-      padding-left: 1.5rem;
-      border-left: 2px solid rgba(0, 229, 255, 0.2);
-    }
-    
-    .subsection-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: var(--accent-cyan);
-      margin-bottom: 0.8rem;
-    }
-    
-    .list-items p {
-      margin-bottom: 0.8rem;
-      padding-left: 1.5rem;
-      position: relative;
-    }
-    
-    .list-items p::before {
-      content: "▹";
-      position: absolute;
-      left: 0;
-      color: var(--accent-red);
-      font-size: 1.2rem;
-    }
-    
-    .divider {
-      width: 80px;
-      height: 2px;
-      background: linear-gradient(to right, var(--accent-red), transparent);
-      margin: 3.5rem 0;
-    }
-    
-    /* Footer */
-    footer {
-      margin-top: 4rem;
-      padding: 2.5rem;
-      background: rgba(13, 13, 14, 0.5);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      text-align: center;
-      font-size: 0.875rem;
-      line-height: 1.8;
-      color: #a0a0a0;
-    }
-    
-    footer a {
-      color: var(--accent-cyan);
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
-    
-    footer a:hover {
-      color: var(--accent-red);
-    }
-    
-    footer strong {
-      color: #ffffff;
-      display: block;
-      margin-top: 1rem;
-    }
-    
-    /* Responsive */
-    @media (max-width: 768px) {
-      .header {
-        padding: 1rem 1.5rem;
-      }
-      
-      .header-left {
-        gap: 0.8rem;
-      }
-      
-      .back-btn {
-        font-size: 0.65rem;
-        padding: 0.6rem 1rem;
-      }
-      
-      .container {
-        padding: 9rem 1.5rem 3rem;
-      }
-      
-      .page-title {
-        margin-bottom: 0.5rem;
-      }
-      
-      .page-subtitle {
-        margin-bottom: 3rem;
-      }
-      
-      .section-header {
-        flex-direction: column;
-        gap: 1rem;
-      }
-      
-      .section-meta {
-        align-items: flex-start;
-        flex-direction: row;
-        gap: 1rem;
-      }
-      
-      .section-title {
-        font-size: 1.5rem;
-      }
-      
-      .section-content {
-        font-size: 1rem;
-      }
-      
-      .subsection {
-        padding-left: 1rem;
-      }
-    }
+    .btn-primary { background: var(--accent-red); color: #fff; border: 1px solid var(--accent-red); }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(227,11,23,0.3); }
+    .btn-ghost { background: transparent; color: #cfcabf; border: 1px solid rgba(255,255,255,0.18); }
+    .btn-ghost:hover { border-color: #f3ede0; color: #f3ede0; }
+
+    footer { text-align:center; padding: 3rem 1.5rem 4rem; color:#6b6b6b; font-size:0.8rem; border-top:1px solid rgba(255,255,255,0.05); }
+    footer a { color:#9a9a9a; text-decoration:none; } footer a:hover{ color:var(--accent-red); }
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="header">
-    <div class="header-left">
-      <div class="header-title">Roadmap</div>
-    </div>
-    <a href="index.html" class="back-btn">← Back Home</a>
-  </header>
-  
-  <!-- Main Content -->
-  <div class="container">
-    <h1 class="page-title">NYFURION ROADMAP</h1>
-    <p class="page-subtitle">The complete journey of Nyfurion, from concept to reality — every milestone that shaped the project.</p>
-    
-    <div class="roadmap-section">
-      <div class="section-label">Version 1.0</div>
-      <div class="section-header">
-        <h2 class="section-title">Initial Collection Launch</h2>
-        <div class="section-meta">
-          <span class="release-date">Release: 2025</span>
-          <span class="status-badge completed">
-            <span class="status-icon">✓</span>
-            Completed
-          </span>
-        </div>
-      </div>
-      <div class="section-content">
-        <p>The Nyfurion Series began with the launch of the first 100 NFT fragments. Each fragment represents a unique element of the narrative universe, giving life to a collection that blends digital art and storytelling. This first wave marked the beginning of Nyfurion, attracting interaction on social media.</p>
-        <div class="goal-box">
-          <p><strong>Goal achieved:</strong> Project foundation and first contact with the public.</p>
-        </div>
-      </div>
-      <div class="divider"></div>
-    </div>
-    
-    <div class="roadmap-section">
-      <div class="section-label">Version 1.1</div>
-      <div class="section-header">
-        <h2 class="section-title">Gradual Expansion of the Collection</h2>
-        <div class="section-meta">
-          <span class="release-date">Period: 2025</span>
-          <span class="status-badge completed">
-            <span class="status-icon">✓</span>
-            Completed
-          </span>
-        </div>
-      </div>
-      <div class="section-content">
-        <p>Following the initial launch, the Nyfurion collection adopted a structured and progressive release strategy. NFTs were minted in batches of 100 pieces at a time, eventually reaching a total of 400 unique fragments. This expansion allowed the project to maintain high quality and consistency, reinforcing Nyfurion's creative vision.</p>
-        <p>At the same time, the presence on Instagram began to grow, with each release accompanied by visual content, teasers, and updates. Social media started to reflect the evolution of the Nyfurion universe, creating an initial point of contact with the public.</p>
-        <div class="goal-box">
-          <p><strong>Goal achieved:</strong> Controlled expansion of the collection and launch of visual communication on social platforms.</p>
-        </div>
-      </div>
-      <div class="divider"></div>
-    </div>
-    
-    <div class="roadmap-section">
-      <div class="section-label">Version 1.2</div>
-      <div class="section-header">
-        <h2 class="section-title">Narrative and Visual Expansion</h2>
-        <div class="section-meta">
-          <span class="release-date">Period: 2025</span>
-          <span class="status-badge completed">
-            <span class="status-icon">✓</span>
-            Completed
-          </span>
-        </div>
-      </div>
-      <div class="section-content">
-        <p>The Nyfurion collection took another evolutionary step with the introduction of new female characters, iconic locations, and narrative elements that had been previously announced. Visual fragments of the destroyed city, forgotten streets, and immersive settings were added to deepen the atmosphere of the Nyfurion universe.</p>
-        <p>This phase fulfilled earlier promises made to the community, reinforcing the project's narrative and visual consistency. Each new NFT is a piece that enriches the mythology of Nyfurion.</p>
-        <div class="goal-box">
-          <p><strong>Goal achieved:</strong> Thematic and narrative expansion of the collection, with the integration of previously announced content.</p>
-        </div>
-      </div>
-      <div class="divider"></div>
-    </div>
-    
-    <div class="roadmap-section">
-      <div class="section-label">Version 1.3</div>
-      <div class="section-header">
-        <h2 class="section-title">Hidden Evolutions & Dynamic Lore</h2>
-        <div class="section-meta">
-          <span class="status-badge ongoing">
-            <span class="status-icon">⚡</span>
-            Ongoing
-          </span>
-        </div>
-      </div>
-      <div class="section-content">
-        <p>Some minted NFTs hide undisclosed narrative evolutions. A few of these evolutions have already been revealed, while others will unfold gradually through Instagram stories, adding depth and mystery to the Nyfurion universe.</p>
-        <p>A seemingly good character might conceal a dark soul. A minor fragment could turn out to be central to the story. These evolutions aren't always visible in the attributes, but they're part of a living, dynamic lore that enhances the symbolic and collectible value of each NFT.</p>
-        <div class="goal-box">
-          <p><strong>Goal:</strong> Introduce an unpredictable narrative layer that evolves over time and actively engages the community.</p>
-        </div>
-      </div>
-      <div class="divider"></div>
-    </div>
-    
-    <div class="roadmap-section">
-      <div class="section-label">Version 1.4</div>
-      <div class="section-header">
-        <h2 class="section-title">NYFV2: Fragmented Collection</h2>
-        <div class="section-meta">
-          <span class="status-badge live">
-            <span class="status-icon">●</span>
-            Live Mint
-          </span>
-        </div>
-      </div>
-      <div class="section-content">
-        <p>NYFV2 is a fragmented collection of 100 unique NFTs, directly connected to the narrative universe of Nyfurion. This series was designed for a live mint on OpenSea, offering collectors the opportunity to enter the world of Nyfurion through selected and mysterious fragments.</p>
-        
-        <div class="subsection">
-          <h3 class="subsection-title">Connection to the Main Collection</h3>
-          <p>NYFV2 is not a second volume, but a narrative branch that also includes evolutionary fragments linked to the main collection. Once all 100 pieces are minted, the creative and narrative process will continue within Nyfurion, where new fragments, further evolutions, revelations, and connections between NFTs will unfold.</p>
-        </div>
-        
-        <div class="goal-box">
-          <p><strong>Goal:</strong> Expand access to the Nyfurion universe through a fragmented collection, keeping the lore alive and setting the stage for future evolutions.</p>
-        </div>
-      </div>
-      <div class="divider"></div>
-    </div>
-    
-    <div class="roadmap-section">
-      <div class="section-label">Version 1.5</div>
-      <div class="section-header">
-        <h2 class="section-title">Visual Storytelling & Community</h2>
-        <div class="section-meta">
-          <span class="status-badge completed">
-            <span class="status-icon">✓</span>
-            Completed
-          </span>
-        </div>
-      </div>
-      <div class="section-content">
-        <p>During this phase, a digital book was published on @Nyfurion_club Instagram, offering an immersive and accessible introduction to the Nyfurion project. Through evocative visuals and carefully crafted texts, the audience can explore the narrative universe and understand the vision behind each NFT.</p>
-        
-        <div class="subsection">
-          <h3 class="subsection-title">Goals</h3>
-          <div class="list-items">
-            <p>Make the project readable and engaging, even for those unfamiliar with crypto or NFTs.</p>
-            <p>Strengthen the bond with the community through clear and inspiring content.</p>
-            <p>Open the lore to active participation from holders, while maintaining narrative coherence.</p>
-          </div>
-        </div>
-        
-        <div class="subsection">
-          <h3 class="subsection-title">Participatory Lore</h3>
-          <p>Nyfurion fragment holders can contribute to the story with small inputs—suggesting plot twists, narrative branches, or unique details that enrich the world. Each fragment becomes a voice in Nyfurion's fate, without disrupting the core storyline.</p>
-        </div>
-        
-        <div class="subsection">
-          <h3 class="subsection-title">Ongoing Activities</h3>
-          <div class="list-items">
-            <p>Publishing Instagram stories and posts for updates and sneak peeks.</p>
-            <p>Launching contests to win NFTs, with one already completed and others in development.</p>
-          </div>
-        </div>
-      </div>
-      <div class="divider"></div>
-    </div>
-    
-    <div class="roadmap-section">
-      <div class="section-label">Version 1.6</div>
-      <div class="section-header">
-        <h2 class="section-title">License Publication</h2>
-        <div class="section-meta">
-          <span class="status-badge completed">
-            <span class="status-icon">✓</span>
-            Completed
-          </span>
-        </div>
-      </div>
-      <div class="section-content">
-        <p>The official Nyfurion license has been published as an Instagram Story, making it easily accessible to anyone interested in understanding the rights and usage rules of the NFT fragments. The license outlines the creative possibilities and limitations, protecting both the project and its holders.</p>
-        
-        <div class="subsection">
-          <h3 class="subsection-title">Goals</h3>
-          <div class="list-items">
-            <p>Provide legal clarity and transparency regarding digital ownership.</p>
-            <p>Strengthen trust in the project's structure and professionalism.</p>
-            <p>Make the license accessible in a simple and direct format.</p>
-          </div>
-        </div>
-        
-        <div class="goal-box">
-          <p><strong>Access:</strong> Available via Instagram at @Nyfurion_club, with the license story linked directly for viewing.</p>
-        </div>
-      </div>
-      <div class="divider"></div>
-    </div>
-    
-    <div class="roadmap-section">
-      <div class="section-label">Version 1.7</div>
-      <div class="section-header">
-        <h2 class="section-title">Nyfurion Beyond: Towards TV Series</h2>
-        <div class="section-meta">
-          <span class="status-badge ongoing">
-            <span class="status-icon">⚡</span>
-            Long-term
-          </span>
-        </div>
-      </div>
-      <div class="section-content">
-        <p>Nyfurion is not just an NFT collection—it's a narrative universe designed to expand beyond the digital realm. The main goal is to bring the Nyfurion series to television or streaming platforms, collaborating with existing brands and entertainment networks.</p>
-        <p>Each NYF fragment represents a potential spark of storytelling. If one of these NFTs is selected to appear in the series, its holder will receive a percentage of earnings, to be defined based on future agreements.</p>
-        
-        <div class="subsection">
-          <h3 class="subsection-title">Goals</h3>
-          <div class="list-items">
-            <p>Make Nyfurion known to the point of generating a series on demand.</p>
-            <p>Reward fragment holders with creative and financial recognition.</p>
-            <p>Transform the collection into a shared narrative ecosystem.</p>
-          </div>
-        </div>
-        
-        <div class="goal-box">
-          <p><strong>Important Note:</strong> This goal is ambitious and will depend on time, the project's growth, and public interest. But every step taken so far is a building block toward that possibility.</p>
-        </div>
-      </div>
-      <div class="divider"></div>
-    </div>
-    
-    <div class="roadmap-section">
-      <div class="section-label">Version 1.8</div>
-      <div class="section-header">
-        <h2 class="section-title">Collaborations & Commercial Initiatives</h2>
-        <div class="section-meta">
-          <span class="status-badge ongoing">
-            <span class="status-icon">⚡</span>
-            Active
-          </span>
-        </div>
-      </div>
-      <div class="section-content">
-        <p>Nyfurion is open to collaborations with artists, creatives, brands, and entrepreneurial ventures that wish to contribute to the expansion of its narrative universe. NFT fragment holders are allowed to launch commercial activities inspired by the project, in accordance with the terms outlined in the official license.</p>
-        
-        <div class="subsection">
-          <h3 class="subsection-title">Goals</h3>
-          <div class="list-items">
-            <p>Encourage the creation of artistic and business initiatives linked to Nyfurion.</p>
-            <p>Give tangible value to NFT fragments beyond the digital space.</p>
-            <p>Expand the project's visibility through strategic partnerships.</p>
-          </div>
-        </div>
-        
-        <div class="subsection">
-          <h3 class="subsection-title">Holder Rights</h3>
-          <p>As stated in the license published on Instagram, holders may use their fragments for creative projects, merchandising, storytelling, or commercial initiatives, provided they respect the brand's guidelines.</p>
-        </div>
-        
-        <div class="goal-box">
-          <p><strong>Collaborations:</strong> Partnership proposals, artistic projects, or commercial initiatives can be submitted via Instagram DM or email. Each proposal will be evaluated based on its alignment with Nyfurion's vision.</p>
-        </div>
-      </div>
-    </div>
-    
-    <footer>
-      Thank you for following the Nyfurion journey.<br>
-      <a href="index.html">Home</a> | <a href="nyfurion-lore.html">Lore</a> | <a href="contatti.html">Contact</a>
-      <strong>Copyright © 2025 NYFURION X REBORN — All rights reserved.</strong>
-    </footer>
+  <!-- ===== CINEMATIC INTRO ===== -->
+  <div id="cine-intro">
+    <img class="cine-video" id="cine-image" src="assets/images/roadmap-intro-frame.png" alt="" aria-hidden="true">
+    <div class="cine-vignette"></div>
+
+    <!-- only the brand, centered -->
+    <div class="cine-line" id="l-nyf"><span class="cine-word brand">NYFURION</span></div>
+
+    <button id="cine-skip">Skip ›</button>
   </div>
+
+  <div id="progress-bar"></div>
+
+  <nav id="topnav">
+    <div class="nav-scroll" id="navScroll">
+      <div class="nav-track">
+        <a href="index.html" class="nav-home">Home</a>
+        <a href="lore.html">Lore</a>
+        <a href="characters.html">Characters</a>
+        <a href="roadmap.html" class="active">Roadmap</a>
+        <a href="nfts.html">NFTs</a>
+        <a href="contacts.html">Contact</a>
+        <span class="nav-sep"></span>
+        <a href="index.html#choose" class="nav-cta">Choose Your Side</a>
+      </div>
+    </div>
+    <div class="nav-prog" id="navProg" aria-hidden="true"></div>
+  </nav>
+
+  <section class="hero">
+    <div class="eyebrow">The Journey</div>
+    <h1>The Road of<br>Nyfurion</h1>
+    <p>From a single spark to a living universe. Every step taken, and every step still to come.</p>
+  </section>
+
+  <div class="timeline">
+
+    <!-- 1.0 -->
+    <div class="node left done">
+      <span class="dot"></span>
+      <div class="ver">Phase 1.0 · 2025</div>
+      <span class="status done">Completed</span>
+      <h2>The First Spark</h2>
+      <p>The Nyfurion saga began with the first <span class="highlight">100 fragments</span>. Each one a unique piece of the universe, where digital art and storytelling became one, and the world made its first contact with the public.</p>
+    </div>
+
+    <!-- 1.1 -->
+    <div class="node right done">
+      <span class="dot"></span>
+      <div class="ver">Phase 1.1 · 2025</div>
+      <span class="status done">Completed</span>
+      <h2>The World Expands</h2>
+      <p>Fragments were released in waves, growing to <span class="highlight">400 unique pieces</span>. Quality and vision held firm, while the story began to live on social media through teasers, visuals and updates.</p>
+    </div>
+
+    <!-- 1.2 -->
+    <div class="node left done">
+      <span class="dot"></span>
+      <div class="ver">Phase 1.2 · 2025</div>
+      <span class="status done">Completed</span>
+      <h2>New Faces, New Lands</h2>
+      <p>The universe deepened with new female characters, iconic locations and the ruins of a fallen city. Every promise made to the community was kept, every fragment enriched the myth.</p>
+    </div>
+
+    <!-- 1.3 -->
+    <div class="node right active">
+      <span class="dot"></span>
+      <div class="ver">Phase 1.3 · In progress</div>
+      <span class="status active">Ongoing</span>
+      <h2>Hidden Evolutions</h2>
+      <p>Some fragments conceal secret evolutions, revealed slowly over time. A gentle face may hide a dark soul; a minor piece may become central. This is a <span class="highlight">living lore</span>, never fully predictable.</p>
+    </div>
+
+    <!-- 1.4 -->
+    <div class="node left active">
+      <span class="dot"></span>
+      <div class="ver">Phase 1.4 · Live</div>
+      <span class="status active">Live Mint</span>
+      <h2>NYFV2 · A New Branch</h2>
+      <p>A fragmented collection of <span class="highlight">100 unique NFTs</span>, a narrative branch tied to the main saga. Once minted, the story continues, with new fragments, evolutions and revelations to come.</p>
+    </div>
+
+    <!-- 1.5 -->
+    <div class="node right done">
+      <span class="dot"></span>
+      <div class="ver">Phase 1.5 · 2025</div>
+      <span class="status done">Completed</span>
+      <h2>The Book & The Community</h2>
+      <p>The first book opened the world to everyone, even those new to crypto. Holders can now shape the lore with their own ideas, becoming a <span class="highlight">voice in Nyfurion's fate</span>.</p>
+    </div>
+
+    <!-- 1.6 -->
+    <div class="node left done">
+      <span class="dot"></span>
+      <div class="ver">Phase 1.6 · 2025</div>
+      <span class="status done">Completed</span>
+      <h2>The Official License</h2>
+      <p>A clear, transparent license defines what holders truly own and can create. Legal clarity, real trust, full creative freedom within the world.</p>
+    </div>
+
+    <!-- 1.7 -->
+    <div class="node right future">
+      <span class="dot"></span>
+      <div class="ver">Phase 1.7 · Long-term vision</div>
+      <span class="status future">The Big Vision</span>
+      <h2>Nyfurion Beyond · The Series</h2>
+      <p>The ultimate goal: bring Nyfurion to <span class="highlight">television and streaming</span>. Every fragment is a potential spark of the story, and holders whose fragment appears on screen share in its success.</p>
+    </div>
+
+    <!-- 1.8 -->
+    <div class="node left future">
+      <span class="dot"></span>
+      <div class="ver">Phase 1.8 · Open</div>
+      <span class="status future">Active</span>
+      <h2>Alliances & Beyond</h2>
+      <p>Nyfurion opens its gates to artists, brands and creators. Holders can build real ventures, merchandise and stories from their fragments, giving the world value far beyond the digital.</p>
+    </div>
+
+  </div>
+
+  <div class="road-cta">
+    <h2>The Story Is Still Being Written</h2>
+    <p>You are early. Step into the world now, and help shape what Nyfurion becomes.</p>
+    <a href="lore.html" class="btn-primary">Read the Saga</a>
+    <a href="index.html#choose" class="btn-ghost">Choose Your Side</a>
+  </div>
+
+  <footer>
+    <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="lore.html">Lore</a> &nbsp;·&nbsp; <a href="characters.html">Characters</a> &nbsp;·&nbsp; <a href="contacts.html">Contact</a><br><br>
+    © 2025 NYFURION X REBORN — All rights reserved.
+  </footer>
+
+  <script>
+    /* ===== CINEMATIC INTRO — one word at a time, then portal opens ===== */
+    (function(){
+      const intro  = document.getElementById('cine-intro');
+      const skip   = document.getElementById('cine-skip');
+      const lNyf  = document.getElementById('l-nyf');
+      let finished = false;
+      const timers = [];
+      document.body.classList.add('intro-lock');
+
+      function playWord(el, dur){ el.style.setProperty('--dur', dur+'ms'); el.classList.add('play'); }
+
+      // NYFURION appears over the video, holds briefly, then SLIDES LEFT to the roadmap. Snappy.
+      let t = 250;
+      timers.push(setTimeout(()=> playWord(lNyf, 1100), t));
+      timers.push(setTimeout(()=> slideToRoadmap(), t + 1550));   // ~1.8s total then slide
+
+      function slideToRoadmap(){
+        if(finished) return; finished = true;
+        timers.forEach(clearTimeout);
+        document.body.classList.remove('intro-lock');
+        intro.classList.add('slide-out');
+        setTimeout(()=>{ intro.classList.add('done'); }, 720);
+      }
+      function skipNow(){
+        if(finished) return; finished = true;
+        timers.forEach(clearTimeout);
+        intro.classList.add('done');
+        document.body.classList.remove('intro-lock');
+      }
+      skip.addEventListener('click', (e)=>{ e.stopPropagation(); skipNow(); });
+      window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') skipNow(); });
+    })();
+
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+    });
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('visible');
+        else e.target.classList.remove('visible');   // re-animate on re-entry for a living feel
+      });
+    }, { threshold: 0.25, rootMargin: '0px 0px -12% 0px' });
+    document.querySelectorAll('.node').forEach(n => obs.observe(n));
+  </script>
+  <script src="nav.js" defer></script>
 </body>
 </html>

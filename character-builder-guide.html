@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Nyfurion — Come aggiungere le foto al Character Builder</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Space Grotesk','Segoe UI',sans-serif; background:#fff; color:#111; font-size:13px; line-height:1.7; }
+  @page { margin: 15mm 14mm; size: A4 portrait; }
+  @media print { .no-print { display:none!important; } .pb { page-break-before: always; } }
+
+  .wrap { max-width: 760px; margin: 0 auto; padding: 36px 24px 60px; }
+
+  /* cover */
+  .cover { border-bottom: 3px solid #111; padding-bottom: 24px; margin-bottom: 32px; }
+  .cover .brand { font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:#aaa; margin-bottom:8px; }
+  .cover h1 { font-size:26px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; line-height:1.2; }
+  .cover .sub { font-size:12px; color:#666; margin-top:6px; letter-spacing:.1em; text-transform:uppercase; }
+
+  /* sezioni */
+  h2 { font-size:12px; font-weight:700; letter-spacing:.22em; text-transform:uppercase;
+       border-left: 4px solid #111; padding-left:10px; margin:30px 0 12px; }
+  h3 { font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:#444; margin:18px 0 6px; }
+
+  p { margin-bottom:8px; }
+
+  /* box evidenza */
+  .box { border:1px solid #111; border-radius:3px; padding:12px 14px; margin:12px 0; }
+  .box.gold { border-color:#c07000; background:#fffbf0; }
+  .box.blue { border-color:#0066cc; background:#f0f6ff; }
+  .box.red  { border-color:#cc2200; background:#fff5f3; }
+  .box .label { font-size:9px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:#888; margin-bottom:4px; }
+
+  /* tabella categorie */
+  table { width:100%; border-collapse:collapse; margin:10px 0 20px; font-size:11.5px; }
+  th { background:#111; color:#fff; padding:7px 10px; font-size:9.5px; letter-spacing:.16em;
+       text-transform:uppercase; text-align:left; font-weight:700; }
+  td { padding:7px 10px; border-bottom:1px solid #eee; vertical-align:top; }
+  tr:nth-child(even) td { background:#fafafa; }
+  td code { font-family:Consolas,monospace; background:#eee; padding:1px 5px; border-radius:2px; font-size:10px; }
+  td.folder { font-family:Consolas,monospace; font-size:11px; font-weight:600; }
+  td.files  { font-family:Consolas,monospace; font-size:10px; color:#555; line-height:2; }
+  td.cat    { font-weight:600; }
+
+  /* albero cartelle */
+  .tree { font-family:Consolas,monospace; font-size:11px; line-height:2;
+          background:#f5f5f5; border:1px solid #ddd; border-radius:4px; padding:14px 18px; margin:10px 0 16px; }
+  .tree .d { font-weight:700; }
+  .tree .f { color:#555; }
+
+  /* regola */
+  .rule { display:flex; gap:12px; align-items:flex-start; margin-bottom:10px; }
+  .rule .n { background:#111; color:#fff; font-size:10px; font-weight:700;
+             width:22px; height:22px; border-radius:50%; display:flex;
+             align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+
+  /* codice JS inline */
+  .jscode { background:#f5f5f5; border:1px solid #ddd; border-radius:4px;
+            padding:12px 14px; font-family:Consolas,monospace; font-size:10.5px;
+            line-height:1.8; margin:10px 0; white-space:pre; overflow-x:auto; }
+  .jscode .cm { color:#888; }
+  .jscode .kw { color:#0066cc; font-weight:700; }
+  .jscode .str { color:#2a7a2a; }
+  .jscode .add { background:#e8fff0; color:#1a6b1a; font-weight:700; }
+
+  /* print btn */
+  .print-btn { position:fixed; top:16px; right:16px; padding:9px 20px;
+               background:#111; color:#fff; border:none; border-radius:3px;
+               font-family:inherit; font-size:11px; letter-spacing:.12em;
+               text-transform:uppercase; cursor:pointer; z-index:999; }
+  .print-btn:hover { background:#333; }
+
+  hr { border:none; border-top:1px solid #e8e8e8; margin:22px 0; }
+  .small { font-size:10px; color:#888; }
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">Salva PDF  ⌘P</button>
+
+<div class="wrap">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="brand">Nyfurion — Character Builder</div>
+    <h1>Come si aggiungono le foto</h1>
+    <div class="sub">Guida operativa completa — struttura cartelle, nomi file, aggiunta varianti</div>
+  </div>
+
+  <!-- REGOLA D'ORO -->
+  <h2>Regola d'oro</h2>
+
+  <div class="box gold">
+    <div class="label">Leggi questo prima di tutto</div>
+    <p><strong>Il sistema funziona in automatico.</strong> Devi solo:</p>
+    <div class="rule"><div class="n">1</div><div>Creare il PNG con le dimensioni giuste</div></div>
+    <div class="rule"><div class="n">2</div><div>Dargli il nome esatto indicato in questa guida</div></div>
+    <div class="rule"><div class="n">3</div><div>Metterlo nella cartella giusta</div></div>
+    <div class="rule"><div class="n">4</div><div>Ricaricare il browser — <strong>il builder lo mostra subito, senza toccare il codice</strong></div></div>
+  </div>
+
+  <div class="box blue">
+    <div class="label">Dimensione obbligatoria per ogni PNG</div>
+    <p style="font-size:22px;font-weight:700;letter-spacing:.04em;margin:4px 0;">2000 × 3000 px</p>
+    <p class="small">Sfondo trasparente (PNG-24 con canale alpha) · Personaggio centrato orizzontalmente · Piedi ancorati al bordo inferiore</p>
+  </div>
+
+  <hr>
+
+  <!-- STRUTTURA CARTELLE -->
+  <h2>Le cartelle già create nel progetto</h2>
+
+  <p>Queste cartelle esistono già dentro <code>assets/characters/</code> — devi solo inserire i PNG al loro interno:</p>
+
+  <div class="tree">
+<span class="d">assets/characters/</span>
+├── <span class="d">backgrounds/</span>       ← sfondi scena
+├── <span class="d">effects/</span>           ← aure ed effetti (usata sia per Aura Back che Aura Front)
+├── <span class="d">base/</span>              ← corpo base / classe del personaggio
+├── <span class="d">outfit/</span>            ← vestiti
+├── <span class="d">symbols/</span>           ← simboli / emblemi
+├── <span class="d">head/</span>              ← testa / elmo
+├── <span class="d">eyes/</span>              ← occhi / visiera
+├── <span class="d">mouth/</span>             ← bocca / espressione
+├── <span class="d">hair/</span>              ← capelli / corna / aureola
+└── <span class="d">accessories/</span>       ← accessori (spallacci, collare, maschere...)</div>
+
+  <hr>
+
+  <!-- TABELLA COMPLETA -->
+  <h2>Tabella completa — ogni categoria con cartella e nomi file</h2>
+
+  <p>Per ogni categoria trovi: la cartella, i file che il builder cerca adesso, e come aggiungere nuovi.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Categoria nel builder</th>
+        <th>Cartella</th>
+        <th>File da inserire (nomi esatti)</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr>
+        <td class="cat">Sfondo</td>
+        <td class="folder">backgrounds/</td>
+        <td class="files">
+          bg_morning_lounge_01.png<br>
+          bg_noon_lounge_01.png<br>
+          bg_night_lounge_01.png
+        </td>
+      </tr>
+
+      <tr>
+        <td class="cat">Aura Back<br><span class="small">(dietro il corpo)</span></td>
+        <td class="folder">effects/</td>
+        <td class="files">
+          effect_aura_violet_01.png<br>
+          effect_energy_blue_01.png<br>
+          effect_flame_red_01.png
+        </td>
+      </tr>
+
+      <tr>
+        <td class="cat">Classe<br><span class="small">(corpo base)</span></td>
+        <td class="folder">base/</td>
+        <td class="files">
+          base_guardian_01.png<br>
+          base_master_01.png<br>
+          base_beast_01.png
+        </td>
+      </tr>
+
+      <tr>
+        <td class="cat">Outfit</td>
+        <td class="folder">outfit/</td>
+        <td class="files">
+          outfit_armor_01.png<br>
+          outfit_jacket_01.png<br>
+          outfit_robe_01.png<br>
+          outfit_core_01.png
+        </td>
+      </tr>
+
+      <tr>
+        <td class="cat">Simbolo</td>
+        <td class="folder">symbols/</td>
+        <td class="files">
+          symbol_sigil_01.png<br>
+          symbol_star_01.png<br>
+          symbol_ring_01.png<br>
+          symbol_void_01.png
+        </td>
+      </tr>
+
+      <tr>
+        <td class="cat">Testa</td>
+        <td class="folder">head/</td>
+        <td class="files">
+          head_guardian_01.png<br>
+          head_master_01.png
+        </td>
+      </tr>
+
+      <tr>
+        <td class="cat">Occhi</td>
+        <td class="folder">eyes/</td>
+        <td class="files">
+          eyes_standard_01.png<br>
+          eyes_sharp_01.png<br>
+          eyes_visor_01.png<br>
+          eyes_orb_01.png
+        </td>
+      </tr>
+
+      <tr>
+        <td class="cat">Bocca</td>
+        <td class="folder">mouth/</td>
+        <td class="files">
+          mouth_neutral_01.png<br>
+          mouth_smile_01.png<br>
+          mouth_serious_01.png
+        </td>
+      </tr>
+
+      <tr>
+        <td class="cat">Capelli</td>
+        <td class="folder">hair/</td>
+        <td class="files">
+          hair_crest_01.png<br>
+          hair_horns_01.png<br>
+          hair_halo_01.png
+        </td>
+      </tr>
+
+      <tr>
+        <td class="cat">Accessori</td>
+        <td class="folder">accessories/</td>
+        <td class="files">
+          accessory_shoulders_01.png<br>
+          accessory_mask_01.png<br>
+          accessory_collar_01.png
+        </td>
+      </tr>
+
+      <tr>
+        <td class="cat">Aura Front<br><span class="small">(davanti al corpo)</span></td>
+        <td class="folder">effects/</td>
+        <td class="files">
+          effect_aura_violet_01.png<br>
+          effect_energy_blue_01.png
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <div class="box red">
+    <div class="label">Attenzione</div>
+    <p>I nomi file devono essere <strong>esattamente come scritti sopra</strong> — minuscolo, underscore, nessuno spazio.
+    Se il nome è diverso, il browser non trova il file e la scheda rimane vuota nel builder.</p>
+  </div>
+
+  <hr>
+
+  <!-- AGGIUNGERE NUOVE VARIANTI -->
+  <div class="pb"></div>
+  <h2>Come aggiungere nuove varianti (es. 100 outfit)</h2>
+
+  <p>Vuoi aggiungere un nuovo outfit che si chiama <strong>"Titan"</strong>? Fai questi 2 passi:</p>
+
+  <h3>Passo 1 — Crea il PNG e mettilo nella cartella</h3>
+  <p>Salva il file come <code>outfit_titan_01.png</code> dentro <code>assets/characters/outfit/</code></p>
+
+  <h3>Passo 2 — Aggiungi una riga in character-builder.js</h3>
+  <p>Apri <code>character-builder.js</code>, cerca il blocco <code>id: 'outfit'</code> e aggiungi la riga evidenziata:</p>
+
+  <div class="jscode"><span class="cm">// cerca questo blocco nel file:</span>
+{
+  id: <span class="str">'outfit'</span>, label: <span class="str">'Outfit'</span>,
+  folder: <span class="str">'outfit'</span>,
+  options: [
+    { id: <span class="str">'none'</span>,   label: <span class="str">'Nessuno'</span>, file: <span class="kw">null</span> },
+    { id: <span class="str">'armor'</span>,  label: <span class="str">'Armor'</span>,   file: <span class="str">'outfit_armor_01.png'</span>  },
+    { id: <span class="str">'jacket'</span>, label: <span class="str">'Jacket'</span>,  file: <span class="str">'outfit_jacket_01.png'</span> },
+    { id: <span class="str">'robe'</span>,   label: <span class="str">'Robe'</span>,    file: <span class="str">'outfit_robe_01.png'</span>   },
+    { id: <span class="str">'core'</span>,   label: <span class="str">'Core'</span>,    file: <span class="str">'outfit_core_01.png'</span>   },
+<span class="add">    { id: 'titan',  label: 'Titan',   file: 'outfit_titan_01.png'  },  ← aggiungi così</span>
+  ]
+}</div>
+
+  <p>Stessa logica per tutte le altre categorie. Il pattern è sempre:</p>
+  <div class="jscode">{ id: <span class="str">'[nome_univoco]'</span>, label: <span class="str">'[Etichetta nel builder]'</span>, file: <span class="str">'[nome_file.png]'</span> }</div>
+
+  <div class="box blue">
+    <div class="label">Convenzione nomi file (rispettala sempre)</div>
+    <p style="font-family:Consolas,monospace;font-size:12px;letter-spacing:.04em;">
+      [categoria]_[variante]_[numero].png
+    </p>
+    <p class="small" style="margin-top:6px;">
+      Esempi corretti: &nbsp;<code>base_titan_01.png</code> &nbsp;·&nbsp; <code>hair_crown_01.png</code> &nbsp;·&nbsp; <code>outfit_cloak_02.png</code>
+    </p>
+  </div>
+
+  <hr>
+
+  <!-- ORDINE LAYER -->
+  <h2>Ordine di sovrapposizione layer — dal basso all'alto</h2>
+
+  <table>
+    <thead>
+      <tr><th>Posizione</th><th>Categoria</th><th>Si trova sopra</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1 — più in basso</td><td>Sfondo</td><td>—</td></tr>
+      <tr><td>2</td><td>Aura Back</td><td>Sopra lo sfondo, dietro il corpo</td></tr>
+      <tr><td>3</td><td>Classe (corpo)</td><td>Layer principale del personaggio</td></tr>
+      <tr><td>4</td><td>Outfit</td><td>Sopra il corpo</td></tr>
+      <tr><td>5</td><td>Simbolo</td><td>Sul petto</td></tr>
+      <tr><td>6</td><td>Testa</td><td>Zona testa / elmo</td></tr>
+      <tr><td>7</td><td>Occhi</td><td>Sul volto, sopra la testa</td></tr>
+      <tr><td>8</td><td>Bocca</td><td>Sul volto, sopra gli occhi</td></tr>
+      <tr><td>9</td><td>Capelli</td><td>Sopra tutto il volto</td></tr>
+      <tr><td>10</td><td>Accessori</td><td>Sopra il corpo</td></tr>
+      <tr><td>11 — più in alto</td><td>Aura Front</td><td>Davanti a tutto</td></tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <!-- POSIZIONAMENTO PNG -->
+  <h2>Come deve essere posizionato il personaggio dentro al PNG</h2>
+
+  <table>
+    <thead>
+      <tr><th>Regola</th><th>Come fare</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Canvas fisso</strong></td>
+        <td>Tutti i PNG devono essere 2000×3000 — anche quelli del solo elmo o degli occhi</td>
+      </tr>
+      <tr>
+        <td><strong>Centrato orizzontalmente</strong></td>
+        <td>Il personaggio deve avere lo stesso margine a sinistra e a destra</td>
+      </tr>
+      <tr>
+        <td><strong>Ancorato in basso</strong></td>
+        <td>I piedi devono toccare (o quasi) il bordo inferiore del canvas</td>
+      </tr>
+      <tr>
+        <td><strong>Zona superiore libera</strong></td>
+        <td>La parte sopra la testa rimane trasparente — è normale</td>
+      </tr>
+      <tr>
+        <td><strong>Sfondo</strong></td>
+        <td>I background possono riempire tutto il canvas, non servono zone trasparenti</td>
+      </tr>
+      <tr>
+        <td><strong>Stessa posizione su tutti i layer</strong></td>
+        <td>Usa un file PSD/AI base e duplicalo — non spostare il personaggio tra un layer e l'altro</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <!-- RIEPILOGO OPERATIVO -->
+  <h2>Riepilogo operativo — cosa fai ogni volta che hai una nuova foto</h2>
+
+  <div class="rule"><div class="n">1</div><div>Crei il PNG <strong>2000×3000</strong>, sfondo trasparente, personaggio centrato in basso</div></div>
+  <div class="rule"><div class="n">2</div><div>Lo salvi con il nome corretto nel formato <code>[cat]_[nome]_01.png</code></div></div>
+  <div class="rule"><div class="n">3</div><div>Lo copi nella cartella giusta dentro <code>assets/characters/</code></div></div>
+  <div class="rule"><div class="n">4</div><div>Apri <code>character-builder.js</code> e aggiungi una riga nell'array <code>options</code> della categoria</div></div>
+  <div class="rule"><div class="n">5</div><div>Ricarichi il browser — <strong>la nuova opzione compare subito nel builder</strong></div></div>
+
+  <div class="box gold" style="margin-top:20px;">
+    <div class="label">Ricorda</div>
+    <p>Il passo 4 (aggiungere la riga nel JS) è necessario solo per far comparire la nuova opzione nella griglia.
+    Se non aggiungi la riga, il file PNG è presente nella cartella ma il builder non lo mostra.</p>
+  </div>
+
+  <p style="text-align:center;font-size:10px;color:#bbb;margin-top:40px;letter-spacing:.1em;text-transform:uppercase;">
+    Nyfurion — Character Builder Guide · 2026
+  </p>
+
+</div>
+</body>
+</html>

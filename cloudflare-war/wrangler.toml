@@ -1,0 +1,20 @@
+name = "nyfurion-war"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+
+# KV namespace for the war counters.
+# 1) Create it:   npx wrangler kv namespace create WAR_KV
+# 2) Paste the printed id below.
+kv_namespaces = [
+  { binding = "WAR_KV", id = "d8cd02a46442439e8d14f183c27d6b49" }
+]
+
+# Optional: your own Ethereum RPC (Alchemy/Infura) for holder checks.
+# [vars]
+# ETH_RPC = "https://eth-mainnet.g.alchemy.com/v2/YOUR_KEY"
+
+# Serve the API on your domain so the site can call /api/* (recommended).
+# Requires the domain (nyfurion.com) to be on this Cloudflare account.
+# routes = [
+#   { pattern = "nyfurion.com/api/*", zone_name = "nyfurion.com" }
+# ]

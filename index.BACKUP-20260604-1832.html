@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>NYFURION X REBORN — OFFICIAL COLLECTION</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="https://ipfs.io/ipfs/bafkreif52w6ucsqdbbwstt22fellwobdnnztceenycprkurkr4bo3q3lcq" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --matte-black: #080809;
+            --deep-black: #0D0D0E;
+            --accent-red: #E30B17;
+            --accent-cyan: #00E5FF;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--matte-black);
+            background-image: linear-gradient(rgba(8, 8, 9, 0.85), rgba(8, 8, 9, 0.85)), url('bg-main.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: #F2F2F2;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        h1, h2, h3, .font-heading {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        ::selection {
+            background: var(--accent-cyan);
+            color: black;
+        }
+        
+        /* Grain Overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.015;
+            z-index: 1000;
+            pointer-events: none;
+            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--matte-black); }
+        ::-webkit-scrollbar-thumb { background: #1a1a1c; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-red); }
+        
+        /* Hero Section */
+        .hero-container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow: hidden;
+        }
+        
+        /* Particles Background Canvas */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        
+        /* Logo */
+        .nyfurion-logo {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            width: 80px;
+            height: auto;
+            z-index: 100;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: var(--deep-black);
+            padding: 0.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+            /* Translation Button */
+            #translate-btn {
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                z-index: 101;
+                background: var(--deep-black);
+                color: #F2F2F2;
+                border: 1px solid rgba(255,255,255,0.05);
+                border-radius: 8px;
+                padding: 0.5rem 1.2rem;
+                font-family: 'Space Grotesk', sans-serif;
+                font-size: 0.9rem;
+                font-weight: 700;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                cursor: pointer;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+                transition: all 0.3s;
+            }
+            #translate-btn:hover {
+                border-color: var(--accent-cyan);
+                color: var(--accent-cyan);
+            }
+        
+        .nyfurion-logo:hover {
+            border-color: var(--accent-red);
+            box-shadow: 0 30px 80px rgba(227, 11, 23, 0.3);
+            transform: translateY(-4px);
+        }
+        
+        /* Portfolio Button */
+        #riccardo-design-btn {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            z-index: 100;
+            background: #ffe600;
+            color: #181a22;
+            font-size: 0.7rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            opacity: 0.6;
+            box-shadow: 0 4px 12px rgba(255, 230, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        #riccardo-design-btn:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 230, 0, 0.4);
+        }
+        
+        /* Main Title */
+        .main-title {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .main-title h1 {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            line-height: 0.95;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to bottom, #ffffff, #a0a0a0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleFadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .main-title .subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            font-weight: 300;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--accent-red);
+            opacity: 0;
+            animation: subtitleFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+        }
+        
+        @keyframes titleFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes subtitleFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Navigation Menu */
+        .nav-menu {
+            position: relative;
+            z-index: 10;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            width: 100%;
+            padding: 0 2rem;
+        }
+        
+        .nav-btn {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem 2rem;
+            background: var(--deep-black);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 2px;
+            text-decoration: none;
+            color: #F2F2F2;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            text-align: center;
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
+        
+        .nav-btn.animate {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-cyan));
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .nav-btn span {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .nav-btn:hover {
+            border-color: var(--accent-red);
+            box-shadow: 0 20px 60px rgba(227, 11, 23, 0.2);
+            transform: translateY(-4px);
+        }
+        
+        .nav-btn:hover::before {
+            opacity: 0.1;
+        }
+        
+        /* Animation delays for buttons */
+        .nav-btn.animate:nth-child(1) { animation: btnFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards; }
+        .nav-btn.animate:nth-child(2) { animation: btnFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.75s forwards; }
+        .nav-btn.animate:nth-child(3) { animation: btnFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards; }
+        .nav-btn.animate:nth-child(4) { animation: btnFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.05s forwards; }
+        .nav-btn.animate:nth-child(5) { animation: btnFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards; }
+        .nav-btn.animate:nth-child(6) { animation: btnFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.35s forwards; }
+        .nav-btn.animate:nth-child(n+7) { animation: btnFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.5s forwards; }
+        
+        /* Fallback to ensure all buttons are visible */
+        .nav-menu:hover .nav-btn,
+        .nav-menu.loaded .nav-btn {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        @keyframes btnFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Privacy Banner */
+        #privacy-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(13, 13, 14, 0.98);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            z-index: 200;
+            display: none;
+        }
+        
+        #privacy-banner .content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        #privacy-banner p {
+            font-size: 0.875rem;
+            color: #a0a0a0;
+            line-height: 1.6;
+        }
+        
+        #privacy-banner a {
+            color: var(--accent-red);
+            text-decoration: underline;
+        }
+        
+        #accept-privacy {
+            padding: 0.75rem 2rem;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 2px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        #accept-privacy:hover {
+            background: var(--accent-red);
+            color: #fff;
+        }
+        
+        /* Policy Button */
+        #open-policy-btn {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 150;
+            background: var(--deep-black);
+            color: #F2F2F2;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0.75rem 1.5rem;
+            border-radius: 2px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        #open-policy-btn:hover {
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+        }
+        
+        /* Policy Modal */
+        #policy-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 300;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        
+        #policy-modal .modal-content {
+            max-width: 900px;
+            margin: 4rem auto;
+            background: var(--deep-black);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 3rem;
+            position: relative;
+        }
+        
+        #close-policy-btn {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            color: #a0a0a0;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        #close-policy-btn:hover {
+            color: var(--accent-red);
+        }
+        
+        #policy-modal h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        #policy-modal-scroll {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: #c0c0c0;
+        }
+        
+        #policy-modal-scroll::-webkit-scrollbar { width: 4px; }
+        #policy-modal-scroll::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
+        #policy-modal-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+        
+        #policy-modal ol {
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        #policy-modal li {
+            margin-bottom: 1.5rem;
+        }
+        
+        #policy-modal b {
+            color: #ffffff;
+            font-weight: 600;
+        }
+        
+        #policy-modal a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+        
+        #policy-modal hr {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 2rem 0;
+        }
+        
+        #accept-policy-btn {
+            margin-top: 2rem;
+            padding: 1rem 3rem;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 2px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        #accept-policy-btn:hover {
+            background: var(--accent-red);
+            color: #fff;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nyfurion-logo {
+                top: 1rem;
+                right: 1rem;
+                width: 60px;
+            }
+            
+            #riccardo-design-btn {
+                top: 1rem;
+                left: 1rem;
+                font-size: 0.6rem;
+                padding: 0.4rem 0.8rem;
+            }
+            
+            .nav-menu {
+                grid-template-columns: 1fr;
+                padding: 0 1rem;
+            }
+            
+            .nav-btn {
+                padding: 1.2rem 1.5rem;
+                font-size: 0.7rem;
+            }
+            
+            #policy-modal .modal-content {
+                padding: 2rem 1.5rem;
+                margin: 2rem auto;
+            }
+            
+            #privacy-banner .content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particles Canvas -->
+    <canvas id="particles-canvas"></canvas>
+    
+        <!-- Logo rimosso su richiesta -->
+
+        <!-- Translation Button -->
+        <button id="translate-btn" onclick="toggleTranslation()">IT</button>
+    
+    <!-- Portfolio Button -->
+    <button id="riccardo-design-btn" onclick="location.href='./portfolio/';">
+        Creator
+    </button>
+    
+    <!-- Hero Container -->
+    <div class="hero-container">
+        <div class="main-title">
+            <h1>NYFURION<br>X REBORN</h1>
+            <div class="subtitle">Official Collection</div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="roadmap.html" class="nav-btn">
+                <span>Roadmap</span>
+            </a>
+            <a href="lore.html" class="nav-btn">
+                <span>Nyfurion Lore</span>
+            </a>
+            <a href="nfts.html" class="nav-btn">
+                <span>NFTs NYF</span>
+            </a>
+            <a href="nyfv2.html" class="nav-btn">
+                <span>NYFV2</span>
+            </a>
+            <a href="contacts.html" class="nav-btn">
+                <span>Contacts</span>
+            </a>
+            <a href="holder.html" class="nav-btn">
+                <span>Holder Lounge</span>
+            </a>
+        </nav>
+    </div>
+    
+    <!-- Privacy Banner -->
+    <div id="privacy-banner">
+        <div class="content">
+            <p>
+                Questo sito utilizza cookie tecnici e di terze parti per migliorare l'esperienza utente. 
+                Per maggiori informazioni consulta la <a href="privacy-policy.html">Privacy Policy</a>.
+            </p>
+            <button id="accept-privacy">Accetta</button>
+        </div>
+    </div>
+    
+    <!-- Policy Button -->
+    <button id="open-policy-btn">Policy</button>
+    
+    <!-- Policy Modal -->
+    <div id="policy-modal">
+        <div class="modal-content">
+            <button id="close-policy-btn">&times;</button>
+            <h2>Privacy Policy</h2>
+            <div id="policy-modal-scroll">
+                <b>IT - Informativa Privacy</b><br><br>
+                <ol>
+                    <li><b>Titolare del trattamento</b><br>
+                        Riccardo Duca, Udine Coderno/Sedegliano (Italia)<br>
+                        Email: <a href="mailto:nyfurion@gmail.com">nyfurion@gmail.com</a>
+                    </li>
+                    <li><b>Tipologie di dati raccolti</b><br>
+                        Il sito raccoglie dati tecnici/statistici tramite Google Analytics, AdSense, Cloudflare, Google Tag Manager.<br>
+                        Dati forniti tramite modulo/email.<br>
+                        Dati raccolti tramite widget social (Instagram, Facebook, Twitter, Discord, Crypto).<br>
+                        Dati relativi a transazioni Web3/Metamask (acquisto NFT in crypto).<br>
+                        Dati di navigazione: IP, browser, sistema operativo, pagine visitate, durata sessione.<br>
+                        Cookie e tecnologie di tracciamento.
+                    </li>
+                    <li><b>Finalità del trattamento</b><br>
+                        Analisi statistiche, sicurezza, gestione richieste, transazioni NFT, personalizzazione esperienza utente.
+                    </li>
+                    <li><b>Base giuridica</b><br>
+                        Consenso (modulo/email, cookie), interesse legittimo (statistiche, sicurezza), esecuzione contratto (NFT), obblighi legali.
+                    </li>
+                    <li><b>Modalità e conservazione</b><br>
+                        Dati trattati in modo automatizzato tramite i servizi elencati.<br>
+                        Non ceduti a terzi per fini commerciali.<br>
+                        Dati statistici aggregati/anonimi non cancellati.<br>
+                        Dati modulo/email cancellabili su richiesta.<br>
+                        Dati NFT conservati per la durata necessaria.
+                    </li>
+                    <li><b>Diritti dell'utente</b><br>
+                        Accesso, rettifica, cancellazione dati inviati tramite modulo/email.<br>
+                        Limitazione/opposizione, portabilità, revoca consenso.<br>
+                        I dati raccolti tramite servizi terzi sono anonimi e aggregati.<br>
+                        Per richieste: nyfurion@gmail.com
+                    </li>
+
+        <script>
+        // Traduzioni base (esempio, da estendere per tutte le sezioni)
+        const translations = {
+            en: {
+                title: "NYFURION X REBORN — OFFICIAL COLLECTION",
+                mainTitle: "NYFURION\nX REBORN",
+                subtitle: "Official Collection",
+                roadmap: "Roadmap",
+                lore: "Nyfurion Lore",
+                nfts: "NFTs NYF",
+                nyfv2: "NYFV2",
+                contacts: "Contacts",
+                creator: "Creator",
+                privacyBanner: "This site uses technical and third-party cookies to improve the user experience. For more information, see the ",
+                privacyPolicy: "Privacy Policy",
+                accept: "Accept",
+                policy: "Policy"
+            },
+            it: {
+                title: "NYFURION X REBORN — COLLEZIONE UFFICIALE",
+                mainTitle: "NYFURION\nX REBORN",
+                subtitle: "Collezione Ufficiale",
+                roadmap: "Roadmap",
+                lore: "Lore di Nyfurion",
+                nfts: "NFTs NYF",
+                nyfv2: "NYFV2",
+                contacts: "Contatti",
+                creator: "Creatore",
+                privacyBanner: "Questo sito utilizza cookie tecnici e di terze parti per migliorare l'esperienza utente. Per maggiori informazioni consulta la ",
+                privacyPolicy: "Privacy Policy",
+                accept: "Accetta",
+                policy: "Policy"
+            }
+        };
+
+        let currentLang = document.documentElement.lang === 'it' ? 'it' : 'en';
+
+        function updateTranslation() {
+            document.title = translations[currentLang].title;
+            // Titolo principale
+            const h1 = document.querySelector('.main-title h1');
+            if(h1) h1.innerHTML = translations[currentLang].mainTitle.replace("\n", "<br>");
+            // Sottotitolo
+            const subtitle = document.querySelector('.main-title .subtitle');
+            if(subtitle) subtitle.textContent = translations[currentLang].subtitle;
+            // Pulsanti menu
+            const navLabels = {
+                'roadmap.html': translations[currentLang].roadmap,
+                'lore.html': translations[currentLang].lore,
+                'nfts.html': translations[currentLang].nfts,
+                'nyfv2.html': translations[currentLang].nyfv2,
+                'contacts.html': translations[currentLang].contacts
+            };
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                const label = navLabels[btn.getAttribute('href')];
+                const span = btn.querySelector('span');
+                if(label && span) span.textContent = label;
+            });
+            // Pulsante creator
+            const creatorBtn = document.getElementById('riccardo-design-btn');
+            if(creatorBtn) creatorBtn.textContent = translations[currentLang].creator;
+            // Banner privacy
+            const privacyBanner = document.querySelector('#privacy-banner p');
+            const privacyLink = document.querySelector('#privacy-banner a');
+            if(privacyBanner && privacyLink) {
+                privacyBanner.childNodes[0].textContent = translations[currentLang].privacyBanner;
+                privacyLink.textContent = translations[currentLang].privacyPolicy;
+            }
+            // Bottone accetta privacy
+            const acceptBtn = document.getElementById('accept-privacy');
+            if(acceptBtn) acceptBtn.textContent = translations[currentLang].accept;
+            // Bottone policy
+            const policyBtn = document.getElementById('open-policy-btn');
+            if(policyBtn) policyBtn.textContent = translations[currentLang].policy;
+            // Aggiorna testo pulsante lingua
+            const translateBtn = document.getElementById('translate-btn');
+            if(translateBtn) translateBtn.textContent = currentLang.toUpperCase();
+        }
+
+        function toggleTranslation() {
+            currentLang = currentLang === 'it' ? 'en' : 'it';
+            document.documentElement.lang = currentLang;
+            updateTranslation();
+        }
+
+        // Inizializza la lingua attuale all'avvio
+        window.addEventListener('DOMContentLoaded', updateTranslation);
+        </script>
+                    <li><b>Cookie e tracciamento</b><br>
+                        Il sito usa cookie tecnici, analitici, di profilazione e di terze parti.<br>
+                        Gestione preferenze tramite banner cookie.
+                    </li>
+                    <li><b>Banner consenso cookie</b><br>
+                        Banner conforme alle linee guida UE: accetta/rifiuta cookie non essenziali, gestione preferenze, link alla Cookie Policy.
+                    </li>
+                    <li><b>Trasferimento dati fuori UE</b><br>
+                        Alcuni dati possono essere trasferiti fuori UE (es. Google, Cloudflare) con adeguate garanzie (clausole contrattuali standard).
+                    </li>
+                    <li><b>Sicurezza dati</b><br>
+                        Crittografia SSL, firewall, accesso limitato.
+                    </li>
+                    <li><b>Registro consensi</b><br>
+                        Il sito registra il consenso per cookie e dati personali.
+                    </li>
+                    <li><b>Aggiornamenti</b><br>
+                        La policy può essere aggiornata. Gli utenti saranno informati tramite avvisi sul sito.
+                    </li>
+                </ol>
+                <hr>
+                <b>EN - Privacy Policy</b><br><br>
+                <ol>
+                    <li><b>Data Controller</b><br>
+                        Riccardo Duca, Udine Coderno/Sedegliano (Italy)<br>
+                        Email: <a href="mailto:nyfurion@gmail.com">nyfurion@gmail.com</a>
+                    </li>
+                    <li><b>Types of Data Collected</b><br>
+                        Technical/statistical data via Google Analytics, AdSense, Cloudflare, Google Tag Manager.<br>
+                        Data provided via contact form/email.<br>
+                        Data from social widgets (Instagram, Facebook, Twitter, Discord, Crypto).<br>
+                        Web3/Metamask transaction data (NFT purchase in crypto).<br>
+                        Browsing data: IP, browser, OS, pages visited, session duration.<br>
+                        Cookies and tracking technologies.
+                    </li>
+                    <li><b>Purpose of Data Processing</b><br>
+                        Statistical analysis, security, handling requests, NFT transactions, user experience personalization.
+                    </li>
+                    <li><b>Legal Basis</b><br>
+                        Consent (form/email, cookies), legitimate interest (statistics, security), contract performance (NFT), legal obligations.
+                    </li>
+                    <li><b>Data Processing and Retention</b><br>
+                        Data processed automatically via listed services.<br>
+                        Not shared with third parties for commercial purposes.<br>
+                        Statistical data is aggregated/anonymous and not deleted.<br>
+                        Data via form/email can be deleted upon request.<br>
+                        NFT data retained as needed.
+                    </li>
+                    <li><b>User Rights</b><br>
+                        Access, rectify, delete data submitted via form/email.<br>
+                        Restrict/object, portability, withdraw consent.<br>
+                        Data collected via third-party services is anonymous and aggregated.<br>
+                        For inquiries: nyfurion@gmail.com
+                    </li>
+                    <li><b>Cookies and Tracking</b><br>
+                        The site uses technical, analytical, profiling, and third-party cookies.<br>
+                        Preferences managed via cookie banner.
+                    </li>
+                    <li><b>Cookie Consent Banner</b><br>
+                        Banner compliant with EU guidelines: accept/decline non-essential cookies, manage preferences, link to Cookie Policy.
+                    </li>
+                    <li><b>Data Transfer Outside the EU</b><br>
+                        Some data may be transferred outside the EU (e.g., Google, Cloudflare) with adequate safeguards (standard contractual clauses).
+                    </li>
+                    <li><b>Data Security</b><br>
+                        SSL encryption, firewalls, restricted access.
+                    </li>
+                    <li><b>Consent Log</b><br>
+                        The site records user consent for cookies and personal data.
+                    </li>
+                    <li><b>Updates</b><br>
+                        This policy may be updated. Users will be notified via site notices.
+                    </li>
+                </ol>
+                <span style="font-size:0.75rem;color:#666;display:block;text-align:right;margin-top:2rem;">Last update: 2025-06-03</span>
+            </div>
+            <button id="accept-policy-btn">Accetto / I Accept</button>
+        </div>
+    </div>
+    
+    <script>
+        // Privacy Banner Logic
+        window.addEventListener('DOMContentLoaded', function() {
+            const banner = document.getElementById('privacy-banner');
+            const acceptBtn = document.getElementById('accept-privacy');
+            
+            if (!localStorage.getItem('privacyAccepted')) {
+                banner.style.display = 'block';
+            }
+            
+            acceptBtn.addEventListener('click', function() {
+                localStorage.setItem('privacyAccepted', '1');
+                banner.style.display = 'none';
+            });
+        });
+        
+        // Policy Modal Logic
+        document.getElementById('open-policy-btn').onclick = function() {
+            document.getElementById('policy-modal').style.display = 'block';
+        };
+        
+        document.getElementById('close-policy-btn').onclick = function() {
+            document.getElementById('policy-modal').style.display = 'none';
+        };
+        
+        document.getElementById('accept-policy-btn').onclick = function() {
+            document.getElementById('policy-modal').style.display = 'none';
+            localStorage.setItem('privacyAccepted', '1');
+        };
+        
+        // Close modal on background click
+        document.getElementById('policy-modal').onclick = function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        };
+        
+        // Particles Animation
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+        
+        const particles = [];
+        const particleCount = 80;
+        
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            
+            draw() {
+                ctx.fillStyle = `rgba(227, 11, 23, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Glow effect
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = 'rgba(227, 11, 23, 0.5)';
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+        
+        function init() {
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            
+            // Draw connections
+            particles.forEach((a, i) => {
+                particles.slice(i + 1).forEach(b => {
+                    const dx = a.x - b.x;
+                    const dy = a.y - b.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 150) {
+                        ctx.strokeStyle = `rgba(227, 11, 23, ${0.1 * (1 - distance / 150)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(a.x, a.y);
+                        ctx.lineTo(b.x, b.y);
+                        ctx.stroke();
+                    }
+                });
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        
+        init();
+        animate();
+        
+        // Animate nav buttons only on first load, not on back navigation
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const hasAnimated = sessionStorage.getItem('navAnimated');
+        
+        if (!hasAnimated) {
+            // First load - add animate class and set flag
+            navButtons.forEach(btn => btn.classList.add('animate'));
+            sessionStorage.setItem('navAnimated', 'true');
+        }
+        
+        // Ensure all nav buttons are visible after animations complete
+        setTimeout(() => {
+            const navMenu = document.querySelector('.nav-menu');
+            if (navMenu) {
+                navMenu.classList.add('loaded');
+            }
+            navButtons.forEach(btn => btn.classList.remove('animate'));
+        }, 2000);
+    </script>
+</body>
+</html>

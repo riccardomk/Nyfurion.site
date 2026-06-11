@@ -1,0 +1,245 @@
+NYFURION - GUIDA PRECISA PER CREARE LE FOTO PNG PER IL BUILDER
+Versione operativa (da copiare nell'AI immagini)
+
+=================================================================
+1) SPECIFICHE OBBLIGATORIE (SEMPRE UGUALI)
+=================================================================
+
+FORMATO FILE:
+- PNG con trasparenza (alpha)
+
+DIMENSIONE OBBLIGATORIA:
+- 2000 x 3000 px (portrait)
+
+INQUADRATURA OBBLIGATORIA:
+- personaggio frontale
+- centrato orizzontalmente
+- piedi ancorati in basso
+- stessa posa per tutti i layer
+- camera fissa, nessun cambio di prospettiva
+
+REGOLE FONDAMENTALI:
+- Tutti i PNG devono avere stesso canvas 2000x3000
+- Non spostare mai il soggetto tra un layer e l'altro
+- Sfondo trasparente per tutti i layer (tranne i background)
+- Nessun testo, nessun watermark, nessun bordo
+- RGB
+
+SE NON RISPETTI QUESTE REGOLE, I LAYER NON SI ALLINEANO.
+
+=================================================================
+2) STRUTTURA CARTELLE (GIA PRONTA NEL PROGETTO)
+=================================================================
+
+assets/characters/
+  backgrounds/
+  effects/
+  base/
+  outfit/
+  symbols/
+  head/
+  eyes/
+  mouth/
+  hair/
+  accessories/
+
+=================================================================
+3) COME VANNO NOMINATI I FILE
+=================================================================
+
+Puoi usare anche numerazione semplice.
+Formato consigliato:
+- [categoria]_[numero].png
+
+Esempi validi:
+- head_1.png, head_2.png, head_3.png
+- outfit_1.png, outfit_2.png
+- eyes_1.png, eyes_2.png
+
+IMPORTANTE:
+- il nome reale del file deve essere poi scritto anche in character-builder.js
+- se il nome non e nel JS, non appare nel viewer
+
+=================================================================
+4) PROMPT MASTER DA INCOLLARE NELL'AI (BASE COMUNE)
+=================================================================
+
+Usa SEMPRE questo blocco in ogni prompt:
+
+"Create a PNG image with transparent background, exact size 2000x3000 px, front view, full body centered horizontally, feet aligned to bottom edge, fixed camera, no perspective change, no text, no watermark, no frame, clean alpha channel, game-ready layer asset, consistent proportions with previous outputs."
+
+Aggiungi poi la parte specifica della categoria (sotto).
+
+=================================================================
+5) PROMPT SPECIFICI PER CATEGORIA (COPIA/INCOLLA)
+=================================================================
+
+5.1 BASE (corpo principale)
+"Create ONLY the base body layer of a fantasy character. Keep full body silhouette visible, neutral stance, transparent background, no outfit accessories beyond base anatomy/skin."
+
+Destinazione cartella:
+- assets/characters/base/
+
+Nomi consigliati:
+- base_1.png ... base_100.png
+
+
+5.2 HEAD (testa/elmo)
+"Create ONLY the head layer for the same character pose. Include helmet/head shape details only. Everything else fully transparent."
+
+Destinazione cartella:
+- assets/characters/head/
+
+Nomi consigliati:
+- head_1.png ... head_100.png
+
+
+5.3 EYES (occhi/visore)
+"Create ONLY the eye/visor layer aligned to the same face position. Keep only eyes/visor pixels, all other areas transparent."
+
+Destinazione cartella:
+- assets/characters/eyes/
+
+Nomi consigliati:
+- eyes_1.png ... eyes_100.png
+
+
+5.4 MOUTH (bocca/espressione)
+"Create ONLY the mouth/expression layer aligned to the same face position. Keep only mouth pixels, all other areas transparent."
+
+Destinazione cartella:
+- assets/characters/mouth/
+
+Nomi consigliati:
+- mouth_1.png ... mouth_100.png
+
+
+5.5 HAIR (capelli/corna/halo)
+"Create ONLY the hair or top-head ornament layer aligned to the same head position. Everything else transparent."
+
+Destinazione cartella:
+- assets/characters/hair/
+
+Nomi consigliati:
+- hair_1.png ... hair_100.png
+
+
+5.6 OUTFIT (vestito/armatura)
+"Create ONLY outfit/armor layer for the same body pose. No skin, no background, no separate head details unless part of outfit."
+
+Destinazione cartella:
+- assets/characters/outfit/
+
+Nomi consigliati:
+- outfit_1.png ... outfit_100.png
+
+
+5.7 SYMBOLS (emblemi/sigilli)
+"Create ONLY chest symbol/emblem layer, aligned to torso center of same pose, all non-symbol pixels transparent."
+
+Destinazione cartella:
+- assets/characters/symbols/
+
+Nomi consigliati:
+- symbol_1.png ... symbol_100.png
+
+
+5.8 ACCESSORIES (accessori)
+"Create ONLY accessory layer (shoulders/mask/collar etc.) aligned to same pose. Keep only accessory pixels, all else transparent."
+
+Destinazione cartella:
+- assets/characters/accessories/
+
+Nomi consigliati:
+- accessory_1.png ... accessory_100.png
+
+
+5.9 EFFECTS (aure/energia)
+"Create ONLY energy/aura effect layer aligned to same character silhouette. Transparent background, glow/effects only."
+
+Destinazione cartella:
+- assets/characters/effects/
+
+Nomi consigliati:
+- effect_1.png ... effect_100.png
+
+NOTE:
+- la cartella effects viene usata sia per Aura Back sia per Aura Front
+
+
+5.10 BACKGROUNDS (sfondi)
+"Create a full canvas background layer 2000x3000 for the character scene, cinematic game style, no character in frame."
+
+Destinazione cartella:
+- assets/characters/backgrounds/
+
+Nomi consigliati:
+- bg_1.png ... bg_100.png
+
+=================================================================
+6) CHECKLIST PRIMA DI SALVARE OGNI FILE
+=================================================================
+
+- [ ] PNG alpha trasparente
+- [ ] 2000x3000 esatti
+- [ ] soggetto centrato
+- [ ] piedi in basso
+- [ ] nessun watermark/testo
+- [ ] nome coerente (es: head_17.png)
+- [ ] file messo nella cartella giusta
+
+=================================================================
+7) COME FARLE COMPARIRE NEL VIEWER
+=================================================================
+
+PASSO A:
+- Copia i PNG nella cartella giusta (esempio head_1.png in assets/characters/head/)
+
+PASSO B:
+- Aggiorna character-builder.js dentro la categoria corretta (options)
+- Per ogni file aggiungi una riga:
+
+  { id: 'h1', label: 'Head 1', file: 'head_1.png' },
+  { id: 'h2', label: 'Head 2', file: 'head_2.png' },
+
+PASSO C:
+- Ricarica holder.html
+- Le opzioni compaiono nel viewer
+
+=================================================================
+8) COME MANDARLE A ME (OPERATIVO)
+=================================================================
+
+Io non ricevo upload diretti in chat.
+Fai cosi:
+
+1) Metti i file nel workspace, nelle cartelle corrette.
+2) Scrivimi solo questo messaggio:
+   "Ho inserito 50 file in assets/characters/head/ con nomi head_1.png ... head_50.png. Aggiorna il JS."
+3) Io aggiorno automaticamente character-builder.js con tutte le opzioni.
+
+=================================================================
+9) MESSAGGIO PRONTO DA INCOLLARE ALL'AI IMMAGINI
+=================================================================
+
+"You are generating game-ready layered PNG assets for a character builder.
+Output must be EXACTLY 2000x3000 px, transparent background, front view,
+full body centered horizontally, feet aligned to bottom edge, fixed camera,
+consistent proportions across all outputs, no text, no watermark.
+Generate ONLY this layer: [SCRIVI QUI CATEGORIA, es. HEAD].
+Keep all non-layer pixels fully transparent.
+Style: high-quality fantasy game art, clean edges, production ready."
+
+Poi sostituisci [SCRIVI QUI CATEGORIA] con:
+- BASE
+- HEAD
+- EYES
+- MOUTH
+- HAIR
+- OUTFIT
+- SYMBOL
+- ACCESSORY
+- EFFECT
+- BACKGROUND
+
+FINE

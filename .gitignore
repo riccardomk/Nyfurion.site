@@ -1,13 +1,10 @@
-# Segreti — MAI pushare
-cloudflare-worker/.dev.vars
-cloudflare-worker/node_modules/
+book1_ash.txt
+book2_war.txt
+book*_*.txt
+**/.wrangler/
+cloudflare-worker/.wrangler/
+*.tmp
 
-# File VS Code chat
-## GitHub Copilot Chat.md
-
-# File grandi / inutili per il sito
-*.hdr
+# File 3D pesanti — caricati da Pinata/IPFS, non da git
 *.glb
-PROMPT-AI-CHARACTER-BUILDER.txt
-scan-assets.bat
-scan-assets.js
+*.hdr

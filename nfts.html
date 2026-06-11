@@ -1,390 +1,966 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NFTs NYF - Nyfurion X Reborn</title>
-  <link rel="icon" type="image/png" href="https://ipfs.io/ipfs/bafkreif52w6ucsqdbbwstt22fellwobdnnztceenycprkurkr4bo3q3lcq" />
+  <title>Nyfurion &mdash; The Fragments</title>
+  <link rel="icon" type="image/png" href="https://cdn.nyfurion.com/ipfs/bafkreif52w6ucsqdbbwstt22fellwobdnnztceenycprkurkr4bo3q3lcq" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="nav.css">
   <style>
-    :root {
-      --matte-black: #080809;
-      --deep-black: #0D0D0E;
-      --accent-red: #E30B17;
-      --accent-cyan: #00E5FF;
+    :root { --matte-black:#080809; --deep-black:#0D0D0E; --accent-red:#E30B17; --accent-cyan:#00E5FF; --ink:#d9d4c8; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--matte-black); color:#ECECEC; font-family:'Space Grotesk',sans-serif; overflow:hidden; }
+    ::selection { background:var(--accent-cyan); color:#000; }
+
+    .header { position:fixed; top:0; left:0; width:100%; background:rgba(8,8,9,0.6); backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(255,255,255,0.04); padding:1.2rem 2rem; z-index:200; display:flex; align-items:center; justify-content:space-between; }
+    .header-title { font-size:0.7rem; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent-red); }
+    .back-btn { padding:0.6rem 1.4rem; background:rgba(13,13,14,0.6); border:1px solid rgba(255,255,255,0.08); color:#F2F2F2;
+      font-size:0.7rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; text-decoration:none; transition:all 0.3s; border-radius:2px; }
+    .back-btn:hover { border-color:var(--accent-red); color:var(--accent-red); }
+
+    /* progress bar (tracks horizontal scroll) */
+    #progress-bar { position:fixed; bottom:0; left:0; height:3px; width:0%; background:linear-gradient(to right,var(--accent-red),var(--accent-cyan)); z-index:300; transition:width 0.15s; }
+    /* scroll hint */
+    .hint { position:fixed; bottom:1.4rem; left:50%; transform:translateX(-50%); z-index:210;
+      font-size:0.66rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.45); pointer-events:none;
+      display:flex; align-items:center; gap:0.6rem; transition:opacity 0.25s ease; }
+    .hint.is-hidden { opacity:0; }
+    .hint .ar { color:var(--accent-red); animation:slide 1.6s infinite; }
+    @keyframes slide { 0%,100%{transform:translateX(0);opacity:0.5;} 50%{transform:translateX(8px);opacity:1;} }
+
+    /* ===== HORIZONTAL TRACK (native scroll-snap = robust everywhere) ===== */
+    #track {
+      display:flex; flex-wrap:nowrap; height:100vh; width:100vw;
+      overflow-x:auto; overflow-y:hidden;
+      scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
     }
-    
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      background-color: var(--matte-black);
-      background-image: linear-gradient(rgba(8, 8, 9, 0.85), rgba(8, 8, 9, 0.85)), url('nfts-nyf-bg.png');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
-      color: #F2F2F2;
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
-      line-height: 1.8;
+    #track::-webkit-scrollbar { display:none; }
+    .panel { flex:0 0 100vw; width:100vw; height:100vh; scroll-snap-align:start; scroll-snap-stop:always; position:relative;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:7rem 2rem 4rem; overflow:hidden; }
+    .eyebrow { font-size:0.7rem; font-weight:500; letter-spacing:0.5em; text-transform:uppercase; color:var(--accent-red); margin-bottom:1.6rem; }
+    .panel h1 { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(2.6rem,8vw,6.5rem); line-height:0.98; color:#fff; margin-bottom:1.6rem; text-shadow:0 4px 40px rgba(0,0,0,0.9); }
+    .panel h2 { font-family:'Cormorant Garamond',serif; font-weight:500; font-size:clamp(2rem,5vw,3.6rem); line-height:1.05; color:#f3ede0; margin-bottom:1.4rem; }
+    .panel .lead { max-width:720px; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(1.25rem,2.4vw,1.6rem); line-height:1.7; color:#cfc7b8; }
+    .panel .lead .hl { color:var(--accent-cyan); }
+    .panel .micro { max-width:720px; margin-top:1.4rem; font-size:0.72rem; font-weight:700; letter-spacing:0.24em; text-transform:uppercase; color:rgba(255,255,255,0.62); line-height:1.9; }
+    .panel .micro .dot { color:var(--accent-red); margin:0 0.6rem; }
+    .reveal { opacity:0; transform:translateY(28px); transition:opacity 1s ease, transform 1s cubic-bezier(0.16,1,0.3,1); }
+    .panel.active .reveal { opacity:1; transform:translateY(0); }
+    .panel.active .reveal:nth-child(2){ transition-delay:0.12s; }
+    .panel.active .reveal:nth-child(3){ transition-delay:0.24s; }
+    .panel.active .reveal:nth-child(4){ transition-delay:0.36s; }
+
+    /* PANEL 2 &mdash; split: looping fragments (left) + text (right) */
+    .p-wall { flex-direction:row; padding:0; align-items:stretch; }
+    .wall-left { position:relative; width:58%; height:100%; overflow:hidden; background:#0a0a0b; }
+    .wall-cols { display:flex; gap:4px; padding:4px; height:100%; }
+    .wall-col { flex:1; display:flex; flex-direction:column; gap:4px; }
+    .wall-col img { width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:3px; display:block; }
+    /* each column scrolls vertically in a seamless loop, alternating direction */
+    .wall-col.up   { animation:scrollUp var(--dur,40s) linear infinite; }
+    .wall-col.down { animation:scrollDown var(--dur,40s) linear infinite; }
+    @keyframes scrollUp   { from{transform:translateY(0);} to{transform:translateY(-50%);} }
+    @keyframes scrollDown { from{transform:translateY(-50%);} to{transform:translateY(0);} }
+    .wall-fade { position:absolute; inset:0; pointer-events:none;
+      background:linear-gradient(to right, transparent 60%, var(--matte-black)),
+                 linear-gradient(to bottom, var(--matte-black), transparent 12%, transparent 88%, var(--matte-black)); }
+    .wall-right { width:42%; display:flex; flex-direction:column; align-items:flex-start; justify-content:center;
+      text-align:left; padding:4rem clamp(2rem,5vw,5rem); }
+    .wall-right h1 { text-align:left; }
+    .wall-right .lead { text-align:left; margin:0; }
+    @media(max-width:820px){
+      .p-wall{ flex-direction:column; }
+      .wall-left{ width:100%; height:55%; }
+      .wall-right{ width:100%; height:45%; text-align:center; align-items:center; padding:2rem 1.4rem; }
+      .wall-right h1, .wall-right .lead{ text-align:center; }
+      .wall-fade{ background:linear-gradient(to bottom, transparent 70%, var(--matte-black)); }
     }
-    
-    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
-    
-    ::selection {
-      background: var(--accent-cyan);
-      color: black;
+
+    /* PANEL backgrounds (cinematic, character-driven) */
+    .p-own  { background:linear-gradient(rgba(8,8,9,0.68),rgba(8,8,9,0.9)), url('assets/characters/portraits/98.png'); background-size:cover; background-position:center 18%; }
+    .p-story{ background:linear-gradient(rgba(8,8,9,0.7),rgba(8,8,9,0.92)), url('assets/characters/portraits/tyri_1.png'); background-size:cover; background-position:center 15%; }
+    .p-proof{ background:linear-gradient(rgba(8,8,9,0.66),rgba(8,8,9,0.93)), url('assets/nft/nft-slide5-proof-20260607.png'); background-size:cover; background-position:center; }
+    .p-wave { background:#050506; }
+    .p-wave .hero-video { position:absolute; inset:0; z-index:0; width:100%; height:100%; object-fit:cover; filter:saturate(1.08) contrast(1.08) brightness(0.65); }
+    .p-wave .momentum-slideshow { position:absolute; inset:0; z-index:0; overflow:hidden; background:#050506; }
+    .p-wave .momentum-slideshow img {
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+      opacity:0; transform:scale(1.06);
+      filter:saturate(1.08) contrast(1.1) brightness(0.68);
+      animation:momentumSlide 15s ease-in-out infinite;
+      will-change:opacity, transform;
     }
-    
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--matte-black); }
-    ::-webkit-scrollbar-thumb { background: #1a1a1c; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--accent-red); }
-    
-    /* Header */
-    .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(13, 13, 14, 0.95);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 1.5rem 2rem;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .p-wave .momentum-slideshow img:nth-child(2) { animation-delay:5s; }
+    .p-wave .momentum-slideshow img:nth-child(3) { animation-delay:10s; }
+    @keyframes momentumSlide {
+      0%{opacity:0; transform:scale(1.04);}
+      8%{opacity:1;}
+      33%{opacity:1; transform:scale(1.14);}
+      41%{opacity:0; transform:scale(1.17);}
+      100%{opacity:0; transform:scale(1.04);}
     }
-    
-    .header-title {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--accent-red);
+    .p-wave::after { content:""; position:absolute; inset:0; z-index:1; background:radial-gradient(ellipse 60% 55% at center, rgba(8,8,9,0.35), rgba(8,8,9,0.88)); pointer-events:none; }
+    .p-wave > *:not(video):not(.momentum-slideshow) { position:relative; z-index:2; }
+    .p-v2   { background:linear-gradient(rgba(8,8,9,0.74),rgba(8,8,9,0.92)), url('assets/nft/nft-slide8-dj23.png'); background-size:cover; background-position:center; }
+    .p-collab{ background:linear-gradient(rgba(8,8,9,0.72),rgba(8,8,9,0.93)), url('assets/nft/nft-slide8-final-frame-20260607.png'); background-size:cover; background-position:center; }
+    .p-claim{ background:#050506; }
+    .p-sponsor{ background:linear-gradient(rgba(8,8,9,0.7),rgba(8,8,9,0.94)), url('assets/nft/1.jpg'); background-size:cover; background-position:center; }
+    /* video hero */
+    .p-video .hero-video { position:absolute; inset:0; z-index:0; width:100%; height:100%; object-fit:cover; }
+    .p-video .hero-shot { position:absolute; inset:0; z-index:0; width:100%; height:100%; object-fit:cover; object-position:center;
+      filter:brightness(0.78) saturate(1.06); transform:scale(1.05); animation:nftHeroZoom 24s ease-in-out infinite alternate; }
+    @keyframes nftHeroZoom { from{ transform:scale(1.05); } to{ transform:scale(1.16); } }
+    .p-video .scrim { position:absolute; inset:0; z-index:5; pointer-events:none;
+      background:radial-gradient(ellipse 58% 60% at center, rgba(8,8,9,0.78) 0%, rgba(8,8,9,0.5) 45%, rgba(8,8,9,0.72) 100%),
+                 linear-gradient(to bottom, rgba(8,8,9,0.4), transparent 30%, transparent 60%, rgba(8,8,9,0.6)); }
+    .p-video .content { position:relative; z-index:10; max-width:880px; padding:0 1.5rem;
+      display:flex; flex-direction:column; align-items:center; }
+    .p-video .eyebrow { color:#e8e2d6; opacity:0.82; text-shadow:0 2px 24px rgba(0,0,0,0.95);
+      font-size:0.68rem; letter-spacing:0.42em; }
+    .p-video h1 { font-size:clamp(2.6rem,6.4vw,5.4rem); line-height:1.02; letter-spacing:0.005em; margin:1.4rem 0 0;
+      text-shadow:0 8px 60px rgba(0,0,0,0.95), 0 2px 14px rgba(0,0,0,0.9); }
+    .p-video .lead { color:#efe9dd; max-width:560px; margin:1.8rem auto 0; text-shadow:0 2px 26px rgba(0,0,0,0.95); }
+    .p-video .v-cta { margin-top:2.8rem; display:flex; gap:1rem; align-items:center; flex-wrap:wrap; justify-content:center; }
+    /* refined outline CTA, not a loud red block */
+    .p-video .v-enter { display:inline-flex; align-items:center; gap:0.7rem; font-family:'Space Grotesk',sans-serif;
+      font-size:0.72rem; letter-spacing:0.28em; text-transform:uppercase; color:#fff; text-decoration:none;
+      padding:1rem 2.2rem; border:1px solid rgba(255,255,255,0.32); border-radius:2px;
+      background:rgba(255,255,255,0.04); backdrop-filter:blur(4px);
+      transition:border-color 0.4s ease, background 0.4s ease, letter-spacing 0.4s ease; }
+    .p-video .v-enter:hover { border-color:var(--accent-red); background:rgba(227,11,23,0.12); letter-spacing:0.34em; }
+    .p-video .v-enter .arr { color:var(--accent-red); transition:transform 0.4s ease; }
+    .p-video .v-enter:hover .arr { transform:translateX(5px); }
+    /* scroll hint */
+    .p-video .v-hint { position:absolute; left:50%; bottom:2.2rem; transform:translateX(-50%); z-index:10;
+      font-family:'Space Grotesk',sans-serif; font-size:0.6rem; letter-spacing:0.4em; text-transform:uppercase;
+      color:rgba(255,255,255,0.5); display:flex; align-items:center; gap:0.7rem; }
+    .p-video .v-hint .ln { width:46px; height:1px; background:linear-gradient(to right, transparent, rgba(255,255,255,0.5)); }
+    .p-video .v-hint .ln.r { background:linear-gradient(to left, transparent, rgba(255,255,255,0.5)); }
+
+    /* cinematic acts from slide 3 onward */
+    .cinema { padding:0; text-align:left; align-items:stretch; justify-content:center; isolation:isolate; background:#050506; }
+    .cinema::before {
+      content:""; position:absolute; inset:-4%; z-index:0;
+      background-image:var(--shot); background-size:cover; background-position:var(--pos, center);
+      opacity:0.82; filter:saturate(1.06) contrast(1.08) brightness(0.82);
+      transform:scale(1.08); transition:transform 5s cubic-bezier(0.16,1,0.3,1), filter 2s ease;
     }
-    
-    .back-btn {
-      padding: 0.75rem 1.5rem;
-      background: var(--deep-black);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      color: #F2F2F2;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: all 0.3s;
-      border-radius: 2px;
+    .cinema.active::before { transform:scale(1.01); filter:saturate(1.12) contrast(1.08) brightness(0.9); }
+    .cinema.p-v2::before { animation:collabBgZoom 12s ease-in-out infinite; }
+    @keyframes collabBgZoom {
+      0%,100% { transform:scale(1.03); }
+      50% { transform:scale(1.14); }
     }
-    
-    .back-btn:hover {
-      border-color: var(--accent-red);
-      color: var(--accent-red);
+    .cinema::after {
+      content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+      background:var(--veil, linear-gradient(90deg, rgba(8,8,9,0.95) 0%, rgba(8,8,9,0.72) 38%, rgba(8,8,9,0.16) 100%));
     }
-    
-    /* Container */
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 9rem 2rem 5rem;
+    .cinema.p-wave::before { display:none; }
+    .cinema.p-wave::after { background:radial-gradient(ellipse 60% 55% at center, rgba(8,8,9,0.34), rgba(8,8,9,0.9)); }
+    .scene { position:relative; z-index:2; width:100%; height:100%; display:grid; grid-template-columns:minmax(4vw,1fr) minmax(320px,760px) minmax(4vw,1fr); align-items:center; }
+    .scene-main { max-width:760px; padding:6.5rem clamp(1.4rem,4vw,4.5rem) 3.5rem; max-height:100vh; overflow-y:auto; }
+    /* type kept in safe bounds so nothing is cut at 100% zoom */
+    .cinema h2 { font-size:clamp(1.9rem,4.2vw,3.4rem); margin-bottom:1rem; }
+    .cinema .lead { font-size:clamp(1.05rem,1.8vw,1.4rem); line-height:1.6; }
+    .cinema .signal { margin-top:1.2rem; }
+    .scene-main::-webkit-scrollbar, .story-switch .scene-main::-webkit-scrollbar { width:0; }
+    .scene-main { scrollbar-width:none; }
+    .cinema.left .scene-main { grid-column:1 / 3; justify-self:start; padding-left:clamp(2rem,8vw,9rem); }
+    .cinema.right .scene-main { grid-column:2 / 4; justify-self:end; padding-right:clamp(2rem,8vw,9rem); }
+    .cinema.center .scene-main { grid-column:1 / 4; justify-self:center; text-align:center; }
+    .cinema.center .lead, .cinema.center .signal { margin-left:auto; margin-right:auto; }
+    .scene-code { font-size:0.68rem; font-weight:700; letter-spacing:0.42em; text-transform:uppercase; color:var(--accent-red); margin-bottom:1.2rem; }
+    .scene h2 { font-size:clamp(1.9rem,4vw,3.4rem); line-height:1.02; max-width:760px; margin-bottom:1rem; }
+    .scene .lead { max-width:640px; margin:0; font-size:clamp(1.05rem,1.7vw,1.35rem); line-height:1.6; color:#efe8dc; text-shadow:0 12px 45px rgba(0,0,0,0.75); }
+    .signal { max-width:720px; margin-top:1.4rem; display:flex; flex-wrap:wrap; gap:0.7rem 1.1rem; align-items:center; }
+    .signal span { font-size:0.68rem; font-weight:700; letter-spacing:0.24em; text-transform:uppercase; color:rgba(255,255,255,0.64); }
+    .signal span::before { content:""; display:inline-block; width:7px; height:7px; margin-right:0.65rem; border-radius:999px; background:var(--accent-red); box-shadow:0 0 18px rgba(227,11,23,0.75); }
+    .scene-index { position:absolute; z-index:2; right:clamp(1.8rem,4vw,4rem); bottom:clamp(2rem,5vw,4rem);
+      font-family:'Cormorant Garamond',serif; font-size:clamp(4rem,12vw,10rem); line-height:0.8; color:rgba(255,255,255,0.08); pointer-events:none; }
+    .scene-rule { width:min(34vw,360px); height:1px; margin:2rem 0; background:linear-gradient(90deg,var(--accent-red),transparent); }
+    .cinema.center .scene-rule { margin-left:auto; margin-right:auto; background:linear-gradient(90deg,transparent,var(--accent-red),transparent); }
+    .claim-actions { margin-top:2.2rem; }
+    .split-act::before { display:none; }
+    .split-act::after {
+      background:linear-gradient(90deg, rgba(5,5,6,0.96) 0%, rgba(5,5,6,0.82) 42%, rgba(5,5,6,0.22) 72%, rgba(5,5,6,0.62) 100%);
     }
-    
-    .page-title {
-      font-size: clamp(2.5rem, 8vw, 4.5rem);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.5rem;
-      background: linear-gradient(to bottom, #ffffff, #a0a0a0);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-align: center;
+    .split-act .scene {
+      grid-template-columns:minmax(320px,0.9fr) minmax(420px,1.1fr);
+      gap:0;
+      padding:0;
     }
-    
-    .page-subtitle {
-      font-size: 1rem;
-      color: rgba(255, 255, 255, 0.6);
-      margin-bottom: 3rem;
-      text-align: center;
+    .split-act .scene-main {
+      grid-column:1; justify-self:start; padding:7rem clamp(2rem,5vw,7rem) 4rem; max-width:760px;
     }
-    
-    /* Price Box */
-    .price-box {
-      background: rgba(13, 13, 14, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 8px;
-      padding: 2rem;
-      margin-bottom: 3rem;
-      text-align: center;
+    .scene-visual {
+      position:relative; z-index:2; grid-column:2; justify-self:end;
+      width:100%; height:100vh;
+      overflow:hidden; border-radius:0;
+      box-shadow:none;
+      background:#050506;
     }
-    
-    .price-box h2 {
-      font-size: 1.5rem;
-      color: var(--accent-cyan);
-      margin-bottom: 1rem;
+    .scene-visual::after {
+      content:""; position:absolute; inset:0; z-index:3; pointer-events:none;
+      background:linear-gradient(90deg, rgba(5,5,6,0.74) 0%, rgba(5,5,6,0.16) 24%, transparent 54%),
+                 radial-gradient(ellipse 78% 64% at center, transparent 44%, rgba(5,5,6,0.18) 100%);
     }
-    
-    .price-box p {
-      color: rgba(255, 255, 255, 0.7);
-      margin-bottom: 0.5rem;
+    .scene-visual img {
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+      filter:saturate(1.08) contrast(1.08) brightness(0.94);
+      transform-origin:center; will-change:opacity, transform;
     }
-    
-    .price-value {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--accent-red);
-      margin: 1.5rem 0;
+    .scene-visual .loop-a { animation:actLoopA 9s ease-in-out infinite; }
+    .scene-visual .loop-b { animation:actLoopB 9s ease-in-out infinite; }
+    @keyframes actLoopA {
+      0%{opacity:1; transform:scale(1.02);}
+      42%{opacity:1; transform:scale(1.12);}
+      50%{opacity:0; transform:scale(1.16);}
+      92%{opacity:0; transform:scale(1.02);}
+      100%{opacity:1; transform:scale(1.02);}
     }
-    
-    .cta-button {
-      display: inline-block;
-      margin-top: 1.5rem;
-      padding: 1rem 2rem;
-      background: var(--accent-red);
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      border-radius: 4px;
-      transition: all 0.3s;
+    @keyframes actLoopB {
+      0%,42%{opacity:0; transform:scale(1.02);}
+      50%{opacity:1; transform:scale(1.02);}
+      92%{opacity:1; transform:scale(1.12);}
+      100%{opacity:0; transform:scale(1.16);}
     }
-    
-    .cta-button:hover {
-      background: #ff1a26;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(227, 11, 23, 0.3);
+    .story-switch::before { display:none; }
+    .story-switch::after {
+      background:linear-gradient(90deg, rgba(5,5,6,0.96) 0%, rgba(5,5,6,0.84) 43%, rgba(5,5,6,0.24) 72%, rgba(5,5,6,0.62) 100%);
     }
-    
-    /* Motto */
-    .motto {
-      text-align: center;
-      font-size: 1.1rem;
-      line-height: 1.8;
-      margin-bottom: 4rem;
-      padding: 2rem;
-      background: rgba(0, 229, 255, 0.05);
-      border-left: 3px solid var(--accent-cyan);
-      border-radius: 4px;
+    .story-switch .scene {
+      grid-template-columns:minmax(320px,0.92fr) minmax(420px,1.08fr);
+      gap:0; padding:0;
     }
-    
-    .highlight-cyan {
-      color: var(--accent-cyan);
-      font-weight: 600;
+    .story-switch .scene-main {
+      grid-column:1; justify-self:start; padding:6rem clamp(2rem,5vw,6rem) 3rem; max-width:720px;
+      height:100vh; overflow-y:auto; display:flex; flex-direction:column; justify-content:center;
     }
-    
-    /* Section */
-    .section {
-      margin-bottom: 4rem;
+    /* keep type in safe bounds at 100% zoom */
+    .story-switch h2 { font-size:clamp(1.9rem,4vw,3.2rem); margin-bottom:1rem; }
+    .story-switch .lead { font-size:clamp(1.05rem,1.7vw,1.35rem); line-height:1.6; }
+    .story-switch .signal { margin-top:1.2rem; }
+    .story-switch .story-language { margin-top:1.4rem; }
+    .story-switch .story-nav { margin-top:1.6rem; }
+    .story-stage { transition:opacity 0.55s ease, transform 0.55s cubic-bezier(0.16,1,0.3,1); }
+    .story-switch.changing .story-stage { opacity:0; transform:translateY(14px); }
+    .story-language {
+      margin-top:2.1rem; font-family:'Space Grotesk',sans-serif; font-size:0.74rem; font-weight:700;
+      letter-spacing:0.34em; text-transform:uppercase; color:rgba(0,229,255,0.78);
+      text-shadow:0 0 24px rgba(0,229,255,0.22);
     }
-    
-    .section h2 {
-      font-size: 1.8rem;
-      color: #ffffff;
-      margin-bottom: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+    .story-language small {
+      display:block; margin-top:0.55rem; font-size:0.58rem; letter-spacing:0.22em;
+      color:rgba(255,255,255,0.5);
     }
-    
-    .section h3 {
-      font-size: 1.3rem;
-      color: var(--accent-cyan);
-      margin-top: 2rem;
-      margin-bottom: 1rem;
+    .story-visual {
+      position:relative; z-index:2; grid-column:2; justify-self:end;
+      width:100%; height:100vh; overflow:hidden; background:#050506;
     }
-    
-    .section p {
-      color: rgba(255, 255, 255, 0.8);
-      margin-bottom: 1rem;
-      line-height: 1.8;
+    .story-visual::after {
+      content:""; position:absolute; inset:0; z-index:4; pointer-events:none;
+      background:linear-gradient(90deg, rgba(5,5,6,0.78) 0%, rgba(5,5,6,0.16) 26%, transparent 58%),
+                 radial-gradient(ellipse 76% 62% at center, transparent 45%, rgba(5,5,6,0.22) 100%);
     }
-    
-    .section ul {
-      list-style: none;
-      padding-left: 0;
-      margin-bottom: 1.5rem;
+    .story-visual img, .story-visual video {
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 22%;
+      opacity:0; transform:scale(1.08); filter:saturate(1.08) contrast(1.08) brightness(0.9);
+      transition:opacity 1s ease, transform 5.2s cubic-bezier(0.16,1,0.3,1);
+      will-change:opacity, transform;
     }
-    
-    .section li {
-      padding-left: 2rem;
-      margin-bottom: 0.8rem;
-      position: relative;
+    .story-visual img.active, .story-visual video.active { opacity:1; transform:scale(1.01); }
+    .story-nav { display:flex; align-items:center; gap:1.2rem; margin-top:2rem; }
+    .story-arrow { background:transparent; border:1px solid rgba(255,255,255,0.25); color:#cfcabf; cursor:pointer;
+      width:42px; height:42px; border-radius:50%; font-size:1.3rem; line-height:1; transition:all 0.25s; flex:0 0 auto; }
+    .story-arrow:hover { border-color:var(--accent-red); background:var(--accent-red); color:#fff; }
+    .story-dots {
+      display:flex; gap:0.6rem; align-items:center;
     }
-    
-    .section li::before {
-      content: "▹";
-      position: absolute;
-      left: 0.5rem;
-      color: var(--accent-red);
-      font-size: 1.2rem;
+    .story-dots button {
+      width:34px; height:2px; border:0; padding:0; cursor:pointer;
+      background:rgba(255,255,255,0.22); transition:background 0.3s ease, width 0.3s ease;
     }
-    
-    .highlight {
-      color: var(--accent-red);
-      font-weight: 600;
-    }
-    
-    .info-box {
-      background: rgba(0, 229, 255, 0.08);
-      border-left: 3px solid var(--accent-cyan);
-      padding: 1.5rem;
-      margin: 2rem 0;
-      border-radius: 4px;
-    }
-    
-    .warning-box {
-      background: rgba(227, 11, 23, 0.08);
-      border-left: 3px solid var(--accent-red);
-      padding: 1.5rem;
-      margin: 2rem 0;
-      border-radius: 4px;
-    }
-    
-    .creator-note {
-      margin-top: 4rem;
-      padding: 2rem;
-      background: rgba(13, 13, 14, 0.5);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      text-align: center;
-      font-size: 0.9rem;
-      color: #a0a0a0;
-    }
-    
-    .creator-note a {
-      color: var(--accent-cyan);
-      text-decoration: none;
-      font-weight: 500;
-    }
-    
-    .creator-note a:hover {
-      color: var(--accent-red);
-    }
-    
-    /* Responsive */
-    @media (max-width: 768px) {
-      .container {
-        padding: 8rem 1.5rem 3rem;
+    .story-dots button.active { width:56px; background:var(--accent-red); }
+
+    @media(max-width:820px){
+      .scene { display:flex; align-items:center; justify-content:center; padding:0; }
+      .cinema.left .scene-main, .cinema.right .scene-main, .cinema.center .scene-main {
+        padding:5rem 1.4rem 4rem; text-align:center; justify-self:center;
       }
-      
-      .price-box {
-        padding: 1.5rem;
+      .split-act .scene { flex-direction:column-reverse; gap:1.2rem; padding:5rem 1.2rem 4rem; }
+      .split-act .scene-main { padding:0; text-align:center; max-width:100%; }
+      .scene-visual { width:100%; height:44vh; justify-self:center; border-radius:0; }
+      .story-switch .scene { flex-direction:column-reverse; gap:1.2rem; padding:5rem 1.2rem 4rem; }
+      .story-switch .scene-main { padding:0; text-align:center; max-width:100%; }
+      .story-visual { width:100%; height:44vh; justify-self:center; }
+      .story-dots { justify-content:center; }
+      .scene .lead, .signal { margin-left:auto; margin-right:auto; justify-content:center; }
+      .scene-index { display:none; }
+    }
+
+    .btn-primary, .btn-ghost { font-size:0.74rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; text-decoration:none;
+      padding:1.05rem 2.4rem; border-radius:2px; transition:all 0.4s cubic-bezier(0.16,1,0.3,1); display:inline-block; margin:0.4rem; }
+    .btn-primary { background:var(--accent-red); color:#fff; border:1px solid var(--accent-red); }
+    .btn-primary:hover { transform:translateY(-3px); box-shadow:0 16px 40px rgba(227,11,23,0.4); }
+    .btn-ghost { background:transparent; color:#cfcabf; border:1px solid rgba(255,255,255,0.25); }
+    .btn-ghost:hover { border-color:#fff; color:#fff; }
+    .cta-row { margin-top:2.5rem; }
+    .floor { margin-top:1.6rem; font-size:0.82rem; letter-spacing:0.08em; color:#cfcabf; }
+    .floor b { color:#fff; }
+
+    /* ===== COLLABORATIONS: text left &middot; scrolling projects right ===== */
+    .p-collabs { flex-direction:row; padding:0; align-items:stretch; background:radial-gradient(ellipse at left, rgba(20,8,8,0.4), var(--matte-black) 70%); }
+    .collab-left { width:46%; display:flex; flex-direction:column; justify-content:center;
+      padding:5rem clamp(2rem,4vw,5rem); }
+    .collab-left h2 { text-align:left; font-family:'Cormorant Garamond',serif; font-weight:500; font-size:clamp(1.9rem,3.6vw,3rem); color:#f3ede0; line-height:1.1; margin-bottom:1rem; }
+    .collab-left .lead { text-align:left; margin:0 0 1.2rem; }
+    .collab-sub { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.1rem; color:#9a9286; line-height:1.6; margin-bottom:2rem; }
+    /* big full-height image stage that slides between projects */
+    .collab-right { width:54%; position:relative; }
+    .collab-stage { position:absolute; inset:0; overflow:hidden; background:#050506; }
+    .collab-shot { position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+      opacity:0; transform:scale(1.06); transition:opacity 0.8s ease, transform 6s ease; }
+    .collab-shot.active { opacity:1; transform:scale(1); }
+    .collab-stage::after { content:""; position:absolute; inset:0; pointer-events:none;
+      background:linear-gradient(90deg, var(--matte-black), transparent 18%),
+                 linear-gradient(to top, rgba(8,8,9,0.92), transparent 40%); }
+    .collab-caption { position:absolute; left:2.5rem; bottom:3rem; z-index:3; display:flex; flex-direction:column; gap:0.4rem; }
+    .cc-name { font-family:'Cormorant Garamond',serif; font-size:clamp(1.6rem,3vw,2.4rem); color:#fff; text-shadow:0 2px 20px rgba(0,0,0,0.8); }
+    .cc-kind { font-size:0.65rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent-cyan); }
+    .collab-arrow { position:absolute; top:50%; transform:translateY(-50%); z-index:4;
+      width:48px; height:48px; border-radius:50%; border:1px solid rgba(255,255,255,0.3); background:rgba(8,8,9,0.5);
+      color:#fff; font-size:1.4rem; cursor:pointer; transition:all 0.25s; }
+    .collab-arrow:hover { border-color:var(--accent-red); background:var(--accent-red); }
+    .collab-arrow.prev { left:1.5rem; } .collab-arrow.next { right:1.5rem; }
+    .collab-dots { position:absolute; right:2rem; bottom:3.4rem; z-index:4; display:flex; gap:0.5rem; }
+    .collab-dots button { width:30px; height:2px; border:0; padding:0; cursor:pointer; background:rgba(255,255,255,0.3); transition:all 0.3s; }
+    .collab-dots button.active { width:48px; background:var(--accent-red); }
+    @media(max-width:820px){
+      .p-collabs{ flex-direction:column; }
+      .collab-left{ width:100%; padding:4rem 1.4rem 1.5rem; text-align:center; align-items:center; }
+      .collab-left h2, .collab-left .lead{ text-align:center; }
+      .collab-right{ width:100%; height:50vh; min-height:340px; }
+      .collab-caption{ left:1.4rem; bottom:2rem; }
+      .collab-arrow.prev{ left:0.6rem; } .collab-arrow.next{ right:0.6rem; }
+    }
+
+    /* ===== FINAL COLLABORATIONS: premium glass partner card ===== */
+    .p-finalcollab {
+      padding:5.6rem clamp(1.2rem,3vw,3.8rem) 2.2rem;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      overflow:hidden;
+      background:#050506;
+    }
+    .p-finalcollab::after {
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:1;
+      pointer-events:none;
+      background:
+        radial-gradient(ellipse 62% 66% at center, rgba(5,5,6,0.02), rgba(5,5,6,0.3) 78%),
+        linear-gradient(90deg, rgba(5,5,6,0.16), rgba(5,5,6,0.02) 48%, rgba(5,5,6,0.18)),
+        linear-gradient(to bottom, rgba(5,5,6,0.28), rgba(5,5,6,0.01) 42%, rgba(5,5,6,0.34));
+    }
+    .cc-stage { position:absolute; inset:-8%; z-index:0; background:#050506; }
+    .cc-stage .cc-shot {
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center;
+      opacity:0;
+      transition:opacity 0.9s ease, transform 7s ease;
+      filter:blur(3px) brightness(0.78) saturate(1.12);
+      transform:scale(1.04);
+    }
+    .cc-stage .cc-shot.active { opacity:0.68; transform:scale(1.02); }
+    .cc-center {
+      position:relative;
+      z-index:2;
+      width:min(1180px, 84vw);
+      height:min(520px, calc(100vh - 9.4rem));
+      min-height:0;
+      display:grid;
+      grid-template-columns:minmax(360px, 1.08fr) minmax(300px, 0.92fr);
+      overflow:hidden;
+      text-align:left;
+      border-radius:9px;
+      background:linear-gradient(135deg, rgba(18,18,18,0.38), rgba(8,8,9,0.22));
+      border:1px solid rgba(255,255,255,0.16);
+      box-shadow:0 38px 110px rgba(0,0,0,0.58), inset 0 1px 0 rgba(255,255,255,0.13);
+      backdrop-filter:blur(5px) saturate(1.08);
+      -webkit-backdrop-filter:blur(5px) saturate(1.08);
+    }
+    .cc-photo {
+      position:relative;
+      min-height:0;
+      height:100%;
+      overflow:hidden;
+      background:linear-gradient(135deg, rgba(255,255,255,0.04), rgba(0,0,0,0.34));
+      border-right:1px solid rgba(255,255,255,0.12);
+    }
+    .cc-photo::after {
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:linear-gradient(to top, rgba(5,5,6,0.14), transparent 42%),
+                 linear-gradient(90deg, transparent 78%, rgba(5,5,6,0.12));
+    }
+    .cc-photo .cc-img {
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      object-position:center;
+      padding:clamp(0.35rem,0.9vw,0.85rem);
+      opacity:0;
+      transition:opacity 0.75s ease, transform 6s ease;
+      filter:saturate(1.06) contrast(1.02) brightness(1.05);
+      transform:scale(1.015);
+    }
+    .cc-photo .cc-img.active { opacity:1; transform:scale(1); }
+    .cc-copy {
+      display:flex;
+      min-width:0;
+      flex-direction:column;
+      justify-content:center;
+      padding:clamp(1.45rem,2.6vw,2.85rem);
+    }
+    .cc-center .scene-code {
+      margin-bottom:0.62rem;
+      color:var(--accent-red);
+      letter-spacing:0.3em;
+    }
+    .cc-center h2 {
+      font-family:'Space Grotesk',sans-serif;
+      font-weight:700;
+      font-size:clamp(1.9rem,3.2vw,3rem);
+      letter-spacing:0.01em;
+      color:#fff;
+      line-height:1.02;
+      margin-bottom:0.55rem;
+      text-shadow:0 18px 60px rgba(0,0,0,0.72);
+    }
+    .cc-tag {
+      max-width:560px;
+      font-size:0.68rem;
+      font-weight:700;
+      letter-spacing:0.2em;
+      line-height:1.55;
+      text-transform:uppercase;
+      color:var(--accent-cyan);
+      margin-bottom:0.82rem;
+    }
+    .cc-center .lead {
+      max-width:590px;
+      margin:0 0 1.05rem;
+      color:#eee6d8;
+      font-size:clamp(1rem,1.35vw,1.22rem);
+      line-height:1.46;
+    }
+    .cc-center .claim-actions {
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:0.85rem;
+      margin-top:0;
+    }
+    .cc-center .btn-primary,
+    .cc-center .btn-ghost {
+      min-height:38px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      margin:0;
+      white-space:nowrap;
+      padding:0.72rem 1.55rem;
+    }
+    .cc-nav {
+      display:flex;
+      align-items:center;
+      gap:1rem;
+      margin-top:0.9rem;
+    }
+    .cc-arrow {
+      width:36px;
+      height:36px;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,0.26);
+      background:rgba(255,255,255,0.045);
+      color:#fff;
+      font-size:1.05rem;
+      cursor:pointer;
+      transition:all 0.25s;
+    }
+    .cc-arrow:hover { border-color:var(--accent-red); background:var(--accent-red); }
+    .cc-dots { display:flex; gap:0.55rem; align-items:center; }
+    .cc-dots button {
+      width:26px;
+      height:2px;
+      border:0;
+      padding:0;
+      cursor:pointer;
+      background:rgba(255,255,255,0.28);
+      transition:all 0.3s;
+    }
+    .cc-dots button.active { width:42px; background:var(--accent-red); }
+    @media(max-height:760px) and (min-width:921px){
+      .p-finalcollab { padding:4.9rem 1rem 1.4rem; }
+      .cc-center {
+        width:min(1120px,84vw);
+        height:min(470px, calc(100vh - 6.8rem));
+        grid-template-columns:minmax(360px,1.08fr) minmax(300px,0.92fr);
       }
-      
-      .price-value {
-        font-size: 1.8rem;
+      .cc-photo .cc-img { padding:0.45rem; }
+      .cc-copy { padding:1.25rem clamp(1.5rem,2.6vw,2.55rem); }
+      .cc-center .scene-code {
+        margin-bottom:0.45rem;
+        font-size:0.58rem;
+        letter-spacing:0.3em;
       }
-      
-      .section h2 {
-        font-size: 1.5rem;
+      .cc-center h2 {
+        font-size:clamp(2.1rem,3.6vw,3.25rem);
+        margin-bottom:0.35rem;
       }
-      
-      .section h3 {
-        font-size: 1.1rem;
+      .cc-tag {
+        margin-bottom:0.64rem;
+        font-size:0.58rem;
+        line-height:1.45;
       }
-      
-      .cta-button {
-        padding: 0.8rem 1.5rem;
-        font-size: 0.75rem;
+      .cc-center .lead {
+        margin-bottom:0.82rem;
+        font-size:clamp(0.92rem,1.22vw,1.08rem);
+        line-height:1.38;
       }
+      .cc-center .claim-actions { gap:0.6rem; }
+      .cc-center .btn-primary,
+      .cc-center .btn-ghost {
+        min-height:34px;
+        padding:0.62rem 1.35rem;
+        font-size:0.6rem;
+        letter-spacing:0.16em;
+      }
+      .cc-nav { margin-top:0.68rem; gap:0.74rem; }
+      .cc-arrow { width:32px; height:32px; font-size:0.98rem; }
+      .cc-dots button { width:24px; }
+      .cc-dots button.active { width:38px; }
+    }
+    @media(max-width:920px){
+      .p-finalcollab { padding:5.4rem 1.1rem 3.4rem; overflow-y:auto; }
+      .cc-center {
+        width:min(620px,100%);
+        height:auto;
+        min-height:0;
+        grid-template-columns:1fr;
+      }
+      .cc-photo {
+        min-height:0;
+        aspect-ratio:16/9;
+        border-right:0;
+        border-bottom:1px solid rgba(255,255,255,0.12);
+      }
+      .cc-copy { padding:1.55rem 1.25rem 1.7rem; text-align:center; align-items:center; }
+      .cc-center .scene-code { letter-spacing:0.24em; }
+      .cc-tag { margin-bottom:1rem; }
+      .cc-center .lead { margin-bottom:1.4rem; font-size:1.08rem; }
+      .cc-center .claim-actions { justify-content:center; }
+      .cc-nav { margin-top:1.4rem; justify-content:center; }
+    }
+
+    /* big number accent for scarcity / v2 */
+    .bignum { font-family:'Cormorant Garamond',serif; font-size:clamp(3.2rem,9vw,7rem); line-height:0.9; color:#fff; margin-bottom:0.5rem; }
+    .bignum b { color:var(--accent-red); }
+
+    /* mobile & tablet: SAME horizontal scroll (swipe sideways with finger) */
+    @media(max-width:820px){
+      .panel{ padding:5rem 1.4rem 4rem; }
+      .p-wall .content{ padding:2rem 1.4rem; }
+      .p-wall .wall{ grid-template-columns:repeat(14,1fr); }
+      .panel h1{ font-size:clamp(2.2rem,11vw,4rem); }
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="header">
-    <div class="header-title">NFTs NYF</div>
-    <a href="index.html" class="back-btn">← Back Home</a>
-  </header>
-  
-  <!-- Main Content -->
-  <div class="container">
-    <h1 class="page-title">NYFURION X REBORN</h1>
-    <p class="page-subtitle">Official NFT Collection — Full Commercial License</p>
-    
-    <div class="price-box">
-      <h2>Collection Information</h2>
-      <p>Open Offer Collection</p>
-      <div class="price-value">Floor Price: 0.01 ETH</div>
-      <p>Each fragment represents a unique element of the Nyfurion narrative universe</p>
-      <a href="https://opensea.io/collection/nyfurionxreborn" target="_blank" class="cta-button">View Collection on OpenSea</a>
-    </div>
-    
-    <div class="motto">
-      <strong>"Make your business shine with Nyfurion's legendary icons — impossible to go unnoticed"</strong>
-      <br><br>
-      <span class="highlight-cyan">NYFURION X REBORN MOTTO - We are one "1"</span>
-    </div>
-    
-    <!-- Commercial License -->
-    <div class="section">
-      <h2>NYFURION X REBORN – COMMERCIAL LICENSE</h2>
-      <p><em>Last updated: August 2025</em></p>
-      <p><strong>Creator:</strong> Riccardo – Founder of the Nyfurion narrative universe</p>
-      
-      <h3>1.0 - GRANTED RIGHTS</h3>
-      <p><strong class="highlight-cyan">1.1</strong> - The owner of a Nyfurion x Reborn Fragment (NFT) holds <span class="highlight">full commercial rights</span> to use their artwork in any personal or professional project.</p>
-      
-      <p><strong class="highlight-cyan">1.2</strong> - You are free to create and monetize without limitations:</p>
-      <ul>
-        <li><strong>1.3</strong> - Video games, apps, digital experiences, and metaverse projects</li>
-        <li><strong>1.4</strong> - Comics, graphic novels, animations, and narrative content</li>
-        <li><strong>1.5</strong> - Restaurants, venues, clubs, wines, alcohol, and any type of commercial activity</li>
-        <li><strong>1.6</strong> - Merchandising, secondary brands, and co-branding projects</li>
-        <li><strong>1.7</strong> - Digital or physical art, installations, exhibitions</li>
-        <li><strong>1.8</strong> - Social media content, media, and promotional initiatives</li>
-        <li><strong>1.9</strong> - Any other form of creative or commercial project, even if not specifically listed</li>
-      </ul>
-      
-      <div class="info-box">
-        <p><strong>No additional authorization is required:</strong> each fragment is free to take on new creative forms through its holder.</p>
+  <nav id="topnav">
+    <div class="nav-scroll" id="navScroll">
+      <div class="nav-track">
+        <a href="index.html" class="nav-home">Home</a>
+        <a href="lore.html">Lore</a>
+        <a href="characters.html">Characters</a>
+        <a href="roadmap.html">Roadmap</a>
+        <a href="nfts.html" class="active">NFTs</a>
+        <a href="contacts.html">Contact</a>
+        <span class="nav-sep"></span>
+        <a href="index.html#choose" class="nav-cta">Choose Your Side</a>
       </div>
     </div>
-    
-    <!-- Limitations -->
-    <div class="section">
-      <h2>X LIMITATIONS</h2>
-      
-      <div class="warning-box">
-        <h3>2.0 - USE OF THE NAME</h3>
-        <p>You <strong>may not use "Nyfurion" as the main brand</strong>. Secondary use is allowed to identify your NFT (e.g., "Nyfurion Fragment #237" or "#234 Nyfurion") and any other name associated with the fragment, provided that the main brand is not Nyfurion alone.</p>
+    <div class="nav-prog" id="navProg" aria-hidden="true"></div>
+  </nav>
+
+  <div id="track">
+
+    <!-- 1 &middot; VIDEO HERO -->
+    <section class="panel p-video" data-i="0">
+      <img class="hero-shot" src="assets/nft/nft-hero.jpg" alt="" aria-hidden="true">
+      <div class="scrim"></div>
+      <div class="content">
+        <div class="eyebrow reveal">Nyfurion X Reborn &middot; Genesis Collection</div>
+        <h1 class="reveal">Own a Piece<br>of the World</h1>
+        <p class="lead reveal">Four hundred souls, sealed forever on the blockchain. Step into the realm not as a watcher, but as a <span class="hl">founder</span>.</p>
+        <div class="v-cta reveal">
+          <a href="https://opensea.io/collection/nyfurionxreborn" target="_blank" rel="noopener" class="v-enter">Enter the Collection <span class="arr">&rsaquo;</span></a>
+        </div>
       </div>
-      
-      <h3>2.1 - OFFICIAL SERIES</h3>
-      <p>You may not create TV series or projects declared officially part of the canonical Nyfurion series. These remain the <span class="highlight">exclusive domain of the Creator</span>.</p>
-      
-      <h3>2.3 - LORE</h3>
-      <p>You may not modify or claim the official Nyfurion lore as canonical. Your works must be presented as <strong>unofficial</strong>.</p>
-      
-      <h3>2.4 - PROHIBITED CONTENT</h3>
-      <p>You may not associate the fragment with violent, offensive, discriminatory, or illegal projects.</p>
-      
-      <h3>2.5 - LOGOS AND ASSETS</h3>
-      <p>You may freely use the image of your Nyfurion Fragment, but you may not use official logos, registered trademarks, or global Nyfurion assets without written authorization from the Creator.</p>
-    </div>
-    
-    <!-- Legal Notes -->
-    <div class="section">
-      <h2>2.6 - LEGAL NOTES / NYFX*</h2>
-      
-      <p><strong class="highlight-cyan">2.7</strong> - Commercial rights <span class="highlight">follow the ownership of the NFT</span>: if you sell the fragment, the rights automatically transfer to the new holder.</p>
-      
-      <p><strong class="highlight-cyan">2.8</strong> - The license is <strong>worldwide, personal, and non-exclusive</strong>: it applies only to the fragment owned and does not transfer the overall intellectual property of the Nyfurion universe.</p>
-      
-      <p><strong class="highlight-cyan">2.9</strong> - If your fragment is selected for an official project, you may receive a symbolic share of the revenues.</p>
-    </div>
-    
-    <div class="creator-note">
-      <p>Creator: Riccardo – Founder of the Nyfurion narrative universe</p>
-      <p>For questions or commercial partnerships: <a href="./contatti.html" style="color: var(--accent-cyan);">Contact Us</a></p>
-    </div>
+      <div class="v-hint reveal" aria-hidden="true"><span class="ln"></span> Scorri <span class="ln r"></span></div>
+    </section>
+
+    <!-- 2 &middot; THE WALL (left: looping 400 &middot; right: text) -->
+    <section class="panel p-wall" data-i="1">
+      <div class="wall-left">
+        <div class="wall-cols" id="wall"></div>
+        <div class="wall-fade"></div>
+      </div>
+      <div class="wall-right">
+        <div class="eyebrow reveal">The Collection</div>
+        <h1 class="reveal">Four Hundred<br>Souls</h1>
+        <p class="lead reveal">Every hero, every traitor, every guardian of the realm. Four hundred fragments, and not one of them the same.</p>
+      </div>
+    </section>
+
+    <!-- 3 &middot; ACT I: DESIRE -->
+    <section class="panel cinema split-act p-own" data-i="2">
+      <div class="scene">
+        <div class="scene-main">
+          <div class="scene-code reveal">Act I &middot; The Spark</div>
+          <h2 class="reveal">A face people can remember.</h2>
+          <div class="scene-rule reveal"></div>
+          <p class="lead reveal">You are not buying a file. You are claiming a character with a look, a name, a story, and the right to build something around it. A fragment can become your mascot, your drop, your content, your product, your signature.</p>
+          <div class="signal reveal"><span>Commercial license</span><span>Usable character IP</span><span>Business seed</span></div>
+        </div>
+        <div class="scene-visual reveal" aria-hidden="true">
+          <img class="loop-a" src="assets/nft/nft-act1-loop-1.png" alt="">
+          <img class="loop-b" src="assets/nft/nft-act1-loop-2.png" alt="">
+        </div>
+        <div class="scene-index">01</div>
+      </div>
+    </section>
+
+    <!-- 4 &middot; ACT II: BELONGING -->
+    <section class="panel cinema story-switch p-story" data-i="3">
+      <div class="scene">
+        <div class="scene-main">
+          <div class="story-stage">
+            <div class="scene-code reveal" id="story-code">Act II &middot; The Inner Circle</div>
+            <h2 class="reveal" id="story-title">A fragment is your seat at the table.</h2>
+            <div class="scene-rule reveal"></div>
+            <p class="lead reveal" id="story-copy">Holders enter the first circle of Nyfurion: early, visible, and close enough to help shape which ideas deserve to grow.</p>
+            <div class="signal reveal" id="story-signal"><span>Community voice</span><span>Early access</span><span>Lore participation</span></div>
+            <div class="story-language reveal" id="story-language">NYF &middot; AURION VEL KAIRA
+              <small>Hidden language &middot; coded messages &middot; symbols inside the saga</small>
+            </div>
+          </div>
+          <div class="story-nav reveal">
+            <button type="button" class="story-arrow" id="story-prev" aria-label="Previous">&lsaquo;</button>
+            <div class="story-dots" id="story-dots" aria-label="Story switch"></div>
+            <button type="button" class="story-arrow" id="story-next" aria-label="Next">&rsaquo;</button>
+          </div>
+        </div>
+        <div class="story-visual reveal" aria-hidden="true">
+          <img class="active" src="assets/characters/portraits/story-1.png" alt="">
+          <img src="assets/characters/portraits/story-2.png" alt="">
+          <img src="assets/characters/portraits/story-3.png" alt="">
+        </div>
+        <div class="scene-index">02</div>
+      </div>
+    </section>
+
+    <!-- 5 &middot; THE COLLECTIONS (Genesis 400 + NYF V2, switchable) -->
+    <section class="panel cinema center p-claim" data-i="4" style="--shot:url('assets/nft/v2-collection.jpg'); --pos:center; --veil:radial-gradient(ellipse 62% 58% at center, rgba(8,8,9,0.56), rgba(8,8,9,0.95));">
+      <div class="scene">
+        <div class="scene-main">
+          <div class="scene-code reveal" id="col-code">The Threshold</div>
+          <div class="bignum reveal" id="col-num">Only <b>400</b></div>
+          <h2 class="reveal" id="col-title">The Genesis door does not stay open forever.</h2>
+          <p class="lead reveal" id="col-desc">A character, a full commercial license, and a founder place inside the first era. The first chapter of Nyfurion, sealed on-chain.</p>
+          <div class="claim-actions reveal">
+            <a href="https://opensea.io/collection/nyfurionxreborn" target="_blank" rel="noopener" class="btn-primary" id="col-link">Claim Your Fragment</a>
+            <a href="index.html#choose" class="btn-ghost">Choose Your Side</a>
+            <div class="floor" id="col-floor">Full commercial license &middot; Secured on Ethereum</div>
+          </div>
+          <div class="cc-nav reveal" style="justify-content:center;">
+            <button type="button" class="cc-arrow" id="col-prev" aria-label="Previous">&lsaquo;</button>
+            <div class="cc-dots" id="col-dots"></div>
+            <button type="button" class="cc-arrow" id="col-next" aria-label="Next">&rsaquo;</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 &middot; CURRENT COLLABORATIONS (sponsor glass card) -->
+    <section class="panel p-finalcollab" data-i="5">
+      <div class="cc-stage" id="cc-stage"></div>
+      <div class="cc-center">
+        <div class="cc-photo" id="cc-photo"></div>
+        <div class="cc-copy">
+          <div class="scene-code reveal">Collaborations &amp; Support</div>
+          <h2 id="cc-title">me3collectibles</h2>
+          <p class="cc-tag" id="cc-tag">Active Collaboration</p>
+          <p class="lead" id="cc-desc">A vision and a project worth discovering. Step into the world they are building, and visit the site to see it for yourself.</p>
+          <div class="claim-actions">
+            <a href="#" target="_blank" rel="noopener" class="btn-primary" id="cc-link">View the Collaboration</a>
+            <a href="contacts.html" class="btn-ghost">Become a Partner</a>
+          </div>
+          <div class="cc-nav">
+            <button class="cc-arrow" id="cc-prev" aria-label="Previous">&lsaquo;</button>
+            <div class="cc-dots" id="cc-dots"></div>
+            <button class="cc-arrow" id="cc-next" aria-label="Next">&rsaquo;</button>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
+
+  <div id="progress-bar"></div>
+  <div class="hint">scroll <span class="ar">&rarr;</span></div>
+
+  <script>
+    // build looping columns of the 400 fragments (cinematic, auto-scroll)
+    const wall = document.getElementById('wall');
+    const COLS = 7;                 // more columns = more fragments visible
+    const buckets = Array.from({length:COLS}, ()=>[]);
+    for(let n=1;n<=400;n++){ buckets[(n-1)%COLS].push(n); }
+    buckets.forEach((nums, ci)=>{
+      const col=document.createElement('div');
+      col.className='wall-col ' + (ci%2 ? 'down':'up');
+      col.style.setProperty('--dur', (18 + ci*2.5)+'s');   // faster varied speeds
+      // duplicate the list twice for a seamless loop
+      [...nums, ...nums].forEach(n=>{
+        const img=document.createElement('img'); img.loading='lazy'; img.alt=''; img.src='assets/nft/'+n+'.jpg';
+        col.appendChild(img);
+      });
+      wall.appendChild(col);
+    });
+
+    // Act II: photo + copy switch, with Nyfurion encrypted-language hints
+    const storySwitch = document.querySelector('.story-switch');
+    const storyImages = Array.from(document.querySelectorAll('.story-visual img'));
+    const storyCode = document.getElementById('story-code');
+    const storyTitle = document.getElementById('story-title');
+    const storyCopy = document.getElementById('story-copy');
+    const storySignal = document.getElementById('story-signal');
+    const storyLanguage = document.getElementById('story-language');
+    const storyDots = document.getElementById('story-dots');
+    const storySlides = [
+      {
+        code:'Act II &middot; The Inner Circle',
+        title:'A fragment is your seat at the table.',
+        copy:'Holders enter the first circle of Nyfurion: early, visible, and close enough to help shape which ideas deserve to grow.',
+        signal:['Community voice','Early access','Lore participation'],
+        language:'NYF &middot; AURION VEL KAIRA',
+        note:'The realm recognizes those who enter early'
+      },
+      {
+        code:'Act II &middot; The Hidden Tongue',
+        title:'The world speaks in its own language.',
+        copy:'Across the series, Nyfurion carries symbols, coded phrases and encrypted messages. Holding a fragment means following the clues as the mythology opens.',
+        signal:['Nyfurion language','Encrypted messages','Hidden symbols'],
+        language:'KAEL &middot; VORUN &middot; NYFAR',
+        note:'A coded tongue woven through the saga'
+      },
+      {
+        code:'Act II &middot; The Living Myth',
+        title:'Every reveal can become part of your story.',
+        copy:'Characters, signs, drops and future choices create a world that keeps moving. Your fragment gives you a place inside that movement.',
+        signal:['Evolving lore','Holder identity','Future reveals'],
+        language:'SYN VARA &middot; ETH NYFURION',
+        note:'A living realm for builders and believers'
+      }
+    ];
+    let storyIndex = 0;
+    const setStory = (index)=>{
+      if(!storySwitch) return;
+      storyIndex = (index + storySlides.length) % storySlides.length;
+      storySwitch.classList.add('changing');
+      setTimeout(()=>{
+        const item = storySlides[storyIndex];
+        storyCode.textContent = item.code;
+        storyTitle.textContent = item.title;
+        storyCopy.textContent = item.copy;
+        storySignal.innerHTML = item.signal.map(text=>`<span>${text}</span>`).join('');
+        storyLanguage.innerHTML = `${item.language}<small>${item.note}</small>`;
+        storyImages.forEach((img, i)=>img.classList.toggle('active', i === storyIndex));
+        Array.from(storyDots.children).forEach((dot, i)=>dot.classList.toggle('active', i === storyIndex));
+        storySwitch.classList.remove('changing');
+      }, 280);
+    };
+    let storyTimer=null;
+    function startAuto(){ stopAuto(); storyTimer=setInterval(()=>setStory(storyIndex+1), 8000); }
+    function stopAuto(){ if(storyTimer){ clearInterval(storyTimer); storyTimer=null; } }
+    // when the user acts, pause auto then resume after a while so they can read
+    function userMove(i){ setStory(i); stopAuto(); setTimeout(startAuto, 14000); }
+    if(storyDots){
+      storySlides.forEach((_, i)=>{
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.addEventListener('click', ()=>userMove(i));
+        storyDots.appendChild(dot);
+      });
+      const prevBtn=document.getElementById('story-prev'), nextBtn=document.getElementById('story-next');
+      if(prevBtn) prevBtn.addEventListener('click', ()=>userMove(storyIndex-1));
+      if(nextBtn) nextBtn.addEventListener('click', ()=>userMove(storyIndex+1));
+      setStory(0);
+      startAuto();
+    }
+
+    // ===== SPONSORS / COLLABORATIONS carousel (image left + text right) =====
+    // EDIT here to add real sponsors: image, title, tag, description, link
+    const PARTNERS=[
+      { img:'assets/nft/sponsor-mb3.png', title:'me3collectibles', tag:'Active Collaboration',
+        desc:'A vision and a project worth discovering. Step into the world they are building, and visit the site to see it for yourself.', link:'https://me3collectibles.com/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQPOTM2NjE5NzQzMzkyNDU5AAGnfrt1puDNVGN1dwGGYZcGsge1DLPuUe9nbCnbHepQeV3jNGZW_8JicgJV7jY_aem_UT3Z518yWvmwUOzCU5ws7w' },
+      { img:'assets/nft/sponsor-apester.png', title:'APESTER#5455', tag:'Active Collaboration',
+        desc:'A collaboration worth exploring. Visit the profile and step into the world behind it.', link:'https://apester5455.com/' }
+    ];
+    const ccStage=document.getElementById('cc-stage'), ccPhoto=document.getElementById('cc-photo'),
+          ccTitle=document.getElementById('cc-title'),
+          ccTag=document.getElementById('cc-tag'), ccDesc=document.getElementById('cc-desc'),
+          ccLink=document.getElementById('cc-link'), ccDots=document.getElementById('cc-dots');
+    let ccI=0, ccTimer=null;
+    // blurred background + sharp card photo for each sponsor
+    PARTNERS.forEach((p,i)=>{
+      const bg=document.createElement('img'); bg.className='cc-shot'+(i===0?' active':''); bg.src=p.img; bg.alt=''; bg.loading='eager'; ccStage.appendChild(bg);
+      const fg=document.createElement('img'); fg.className='cc-img'+(i===0?' active':''); fg.src=p.img; fg.alt=p.title; fg.loading=i?'lazy':'eager'; ccPhoto.appendChild(fg);
+    });
+    const ccShots=Array.from(ccStage.children), ccImgs=Array.from(ccPhoto.children);
+    function setCC(i){
+      ccI=(i+PARTNERS.length)%PARTNERS.length;
+      const p=PARTNERS[ccI];
+      ccShots.forEach((s,k)=>s.classList.toggle('active',k===ccI));
+      ccImgs.forEach((s,k)=>s.classList.toggle('active',k===ccI));
+      if(ccTitle) ccTitle.textContent=p.title;
+      if(ccTag) ccTag.textContent=p.tag;
+      if(ccDesc) ccDesc.textContent=p.desc;
+      if(ccLink) ccLink.href=p.link;
+      if(ccDots) Array.from(ccDots.children).forEach((d,k)=>d.classList.toggle('active',k===ccI));
+    }
+    if(ccDots){
+      // hide nav if only one partner
+      if(PARTNERS.length<2){ document.querySelector('.cc-nav').style.display='none'; }
+      PARTNERS.forEach((_,k)=>{ const b=document.createElement('button'); b.type='button'; b.addEventListener('click',()=>ccMove(k)); ccDots.appendChild(b); });
+      function ccStart(){ ccStop(); if(PARTNERS.length>1) ccTimer=setInterval(()=>setCC(ccI+1),7000); }
+      function ccStop(){ if(ccTimer){clearInterval(ccTimer);ccTimer=null;} }
+      window.ccMove=(i)=>{ setCC(i); ccStop(); setTimeout(ccStart,13000); };
+      const cp=document.getElementById('cc-prev'), cn=document.getElementById('cc-next');
+      if(cp) cp.addEventListener('click',()=>ccMove(ccI-1));
+      if(cn) cn.addEventListener('click',()=>ccMove(ccI+1));
+      setCC(0); ccStart();
+    }
+
+    // ===== THE COLLECTIONS switch: Genesis 400 <-> NYF V2 =====
+    const COLLECTIONS=[
+      { code:'The Genesis Collection', num:'400', title:'The Genesis door does not stay open forever.',
+        desc:'A character, a full commercial license, and a founder place inside the first era. The first chapter of Nyfurion, sealed on-chain.',
+        floor:'Full commercial license · Secured on Ethereum', btn:'Claim Your Fragment',
+        link:'https://opensea.io/collection/nyfurionxreborn',
+        shot:"url('assets/nft/v2-collection.jpg')", pos:'center' },
+      { code:'NYF V2 · Live Mint', num:'100', title:'A new chapter enters the saga.',
+        desc:'One hundred new fragments expand the world of Nyfurion. New characters, new entry points, and a fresh wave for those who want in early.',
+        floor:'New fragments · Live mint now · Secured on Ethereum', btn:'Mint NYF V2',
+        link:'#',   // <-- replace # with the V2 live mint link
+        shot:"url('assets/nft/v2-collection.jpg')", pos:'center' }
+    ];
+    const colPanel=document.querySelector('.p-claim');
+    const colEls={ code:document.getElementById('col-code'), num:document.getElementById('col-num'),
+      title:document.getElementById('col-title'), desc:document.getElementById('col-desc'),
+      floor:document.getElementById('col-floor'), link:document.getElementById('col-link'), dots:document.getElementById('col-dots') };
+    let colI=0, colTimer=null;
+    function setCol(i){
+      colI=(i+COLLECTIONS.length)%COLLECTIONS.length;
+      const c=COLLECTIONS[colI];
+      if(colEls.code) colEls.code.textContent=c.code;
+      if(colEls.num) colEls.num.innerHTML='Only <b>'+c.num+'</b>';
+      if(colEls.title) colEls.title.textContent=c.title;
+      if(colEls.desc) colEls.desc.textContent=c.desc;
+      if(colEls.floor) colEls.floor.textContent=c.floor;
+      if(colEls.link){ colEls.link.textContent=c.btn; colEls.link.href=c.link; }
+      if(colPanel){ colPanel.style.setProperty('--shot',c.shot); colPanel.style.setProperty('--pos',c.pos); }
+      if(colEls.dots) Array.from(colEls.dots.children).forEach((d,k)=>d.classList.toggle('active',k===colI));
+    }
+    if(colEls.dots){
+      COLLECTIONS.forEach((_,k)=>{ const b=document.createElement('button'); b.type='button'; b.addEventListener('click',()=>colMove(k)); colEls.dots.appendChild(b); });
+      function colStart(){ colStop(); colTimer=setInterval(()=>setCol(colI+1),8000); }
+      function colStop(){ if(colTimer){clearInterval(colTimer);colTimer=null;} }
+      window.colMove=(i)=>{ setCol(i); colStop(); setTimeout(colStart,15000); };
+      document.getElementById('col-prev').addEventListener('click',()=>colMove(colI-1));
+      document.getElementById('col-next').addEventListener('click',()=>colMove(colI+1));
+      setCol(0); colStart();
+    }
+
+    const track=document.getElementById('track');
+    const panels=Array.from(track.querySelectorAll('.panel'));
+    const bar=document.getElementById('progress-bar');
+    const hint=document.querySelector('.hint');
+
+    // ===== wheel -> jump panel by panel (mouse). Touch swipe is native on mobile. =====
+    let cur=0, locked=false;
+    function goTo(i){
+      cur=Math.max(0, Math.min(i, panels.length-1));
+      track.scrollTo({ left: cur*window.innerWidth, behavior:'smooth' });
+    }
+    function onWheel(e){
+      e.preventDefault();
+      if(locked) return;
+      const d = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+      if(Math.abs(d) < 6) return;
+      locked=true;
+      goTo(cur + (d>0?1:-1));
+      setTimeout(()=>{ locked=false; }, 650);
+    }
+    window.addEventListener('wheel', onWheel, {passive:false});
+    // keep cur in sync when finger-swiping or trackpad-panning
+    let st;
+    track.addEventListener('scroll', ()=>{ clearTimeout(st); st=setTimeout(()=>{ cur=Math.round(track.scrollLeft/window.innerWidth); }, 120); });
+
+    // progress bar + active panel reveal
+    function onScroll(){
+      const max=track.scrollWidth-track.clientWidth;
+      bar.style.width = max>0 ? (track.scrollLeft/max*100)+'%' : '0%';
+      const center=track.scrollLeft + track.clientWidth/2;
+      let activeIndex=0;
+      panels.forEach((p,index)=>{
+        const start=p.offsetLeft, end=start+p.offsetWidth;
+        const isActive=center>=start && center<end;
+        if(isActive) activeIndex=index;
+        p.classList.toggle('active', isActive);
+      });
+      cur=activeIndex;
+      if(hint) hint.classList.toggle('is-hidden', activeIndex >= panels.length-1);
+    }
+    track.addEventListener('scroll', onScroll);
+    window.addEventListener('resize', onScroll);
+    // first panel active on load
+    panels[0].classList.add('active');
+    onScroll();
+    // keyboard
+    window.addEventListener('keydown',(e)=>{
+      if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){ e.preventDefault(); goTo(cur+1); }
+      if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); goTo(cur-1); }
+    });
+
+  </script>
+  <script src="nav.js" defer></script>
 </body>
 </html>
