@@ -291,16 +291,19 @@
     .story-dots button.active { width:56px; background:var(--accent-red); }
 
     @media(max-width:820px){
-      .scene { display:flex; align-items:center; justify-content:center; padding:0; }
+      /* each section scrolls vertically so all text is readable (horizontal swipe still snaps) */
+      .scene { display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:0; height:100vh; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; }
       .cinema.left .scene-main, .cinema.right .scene-main, .cinema.center .scene-main {
-        padding:5rem 1.4rem 4rem; text-align:center; justify-self:center;
+        padding:5.5rem 1.4rem 3rem; text-align:center; justify-self:center;
       }
-      .split-act .scene { flex-direction:column-reverse; gap:1.2rem; padding:5rem 1.2rem 4rem; }
-      .split-act .scene-main { padding:0; text-align:center; max-width:100%; }
-      .scene-visual { width:100%; height:44vh; justify-self:center; border-radius:0; }
-      .story-switch .scene { flex-direction:column-reverse; gap:1.2rem; padding:5rem 1.2rem 4rem; }
-      .story-switch .scene-main { padding:0; text-align:center; max-width:100%; }
-      .story-visual { width:100%; height:44vh; justify-self:center; }
+      /* image-on-top layouts: photo attached under the navbar, cropped (cover), text below */
+      .split-act .scene, .story-switch .scene { flex-direction:column; gap:0; padding:0; }
+      .scene-visual, .story-visual { order:-1; width:100%; height:50vh; flex:0 0 auto; justify-self:center; border-radius:0; }
+      .split-act .scene-main, .story-switch .scene-main { padding:1.6rem 1.4rem 3rem; text-align:center; max-width:100%; }
+      /* remove the nested scroll on mobile so the eyebrow + title are never hidden */
+      .scene-main, .cinema.left .scene-main, .cinema.right .scene-main, .cinema.center .scene-main, .split-act .scene-main, .story-switch .scene-main { max-height:none; overflow:visible; }
+      .story-visual::after { background:linear-gradient(0deg, #050506 5%, rgba(5,5,6,0) 58%) !important; }
+      .story-visual img, .story-visual video, .scene-visual img, .scene-visual video { object-position:center 18%; }
       .story-dots { justify-content:center; }
       .scene .lead, .signal { margin-left:auto; margin-right:auto; justify-content:center; }
       .scene-index { display:none; }
@@ -879,7 +882,7 @@
       { code:'NYF V2 · Live Mint', num:'100', title:'A new chapter enters the saga.',
         desc:'One hundred new fragments expand the world of Nyfurion. New characters, new entry points, and a fresh wave for those who want in early.',
         floor:'New fragments · Live mint now · Secured on Ethereum', btn:'Mint NYF V2',
-        link:'#',   // <-- replace # with the V2 live mint link
+        link:'https://opensea.io/collection/nyfx-reborn-v2',
         shot:"url('assets/nft/v2-collection.jpg')", pos:'center' }
     ];
     const colPanel=document.querySelector('.p-claim');

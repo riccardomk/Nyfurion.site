@@ -228,15 +228,15 @@
 
     /* ===== Mobile: stack scenes ===== */
     @media (max-width: 768px){
-      .cine { scroll-snap-type: none; }
-      .scene, .scene.reverse { flex-direction: column; height: auto; min-height: 100vh; overflow-y: auto; }
-      .panel { height: auto; min-height: 100vh; }
+      /* horizontal swipe + snap like the NFT page, but each section scrolls vertically so all text is readable */
+      .panel { overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+      .scene, .scene.reverse { flex-direction: column; justify-content: flex-start; }
       .cs-media { flex:0 0 44vh; width:100%; height:44vh; opacity:1; }
       .cs-media img { transform:none; }
       .cs-media::after, .scene.reverse .cs-media::after { background: linear-gradient(0deg, #050507 1%, rgba(5,5,7,0) 55%); }
       .scene .cs-seal, .scene.reverse .cs-seal { right:1rem; left:auto; }
       .scene .cs-badge, .scene.reverse .cs-badge { left:1rem; right:auto; }
-      .cs-text, .scene.reverse .cs-text { flex:1 1 auto; width:100%; max-width:none; align-self:auto; text-align:left; padding:1.5rem 1.4rem 3rem; display:block; height:auto; overflow:visible; position:static; }
+      .cs-text, .scene.reverse .cs-text { flex:0 0 auto; width:100%; max-width:none; align-self:auto; text-align:left; padding:1.2rem 1.4rem 3rem; display:block; height:auto; overflow:visible; position:static; }
       .cs-text::before, .cs-text::after { content:none; display:none; }
       .scene.reverse .cs-quote { border-right:none; border-left:3px solid var(--accent-red); padding-right:0; padding-left:1.1rem; }
       .cs-text > * { opacity:1 !important; transform:none !important; }
@@ -608,31 +608,29 @@
     }
 
     /* vertical wheel -> horizontal, but let tall panels scroll vertically first */
-    let locked = false;
+    /* wheel -> jump one panel at a time (same mechanic as the NFT page) */
+    let cur = 0, locked = false;
     function go(dir){
       const w = cine.clientWidth || window.innerWidth;
-      const max = Math.max(0, document.querySelectorAll('.panel').length - 1);
-      const cur = Math.round(cine.scrollLeft / w);
-      const next = Math.max(0, Math.min(max, cur + dir));
-      cine.scrollTo({ left: next * w, behavior: 'smooth' });
+      const max = document.querySelectorAll('.panel').length - 1;
+      cur = Math.max(0, Math.min(max, cur + dir));
+      cine.scrollTo({ left: cur * w, behavior: 'smooth' });
     }
     cine.addEventListener('wheel', function(e){
-      const vert = Math.abs(e.deltaY) >= Math.abs(e.deltaX);
-      const delta = vert ? e.deltaY : e.deltaX;
-      if (!delta) return;
-      const w = cine.clientWidth || window.innerWidth;
-      const cur = Math.round(cine.scrollLeft / w);
-      const panel = document.querySelectorAll('.panel')[cur];
-      if (vert && panel && panel.scrollHeight > panel.clientHeight + 1){
-        const atTop = panel.scrollTop <= 0;
-        const atBot = panel.scrollTop + panel.clientHeight >= panel.scrollHeight - 1;
-        if ((delta > 0 && !atBot) || (delta < 0 && !atTop)) return;
-      }
       e.preventDefault();
-      if (locked) return; locked = true;
-      go(delta > 0 ? 1 : -1);
-      setTimeout(() => { locked = false; }, 780);
+      if (locked) return;
+      const d = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+      if (Math.abs(d) < 6) return;
+      locked = true;
+      go(d > 0 ? 1 : -1);
+      setTimeout(() => { locked = false; }, 650);
     }, { passive:false });
+    /* keep cur in sync with finger-swipe / trackpad / anchor scroll */
+    let _csync;
+    cine.addEventListener('scroll', function(){
+      clearTimeout(_csync);
+      _csync = setTimeout(function(){ cur = Math.round(cine.scrollLeft / (cine.clientWidth || window.innerWidth)); }, 120);
+    });
 
     window.addEventListener('keydown', function(e){
       if (e.target.closest('input,textarea,select,button')) return;
