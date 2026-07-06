@@ -1,0 +1,55 @@
+{
+  "id": "fridgemind",
+  "title": "FridgeMind",
+  "category": {
+    "IT": "Mobile App · UX/UI · Progetto personale",
+    "EN": "Mobile App · UX/UI · Personal project"
+  },
+  "year": "2025",
+  "role": {
+    "IT": "Founder & Product Designer",
+    "EN": "Founder & Product Designer"
+  },
+  "brief": {
+    "IT": "IL TUO FRIGO A PORTATA DI APP.\n\nFridgeMind è la mia app Android, pubblicata su Google Play. Tiene sotto controllo freezer e alimenti: aggiungi, modifichi e rimuovi i prodotti in pochi tocchi. Nata da un problema che vive in ogni casa: dimenticare cosa c'è in freezer, e buttare via cibo (e soldi).",
+    "EN": "YOUR FRIDGE AT YOUR FINGERTIPS.\n\nFridgeMind is my Android app, published on Google Play. It keeps your freezer and food under control: add, edit and remove products in a few taps. Born from a problem in every home: forgetting what's in the freezer, and throwing away food (and money)."
+  },
+  "tools": ["Claude Code · Opus 4.8", "AI", "Adobe Illustrator"],
+  "mainImage": "",
+  "heroBg": "radial-gradient(130% 130% at 35% 28%, #3b86f7 0%, #1d54cd 42%, #0a1838 100%)",
+  "heroLogo": "./images/fridgemind-logo.png?v=2",
+  "heroVersion": "1.0.37",
+  "chapters": [
+    {
+      "k": { "IT": "01 · Il problema", "EN": "01 · The problem" },
+      "title": { "IT": "Quello che dimentichi, lo butti", "EN": "What you forget, you throw away" },
+      "text": { "IT": "Ogni famiglia lo vive: il freezer si riempie, ti dimentichi cosa c'è dentro, e il cibo scade. Spreco di cibo, spreco di soldi.\n\nLa sfida: rendere la gestione del freezer così semplice da diventare un'abitudine, non una fatica.", "EN": "Every family knows it: the freezer fills up, you forget what's inside, and food expires. Wasted food, wasted money.\n\nThe challenge: make managing the freezer so simple it becomes a habit, not a chore." }
+    },
+    {
+      "k": { "IT": "02 · L'approccio", "EN": "02 · The approach" },
+      "title": { "IT": "Semplice, o nessuno la usa", "EN": "Simple, or nobody uses it" },
+      "text": { "IT": "Un'app di organizzazione funziona solo se è immediata. Ho progettato un'interfaccia intuitiva: aggiungere, modificare o rimuovere un prodotto in pochi secondi, con i dati sincronizzati con Google e sempre a portata di mano. Collegamento rapido e sicuro al 100%.\n\nProgettata per tutti, dalle famiglie a chiunque ami l'ordine in cucina.", "EN": "An organization app only works if it's immediate. I designed an intuitive interface: add, edit or remove a product in seconds, with data synced to Google and always at hand. A fast, 100% secure connection.\n\nBuilt for everyone, from families to anyone who loves order in the kitchen." },
+      "phones": ["./images/fridgemind-onboard-B.png?v=4", "./images/fridgemind-onboard-A.png?v=4"]
+    },
+    {
+      "k": { "IT": "03 · Il lavoro finale", "EN": "03 · The final work" },
+      "title": { "IT": "Dall'idea a Google Play", "EN": "From idea to Google Play" },
+      "text": { "IT": "FridgeMind: un'app vera, progettata e pubblicata sul Google Play Store, scaricabile e utilizzabile oggi. Dall'idea all'interfaccia fino alla presenza di ogni tuo singolo pezzo, che sia in frigo, in freezer o in credenza. Gestita da zero, e dal tuo dito.", "EN": "FridgeMind: a real app, designed and published on the Google Play Store, downloadable and usable today. From idea to interface to tracking every single item you own, whether it's in the fridge, the freezer or the pantry. Handled from scratch, and from your fingertip." },
+      "phones": ["./images/fridgemind-shot-1.png", "./images/fridgemind-shot-5.png", "./images/fridgemind-shot-4.png"]
+    },
+    {
+      "k": { "IT": "04 · Il valore", "EN": "04 · The value" },
+      "title": { "IT": "Non un'app-lista. Meno sprechi, più controllo.", "EN": "Not a list app. Less waste, more control." },
+      "text": { "IT": "Il vero valore non è «segnare cosa c'è in freezer». È ciò che ne ricavi: ottimizzi lo spazio, riduci gli sprechi, risparmi soldi e ti togli il pensiero. E quando finisci un prodotto, FridgeMind ti genera la lista della spesa in automatico, in base ai tuoi movimenti nell'app. Niente più stress.\n\nFridgeMind non vende una lista: vende controllo, tranquillità e la libertà di dimenticarti la lista della spesa.", "EN": "The real value isn't «noting what's in the freezer». It's what you get from it: you optimize space, cut waste, save money and lose the worry. And when you finish a product, FridgeMind generates your shopping list automatically, based on your activity in the app. No more stress.\n\nFridgeMind doesn't sell a list: it sells control, peace of mind, and the freedom to forget the shopping list." },
+      "phones": ["./images/fridgemind-shot-6.png", "./images/fridgemind-shot-3.png"]
+    },
+    {
+      "type": "outcome",
+      "text": { "IT": "FridgeMind dimostra che porto un prodotto dall'idea allo store: design, esperienza d'uso e messaggio, tutto costruito da me. Un progetto reale, vivo su Google Play, che continuo a migliorare.", "EN": "FridgeMind proves I take a product from idea to store: design, user experience and message, all built by me. A real project, live on Google Play, that I keep improving." }
+    },
+    {
+      "type": "banner",
+      "src": "./images/fridgemind-banner.png"
+    }
+  ]
+}

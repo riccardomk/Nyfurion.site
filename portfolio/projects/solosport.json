@@ -2,8 +2,8 @@
   "id": "solo-sport",
   "title": "SoloSport",
   "category": {
-    "IT": "Branding",
-    "EN": "Branding"
+    "IT": "Concept di Branding Sportivo",
+    "EN": "Sports Branding Concept"
   },
   "year": "2024",
   "role": {
@@ -11,145 +11,65 @@
     "EN": "Graphic Designer"
   },
   "brief": {
-    "IT": "SoloSport è un progetto di branding sportivo originale nato dalla passione personale per lo sport e il design. L'obiettivo era creare un'identità visiva moderna, distintiva e versatile per un portale tematico dedicato all'informazione sportiva, con focus su riconoscibilità, dinamismo e minimalismo. Our motto? #NoSportNoFunLivingOn",
-    "EN": "SoloSport is an original sports branding project born from a personal passion for sports and design. The goal was to create a modern, distinctive and versatile visual identity for a thematic portal dedicated to sports information, focusing on recognizability, dynamism and minimalism. Our motto? #NoSportNoFunLivingOn"
+    "IT": "Progetto creativo originale, nato dalla fusione tra passione per lo sport e design minimalista.\n\nSoloSport è un progetto creativo sviluppato in completa autonomia, concepito come identità visiva per un portale dedicato all'informazione sportiva. Il concept nasce dalla volontà di unire impatto visivo, minimalismo grafico e dinamismo tematico.\n\nLogo, palette cromatica e pattern sono stati progettati per trasmettere energia, precisione e riconoscibilità: valori fondamentali nel mondo dello sport e nella comunicazione digitale.",
+    "EN": "An original creative project, born from the fusion of a passion for sport and minimalist design.\n\nSoloSport is a creative project developed in complete autonomy, conceived as the visual identity for a portal dedicated to sports news. The concept comes from the will to combine visual impact, graphic minimalism and thematic dynamism.\n\nLogo, color palette and pattern were designed to convey energy, precision and recognizability: core values in the world of sport and digital communication."
   },
-  "deliverables": {
-    "IT": [
-      "Logo Design: sintesi geometrica cerchio/suddivisioni",
-      "Visual Identity: palette cromatica #E30B17 e #1D1E1B",
-      "Pattern Design: dinamismo vettoriale applicato",
-      "3D Modeling: renderizzazione logo premium",
-      "UI Concept: portale SoloSport.liveSport"
-    ],
-    "EN": [
-      "Logo Design: geometric synthesis circle/subdivisions",
-      "Visual Identity: #E30B17 and #1D1E1B palette",
-      "Pattern Design: applied vector dynamism",
-      "3D Modeling: premium logo rendering",
-      "UI Concept: SoloSport.liveSport portal"
-    ]
-  },
-  "process": {
-    "IT": [
-      "Studio a mano libera: esplorazione forme e dinamismo.",
-      "Sintesi geometrica: fusione cerchio (totalità) e tagli (pluralità).",
-      "Digitalizzazione: costruzione vettoriale millimetrica.",
-      "Rendering 3D: texturizzazione e illuminazione studio."
-    ],
-    "EN": [
-      "Freehand study: exploring shapes and dynamism.",
-      "Geometric synthesis: circle (totality) and cuts (plurality).",
-      "Digitization: precise vector construction.",
-      "3D Rendering: texturing and studio lighting."
-    ]
-  },
-  "outcome": {
-    "IT": "SoloSport rappresenta una visione strategica del branding contemporaneo: coerenza, riconoscibilità e applicabilità reale nel mondo digitale.",
-    "EN": "SoloSport represents a strategic vision of contemporary branding: consistency, recognizability, and real-world applicability."
-  },
-  "tools": [
-    "Illustrator",
-    "Blender",
-    "Photoshop"
-  ],
+  "tools": ["Illustrator", "Blender", "Photoshop"],
   "mainImage": "./images/solosport/solosport-hero.png",
-  "logoUrl": "./images/logosp.png",
-  "gallery": [
+  "palette": [
     {
-      "url": "./images/solosport/solosport-hero.png",
-      "label": "SoloSport Hero",
-      "style": {
-        "backgroundColor": "#1a1a1a",
-        "padding": "40px",
-        "borderRadius": "24px",
-        "display": "flex",
-        "alignItems": "center",
-        "justifyContent": "center",
-        "minHeight": "600px",
-        "position": "relative",
-        "border": "1px solid rgba(227, 11, 23, 0.4)",
-        "boxShadow": "0 0 40px rgba(227, 11, 23, 0.6), 0 0 80px rgba(227, 11, 23, 0.3), inset 0 0 20px rgba(227, 11, 23, 0.1)"
-      }
+      "hex": "#1D1E1B",
+      "role": { "IT": "Primarie", "EN": "Primary" },
+      "rgb": "29, 30, 27",
+      "cmyk": "0, 0, 0, 89",
+      "note": { "IT": "Nero profondo per eleganza, solidità e contrasto massimo", "EN": "Deep black for elegance, solidity and maximum contrast" }
     },
     {
-      "url": "./images/solosport/solosport-1.png",
-      "label": "SoloSport Visual",
-      "style": {
-        "backgroundColor": "#1a1a1a",
-        "padding": "40px",
-        "borderRadius": "24px",
-        "display": "flex",
-        "alignItems": "center",
-        "justifyContent": "center",
-        "minHeight": "600px",
-        "position": "relative",
-        "border": "1px solid rgba(227, 11, 23, 0.4)",
-        "boxShadow": "0 0 40px rgba(227, 11, 23, 0.6), 0 0 80px rgba(227, 11, 23, 0.3), inset 0 0 20px rgba(227, 11, 23, 0.1)"
-      }
+      "hex": "#E30B17",
+      "role": { "IT": "Accento", "EN": "Accent" },
+      "rgb": "227, 11, 23",
+      "cmyk": "0, 95, 90, 11",
+      "note": { "IT": "Rosso acceso per energia, passione e dinamismo sportivo", "EN": "Bright red for energy, passion and sporting dynamism" },
+      "accent": true
+    }
+  ],
+  "chapters": [
+    {
+      "k": { "IT": "Brand concept", "EN": "Brand concept" },
+      "title": { "IT": "Il portale e SoloSport live", "EN": "The portal and SoloSport live" },
+      "text": { "IT": "Un'identità pensata per un portale di informazione sportiva: chiara, dinamica e riconoscibile su ogni schermo.\n\nEventi settimanali con interviste live esclusive ai migliori sportivi della settimana, direttamente negli studi. Vinci il tuo biglietto gratuito sul sito: SoloSport.liveSport", "EN": "An identity designed for a sports news portal: clear, dynamic and recognizable on every screen.\n\nWeekly events with exclusive live interviews with the week's top athletes, straight from the studios. Win your free ticket on the site: SoloSport.liveSport" },
+      "motto": "#NoSportNoFunLivingOn",
+      "images": ["./images/solosport/solosport-descrizione.png", "./images/staff-solosport.png"]
     },
     {
-      "url": "./images/solosport/solosport-2.png",
-      "label": "SoloSport Design",
-      "style": {
-        "backgroundColor": "#1a1a1a",
-        "padding": "40px",
-        "borderRadius": "24px",
-        "display": "flex",
-        "alignItems": "center",
-        "justifyContent": "center",
-        "minHeight": "600px",
-        "position": "relative",
-        "border": "1px solid rgba(227, 11, 23, 0.4)",
-        "boxShadow": "0 0 40px rgba(227, 11, 23, 0.6), 0 0 80px rgba(227, 11, 23, 0.3), inset 0 0 20px rgba(227, 11, 23, 0.1)"
-      }
+      "k": { "IT": "Processo creativo", "EN": "Creative process" },
+      "title": { "IT": "Dal concept al logo finale", "EN": "From concept to final logo" },
+      "text": { "IT": "Il percorso è iniziato con uno studio a mano libera, per esplorare forme e dinamismo sportivo.\n\nAttraverso schizzi, sperimentazioni e digitalizzazione, ho sviluppato un risultato coerente, moderno e distintivo.", "EN": "It started with a freehand study, to explore shapes and sporting dynamism.\n\nThrough sketches, experiments and digitalization, I developed a coherent, modern and distinctive result." },
+      "images": ["./images/solosport-sketches.png", "./images/solosport-logo-process.png"]
     },
     {
-      "url": "./images/logosp.png",
-      "label": "Logo SoloSport",
-      "style": {
-        "backgroundColor": "#1a1a1a",
-        "padding": "40px",
-        "borderRadius": "24px",
-        "display": "flex",
-        "alignItems": "center",
-        "justifyContent": "center",
-        "minHeight": "400px",
-        "position": "relative",
-        "border": "1px solid rgba(227, 11, 23, 0.4)",
-        "boxShadow": "0 0 40px rgba(227, 11, 23, 0.6), 0 0 80px rgba(227, 11, 23, 0.3), inset 0 0 20px rgba(227, 11, 23, 0.1)"
-      }
+      "title": { "IT": "Il logo", "EN": "The logo" },
+      "text": { "IT": "Il logo nasce dalla sintesi geometrica di due elementi complementari: il cerchio, simbolo dell'universo sportivo nella sua totalità, e le suddivisioni interne, che rappresentano la varietà e la pluralità delle discipline.", "EN": "The logo comes from the geometric synthesis of two complementary elements: the circle, symbol of the sporting universe in its entirety, and the inner subdivisions, representing the variety and plurality of the disciplines." },
+      "images": ["./images/logosp.png", "./images/solosport-3d.png", "./images/solosport/solosport-1.png"]
     },
     {
-      "url": "./images/pattern.png",
-      "label": "Pattern SoloSport",
-      "style": {
-        "backgroundColor": "#1a1a1a",
-        "padding": "40px",
-        "borderRadius": "24px",
-        "display": "flex",
-        "alignItems": "center",
-        "justifyContent": "center",
-        "minHeight": "500px",
-        "border": "1px solid rgba(227, 11, 23, 0.4)",
-        "boxShadow": "0 0 40px rgba(227, 11, 23, 0.6), 0 0 80px rgba(227, 11, 23, 0.3), inset 0 0 20px rgba(227, 11, 23, 0.1)"
-      }
+      "title": { "IT": "Pattern e sistema visivo", "EN": "Pattern and visual system" },
+      "text": { "IT": "Dal marchio nasce un pattern modulare che porta ritmo e riconoscibilità su tutti i supporti.", "EN": "From the mark comes a modular pattern that brings rhythm and recognizability across every medium." },
+      "images": ["./images/solosport/solosport-2.png", "./images/pattern.png"]
     },
     {
-      "url": "./images/solosport/solosport-chatgpt.png",
-      "label": "SoloSport Concept Art",
-      "style": {
-        "backgroundColor": "#1a1a1a",
-        "padding": "40px",
-        "borderRadius": "24px",
-        "display": "flex",
-        "alignItems": "center",
-        "justifyContent": "center",
-        "minHeight": "600px",
-        "position": "relative",
-        "border": "1px solid rgba(227, 11, 23, 0.4)",
-        "boxShadow": "0 0 40px rgba(227, 11, 23, 0.6), 0 0 80px rgba(227, 11, 23, 0.3), inset 0 0 20px rgba(227, 11, 23, 0.1)"
-      }
+      "title": { "IT": "Merchandising", "EN": "Merchandising" },
+      "text": { "IT": "Il logo è stato applicato su magliette casual, dando vita a una linea di merchandising sportivo dall'identità forte e distintiva.", "EN": "The logo was applied to casual t-shirts, creating a sportswear line with a strong, distinctive identity." },
+      "images": ["./images/solosport/solosport-pattern-1.png", "./images/solosport/solosport-pattern-2.png"]
+    },
+    { "type": "palette" },
+    {
+      "type": "outcome",
+      "text": { "IT": "Questa composizione trasmette un'identità visiva solida e versatile, capace di adattarsi a diversi contesti comunicativi mantenendo riconoscibilità e impatto.", "EN": "This composition conveys a solid, versatile visual identity, able to adapt to different communication contexts while keeping recognizability and impact." }
+    },
+    {
+      "type": "note",
+      "text": { "IT": "Questo progetto rappresenta branding strategico e visione creativa. SoloSport è nato dalla mia passione per lo sport e dalla volontà di esplorare l'identità visiva di un portale tematico, con attenzione al dettaglio, coerenza e applicabilità reale.", "EN": "This project represents strategic branding and creative vision. SoloSport was born from my passion for sport and the will to explore the visual identity of a themed portal, with care for detail, consistency and real-world application." }
     }
   ]
 }

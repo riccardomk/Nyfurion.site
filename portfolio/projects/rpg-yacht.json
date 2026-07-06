@@ -1,6 +1,6 @@
 {
   "id": "rpg-yacht",
-  "title": "RPG Yacht",
+  "title": "R.P.G Yacht",
   "category": {
     "IT": "Visualizzazione 3D",
     "EN": "3D Visualization"
@@ -11,106 +11,48 @@
     "EN": "3D Graphic Designer"
   },
   "brief": {
-    "IT": "RPG Yacht – Progetto su Commissione / Visualizzazione Strutture Marine. Sviluppo di visual 3D e identità di lusso per il settore nautico. Focus sulla resa fotorealistica delle strutture e coerenza del brand premium.",
-    "EN": "RPG Yacht – Commissioned Project / Marine Structure Visualization. Development of 3D visuals and luxury identity for the nautical sector."
+    "IT": "R.P.G Yacht crea accessori nautici di lusso su misura: piattaforme galleggianti, pool, scivoli e gonfiabili premium per yacht e resort esclusivi.\n\nMi hanno chiesto di rappresentare in 3D i loro progetti su misura: far vedere al cliente-armatore come sarebbe stata la struttura finita, prima ancora di costruirla.",
+    "EN": "R.P.G Yacht creates bespoke luxury nautical accessories: floating platforms, pools, slides and premium inflatables for exclusive yachts and resorts.\n\nThey asked me to represent their custom projects in 3D: to show the buyer how the finished structure would look, before it was even built."
   },
-  "deliverables": {
-    "IT": [
-      "3D Modeling",
-      "Texturing",
-      "Lighting",
-      "Brand Identity"
-    ],
-    "EN": [
-      "3D Modeling",
-      "Texturing",
-      "Lighting",
-      "Brand Identity"
-    ]
-  },
-  "process": {
-    "IT": [
-      "Modellazione poligonale complessa",
-      "Studio materiali metallici",
-      "Renderizzazione EEVEE Blender"
-    ],
-    "EN": [
-      "Complex polygonal modeling",
-      "Metallic material study",
-      "Blender EEVEE rendering"
-    ]
-  },
-  "outcome": {
-    "IT": "Un ecosistema visivo che trasmette lusso, precisione e avanguardia tecnologica.",
-    "EN": "A visual ecosystem conveying luxury, precision, and technological vanguard."
-  },
-  "tools": [
-    "Blender",
-    "Photoshop",
-    "Illustrator"
-  ],
-  "videoUrl": "./videos/rpg-yacht-presentation.mov",
-  "mainImage": "https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=1920&auto=format&fit=crop",
-  "gallery": [
+  "tools": ["Blender", "EEVEE (real-time)", "Adobe Photoshop", "Adobe Illustrator"],
+  "mainImage": "./images/rpg-yacht-4.jpg",
+  "noZoom": true,
+  "chapters": [
     {
-      "url": "./images/rpg-yacht-1.png",
-      "label": "Blender Rendering EEVEE 1"
+      "k": { "IT": "Anteprima", "EN": "Preview" },
+      "title": { "IT": "Il progetto, in movimento", "EN": "The project, in motion" },
+      "text": { "IT": "Un giro completo della struttura in 3D: il modo più diretto per far vivere lo spazio al cliente, prima ancora di costruirlo.", "EN": "A full 3D walkthrough of the structure: the most direct way to let the client experience the space, before it's even built." },
+      "video": "./images/rpg-yacht-video.mp4",
+      "poster": "./images/rpg-yacht-9.jpg",
+      "videoLabel": "3D · Blender · EEVEE"
     },
     {
-      "url": "./images/rpg-yacht-2.png",
-      "label": "Blender Rendering EEVEE 2"
+      "k": { "IT": "01 · La sfida", "EN": "01 · The challenge" },
+      "title": { "IT": "Vendere qualcosa che non esiste ancora", "EN": "Selling something that doesn't exist yet" },
+      "text": { "IT": "Il vero obiettivo non era un bel render: era convertire il cliente in compratore. E quale modo migliore se non mostrargli il lavoro finito quando ancora doveva iniziare?\n\nDovevo trasformare l'immaginazione in una decisione d'acquisto.", "EN": "The real goal wasn't a pretty render: it was to turn the client into a buyer. And what better way than showing them the finished work before it had even started?\n\nI had to turn imagination into a purchase decision." },
+      "images": ["./images/rpg-yacht-10.jpg", "./images/rpg-yacht-5.jpg"]
     },
     {
-      "url": "./images/rpg-yacht-3.png",
-      "label": "Blender Rendering EEVEE 3"
+      "k": { "IT": "02 · L'approccio", "EN": "02 · The approach" },
+      "title": { "IT": "Costruito in 3D, alla misura reale", "EN": "Built in 3D, at real scale" },
+      "text": { "IT": "In Blender ho ricostruito i gonfiabili e le piattaforme richieste, pezzo per pezzo, alla loro misura reale. Dal modello 3D al render finale in EEVEE, il motore real-time di Blender, ho lavorato su materiali, luce e inquadrature per restituire non solo la struttura, ma il desiderio di averla già a bordo.\n\nUna scelta precisa: EEVEE mi ha dato velocità e stabilità di rendering per proporre al cliente più versioni in poco tempo, ognuna sui canoni richiesti.", "EN": "In Blender I rebuilt the requested inflatables and platforms, piece by piece, at their true scale. From the 3D model to the final render in EEVEE, Blender's real-time engine, I worked on materials, light and framing to convey not just the structure, but the desire to already have it on board.\n\nA deliberate choice: EEVEE gave me rendering speed and stability to offer the client several versions in little time, each to their standards." },
+      "compare": { "wire": "./images/rpg-yacht-13.jpg", "render": "./images/rpg-yacht-11.jpg" }
     },
     {
-      "url": "./images/rpg-yacht-4.png",
-      "label": "Blender Rendering EEVEE 4"
+      "k": { "IT": "03 · Il dettaglio", "EN": "03 · The detail" },
+      "title": { "IT": "Dal wireframe al render", "EN": "From wireframe to render" },
+      "text": { "IT": "Ho affiancato il wireframe al render finale: la precisione tecnica dietro l'immagine d'impatto. Struttura esatta, misure reali, resa emotiva. Così il cliente vedeva insieme la serietà del progetto e il risultato finale.", "EN": "I placed the wireframe alongside the final render: the technical precision behind the striking image. Exact structure, real measurements, emotional delivery. So the client saw both the seriousness of the project and the final result." },
+      "compare": { "wire": "./images/rpg-yacht-15.jpg", "render": "./images/rpg-yacht-2.jpg" }
     },
     {
-      "url": "./images/rpg-yacht-5.png",
-      "label": "Blender Rendering EEVEE 5"
+      "k": { "IT": "04 · Il lavoro finale", "EN": "04 · The final work" },
+      "title": { "IT": "Render, video e file pronti", "EN": "Renders, video and ready files" },
+      "text": { "IT": "Ho consegnato oltre 20 render, un video e i file di progetto in soli 3 giorni, più le varianti aggiuntive richieste in seguito. Tutto pronto per essere presentato ai loro clienti come vero e proprio strumento di vendita.\n\nLa scelta di EEVEE ha pagato: rapido, stabile, consegnato nei tempi giusti.", "EN": "I delivered over 20 renders, a video and the project files in just 3 days, plus the extra variants requested later. All ready to be presented to their clients as a real sales tool.\n\nThe EEVEE choice paid off: fast, stable, delivered right on time." },
+      "images": ["./images/rpg-yacht-1.jpg", "./images/rpg-yacht-7.jpg", "./images/rpg-yacht-3.jpg", "./images/rpg-yacht-6.jpg", "./images/rpg-yacht-8.jpg", "./images/rpg-yacht-9.jpg"]
     },
     {
-      "url": "./images/rpg-yacht-6.png",
-      "label": "Blender Rendering EEVEE 6"
-    },
-    {
-      "url": "./images/rpg-yacht-7.png",
-      "label": "Blender Rendering EEVEE 7"
-    },
-    {
-      "url": "./images/rpg-yacht-8.png",
-      "label": "Blender Rendering EEVEE 8"
-    },
-    {
-      "url": "./images/rpg-yacht-9.png",
-      "label": "Blender Rendering EEVEE 9"
-    },
-    {
-      "url": "./images/rpg-yacht-10.png",
-      "label": "Blender Rendering EEVEE 10"
-    },
-    {
-      "url": "./images/rpg-yacht-11.png",
-      "label": "Blender Rendering EEVEE 11"
-    },
-    {
-      "url": "./images/rpg-yacht-12.png",
-      "label": "Blender Rendering EEVEE 12"
-    },
-    {
-      "url": "./images/rpg-yacht-13.png",
-      "label": "Blender Rendering EEVEE 13"
-    },
-    {
-      "url": "./images/rpg-yacht-14.png",
-      "label": "Blender Rendering EEVEE 14"
-    },
-    {
-      "url": "./images/rpg-yacht-15.png",
-      "label": "Blender Rendering EEVEE 15"
+      "type": "outcome",
+      "text": { "IT": "Sono rimasti soddisfatti in tutto: le immagini facevano vedere il prodotto finito prima ancora di costruirlo, esattamente ciò che serviva per vendere. Tanto che mi hanno affidato anche la locandina dell'azienda.", "EN": "They were happy across the board: the images showed the finished product before it was even built, exactly what was needed to sell. So much so that they also entrusted me with the company's poster." }
     }
   ]
 }

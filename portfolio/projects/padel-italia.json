@@ -1,102 +1,55 @@
 {
   "id": "padel-italia",
-  "title": "Official Padel Italia",
+  "title": "Official Padel Italia N°14",
   "category": {
-    "IT": "Design Editoriale",
-    "EN": "Editorial Design"
+    "IT": "Direzione Creativa Editoriale",
+    "EN": "Editorial Creative Direction"
   },
   "year": "2024",
   "role": {
-    "IT": "Direttore Creativo & Designer Grafico",
+    "IT": "Creative Director & Graphic Designer",
     "EN": "Creative Director & Graphic Designer"
   },
   "brief": {
-    "IT": "Official Padel Italia N°14 – Direzione Creativa Editoriale. Ideazione e realizzazione completa della rivista, dalla progettazione grafica alla valorizzazione dei contenuti editoriali e fotografici. Un progetto commissionato che ha richiesto una visione creativa strategica, sintesi grafica raffinata e comunicazione visiva d'impatto. La rivista è stata apprezzata per la qualità grafica, la chiarezza comunicativa e la sintonia con le esigenze del cliente.",
-    "EN": "Official Padel Italia N°14 – Creative Editorial Direction. Complete ideation and realization of the magazine, from graphic design to enhancement of editorial and photographic content. A commissioned project requiring strategic creative vision, refined graphic synthesis, and impactful visual communication. The magazine was appreciated for graphic quality, communication clarity, and alignment with client needs."
+    "IT": "Official Padel Italia è la rivista nazionale del padel. Un cliente mi ha affidato l'impaginazione dell'edizione N°14: restare fedele al canone dei numeri precedenti, ma con un pizzico di creatività e novità in più.\n\nMi fornivano testi, file e alcune foto. Il resto l'ho costruito da zero: copertina, indice e diverse parti grafiche, facendo combaciare ogni testo con la sua immagine.",
+    "EN": "Official Padel Italia is the national padel magazine. A client entrusted me with the layout of issue N°14: staying faithful to the canon of previous issues, but with an added touch of creativity and novelty.\n\nThey provided texts, files and some photos. The rest I built from scratch: cover, index and several graphic parts, matching every text with its image."
   },
-  "deliverables": {
-    "IT": [
-      "Design da zero: definizione griglia, gerarchia visiva e stile tipografico",
-      "Direzione creativa: composizione pagine e narrazione visiva fluida",
-      "Montaggio fotografico: ottimizzazione immagini e valorizzazione estetica",
-      "Progettazione indice editoriale in Adobe Illustrator",
-      "Preparazione per stampa e gestione file produttivi"
-    ],
-    "EN": [
-      "Design from scratch: grid definition, visual hierarchy and typographic style",
-      "Creative direction: page composition and fluid visual narrative",
-      "Photo montage: image optimization and aesthetic enhancement",
-      "Editorial index design in Adobe Illustrator",
-      "Print preparation and production file management"
-    ]
-  },
-  "process": {
-    "IT": [
-      "Analisi del brief e definizione della strategia visiva coerente con il tono editoriale",
-      "Progettazione grafica: layout moderno, funzionale e coerente per tutte le sezioni",
-      "Evoluzione del design dell'indice: due alternative sviluppate per testare soluzioni visive equilibrate",
-      "Ottimizzazione della composizione: bilanciamento tra elementi testuali e illustrativi",
-      "Direzione creativa completa: dalla tipografia alla fotografia, dalla palette colore all'impaginazione finale",
-      "Feedback positivi per leggibilità, coerenza visiva e qualità grafica complessiva"
-    ],
-    "EN": [
-      "Brief analysis and definition of visual strategy coherent with editorial tone",
-      "Graphic design: modern, functional and consistent layout for all sections",
-      "Index design evolution: two alternatives developed to test balanced visual solutions",
-      "Composition optimization: balance between textual and illustrative elements",
-      "Complete creative direction: from typography to photography, from color palette to final layout",
-      "Positive feedback for readability, visual consistency and overall graphic quality"
-    ]
-  },
-  "outcome": {
-    "IT": "La rivista Official Padel Italia N°14 rappresenta un progetto di design editoriale maturo e coeso. Il lavoro ha ricevuto riscontri positivi per la qualità grafica, la leggibilità intuitiva, la coerenza visiva e la capacità di comunicare efficacemente i contenuti. Un successo sia dal punto di vista visivo che editoriale, confermando una gestione strategica della direzione creativa.",
-    "EN": "Official Padel Italia N°14 magazine represents a mature and cohesive editorial design project. The work received positive feedback for graphic quality, intuitive readability, visual consistency, and effective content communication. A success both visually and editorially, confirming strategic creative direction management."
-  },
-  "tools": [
-    "Adobe InDesign",
-    "Adobe Photoshop",
-    "Adobe Illustrator"
-  ],
-  "mainImage": "./images/padel1.png",
-  "gallery": [
+  "tools": ["Adobe InDesign", "Adobe Illustrator", "Adobe Photoshop", "Adobe Lightroom"],
+  "mainImage": "./images/padel-cover.jpg",
+  "chapters": [
     {
-      "url": "./images/padel-cover.png",
-      "label": "Indice official padel italia n°14",
-      "style": {
-        "backgroundColor": "#1a1a1a",
-        "padding": "30px",
-        "borderRadius": "12px",
-        "minHeight": "500px",
-        "border": "1px solid rgba(227, 11, 23, 0.3)",
-        "overflow": "hidden",
-        "animation": "slideHorizontal 15s ease-in-out infinite"
-      }
+      "k": { "IT": "01 · La sfida", "EN": "01 · The challenge" },
+      "title": { "IT": "Far entrare tutto, senza soffocare la pagina", "EN": "Fit everything in, without suffocating the page" },
+      "text": { "IT": "Dovevo valorizzare tutti i contenuti e le foto richieste, creare l'indice da zero e rispettare il canone della testata. Il tutto in circa tre mesi, con richieste e nuovi materiali che arrivavano in corsa.\n\nLa sfida vera: far respirare la rivista pur riempiendo ogni spazio con senso.", "EN": "I had to elevate all the required content and photos, build the index from scratch and respect the magazine's canon. All in about three months, with new requests and materials arriving along the way.\n\nThe real challenge: letting the magazine breathe while filling every space with purpose." },
+      "banners": ["./images/padel-internal.jpg"]
     },
     {
-      "url": "./images/padel-2.png",
-      "label": "Rivista Padel Italia Ufficiale n°14",
-      "style": {
-        "backgroundColor": "#1a1a1a",
-        "padding": "30px",
-        "borderRadius": "12px",
-        "minHeight": "500px",
-        "border": "1px solid rgba(227, 11, 23, 0.3)",
-        "overflow": "hidden",
-        "animation": "slideHorizontal 15s ease-in-out infinite"
-      }
+      "k": { "IT": "02 · L'approccio", "EN": "02 · The approach" },
+      "title": { "IT": "Una griglia solida, poi la libertà nei dettagli", "EN": "A solid grid, then freedom in the details" },
+      "text": { "IT": "Ho definito la griglia principale e il template di tutte le pagine: numero di foto e testo per pagina, calcolando ogni spazio libero. Su quella base ho lavorato di direzione artistica: font diversi dove serviva enfasi, testo sovrapposto a immagini sfocate, foto rilavorate in Lightroom.\n\nCoerente con i numeri passati, ma più curato nel dettaglio, senza mai esagerare.", "EN": "I defined the main grid and the template for every page: number of photos and text per page, calculating every free space. On that base I worked on art direction: different fonts where emphasis was needed, text over blurred images, photos reworked in Lightroom.\n\nCoherent with past issues, but more refined in the detail, without ever overdoing it." },
+      "banners": ["./images/padel-typographic.jpg"]
     },
     {
-      "url": "./images/padel-3.png",
-      "label": "Rivista Padel Italia Ufficiale n°14",
-      "style": {
-        "backgroundColor": "#1a1a1a",
-        "padding": "30px",
-        "borderRadius": "12px",
-        "minHeight": "500px",
-        "border": "1px solid rgba(227, 11, 23, 0.3)",
-        "overflow": "hidden",
-        "animation": "slideHorizontal 15s ease-in-out infinite"
-      }
+      "k": { "IT": "03 · Il dettaglio", "EN": "03 · The detail" },
+      "title": { "IT": "Copertina e indice, da zero", "EN": "Cover and index, from scratch" },
+      "text": { "IT": "Due pezzi li ho creati interamente da zero: la copertina e l'indice, quest'ultimo su esplicita richiesta del cliente. Progettati in Illustrator, sono il biglietto da visita del numero: coerenti con la testata, ma con quella novità che cercavano.", "EN": "Two pieces I created entirely from scratch: the cover and the index, the latter at the client's explicit request. Designed in Illustrator, they are the magazine's calling card: coherent with the brand, but with the novelty they were after." },
+      "banners": ["./images/padel-cover.jpg"]
+    },
+    {
+      "k": { "IT": "04 · Progettazione dell'indice", "EN": "04 · Designing the index" },
+      "title": { "IT": "Due alternative, una scelta", "EN": "Two alternatives, one choice" },
+      "text": { "IT": "L'indice della rivista è stato progettato interamente in Adobe Illustrator. Ho esplorato diverse soluzioni visive, testando il bilanciamento tra elementi testuali e illustrativi, con l'obiettivo di ottenere una composizione chiara, elegante e coerente con lo stile editoriale.\n\nPresento due alternative sviluppate durante il processo, che mostrano l'evoluzione del layout e delle scelte stilistiche. Dopo un'attenta analisi ho individuato l'equilibrio perfetto tra tipografia funzionale e illustrazione minimale, optando per la composizione a destra.\n\nUna scelta progettuale che ha favorito la leggibilità, guida lo sguardo del lettore in modo naturale e rafforza l'identità visiva del progetto.", "EN": "The magazine's index was designed entirely in Adobe Illustrator. I explored several visual solutions, testing the balance between textual and illustrative elements, aiming for a clear, elegant composition consistent with the editorial style.\n\nHere are the two alternatives developed during the process, showing how the layout and the stylistic choices evolved. After careful analysis I found the perfect balance between functional typography and minimal illustration, opting for the composition on the right.\n\nA design choice that improved readability, guides the reader's eye naturally and strengthens the project's visual identity." },
+      "banners": ["./images/padel-index-study.jpg"]
+    },
+    {
+      "k": { "IT": "05 · Il lavoro finale", "EN": "05 · The final work" },
+      "title": { "IT": "Oltre 60 pagine, pronte per la stampa", "EN": "Over 60 pages, print-ready" },
+      "text": { "IT": "Ho consegnato la rivista completa nei tempi: oltre 60 pagine, con testo e foto calibrati pagina per pagina e le pubblicità inserite dove richiesto. Tutto costruito tra InDesign e Illustrator e consegnato in file pronti per la stampa.", "EN": "I delivered the complete magazine on time: over 60 pages, with text and photos balanced page by page and ads placed where required. All built across InDesign and Illustrator and delivered as print-ready files." },
+      "banners": ["./images/padel-final.jpg"]
+    },
+    {
+      "type": "outcome",
+      "text": { "IT": "Il cliente ha avuto la novità che cercava senza perdere la propria identità. Soddisfatti del risultato, hanno stampato e presentato la rivista con entusiasmo.", "EN": "The client got the novelty they were after without losing their identity. Happy with the result, they printed and presented the magazine with enthusiasm." }
     }
   ]
 }

@@ -1,0 +1,71 @@
+{
+  "id": "udn",
+  "title": "UDN",
+  "category": {
+    "IT": "Identità di Brand · Progetto personale",
+    "EN": "Brand Identity · Personal project"
+  },
+  "year": "2024",
+  "role": {
+    "IT": "Founder & Brand Designer",
+    "EN": "Founder & Brand Designer"
+  },
+  "brief": {
+    "IT": "UDN è il mio marchio di nicchia di abbigliamento e gadget, nato nel 2024.\n\nL'ho creato per un motivo semplice e personale: mettere su maglia i miei pensieri, le mie domande, le mie riflessioni. Grafiche, parole e simboli in cui chiunque può ritrovare un significato diverso, legato alla propria esperienza.",
+    "EN": "UDN is my niche clothing and gadgets brand, born in 2024.\n\nI created it for a simple, personal reason: to put my thoughts, my questions, my reflections onto a shirt. Graphics, words and symbols in which anyone can find a different meaning, tied to their own experience."
+  },
+  "tools": ["Adobe Illustrator", "Adobe Photoshop"],
+  "mainImage": "",
+  "chapters": [
+    {
+      "k": { "IT": "01 · Il nome", "EN": "01 · The name" },
+      "title": { "IT": "Unico Dato Nativo", "EN": "Unico Dato Nativo" },
+      "text": { "IT": "UDN sta per Unico Dato Nativo: ognuno è un originale, un dato unico e irripetibile fin dalla nascita.\n\nÈ l'idea che porta il brand: nessuno è uguale a un altro, e ognuno dà alle cose il proprio significato. Tre lettere facili da ricordare, ancor prima di pensarci.", "EN": "UDN stands for «Unico Dato Nativo», Italian for «unique native given»: everyone is an original, one of a kind from birth.\n\nIt's the idea the brand carries: no one is the same as anyone else, and everyone gives things their own meaning. Three letters, easy to remember, even before you think about it." }
+    },
+    {
+      "k": { "IT": "02 · Il simbolo", "EN": "02 · The symbol" },
+      "title": { "IT": "Unità, libertà, forza", "EN": "Unity, freedom, strength" },
+      "text": { "IT": "Il simbolo di UDN è un emblema: un segno che parla senza parole. Tre forme che si sollevano e convergono verso un unico punto, l'unità che nasce da parti diverse. Il movimento verso l'alto è libertà; il pieno netto del nero è forza.\n\nUn segno solo, ma con dentro l'anima del brand.", "EN": "UDN's symbol is an emblem: a mark that speaks without words. Three forms that rise and converge toward a single point, the unity born from different parts. The upward motion is freedom; the sharp, solid black is strength.\n\nA single mark, carrying the soul of the brand." }
+    },
+    {
+      "k": { "IT": "03 · La costruzione", "EN": "03 · The construction" },
+      "title": { "IT": "Cerchi tagliati e specchiati", "EN": "Circles cut and mirrored" },
+      "text": { "IT": "Il segno nasce da cerchi sovrapposti, tagliati poco dopo il centro e specchiati: così diventa movimento e, allo stesso tempo, copertura, come un tetto.\n\nNon è una semplice ripetizione, è equilibrio costruito pezzo per pezzo. Il primo segno dà il movimento. Il secondo lo scalo, gli cambio angolatura e lo sposto sul lato opposto: crea stacco e lascia respiro, senza essere identico. Il terzo è il secondo invertito di direzione, a chiudere l'equilibrio al contrario.\n\nTre parti che non si somigliano, ma che insieme stanno in armonia.", "EN": "The mark comes from overlapping circles, cut just past the center and mirrored: it becomes movement and, at the same time, cover, like a roof.\n\nIt's not a simple repetition, it's balance built piece by piece. The first sign gives the movement. The second I scale, re-angle and shift to the opposite side: it creates contrast and leaves room to breathe, without being identical. The third is the second flipped in direction, closing the balance in reverse.\n\nThree parts that don't look alike, yet together they hold in harmony." },
+      "banners": ["./images/udn-explore.png?v=3"]
+    },
+    {
+      "k": { "IT": "04 · Il wordmark", "EN": "04 · The wordmark" },
+      "title": { "IT": "Alfarn, con gli angoli arrotondati", "EN": "Alfarn, with rounded corners" },
+      "text": { "IT": "Il wordmark parte dal font Alfarn. Per non lasciarlo piatto e anonimo, ho arrotondato alcuni angoli: piccoli interventi che gli danno un carattere morbido ma deciso, in linea con l'emblema.\n\nUn dettaglio che non salta subito all'occhio, ma si sente.", "EN": "The UDN wordmark starts from the Alfarn typeface. To keep it from looking flat and anonymous, I rounded a few corners: small tweaks that give it a soft but decisive character, in line with the emblem.\n\nA detail you don't notice at first, but you feel." },
+      "banners": ["./images/udn-wordplan.png?v=3"]
+    },
+    {
+      "k": { "IT": "05 · Il sistema", "EN": "05 · The system" },
+      "title": { "IT": "Un solo sistema: marchio, colore, carattere", "EN": "One system: mark, color, type" },
+      "text": { "IT": "Emblema, wordmark e tagline lavorano insieme su una palette essenziale: nero pieno #120804 e bianco segnale #FEFDF8. Nessun colore di troppo. Un carattere geometrico e netto, in maiuscolo, come i messaggi che porta.\n\nUn sistema, non pezzi sparsi: così UDN resta riconoscibile ovunque, dalla maglia al packaging.", "EN": "Emblem, wordmark and tagline work together on an essential palette: solid black #120804 and signal white #FEFDF8. No color to spare. A geometric, sharp typeface, all caps, like the messages it carries.\n\nA system, not scattered pieces: this keeps UDN recognizable everywhere, from the shirt to the packaging." },
+      "banners": ["./images/udn-system.png?v=4"]
+    },
+    {
+      "k": { "IT": "06 · Le grafiche che parlano", "EN": "06 · The graphics that speak" },
+      "title": { "IT": "Parole e simboli che aprono una domanda", "EN": "Words and symbols that open a question" },
+      "text": { "IT": "Il vero prodotto sono le grafiche che portano il messaggio: «Do you know the meaning of X?», «OPEN X», «Incomplete, won but missed». Parole e simboli, a volte con un pizzico di sarcasmo.\n\nNon impongo un significato: lo lascio a chi indossa. Ognuno ci trova il suo.", "EN": "The real product is the graphics that carry the message: «Do you know the meaning of X?», «OPEN X», «Incomplete, won but missed». Words and symbols, sometimes with a hint of sarcasm.\n\nI don't impose a meaning: I leave it to whoever wears it. Everyone finds their own." },
+      "banners": ["./images/udn-tee-open.png", "./images/udn-tee-tris.png"]
+    },
+    {
+      "k": { "IT": "07 · Il packaging", "EN": "07 · The packaging" },
+      "title": { "IT": "L'esperienza è tutta nera", "EN": "An all-black experience" },
+      "text": { "IT": "Un unboxing coerente dal primo all'ultimo dettaglio: box, mailer, tissue, biglietto «thank you», tag e sticker. Tutto nero, tutto UDN, «rare by nature».\n\nPerché non compri solo una maglia: indossi un'idea. E anche il modo in cui arriva fa parte del messaggio.", "EN": "An unboxing coherent down to the last detail: box, mailer, tissue, «thank you» card, tags and stickers. All black, all UDN, «rare by nature».\n\nBecause you don't just buy a shirt: you wear an idea. And the way it arrives is part of the message too." },
+      "banners": ["./images/udn-pack-a.png", "./images/udn-pack-b.png"]
+    },
+    {
+      "k": { "IT": "08 · Lo shop", "EN": "08 · The store" },
+      "title": { "IT": "Il brand diventa negozio", "EN": "The brand becomes a store" },
+      "text": { "IT": "UDN non si ferma alla maglia: diventa un e-commerce completo. «Rare by nature» — dalla home ai drop in limited edition, ogni sezione parla la stessa lingua: nera, diretta, di nicchia.\n\nDall'idea, al prodotto, fino allo store: un'esperienza coerente dall'inizio alla fine.", "EN": "UDN doesn't stop at the shirt: it becomes a full e-commerce. «Rare by nature» — from the homepage to limited-edition drops, every section speaks the same language: black, direct, niche.\n\nFrom idea, to product, to store: one coherent experience from start to finish." },
+      "banners": ["./images/udn-shop.png"]
+    },
+    {
+      "type": "outcome",
+      "text": { "IT": "La missione di UDN è arrivare a tutti e aprire nuovi schemi, pensieri e ricordi attraverso grafiche, parole e simboli. Un marchio di nicchia il cui valore è ciò che ti fa pensare, per un pubblico dai 18 ai 40 anni.\n\nDal segno allo store, UDN è un mondo coerente: un progetto reale, che continuo a far crescere.", "EN": "UDN's mission is to reach everyone and open new patterns, thoughts and memories through graphics, words and symbols. A niche brand whose value is what it makes you think, for an audience aged 18 to 40.\n\nFrom the mark to the store, UDN is one coherent world: a real project, one I keep growing." }
+    }
+  ]
+}

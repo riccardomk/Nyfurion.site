@@ -2,8 +2,8 @@
   "id": "di-lenarda",
   "title": "F.lli Di Lenarda",
   "category": {
-    "IT": "Identity & Illustration",
-    "EN": "Identity & Illustration"
+    "IT": "Logo Illustrato · Identità",
+    "EN": "Illustrated Logo · Identity"
   },
   "year": "2023",
   "role": {
@@ -11,67 +11,67 @@
     "EN": "Art Director & Illustrator"
   },
   "brief": {
-    "IT": "Progetto su commissione per l'azienda agricola F.lli Di Lenarda, attiva in Friuli Venezia Giulia. L'obiettivo era sviluppare un logo illustrato capace di rappresentare pienamente l'identità e i valori dell'azienda.",
-    "EN": "Commissioned project for the F.lli Di Lenarda farm in Friuli. The goal was to develop an illustrated logo representing the identity and values of the farm."
+    "IT": "Jacopo e Tommaso, due fratelli, un'azienda agricola di latte in Friuli. Amici, prima che clienti.\n\nMi hanno chiesto un logo per la loro immagine e le loro divise: qualcosa che rimandasse a ciò che fanno ogni giorno, e all'amore profondo per la loro attività.",
+    "EN": "Jacopo and Tommaso, two brothers, a dairy farm in Friuli. Friends before clients.\n\nThey asked me for a logo for their image and their workwear: something that spoke to what they do every day, and to the deep love for their work."
   },
-  "collaborationText": {
-    "IT": "Dopo un'attenta analisi del contesto territoriale e produttivo, ho elaborato una proposta visiva originale e mirata. Il risultato fonde tradizione agricola e design contemporaneo.",
-    "EN": "After a careful analysis of the territory, I developed a targeted visual proposal. The result blends agricultural tradition and contemporary design."
+  "tools": ["Adobe Illustrator", "Adobe Lightroom"],
+  "mainImage": "./images/dilenarda-hero-caps.jpg",
+  "template": "identity",
+  "caseTheme": {
+    "--bg": "#ffffff",
+    "--bg-2": "#f5f6f4",
+    "--paper": "#ffffff",
+    "--ink": "#17243c",
+    "--ink-2": "#34405a",
+    "--muted": "#5b6270",
+    "--faint": "#99a0ac",
+    "--line": "rgba(23,36,60,.13)",
+    "--line-2": "rgba(23,36,60,.06)"
   },
-  "deliverables": {
-    "IT": [
-      "Logo illustrato: stilizzazione iconica della mucca",
-      "Brand Identity: equilibrio tra tradizione e modernità",
-      "Variant study: proposte multiple per versatilità di stampa",
-      "Packaging Design: applicazione su prodotti caseari"
-    ],
-    "EN": [
-      "Illustrated logo: iconic cow stylization",
-      "Brand Identity: balance between tradition and modernity",
-      "Variant study: multiple proposals for print versatility",
-      "Packaging Design: application on dairy products"
-    ]
-  },
-  "process": {
-    "IT": [
-      "Ricerca storica e territoriale friulana.",
-      "Sketch manuali per definire il tratto illustrativo.",
-      "Vettorializzazione e pulizia del segno grafico.",
-      "Sviluppo varianti cromatiche per contesti digitali/stampa."
-    ],
-    "EN": [
-      "Friulian historical and territorial research.",
-      "Manual sketches to define the illustrative style.",
-      "Vectorization and cleanup of the graphic mark.",
-      "Development of color variants for digital/print."
-    ]
-  },
-  "outcome": {
-    "IT": "Un logo distintivo con un segno grafico riconoscibile, coerente e adatto alla comunicazione moderna del settore agricolo.",
-    "EN": "A distinctive logo with a recognizable, consistent graphic mark, suitable for modern agricultural communication."
-  },
-  "tools": [
-    "Illustrator",
-    "Lightroom"
-  ],
-  "mainImage": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1920&auto=format&fit=crop",
-  "logoUrl": "./images/dilenarda-logo-finale.png",
-  "gallery": [
+  "chapters": [
     {
-      "url": "./images/dilenarda-1.png",
-      "label": "Proposta Logo"
+      "k": { "IT": "01 · La sfida", "EN": "01 · The challenge" },
+      "title": { "IT": "Dare un volto all'amore per il proprio lavoro", "EN": "Giving a face to the love for their work" },
+      "text": { "IT": "Lavorano da sempre, con dedizione, ma non avevano ancora un segno che li rappresentasse. Volevano un'identità che raccontasse chi sono e quanto tengono a ciò che fanno.\n\nMi hanno dato piena libertà: si sono fidati.", "EN": "They've always worked, with dedication, but they still had no mark to represent them. They wanted an identity that told who they are and how much they care about what they do.\n\nThey gave me full freedom: they trusted me." }
     },
     {
-      "url": "./images/dilenarda-4.png",
-      "label": "Proposta Logo 04"
+      "k": { "IT": "02 · Esplorazioni", "EN": "02 · Explorations" },
+      "title": { "IT": "Due bozze, due direzioni", "EN": "Two sketches, two directions" },
+      "text": { "IT": "Sono partito dalla mucca, il cuore della loro attività, cercando il segno in direzioni diverse.\n\nQueste sono due bozze non completate, volutamente in contrasto: una mucca al pascolo e una mucca intera. Due modi opposti di guardare lo stesso soggetto. Non dovevano diventare il logo, ma aiutarmi a scegliere la strada giusta. Dal confronto tra le due è nato il marchio definitivo, qui sotto.", "EN": "I started from the cow, the heart of their work, exploring the mark in different directions.\n\nThese are two unfinished drafts, deliberately in contrast: a grazing cow and a full-bodied cow. Two opposite ways of looking at the same subject. They weren't meant to become the logo, but to help me choose the right path. From the comparison between the two the final mark was born, below." },
+      "role": "expl",
+      "caption": { "IT": "Due bozze non completate: la mucca al pascolo e la mucca intera.", "EN": "Two unfinished drafts: the grazing cow and the full-bodied cow." },
+      "banner": "./images/dilenarda-cows-duo.png"
     },
     {
-      "url": "./images/dilenarda-5.png",
-      "label": "Logo Finale"
+      "k": { "IT": "03 · Due mucche, un cuore", "EN": "03 · Two cows, one heart" },
+      "title": { "IT": "Il marchio", "EN": "The mark" },
+      "text": { "IT": "L'idea vincente: la stessa mucca vista da due direzioni, unite a formare un cuore. Unione, stabilità e sicurezza, esattamente ciò che loro sono.\n\nUn segno caldo, che funziona identico in positivo e in negativo.", "EN": "The winning idea: the same cow seen from two directions, joined into a heart. Union, stability and security, exactly what they are.\n\nA warm mark that works identically in positive and negative." },
+      "logoPair": {
+        "a": { "img": "./images/dilenarda-mark-light.png", "bg": "#ffffff" },
+        "b": { "img": "./images/dilenarda-mark-dark.png", "bg": "#0a1a2f" }
+      }
     },
     {
-      "url": "./images/dilenarda-6.png",
-      "label": "Variante Logo"
+      "k": { "IT": "04 · Addosso", "EN": "04 · Worn" },
+      "title": { "IT": "Dove doveva stare: addosso", "EN": "Where it belongs: worn" },
+      "text": { "IT": "Il logo non è rimasto su un file. È finito sulle loro divise, t-shirt, giacche e cappellini, che indossano al lavoro e fuori con gli amici.\n\nRicamato o stampato, in positivo e in negativo, il segno tiene su ogni materiale e su ogni colore: la stessa identità, sempre riconoscibile.", "EN": "The logo didn't stay on a file. It went onto their workwear, t-shirts, jackets and caps, which they wear at work and out with friends.\n\nEmbroidered or printed, in positive and negative, the mark holds on every material and every colour: the same identity, always recognisable." },
+      "role": "worn",
+      "apps": [
+        {
+          "img": "./images/dilenarda-worn-trio.jpg",
+          "label": { "IT": "Le divise", "EN": "The workwear" },
+          "text": { "IT": "Il primo posto dove doveva vivere. T-shirt fronte e retro e giacca, con il segno stampato grande sulla schiena e piccolo sul cuore.\n\nÈ il logo che Jacopo e Tommaso indossano ogni giorno in stalla e nei campi, e che li rende riconoscibili anche fuori, con gli amici.", "EN": "The first place it had to live. T-shirt front and back and jacket, with the mark printed large on the back and small over the heart.\n\nIt's the logo Jacopo and Tommaso wear every day in the barn and in the fields, and that makes them recognisable outside too, with friends." }
+        },
+        {
+          "img": "./images/dilenarda-processo-4.jpg",
+          "label": { "IT": "I cappellini", "EN": "The caps" },
+          "text": { "IT": "Crema e verde. Qui il marchio dimostra la sua forza: ricamato scuro sul chiaro e chiaro sullo scuro, resta identico e leggibile.\n\nPositivo e negativo, stesso carattere: un dettaglio che li accompagna anche quando la giacca resta a casa.", "EN": "Cream and green. Here the mark proves its strength: embroidered dark on light and light on dark, it stays identical and legible.\n\nPositive and negative, same character: a detail that goes with them even when the jacket stays home." }
+        }
+      ]
+    },
+    {
+      "type": "outcome",
+      "text": { "IT": "La loro reazione: «Fantastico, siamo sorpresi, davvero bello. Grazie.» Hanno iniziato a indossare il logo da subito e mi hanno già chiesto nuove t-shirt e giacche: un'identità che portano con orgoglio, facendosi pubblicità da soli.", "EN": "Their reaction: «Fantastic, we're surprised, really beautiful. Thank you.» They started wearing the logo right away and already asked me for new t-shirts and jackets: an identity they carry with pride, promoting themselves along the way." }
     }
   ]
 }
