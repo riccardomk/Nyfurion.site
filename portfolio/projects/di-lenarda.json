@@ -11,8 +11,8 @@
     "EN": "Art Director & Illustrator"
   },
   "brief": {
-    "IT": "Jacopo e Tommaso, due fratelli, un'azienda agricola di latte in Friuli. Amici, prima che clienti.\n\nMi hanno chiesto un logo per la loro immagine e le loro divise: qualcosa che rimandasse a ciò che fanno ogni giorno, e all'amore profondo per la loro attività.",
-    "EN": "Jacopo and Tommaso, two brothers, a dairy farm in Friuli. Friends before clients.\n\nThey asked me for a logo for their image and their workwear: something that spoke to what they do every day, and to the deep love for their work."
+    "IT": "Jacopo e Tommaso, due fratelli, un'azienda agricola in Friuli. Amici, prima che clienti.\n\nMi hanno chiesto un logo per la loro immagine e le loro divise: qualcosa che rimandasse a ciò che fanno ogni giorno, e all'amore profondo per la loro attività.",
+    "EN": "Jacopo and Tommaso, two brothers, a farm in Friuli. Friends before clients.\n\nThey asked me for a logo for their image and their workwear: something that spoke to what they do every day, and to the deep love for their work."
   },
   "tools": ["Adobe Illustrator", "Adobe Lightroom"],
   "mainImage": "./images/dilenarda-hero-caps.jpg",
@@ -37,15 +37,15 @@
     {
       "k": { "IT": "02 · Esplorazioni", "EN": "02 · Explorations" },
       "title": { "IT": "Due bozze, due direzioni", "EN": "Two sketches, two directions" },
-      "text": { "IT": "Sono partito dalla mucca, il cuore della loro attività, cercando il segno in direzioni diverse.\n\nQueste sono due bozze non completate, volutamente in contrasto: una mucca al pascolo e una mucca intera. Due modi opposti di guardare lo stesso soggetto. Non dovevano diventare il logo, ma aiutarmi a scegliere la strada giusta. Dal confronto tra le due è nato il marchio definitivo, qui sotto.", "EN": "I started from the cow, the heart of their work, exploring the mark in different directions.\n\nThese are two unfinished drafts, deliberately in contrast: a grazing cow and a full-bodied cow. Two opposite ways of looking at the same subject. They weren't meant to become the logo, but to help me choose the right path. From the comparison between the two the final mark was born, below." },
+      "text": { "IT": "La mucca era il punto di partenza obbligato. Il segno doveva nascere da lì e restituire tutto questo in un'immagine sola.\n\nHo iniziato a disegnare — schizzi a mano, prove in Illustrator, ricalchi con la tavola grafica. Ho girato attorno all'animale finché non ho trovato il punto giusto: semplificarlo senza spegnerlo, renderlo essenziale lasciandogli addosso tutta la sua forza e la sua possenza.\n\nNe sono uscite diverse varianti, ognuna con il suo equilibrio da cercare. Queste due bozze sono quelle in cui mi sono riconosciuto di più: due strade diverse per dire la stessa cosa. Erano prove, il modo per capire quale segno reggesse davvero — e dal loro confronto, con calma e lucidità, è nato il marchio definitivo.", "EN": "The cow was the starting point I couldn't avoid. The mark had to come from there and give all of it back in a single image.\n\nI started drawing — sketches by hand, tries in Illustrator, retracing with a graphics tablet. I circled the animal until I found the right point: to simplify it without dulling it, to make it essential while keeping all its strength and power on it.\n\nSeveral variants came out, each with its own balance to find. These two drafts are the ones I recognised myself in the most: two different roads to say the same thing. They were tests, the way to understand which mark truly held up — and from their comparison, calmly and clearly, the final mark was born." },
       "role": "expl",
-      "caption": { "IT": "Due bozze non completate: la mucca al pascolo e la mucca intera.", "EN": "Two unfinished drafts: the grazing cow and the full-bodied cow." },
+      "caption": { "IT": "Due delle direzioni esplorate: la mucca al pascolo e la mucca intera.", "EN": "Two of the directions explored: the grazing cow and the full-bodied cow." },
       "banner": "./images/dilenarda-cows-duo.png"
     },
     {
-      "k": { "IT": "03 · Due mucche, un cuore", "EN": "03 · Two cows, one heart" },
-      "title": { "IT": "Il marchio", "EN": "The mark" },
-      "text": { "IT": "L'idea vincente: la stessa mucca vista da due direzioni, unite a formare un cuore. Unione, stabilità e sicurezza, esattamente ciò che loro sono.\n\nUn segno caldo, che funziona identico in positivo e in negativo.", "EN": "The winning idea: the same cow seen from two directions, joined into a heart. Union, stability and security, exactly what they are.\n\nA warm mark that works identically in positive and negative." },
+      "k": { "IT": "03 · Due mucche, un equilibrio", "EN": "03 · Two cows, one balance" },
+      "title": { "IT": "L'illustrazione finale", "EN": "The final illustration" },
+      "text": { "IT": "Il risultato è un'illustrazione: due mucche una di fronte all'altra, linee pulite che si chiudono in una forma equilibrata, elegante e dinamica.\n\nLe due bozze di partenza mi hanno portato fin qui: mi hanno fatto capire come impostare il processo e trovare la strada giusta. Da lì ho spinto tutto verso l'essenziale, fino a un segno minimal, fatto di pochi dettagli scelti con precisione.\n\nEd è proprio questa pulizia a dargli forza: dettagli netti, un'illustrazione che regge identica in positivo e in negativo, in stampa come in ricamo.", "EN": "The result is an illustration: two cows facing each other, clean lines that close into a balanced, elegant and dynamic form.\n\nThe two starting drafts brought me here: they made me understand how to set up the process and find the right path. From there I pushed everything toward the essential, down to a minimal mark made of a few precisely chosen details.\n\nAnd it's exactly this cleanliness that gives it strength: sharp details, an illustration that holds identical in positive and negative, in print as in embroidery." },
       "logoPair": {
         "a": { "img": "./images/dilenarda-mark-light.png", "bg": "#ffffff" },
         "b": { "img": "./images/dilenarda-mark-dark.png", "bg": "#0a1a2f" }
@@ -53,25 +53,14 @@
     },
     {
       "k": { "IT": "04 · Addosso", "EN": "04 · Worn" },
-      "title": { "IT": "Dove doveva stare: addosso", "EN": "Where it belongs: worn" },
-      "text": { "IT": "Il logo non è rimasto su un file. È finito sulle loro divise, t-shirt, giacche e cappellini, che indossano al lavoro e fuori con gli amici.\n\nRicamato o stampato, in positivo e in negativo, il segno tiene su ogni materiale e su ogni colore: la stessa identità, sempre riconoscibile.", "EN": "The logo didn't stay on a file. It went onto their workwear, t-shirts, jackets and caps, which they wear at work and out with friends.\n\nEmbroidered or printed, in positive and negative, the mark holds on every material and every colour: the same identity, always recognisable." },
+      "title": { "IT": "Dal segno al prodotto", "EN": "From the mark to the product" },
+      "text": { "IT": "T-shirt, giacche e cappellini, che indossano al lavoro e fuori con gli amici.\n\nRicamato o stampato, in positivo e in negativo, il segno tiene su ogni materiale e su ogni colore: la stessa identità, sempre riconoscibile.\n\nÈ il logo che Jacopo e Tommaso indossano ogni giorno in stalla e nei campi, e che li rende riconoscibili anche fuori, con gli amici.", "EN": "T-shirts, jackets and caps, which they wear at work and out with friends.\n\nEmbroidered or printed, in positive and negative, the mark holds on every material and every colour: the same identity, always recognisable.\n\nIt's the logo Jacopo and Tommaso wear every day in the barn and in the fields, and that makes them recognisable outside too, with friends." },
       "role": "worn",
-      "apps": [
-        {
-          "img": "./images/dilenarda-worn-trio.jpg",
-          "label": { "IT": "Le divise", "EN": "The workwear" },
-          "text": { "IT": "Il primo posto dove doveva vivere. T-shirt fronte e retro e giacca, con il segno stampato grande sulla schiena e piccolo sul cuore.\n\nÈ il logo che Jacopo e Tommaso indossano ogni giorno in stalla e nei campi, e che li rende riconoscibili anche fuori, con gli amici.", "EN": "The first place it had to live. T-shirt front and back and jacket, with the mark printed large on the back and small over the heart.\n\nIt's the logo Jacopo and Tommaso wear every day in the barn and in the fields, and that makes them recognisable outside too, with friends." }
-        },
-        {
-          "img": "./images/dilenarda-processo-4.jpg",
-          "label": { "IT": "I cappellini", "EN": "The caps" },
-          "text": { "IT": "Crema e verde. Qui il marchio dimostra la sua forza: ricamato scuro sul chiaro e chiaro sullo scuro, resta identico e leggibile.\n\nPositivo e negativo, stesso carattere: un dettaglio che li accompagna anche quando la giacca resta a casa.", "EN": "Cream and green. Here the mark proves its strength: embroidered dark on light and light on dark, it stays identical and legible.\n\nPositive and negative, same character: a detail that goes with them even when the jacket stays home." }
-        }
-      ]
+      "images": ["./images/dilenarda-worn-trio.jpg", "./images/dilenarda-processo-4.jpg"]
     },
     {
       "type": "outcome",
-      "text": { "IT": "La loro reazione: «Fantastico, siamo sorpresi, davvero bello. Grazie.» Hanno iniziato a indossare il logo da subito e mi hanno già chiesto nuove t-shirt e giacche: un'identità che portano con orgoglio, facendosi pubblicità da soli.", "EN": "Their reaction: «Fantastic, we're surprised, really beautiful. Thank you.» They started wearing the logo right away and already asked me for new t-shirts and jackets: an identity they carry with pride, promoting themselves along the way." }
+      "text": { "IT": "Si sono riconosciuti subito nel segno: era loro. Hanno iniziato a indossare il logo da subito e mi hanno già chiesto nuove t-shirt e giacche: un'identità che portano con orgoglio.", "EN": "They recognised themselves in the mark at once: it was theirs. They started wearing the logo right away and already asked me for new t-shirts and jackets: an identity they carry with pride." }
     }
   ]
 }

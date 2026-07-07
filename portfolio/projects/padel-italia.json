@@ -11,8 +11,8 @@
     "EN": "Creative Director & Graphic Designer"
   },
   "brief": {
-    "IT": "Official Padel Italia è la rivista nazionale del padel. Un cliente mi ha affidato l'impaginazione dell'edizione N°14: restare fedele al canone dei numeri precedenti, ma con un pizzico di creatività e novità in più.\n\nMi fornivano testi, file e alcune foto. Il resto l'ho costruito da zero: copertina, indice e diverse parti grafiche, facendo combaciare ogni testo con la sua immagine.",
-    "EN": "Official Padel Italia is the national padel magazine. A client entrusted me with the layout of issue N°14: staying faithful to the canon of previous issues, but with an added touch of creativity and novelty.\n\nThey provided texts, files and some photos. The rest I built from scratch: cover, index and several graphic parts, matching every text with its image."
+    "IT": "Official Padel Italia è la rivista di Padel. Un cliente mi ha affidato l'impaginazione dell'edizione N°14: restare fedele al canone dei numeri precedenti, ma con un pizzico di creatività e novità in più, con l'obbligo di inserire le pubblicità richieste all'interno della pagina in una modalità precisa e funzionale.\n\nMi fornivano testi, file e alcune foto. Il resto l'ho costruito da zero: copertina, indice e diverse parti grafiche, facendo combaciare ogni testo con la sua immagine.",
+    "EN": "Official Padel Italia is the padel magazine. A client entrusted me with the layout of issue N°14: staying faithful to the canon of previous issues, but with an added touch of creativity and novelty, with the requirement of placing the requested ads inside the page in a precise and functional way.\n\nThey provided texts, files and some photos. The rest I built from scratch: cover, index and several graphic parts, matching every text with its image."
   },
   "tools": ["Adobe InDesign", "Adobe Illustrator", "Adobe Photoshop", "Adobe Lightroom"],
   "mainImage": "./images/padel-cover.jpg",
@@ -20,7 +20,7 @@
     {
       "k": { "IT": "01 · La sfida", "EN": "01 · The challenge" },
       "title": { "IT": "Far entrare tutto, senza soffocare la pagina", "EN": "Fit everything in, without suffocating the page" },
-      "text": { "IT": "Dovevo valorizzare tutti i contenuti e le foto richieste, creare l'indice da zero e rispettare il canone della testata. Il tutto in circa tre mesi, con richieste e nuovi materiali che arrivavano in corsa.\n\nLa sfida vera: far respirare la rivista pur riempiendo ogni spazio con senso.", "EN": "I had to elevate all the required content and photos, build the index from scratch and respect the magazine's canon. All in about three months, with new requests and materials arriving along the way.\n\nThe real challenge: letting the magazine breathe while filling every space with purpose." },
+      "text": { "IT": "Dovevo valorizzare tutti i contenuti e le foto richieste, creare l'indice da zero e rispettare il canone della testata. Il tutto con richieste e nuovi materiali che arrivavano in corsa.\n\nLa sfida vera: far respirare la rivista pur riempiendo ogni spazio con senso.", "EN": "I had to elevate all the required content and photos, build the index from scratch and respect the magazine's canon. All with new requests and materials arriving along the way.\n\nThe real challenge: letting the magazine breathe while filling every space with purpose." },
       "banners": ["./images/padel-internal.jpg"]
     },
     {
