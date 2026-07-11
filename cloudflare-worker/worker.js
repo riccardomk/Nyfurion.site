@@ -45,8 +45,8 @@ const MAX_TOKEN_ID   = 400;
 const MAX_BODY_BYTES = 4096;             // 4 KB max body
 
 const RATE_LIMITS = {
-  nonce:  { max: 5,  ttlSec: 300 },
-  verify: { max: 10, ttlSec: 600 },
+  nonce:  { max: 8,  ttlSec: 300 },
+  verify: { max: 12, ttlSec: 600 },
 };
 
 // Regex STRICT per fileKey — blocca qualsiasi path traversal
@@ -439,10 +439,18 @@ async function hmacVerify(data, hexSig, secret) {
 // ─── Rate limiting KV-based ───────────────────────────────────────────────────
 
 async function checkRateLimit(env, endpoint, walletKey, limit) {
+  // Finestra fissa: il conteggio e la sua scadenza viaggiano insieme nel valore.
+  // Ogni put DEVE portare expirationTtl: un put senza scadenza rende il blocco eterno.
   const kvKey = `rl:${endpoint}:${walletKey}`;
-  const cur   = parseInt(await env.NONCE_KV.get(kvKey) || '0', 10);
-  if (cur >= limit.max) return true;
-  await env.NONCE_KV.put(kvKey, String(cur + 1), cur === 0 ? { expirationTtl: limit.ttlSec } : undefined);
+  const now   = Date.now();
+  const cur   = await env.NONCE_KV.get(kvKey, 'json');
+  if (cur && typeof cur === 'object' && now < cur.exp) {
+    if (cur.n >= limit.max) return true;
+    const ttl = Math.max(60, Math.ceil((cur.exp - now) / 1000));
+    await env.NONCE_KV.put(kvKey, JSON.stringify({ n: cur.n + 1, exp: cur.exp }), { expirationTtl: ttl });
+    return false;
+  }
+  await env.NONCE_KV.put(kvKey, JSON.stringify({ n: 1, exp: now + limit.ttlSec * 1000 }), { expirationTtl: limit.ttlSec });
   return false;
 }
 
