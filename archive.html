@@ -437,7 +437,8 @@
 
   <script>
     // ─── Config ───────────────────────────────────────────────────────────────
-    const WORKER_BASE = 'https://nyfurion.com/api';
+    // Le fetch aggiungono già /api/... — la base NON deve contenere /api
+    const WORKER_BASE = 'https://nyfurion.com';
 
     const CLAIM_CONTRACT_ADDRESS = '0xdF2c679F5b40373016FCE49702f1f354689E4007';
     const CLAIM_ABI = [
