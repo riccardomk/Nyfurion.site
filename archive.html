@@ -153,31 +153,49 @@
     }
     .token-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(122px, 1fr));
+      gap: 12px;
+      max-height: 58vh;
+      overflow-y: auto;
+      padding: 4px 8px 4px 2px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(212,175,55,0.45) transparent;
     }
     .token-card {
-      background: rgba(212,175,55,0.05);
-      border: 1px solid rgba(212,175,55,0.25);
+      background: rgba(10,9,12,0.78);
+      border: 1px solid rgba(212,175,55,0.28);
       border-radius: 10px;
-      padding: 16px 10px;
-      text-align: center;
+      overflow: hidden;
       cursor: pointer;
-      transition: all 0.25s;
+      transition: transform 0.22s, border-color 0.22s, box-shadow 0.22s;
     }
     .token-card:hover {
-      background: var(--gold-dim);
       border-color: var(--gold);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(212,175,55,0.18);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(212,175,55,0.25);
+    }
+    .token-card .tc-img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      background: #11101a;
+    }
+    .token-card .tc-meta {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 7px 10px 8px;
+      border-top: 1px solid rgba(212,175,55,0.18);
     }
     .token-card .tc-num {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem;
+      font-size: 1.1rem;
       font-weight: 600;
       color: var(--gold);
     }
-    .token-card .tc-label { font-size: 0.68rem; color: var(--muted); margin-top: 4px; letter-spacing: 0.08em; }
+    .token-card .tc-label { font-size: 0.58rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+    #main-card.gallery { max-width: 920px; }
 
     /* ── Step files ── */
     #step-files { display: none; }
@@ -458,6 +476,11 @@
       'function claimArchive(uint256 tokenId) external',
     ];
 
+    // Mappa token → CID dell'artwork ufficiale (servito dal nostro CDN)
+    let PREVIEWS = {};
+    fetch('previews.json').then(r => r.json()).then(m => { PREVIEWS = m; }).catch(() => {});
+    const previewUrl = (id) => PREVIEWS[String(id)] ? `https://cdn.nyfurion.com/ipfs/${PREVIEWS[String(id)]}` : null;
+
     // ─── State ────────────────────────────────────────────────────────────────
     let provider     = null;
     let signer       = null;
@@ -664,10 +687,15 @@
       for (const id of tokens) {
         const card = document.createElement('div');
         card.className = 'token-card';
-        card.innerHTML = `<div class="tc-num">#${id}</div><div class="tc-label">Nyfurion X</div>`;
+        const u = previewUrl(id);
+        const img = u
+          ? `<img class="tc-img" src="${u}" alt="Nyfurion X #${id}" loading="lazy" decoding="async">`
+          : '<div class="tc-img"></div>';
+        card.innerHTML = `${img}<div class="tc-meta"><span class="tc-num">#${id}</span><span class="tc-label">Nyfurion X</span></div>`;
         card.addEventListener('click', () => selectToken(id));
         tokenGridEl.appendChild(card);
       }
+      mainCard.classList.add('gallery');
       stepTokens.style.display = 'block';
     }
 
@@ -675,6 +703,7 @@
     async function selectToken(tokenId) {
       activeTokenId = tokenId;
       stepTokens.style.display  = 'none';
+      mainCard.classList.remove('gallery');
       stepScanning.style.display = 'block';
 
       try {
@@ -853,6 +882,7 @@
       stepFiles.style.display     = 'none';
       deniedBlock.style.display   = 'none';
       mainCard.classList.remove('card--denied');
+      mainCard.classList.remove('gallery');
       walletBadge.style.display   = 'none';
       fileGrid.style.display      = 'none';
       fileGrid.innerHTML          = '';
@@ -895,21 +925,58 @@
     function plaqueTexture(label, type, w, h, big) {
       const c = document.createElement('canvas'); c.width = w; c.height = h;
       const g = c.getContext('2d');
-      g.fillStyle = '#131118'; g.fillRect(0, 0, w, h);
-      g.strokeStyle = '#d4af37'; g.lineWidth = Math.max(4, w * 0.012);
-      g.strokeRect(g.lineWidth, g.lineWidth, w - g.lineWidth * 2, h - g.lineWidth * 2);
-      g.textAlign = 'center'; g.fillStyle = '#d4af37';
-      g.font = `${Math.round(h * 0.09)}px Arial`;
-      g.fillText(type.toUpperCase(), w / 2, h * 0.24);
-      g.fillStyle = '#ECE6D8'; g.font = `bold ${Math.round(h * (big ? 0.13 : 0.15))}px Arial`;
+      // velluto scuro con vignettatura
+      const bg = g.createLinearGradient(0, 0, 0, h);
+      bg.addColorStop(0, '#1a1622'); bg.addColorStop(0.5, '#12101a'); bg.addColorStop(1, '#0c0a10');
+      g.fillStyle = bg; g.fillRect(0, 0, w, h);
+      const vig = g.createRadialGradient(w / 2, h / 2, h * 0.2, w / 2, h / 2, w * 0.7);
+      vig.addColorStop(0, 'rgba(0,0,0,0)'); vig.addColorStop(1, 'rgba(0,0,0,0.45)');
+      g.fillStyle = vig; g.fillRect(0, 0, w, h);
+      // doppia cornice dorata
+      const bw = Math.max(5, w * 0.014);
+      g.strokeStyle = '#d4af37'; g.lineWidth = bw;
+      g.strokeRect(bw, bw, w - bw * 2, h - bw * 2);
+      g.strokeStyle = 'rgba(212,175,55,0.4)'; g.lineWidth = 1.5;
+      g.strokeRect(bw * 2.4, bw * 2.4, w - bw * 4.8, h - bw * 4.8);
+      // fregi angolari
+      g.fillStyle = '#d4af37';
+      const fd = bw * 2.4, fs = bw * 1.4;
+      [[fd, fd], [w - fd, fd], [fd, h - fd], [w - fd, h - fd]].forEach(([x, y]) => {
+        g.beginPath(); g.moveTo(x, y - fs); g.lineTo(x + fs, y); g.lineTo(x, y + fs); g.lineTo(x - fs, y); g.closePath(); g.fill();
+      });
+      // badge del formato
+      g.textAlign = 'center';
+      const badgeW = w * 0.2, badgeH = h * 0.13, bx = w / 2, by = h * 0.21;
+      g.strokeStyle = 'rgba(212,175,55,0.65)'; g.lineWidth = 1.5;
+      g.strokeRect(bx - badgeW / 2, by - badgeH / 2, badgeW, badgeH);
+      g.fillStyle = '#d4af37'; g.font = `600 ${Math.round(h * 0.075)}px Georgia, serif`;
+      g.fillText(type.toUpperCase(), bx, by + h * 0.028);
+      // titolo in serif avorio
+      g.fillStyle = '#F2ECDD'; g.font = `${Math.round(h * (big ? 0.14 : 0.155))}px Georgia, serif`;
       const words = label.split(' '); let lines = [''];
       for (const word of words) {
         if ((lines[lines.length - 1] + ' ' + word).trim().length > 16) lines.push(word);
         else lines[lines.length - 1] = (lines[lines.length - 1] + ' ' + word).trim();
       }
-      lines.slice(0, 2).forEach((ln, i) => g.fillText(ln, w / 2, h * (0.48 + i * 0.17)));
-      g.fillStyle = '#8d8576'; g.font = `${Math.round(h * 0.07)}px Arial`;
-      g.fillText('CLICK TO DOWNLOAD', w / 2, h * 0.87);
+      lines.slice(0, 2).forEach((ln, i) => g.fillText(ln, w / 2, h * (0.5 + i * 0.17)));
+      // filetto e invito
+      g.strokeStyle = 'rgba(212,175,55,0.5)'; g.lineWidth = 1;
+      g.beginPath(); g.moveTo(w * 0.32, h * 0.76); g.lineTo(w * 0.68, h * 0.76); g.stroke();
+      g.fillStyle = '#9a8f6e'; g.font = `${Math.round(h * 0.062)}px Georgia, serif`;
+      g.fillText('C L I C K   T O   C O L L E C T', w / 2, h * 0.87);
+      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
+    }
+
+    function plateTexture(text) {
+      const c = document.createElement('canvas'); c.width = 640; c.height = 144;
+      const g = c.getContext('2d');
+      const bg = g.createLinearGradient(0, 0, 0, 144);
+      bg.addColorStop(0, '#2a2416'); bg.addColorStop(0.5, '#1c180e'); bg.addColorStop(1, '#12100a');
+      g.fillStyle = bg; g.fillRect(0, 0, 640, 144);
+      g.strokeStyle = '#d4af37'; g.lineWidth = 4; g.strokeRect(4, 4, 632, 136);
+      g.textAlign = 'center'; g.fillStyle = '#e8cd7a';
+      g.font = '600 52px Georgia, serif';
+      g.fillText(text, 320, 90);
       const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
     }
 
@@ -929,8 +996,8 @@
       camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100);
       camera.position.set(0, 1.6, 0);
 
-      scene.add(new THREE.AmbientLight(0xffffff, 0.38));
-      const warm = new THREE.PointLight(0xd4af37, 0.7, 18); warm.position.set(0, 3.4, 0); scene.add(warm);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+      const warm = new THREE.PointLight(0xd4af37, 0.85, 18); warm.position.set(0, 3.4, 0); scene.add(warm);
       const back = new THREE.PointLight(0xffffff, 0.35, 16); back.position.set(0, 2.5, -2.5); scene.add(back);
 
       const W = 9, D = 9, H = 4.2;
@@ -952,16 +1019,34 @@
       mkWall(W, 0, -D / 2, 0); mkWall(W, 0, D / 2, Math.PI);
       mkWall(D, -W / 2, 0, Math.PI / 2); mkWall(D, W / 2, 0, -Math.PI / 2);
 
-      // ── Quadro centrale: il personaggio dell'holder ──
+      // ── Quadro centrale: il personaggio dell'holder, sotto il faro ──
       const frameGroup = new THREE.Group();
-      const frame = new THREE.Mesh(new THREE.BoxGeometry(2.5, 3.2, 0.08), trimMat);
+      const frame = new THREE.Mesh(new THREE.BoxGeometry(3.15, 3.15, 0.1), trimMat);
       frameGroup.add(frame);
       const artMat = new THREE.MeshBasicMaterial({ color: 0x131118 });
-      const art = new THREE.Mesh(new THREE.PlaneGeometry(2.3, 3.0), artMat);
-      art.position.z = 0.05; frameGroup.add(art);
-      frameGroup.position.set(0, 1.85, -D / 2 + 0.06);
+      const art = new THREE.Mesh(new THREE.PlaneGeometry(2.92, 2.92), artMat);
+      art.position.z = 0.06; frameGroup.add(art);
+      frameGroup.position.set(0, 2.15, -D / 2 + 0.07);
       scene.add(frameGroup);
 
+      // Faro caldo puntato sull'opera
+      const spot = new THREE.SpotLight(0xffe2a8, 1.15, 22, 0.5, 0.45, 1.1);
+      spot.position.set(0, H - 0.25, -D / 2 + 3.4);
+      spot.target.position.set(0, 2.15, -D / 2);
+      scene.add(spot); scene.add(spot.target);
+
+      // Targa d'ottone col numero del pezzo
+      const plate = new THREE.Mesh(
+        new THREE.PlaneGeometry(1.5, 0.34),
+        new THREE.MeshBasicMaterial({ map: plateTexture('NYFURION X  ·  No. ' + tokenId) })
+      );
+      plate.position.set(0, 0.38, -D / 2 + 0.06);
+      scene.add(plate);
+
+      const setArt = (tex) => {
+        tex.encoding = THREE.sRGBEncoding;
+        art.material = new THREE.MeshBasicMaterial({ map: tex });
+      };
       try {
         const pk = 'token-' + String(tokenId).padStart(3, '0') + '/preview.png';
         const r = await fetch(WORKER_BASE + '/api/get-file', {
@@ -970,12 +1055,16 @@
         });
         if (r.ok) {
           const u = URL.createObjectURL(await r.blob()); blobUrls.push(u);
-          new THREE.TextureLoader().load(u, (tex) => {
-            tex.encoding = THREE.sRGBEncoding;
-            art.material = new THREE.MeshBasicMaterial({ map: tex });
-          });
+          new THREE.TextureLoader().load(u, setArt);
+        } else if (typeof previewUrl === 'function' && previewUrl(tokenId)) {
+          new THREE.TextureLoader().load(previewUrl(tokenId), setArt);
         }
-      } catch (e) { /* il quadro resta scuro, la stanza vive */ }
+      } catch (e) {
+        // riserva: l'artwork pubblico dal CDN — la stanza non resta mai spoglia
+        if (typeof previewUrl === 'function' && previewUrl(tokenId)) {
+          try { new THREE.TextureLoader().load(previewUrl(tokenId), setArt); } catch (_) {}
+        }
+      }
 
       // ── Targhe file sulle pareti laterali e frontale ──
       const files = (archive.files || []);
@@ -992,7 +1081,7 @@
       files.forEach((f, i) => {
         const s = spots[i];
         const tex = plaqueTexture(f.label, f.type, 512, 320, false);
-        const p = new THREE.Mesh(new THREE.PlaneGeometry(1.15, 0.72),
+        const p = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 0.81),
           new THREE.MeshBasicMaterial({ map: tex }));
         p.position.set(s.x, s.y, s.z); p.rotation.y = s.ry;
         p.userData.file = f; scene.add(p); plaques.push(p);
