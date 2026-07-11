@@ -437,9 +437,7 @@
 
   <script>
     // ─── Config ───────────────────────────────────────────────────────────────
-    const WORKER_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-      ? 'http://localhost:8787'
-      : 'https://nyfurion.com/api';
+    const WORKER_BASE = 'https://nyfurion.com/api';
 
     const CLAIM_CONTRACT_ADDRESS = '0xdF2c679F5b40373016FCE49702f1f354689E4007';
     const CLAIM_ABI = [
@@ -512,33 +510,65 @@
 
       } catch (err) {
         console.error(err);
-        alert('Connection failed or rejected.');
+        if (err && (err.code === 4001 || err.code === 'ACTION_REJECTED')) {
+          alert('Connection rejected in your wallet.\nConnessione rifiutata nel wallet.');
+        } else {
+          alert('Connection failed. Please try again.\nConnessione fallita. Riprova.');
+        }
         resetToConnect();
       }
     }
 
     // ─── Autenticazione (nonce → firma → sessionToken) ────────────────────────
     async function authenticateWithWorker() {
+      let step = 'nonce';
       try {
         const nonceRes = await fetch(`${WORKER_BASE}/api/nonce?wallet=${wallet}`);
-        if (!nonceRes.ok) throw new Error('nonce failed');
+        if (!nonceRes.ok) {
+          if (nonceRes.status === 429) {
+            alert('Too many attempts — please wait 5 minutes and try again.\nTroppi tentativi — attendi 5 minuti e riprova.');
+          } else {
+            const d = await nonceRes.json().catch(() => ({}));
+            alert(`Server error (${nonceRes.status})${d.error ? ': ' + d.error : ''}. Please try again.\nErrore del server, riprova.`);
+          }
+          return null;
+        }
         const { nonce, message } = await nonceRes.json();
 
+        step = 'sign';
         const signature = await signer.signMessage(message);
 
+        step = 'verify';
         const verifyRes = await fetch(`${WORKER_BASE}/api/verify-wallet`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ wallet, signature, nonce }),
         });
-        if (!verifyRes.ok) return null;
+        if (!verifyRes.ok) {
+          if (verifyRes.status === 429) {
+            alert('Too many attempts — please wait 10 minutes and try again.\nTroppi tentativi — attendi 10 minuti e riprova.');
+          } else if (verifyRes.status === 401) {
+            alert('Signature expired or not valid — reconnect and sign again.\nFirma scaduta o non valida — ricollega il wallet e firma di nuovo.');
+          } else {
+            const d = await verifyRes.json().catch(() => ({}));
+            alert(`Verification failed (${verifyRes.status})${d.error ? ': ' + d.error : ''}. Please try again.\nVerifica fallita, riprova.`);
+          }
+          return null;
+        }
         const data = await verifyRes.json();
         return data.sessionToken || null;
 
       } catch (err) {
-        console.error(err);
-        if (err.code === 4001) alert('Signature rejected. You must sign to authenticate.');
-        else alert('Authentication error. Please try again.');
+        console.error('[auth:' + step + ']', err);
+        const rejected = err && (err.code === 4001 || err.code === 'ACTION_REJECTED'
+          || (err.info && err.info.error && err.info.error.code === 4001));
+        if (rejected) {
+          alert('Signature rejected in your wallet. Signing is free and required to enter.\nFirma rifiutata nel wallet. La firma è gratuita ed è necessaria per entrare.');
+        } else if (step === 'sign') {
+          alert('Your wallet could not sign the message. Open your wallet popup and approve the signature.\nIl wallet non ha firmato: apri il popup del wallet e approva la firma.');
+        } else {
+          alert('Network error while contacting the server. Check your connection and try again.\nErrore di rete verso il server: controlla la connessione e riprova.');
+        }
         return null;
       }
     }
@@ -697,6 +727,8 @@
         renderFileGrid(archive, tokenId);
         const roomBtn = document.getElementById('btn-room');
         if (roomBtn) roomBtn.style.display = 'inline-flex';
+        // Il museo privato dell'holder si apre da solo appena l'archivio è sbloccato
+        if (window.__openVaultRoom) setTimeout(() => window.__openVaultRoom(), 900);
       } catch (err) {
         console.error(err);
         showStatus('Failed to load file list.', 'error');
@@ -811,6 +843,11 @@
       if (!archive || !activeTokenId) return;
       openRoom(activeTokenId, archive);
     });
+    window.__openVaultRoom = () => {
+      const archive = window.__vaultArchive;
+      if (!archive || !activeTokenId || renderer) return;
+      openRoom(activeTokenId, archive);
+    };
     exitBtn.addEventListener('click', closeRoom);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeRoom(); });
 
