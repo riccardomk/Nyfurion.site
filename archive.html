@@ -89,7 +89,7 @@
     header, .card, #file-grid, footer, #wallet-badge { position: relative; z-index: 1; }
 
     /* ── Header ── */
-    header { text-align: center; margin-bottom: 40px; }
+    header { text-align: center; margin-bottom: 0; margin-top: 6px; }
     header .label {
       font-size: 0.68rem;
       letter-spacing: 0.42em;
@@ -99,7 +99,7 @@
     }
     header h1 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+      font-size: clamp(1.9rem, 4.2vw, 3rem);
       font-weight: 600;
       letter-spacing: 0.01em;
       line-height: 1.05;
@@ -127,7 +127,7 @@
     }
 
     /* ── Step connect ── */
-    #step-connect { text-align: center; }
+    #step-connect { text-align: center; margin-top: min(34vh, 340px); }
     #step-connect p { color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; }
 
     /* ── Scanning state ── */
@@ -294,19 +294,18 @@
 
     /* ── Disclaimer: chip in vetro scuro, leggibile sulla scena ── */
     footer {
-      margin-top: 48px;
-      color: #cfc8b8;
-      font-size: 0.72rem;
-      letter-spacing: 0.06em;
+      position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%);
+      z-index: 2; white-space: nowrap;
+      color: #b8b0a0;
+      font-size: 0.64rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
       text-align: center;
-      max-width: 560px;
-      line-height: 1.7;
-      background: rgba(8,8,10,0.72);
-      border: 1px solid rgba(212,175,55,0.22);
-      border-radius: 10px;
-      padding: 14px 22px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      background: rgba(8,8,10,0.62);
+      border: 1px solid rgba(212,175,55,0.18);
+      border-radius: 999px;
+      padding: 8px 20px;
+      backdrop-filter: blur(8px);
     }
     footer a { color: var(--gold); text-decoration: none; font-weight: 500; }
     footer a:hover { text-decoration: underline; }
@@ -428,8 +427,7 @@
   </div>
 
   <footer>
-    Files are served privately and protected. Access requires on-chain ownership verification.<br>
-    <a href="/license" target="_blank">Official License</a> · <a href="/archive-info" target="_blank">How it works</a>
+    Private &middot; on-chain verified &middot; <a href="/license" target="_blank">License</a> &middot; <a href="/archive-info" target="_blank">How it works</a>
   </footer>
 
   <!-- ethers.js v6 — self-hosted (integrità verificata contro jsdelivr+unpkg, SHA-384: 3CE5A074...) -->
@@ -1268,19 +1266,65 @@
     const t3 = new THREE.PointLight(0xffa050, 0.5, 9);
     t3.position.set(2.35, 2.1, -6.4); scene.add(t3);
 
-    // ─── Meta: chiarore fermo, discreto ───
-    (function endGlow() {
-      const c = document.createElement('canvas'); c.width = c.height = 128;
-      const g = c.getContext('2d');
-      const gr = g.createRadialGradient(64, 64, 4, 64, 64, 64);
-      gr.addColorStop(0, 'rgba(255,210,130,0.7)');
-      gr.addColorStop(0.45, 'rgba(255,190,110,0.18)');
-      gr.addColorStop(1, 'rgba(255,190,110,0)');
-      g.fillStyle = gr; g.fillRect(0, 0, 128, 128);
-      const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0.55 }));
-      s.scale.set(7, 7, 1);
-      s.position.set(0, 2.0, -23.5);
-      scene.add(s);
+    // ─── IL PORTALE — anello d'oro tra colonne di pietra, energia che vortica lenta ───
+    let swirl;
+    (function portalGate() {
+      const PZ = -21.3;
+      for (const side of [-1, 1]) {
+        const col = new THREE.Mesh(new THREE.BoxGeometry(0.62, 4.6, 0.62), pillarMat);
+        col.position.set(1.95 * side, 2.0, PZ);
+        col.castShadow = true;
+        scene.add(col);
+        const colCap = new THREE.Mesh(new THREE.ConeGeometry(0.5, 0.55, 4), goldM);
+        colCap.position.set(1.95 * side, 4.55, PZ);
+        scene.add(colCap);
+      }
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(1.78, 0.13, 20, 72),
+        new THREE.MeshStandardMaterial({
+          color: 0xd4af37, roughness: 0.22, metalness: 1.0,
+          emissive: 0xa8862a, emissiveIntensity: 0.5, envMapIntensity: 1.6
+        })
+      );
+      ring.position.set(0, 2.25, PZ);
+      scene.add(ring);
+
+      // energia interna: vortice che ruota LENTO (la magia del portale)
+      const sc = document.createElement('canvas'); sc.width = sc.height = 512;
+      const sg = sc.getContext('2d');
+      sg.translate(256, 256);
+      for (let a = 0; a < 720; a += 4) {
+        const rad = (a / 720) * 240;
+        const ang = (a * Math.PI) / 180 * 1.8;
+        const alpha = 0.35 * (1 - rad / 240);
+        sg.fillStyle = a % 8 < 4 ? 'rgba(150,215,255,' + alpha + ')' : 'rgba(255,215,150,' + (alpha * 0.6) + ')';
+        sg.beginPath();
+        sg.arc(Math.cos(ang) * rad, Math.sin(ang) * rad, 9 * (1 - rad / 300), 0, Math.PI * 2);
+        sg.fill();
+      }
+      const core = sg.createRadialGradient(0, 0, 2, 0, 0, 90);
+      core.addColorStop(0, 'rgba(230,245,255,0.75)');
+      core.addColorStop(1, 'rgba(150,215,255,0)');
+      sg.fillStyle = core;
+      sg.beginPath(); sg.arc(0, 0, 90, 0, Math.PI * 2); sg.fill();
+      const swirlTex = new THREE.CanvasTexture(sc);
+      swirl = new THREE.Mesh(
+        new THREE.CircleGeometry(1.66, 48),
+        new THREE.MeshBasicMaterial({ map: swirlTex, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide })
+      );
+      swirl.position.set(0, 2.25, PZ + 0.02);
+      scene.add(swirl);
+
+      const gr2 = new THREE.Mesh(
+        new THREE.TorusGeometry(1.95, 0.03, 10, 72),
+        new THREE.MeshBasicMaterial({ color: 0x8fd8ff, transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending })
+      );
+      gr2.position.set(0, 2.25, PZ - 0.05);
+      scene.add(gr2);
+
+      endLight.position.set(0, 2.25, PZ + 1.2);
+      endLight.color.setHex(0x9fd0ff);
+      endLight.intensity = 1.3;
     })();
 
     window.addEventListener('resize', () => {
@@ -1295,12 +1339,14 @@
 
     function animate() {
       t += 1;
+      if (swirl) swirl.rotation.z -= 0.006;
       if (entering) {
-        const p = Math.min(1, (t - tEnter) / 165);
+        const p = Math.min(1, (t - tEnter) / 160);
         const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
-        camera.position.z = CAM0.z - e * 26;
-        camera.position.y = CAM0.y + e * 0.3;
-        camera.lookAt(0, 1.9, -34);
+        camera.position.z = CAM0.z - e * 30.5;
+        camera.position.y = CAM0.y + e * 0.4;
+        camera.lookAt(0, 2.1, -40);
+        if (swirl) swirl.material.opacity = 0.5 + e * 0.5;
       }
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
