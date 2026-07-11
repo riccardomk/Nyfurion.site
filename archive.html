@@ -698,18 +698,12 @@
           return;
         }
 
-        // Mostra step files
+        // Possiedi il token = archivio sbloccato. Nessun claim, nessuna transazione.
         stepFilesTitle.textContent = `Nyfurion X #${tokenId}`;
         stepFiles.style.display = 'block';
-
-        if (!data.hasClaimed) {
-          showStatus('You hold this token. Claim your archive on-chain to unlock the files.', 'info');
-          btnClaim.style.display = 'inline-flex';
-        } else if (data.canAccess) {
-          showStatus('Archive unlocked.', 'success');
-          btnClaim.style.display = 'none';
-          await loadFiles(tokenId);
-        }
+        showStatus('Archive unlocked.', 'success');
+        btnClaim.style.display = 'none';
+        await loadFiles(tokenId);
 
       } catch (err) {
         console.error(err);

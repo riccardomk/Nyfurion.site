@@ -192,46 +192,78 @@ async function handleMyTokens(request, env) {
 }
 
 async function getNyfurionTokensForWallet(wallet, env) {
-  // ─ Tentativo 1: Alchemy NFT API v3 ─────────────────────────────────
+  // ─ Tentativo 1: Alchemy NFT API v3, CON paginazione (il creatore ne ha 400) ─
   try {
     if (env.RPC_URL && env.RPC_URL.includes('alchemy.com/v2/')) {
       const apiKey = env.RPC_URL.split('/v2/')[1];
       if (apiKey) {
-        const nftUrl = `https://eth-mainnet.g.alchemy.com/nft/v3/${apiKey}/getNFTsForOwner` +
-          `?owner=${wallet}&contractAddresses[]=${env.OLD_CONTRACT}&withMetadata=false&pageSize=100`;
-        const res = await fetch(nftUrl);
-        if (res.ok) {
+        const ids = [];
+        let pageKey = '';
+        for (let page = 0; page < 6; page++) {
+          const nftUrl = `https://eth-mainnet.g.alchemy.com/nft/v3/${apiKey}/getNFTsForOwner` +
+            `?owner=${wallet}&contractAddresses[]=${env.OLD_CONTRACT}&withMetadata=false&pageSize=100` +
+            (pageKey ? `&pageKey=${encodeURIComponent(pageKey)}` : '');
+          const res = await fetch(nftUrl);
+          if (!res.ok) throw new Error(`alchemy ${res.status}`);
           const data = await res.json();
-          return (data.ownedNfts || [])
-            .map(n => parseInt(n.tokenId, 10))
-            .filter(n => n >= 1 && n <= MAX_TOKEN_ID)
-            .sort((a, b) => a - b);
+          for (const n of (data.ownedNfts || [])) {
+            const id = parseInt(n.tokenId, 10);
+            if (id >= 1 && id <= MAX_TOKEN_ID) ids.push(id);
+          }
+          pageKey = data.pageKey || '';
+          if (!pageKey) break;
         }
+        if (ids.length > 0) return ids.sort((a, b) => a - b);
       }
     }
   } catch { /* fallback sotto */ }
 
-  // ─ Tentativo 2: balanceOf + tokenOfOwnerByIndex (ERC721Enumerable) ──────
+  // ─ Tentativo 2: multicall3 — ownerOf di TUTTI i token in una sola eth_call.
+  //   Funziona con qualsiasi ERC721 e qualsiasi RPC, per qualunque numero di
+  //   token posseduti: niente tetti che tagliano fuori i grandi holder.
   try {
-    const SEL_BALANCE_OF    = '0x70a08231'; // balanceOf(address)
-    const SEL_TOKEN_BY_IDX  = '0x2f745c59'; // tokenOfOwnerByIndex(address,uint256)
-
-    const balResult = await ethCall(env.OLD_CONTRACT, SEL_BALANCE_OF + encodeAddress(wallet), env.RPC_URL);
-    const balance = balResult ? Number(BigInt(balResult)) : 0;
-    if (balance === 0) return [];
-    if (balance > 50) return []; // safety cap: nessun holder ha >50
-
-    const results = await Promise.all(
-      Array.from({ length: balance }, (_, i) =>
-        ethCall(env.OLD_CONTRACT, SEL_TOKEN_BY_IDX + encodeAddress(wallet) + encodeUint256(i), env.RPC_URL)
-          .then(r => r && r !== '0x' ? Number(BigInt(r)) : null)
-          .catch(() => null)
-      )
-    );
-    return results
-      .filter(id => id !== null && id >= 1 && id <= MAX_TOKEN_ID)
-      .sort((a, b) => a - b);
+    const owners = await multicallOwnerOf(env.OLD_CONTRACT, 1, MAX_TOKEN_ID, env.RPC_URL);
+    const me = wallet.toLowerCase();
+    const ids = [];
+    owners.forEach((o, i) => { if (o && o === me) ids.push(i + 1); });
+    return ids;
   } catch { return []; }
+}
+
+const MULTICALL3 = '0xcA11bde05977b3631167028862bE2a173976CA11';
+
+async function multicallOwnerOf(contract, fromId, toId, rpcUrl) {
+  // tryAggregate(bool requireSuccess, (address target, bytes callData)[] calls)
+  const SEL_TRY_AGGREGATE = '0xbce38bd7';
+  const n = toId - fromId + 1;
+  const target = contract.slice(2).toLowerCase().padStart(64, '0');
+
+  // Tupla (address,bytes): [address][offset 0x40][len 0x24][calldata 36B pad 64B] = 160 byte
+  let tuples = '';
+  for (let i = 0; i < n; i++) {
+    const calldata = SEL_OWNER_OF.slice(2) + encodeUint256(fromId + i);
+    tuples += target + encodeUint256(0x40) + encodeUint256(0x24) + calldata.padEnd(128, '0');
+  }
+  let arr = encodeUint256(n);
+  for (let i = 0; i < n; i++) arr += encodeUint256(n * 32 + i * 160);
+  const data = SEL_TRY_AGGREGATE + encodeUint256(0) + encodeUint256(0x40) + arr + tuples;
+
+  const result = await ethCall(MULTICALL3, data, rpcUrl);
+
+  // Risposta: (bool success, bytes returnData)[]
+  const hex = result.slice(2);
+  const word = (i) => hex.slice(i * 64, (i + 1) * 64);
+  const arrStart = parseInt(word(0), 16) / 32;
+  const count = parseInt(word(arrStart), 16);
+  const owners = [];
+  for (let i = 0; i < count; i++) {
+    const elOff = parseInt(word(arrStart + 1 + i), 16) / 32;
+    const base = arrStart + 1 + elOff;
+    const success = parseInt(word(base), 16) === 1;
+    const dataLen = parseInt(word(base + 2), 16);
+    owners.push(success && dataLen >= 32 ? '0x' + word(base + 3).slice(24) : null);
+  }
+  return owners;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -254,12 +286,14 @@ async function handleCheckAccess(request, env) {
   const tokenIdNum = parseTokenId(tokenId);
   if (tokenIdNum === null) return makeJson({ error: 'Invalid tokenId' }, 400, request);
 
+  // L'accesso segue la proprietà on-chain: possiedi il token = accedi.
+  // Il claim on-chain resta facoltativo (hasClaimed è solo informativo).
   const [isOwner, hasClaimed] = await Promise.all([
     checkOwnerOf(tokenIdNum, wallet, env),
     checkCanAccess(tokenIdNum, wallet, env),
   ]);
 
-  return makeJson({ tokenId: tokenIdNum, isOwner, hasClaimed, canAccess: isOwner && hasClaimed }, 200, request);
+  return makeJson({ tokenId: tokenIdNum, isOwner, hasClaimed, canAccess: isOwner }, 200, request);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -286,15 +320,11 @@ async function handleGetFile(request, env) {
   if (!match) return makeJson({ error: 'Invalid file key' }, 400, request);
   if (parseInt(match[1], 10) !== tokenIdNum) return makeJson({ error: 'Invalid file key' }, 400, request);
 
-  // Regola doppia — sempre entrambe in parallelo, mai short-circuit
-  const [isOwner, canAccessFlag] = await Promise.all([
-    checkOwnerOf(tokenIdNum, wallet, env),
-    checkCanAccess(tokenIdNum, wallet, env),
-  ]);
+  // L'accesso segue la proprietà on-chain: possiedi il token = accedi ai suoi file.
+  const isOwner = await checkOwnerOf(tokenIdNum, wallet, env);
+  if (!isOwner) return makeJson({ error: 'Access denied' }, 403, request);
 
-  if (!isOwner || !canAccessFlag) return makeJson({ error: 'Access denied' }, 403, request);
-
-  const object = await env.NYFURION_R2.get(`nyfurion-holder-archive/${fileKey}`);
+  const object = await env.NYFURION_R2.get(fileKey);
   if (!object) return makeJson({ error: 'File not found' }, 404, request);
 
   return new Response(object.body, {
@@ -362,16 +392,25 @@ async function checkCanAccess(tokenId, wallet, env) {
   } catch { return false; }
 }
 
+// RPC pubblici di riserva: se il provider primario è giù, la porta resta aperta.
+const FALLBACK_RPCS = ['https://ethereum-rpc.publicnode.com', 'https://cloudflare-eth.com'];
+
 async function ethCall(to, data, rpcUrl) {
-  const res = await fetch(rpcUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ jsonrpc: '2.0', method: 'eth_call', params: [{ to, data }, 'latest'], id: 1 }),
-  });
-  if (!res.ok) throw new Error(`RPC ${res.status}`);
-  const j = await res.json();
-  if (j.error) throw new Error(j.error.message);
-  return j.result;
+  let lastErr;
+  for (const url of [rpcUrl, ...FALLBACK_RPCS].filter(Boolean)) {
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jsonrpc: '2.0', method: 'eth_call', params: [{ to, data }, 'latest'], id: 1 }),
+      });
+      if (!res.ok) throw new Error(`RPC ${res.status}`);
+      const j = await res.json();
+      if (j.error) throw new Error(j.error.message);
+      return j.result;
+    } catch (e) { lastErr = e; }
+  }
+  throw lastErr || new Error('RPC unavailable');
 }
 
 function encodeUint256(n) { return BigInt(n).toString(16).padStart(64, '0'); }
