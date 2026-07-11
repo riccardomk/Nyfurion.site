@@ -1039,6 +1039,7 @@
       const out = r0.apply(this, arguments);
       card.style.display = 'none';
       document.body.classList.remove('entering');
+      if (window.__castleReset) window.__castleReset();
       return out;
     };
   })();
@@ -1373,6 +1374,12 @@
     // ─── Unica animazione: l'ingresso col wallet ───
     let entering = false, tEnter = 0, t = 0;
     window.__castleEnter = function () { entering = true; tEnter = t; };
+    window.__castleReset = function () {
+      entering = false;
+      camera.position.copy(CAM0);
+      camera.lookAt(LOOK);
+      if (swirl) swirl.material.opacity = 0.5;
+    };
 
     function animate() {
       t += 1;
@@ -1391,6 +1398,7 @@
     if (reduced) {
       renderer.render(scene, camera);
       window.__castleEnter = function () {};
+      window.__castleReset = function () {};
       setTimeout(() => renderer.render(scene, camera), 1500);
     } else animate();
   })();
