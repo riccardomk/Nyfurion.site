@@ -1071,7 +1071,7 @@
       lines.slice(0, 2).forEach((ln, i) => g.fillText(ln, w / 2, h * (0.5 + i * 0.17)));
       g.fillStyle = '#9a8f6e'; g.font = Math.round(h * 0.062) + 'px Georgia, serif';
       g.fillText('C L I C K   T O   C O L L E C T', w / 2, h * 0.87);
-      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
+      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.flipY = false; return t;
     }
 
     function plateTexture(text) {
@@ -1085,7 +1085,7 @@
       g.textAlign = 'center'; g.fillStyle = '#e8cd7a';
       g.font = '600 72px Georgia, serif';
       g.fillText(text, 512, 124);
-      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
+      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.flipY = false; return t;
     }
 
     function sealTexture() {
@@ -1101,7 +1101,7 @@
       g.font = '26px Georgia, serif'; g.fillText('NYFURION', 256, 268);
       g.fillStyle = '#8d8576'; g.font = '20px Georgia, serif';
       g.fillText('AWAITING RELIC', 256, 420);
-      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
+      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.flipY = false; return t;
     }
 
     function tvTexture() {
@@ -1116,7 +1116,7 @@
       g.fillText('N Y F U R I O N', 512, 268);
       g.fillStyle = '#8d8576'; g.font = '30px Georgia, serif';
       g.fillText('X   R E B O R N', 512, 330);
-      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
+      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.flipY = false; return t;
     }
 
     function skyTexture() {
@@ -1149,6 +1149,7 @@
         const t = L.load('tex-' + base + '-' + m + '.jpg');
         t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.RepeatWrapping;
         t.anisotropy = aniso;
+        t.flipY = false;   // le UV del glTF hanno la V invertita
         maps[m] = t;
       });
       maps.diff.encoding = THREE.sRGBEncoding;
@@ -1292,6 +1293,7 @@
           fetchFileUrl(tokenId, f.key).then((u) => {
             new THREE.TextureLoader().load(u, (tex) => {
               tex.encoding = THREE.sRGBEncoding; tex.anisotropy = ANISO;
+              tex.flipY = false; tex.needsUpdate = true;
               panel.material = new THREE.MeshBasicMaterial({ map: tex });
             });
           }).catch(() => {});
