@@ -50,7 +50,7 @@ const RATE_LIMITS = {
 };
 
 // Regex STRICT per fileKey — blocca qualsiasi path traversal
-const FILE_KEY_RE = /^token-(\d{3})\/(preview|image-extra-\d{2}|character-sheet|lore|license|card|archive)\.(jpg|jpeg|png|pdf|json)$/;
+const FILE_KEY_RE = /^token-(\d{3})\/(preview|image-extra-\d{2}|character-sheet|lore|license|card|card-3d|model|archive)\.(jpg|jpeg|png|pdf|json|glb|stl)$/;
 
 // ─── Origins permesse ─────────────────────────────────────────────────────────
 const ALLOWED_ORIGINS = [
@@ -560,6 +560,8 @@ function guessContentType(key) {
   if (key.endsWith('.jpg') || key.endsWith('.jpeg')) return 'image/jpeg';
   if (key.endsWith('.png'))                          return 'image/png';
   if (key.endsWith('.json'))                         return 'application/json';
+  if (key.endsWith('.glb'))                          return 'model/gltf-binary';
+  if (key.endsWith('.stl'))                          return 'model/stl';
   return 'application/octet-stream';
 }
 
