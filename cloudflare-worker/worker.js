@@ -90,6 +90,7 @@ export default {
       if (url.pathname === '/api/my-tokens'     && request.method === 'POST') return handleMyTokens(request, env);
       if (url.pathname === '/api/check-access'  && request.method === 'POST') return handleCheckAccess(request, env);
       if (url.pathname === '/api/get-file'      && request.method === 'POST') return handleGetFile(request, env);
+      if (url.pathname === '/api/villa'         && request.method === 'POST') return handleVilla(request, env);
       return makeJson({ error: 'Not found' }, 404, request);
     } catch (err) {
       console.error('[worker] unhandled:', err?.message);
@@ -335,6 +336,48 @@ async function handleGetFile(request, env) {
       'Content-Type':        guessContentType(fileKey),
       'Cache-Control':       'private, no-store',
       'Content-Disposition': `inline; filename="${fileKey.split('/').pop()}"`,
+    },
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// POST /api/villa  { wallet, sessionToken }
+// Serve il modello 3D della Villa Prime SOLO a chi ha firmato ed è holder.
+// Il file NON è più pubblico: niente download "di lato" da un URL statico.
+// ─────────────────────────────────────────────────────────────────────────────
+async function handleVilla(request, env) {
+  const body = await parseBody(request);
+  if (!body) return makeJson({ error: 'Invalid body' }, 400, request);
+
+  const { wallet, sessionToken } = body;
+  if (!isValidAddress(wallet) || !sessionToken) {
+    return makeJson({ error: 'Invalid parameters' }, 400, request);
+  }
+
+  const sessionWallet = await verifySessionToken(sessionToken, env);
+  if (!sessionWallet || sessionWallet !== wallet.toLowerCase()) {
+    return makeJson({ error: 'Session invalid or expired' }, 401, request);
+  }
+
+  // Deve possedere almeno 1 NFT della collezione (balanceOf > 0)
+  let bal = null;
+  try {
+    bal = await ethCall(env.OLD_CONTRACT, '0x70a08231' + encodeAddress(wallet.toLowerCase()), env.RPC_URL);
+  } catch { /* rete giù → nega, non aprire */ }
+  if (!bal || BigInt(bal) === 0n) {
+    return makeJson({ error: 'Holders only' }, 403, request);
+  }
+
+  const object = await env.NYFURION_R2.get('villa/villa-prime.glb');
+  if (!object) return makeJson({ error: 'Villa not found' }, 404, request);
+
+  return new Response(object.body, {
+    status: 200,
+    headers: {
+      ...getCorsHeaders(request),
+      ...SECURITY_HEADERS,
+      'Content-Type':  'model/gltf-binary',
+      'Cache-Control': 'private, no-store',
     },
   });
 }

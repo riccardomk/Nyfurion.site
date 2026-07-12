@@ -8,3 +8,7 @@ cloudflare-worker/.wrangler/
 # File 3D pesanti — caricati da Pinata/IPFS, non da git
 *.glb
 *.hdr
+
+# La villa è servita solo dal caveau privato (R2 via /api/villa), mai pubblica
+villa-prime.glb
+test-runner.html

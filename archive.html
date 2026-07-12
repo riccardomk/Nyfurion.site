@@ -1179,7 +1179,7 @@
       scene.background = new THREE.Color(0x05060c);
       scene.fog = new THREE.FogExp2(0x0a0c16, 0.011);
       camera = new THREE.PerspectiveCamera(72, window.innerWidth / window.innerHeight, 0.1, 220);
-      camera.position.set(0, EYE + 0.1, 8.6);   // sul vialetto, davanti al portale d'oro
+      camera.position.set(-1.6, EYE + 0.3, 9.1);   // sul vialetto d'ingresso della villa
       camera.rotation.order = 'YXZ';
 
       // cielo notturno + orizzonte
@@ -1248,7 +1248,9 @@
 
       // ── Carica la villa ──
       const loader = new THREE.GLTFLoader();
-      loader.load('villa-prime.glb', (gltf) => {
+      // La villa è PRIVATA: si scarica solo dal caveau, con firma + possesso NFT.
+      // Niente più file pubblico scaricabile "di lato".
+      const parseVilla = (gltf) => {
         const villa = gltf.scene;
         const exhibitSlots = [], plaqueSlots = [];
         let roomPlate = null;
@@ -1321,10 +1323,21 @@
 
         scene.add(villa);
         hintEl.textContent = HINT_FREE;
-      }, undefined, (err) => {
-        console.error('GLB load error', err);
+      };
+
+      const onVillaError = (err) => {
+        console.error('villa load error', err);
         hintEl.textContent = 'Errore nel caricare la villa — ricarica la pagina.';
-      });
+      };
+
+      fetch(`${WORKER_BASE}/api/villa`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ wallet, sessionToken }),
+      })
+        .then((r) => { if (!r.ok) throw new Error('villa ' + r.status); return r.arrayBuffer(); })
+        .then((buf) => loader.parse(buf, '', parseVilla, onVillaError))
+        .catch(onVillaError);
 
       renderer.domElement.addEventListener('click', onCanvasClick);
       renderer.domElement.addEventListener('pointerdown', onDown);
@@ -1463,8 +1476,8 @@
       }
       camera.position.x += dx;
       camera.position.z += dz;
-      camera.position.x = Math.max(-9.6, Math.min(9.6, camera.position.x));
-      camera.position.z = Math.max(-12.0, Math.min(10.4, camera.position.z));
+      camera.position.x = Math.max(-13.0, Math.min(11.0, camera.position.x));
+      camera.position.z = Math.max(-20.0, Math.min(10.0, camera.position.z));
 
       if (colliders.length) {
         rayV.set(new THREE.Vector3(camera.position.x, camera.position.y + 0.55, camera.position.z), DOWN);
