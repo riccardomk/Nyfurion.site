@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -539,6 +539,474 @@
   <script src="vendor-GLTFLoader-0.147.js"></script>
 
   <script>
+    // ─── Config ───────────────────────────────────────────────────────────────
+    // Le fetch aggiungono già /api/... — la base NON deve contenere /api
+    const WORKER_BASE = 'https://nyfurion.com';
+
+    const CLAIM_CONTRACT_ADDRESS = '0xdF2c679F5b40373016FCE49702f1f354689E4007';
+    const CLAIM_ABI = [
+      'function claimArchive(uint256 tokenId) external',
+    ];
+
+    // Mappa token → CID dell'artwork ufficiale (servito dal nostro CDN)
+    let PREVIEWS = {};
+    fetch('previews.json').then(r => r.json()).then(m => { PREVIEWS = m; }).catch(() => {});
+    const previewUrl = (id) => PREVIEWS[String(id)] ? `https://cdn.nyfurion.com/ipfs/${PREVIEWS[String(id)]}` : null;
+
+    // ─── State ────────────────────────────────────────────────────────────────
+    let provider     = null;
+    let signer       = null;
+    let wallet       = null;
+    let sessionToken = null;
+    let activeTokenId = null;
+
+    // ─── DOM refs ─────────────────────────────────────────────────────────────
+    const stepConnect   = document.getElementById('step-connect');
+    const stepScanning  = document.getElementById('step-scanning');
+    const stepTokens    = document.getElementById('step-tokens');
+    const stepFiles     = document.getElementById('step-files');
+    const stepFilesTitle= document.getElementById('step-files-title');
+    const btnConnect    = document.getElementById('btn-connect');
+    const btnClaim      = document.getElementById('btn-claim');
+    const btnBack       = document.getElementById('btn-back');
+    const statusBox     = document.getElementById('status-box');
+    const fileGrid      = document.getElementById('file-grid');
+    const tokenGridEl   = document.getElementById('token-grid');
+    const walletBadge   = document.getElementById('wallet-badge');
+    const walletAddrEl  = document.getElementById('wallet-address');
+    const deniedBlock   = document.getElementById('denied-block');
+    const deniedMsg     = document.getElementById('denied-msg');
+    const mainCard      = document.getElementById('main-card');
+
+    // ─── Connect Wallet ───────────────────────────────────────────────────────
+    btnConnect.addEventListener('click', connectWallet);
+
+    async function connectWallet() {
+      if (!window.ethereum) {
+        alert('No Web3 wallet detected. Please install MetaMask.');
+        return;
+      }
+      setButtonLoading(btnConnect, true, 'Connecting…');
+      try {
+        provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send('eth_requestAccounts', []);
+
+        const network = await provider.getNetwork();
+        if (network.chainId !== 1n) {
+          alert('Please switch to Ethereum Mainnet in your wallet.');
+          setButtonLoading(btnConnect, false, 'Connect Wallet');
+          return;
+        }
+
+        signer = await provider.getSigner();
+        wallet = await signer.getAddress();
+
+        // Mostra wallet badge e scanning
+        walletAddrEl.textContent  = shortAddress(wallet);
+        walletBadge.style.display = 'block';
+        stepConnect.style.display = 'none';
+        stepScanning.style.display = 'block';
+
+        // Autenticazione firma
+        sessionToken = await authenticateWithWorker();
+        if (!sessionToken) {
+          resetToConnect();
+          return;
+        }
+
+        // Scansione token posseduti — blocca subito se zero
+        stepScanning.style.display = 'block';
+        await scanWalletTokens();
+
+      } catch (err) {
+        console.error(err);
+        if (err && (err.code === 4001 || err.code === 'ACTION_REJECTED')) {
+          alert('Connection rejected in your wallet.\nConnessione rifiutata nel wallet.');
+        } else {
+          alert('Connection failed. Please try again.\nConnessione fallita. Riprova.');
+        }
+        resetToConnect();
+      }
+    }
+
+    // ─── Autenticazione (nonce → firma → sessionToken) ────────────────────────
+    // La firma parte SOLO dal click sul bottone: ogni pressione è un gesto
+    // "fresco" per il browser, l'unico modo per cui il popup del wallet
+    // (Trezor Connect incluso) può aprirsi in modo affidabile ogni volta.
+    // Se un tentativo fallisce, il bottone resta lì: si ripreme e si riprova.
+    async function authenticateWithWorker() {
+      stepScanning.style.display = 'none';
+      const stepSign = document.getElementById('step-sign');
+      const btnSign  = document.getElementById('btn-sign');
+      const signHint = document.getElementById('sign-hint');
+      const btnCancel = document.getElementById('btn-sign-cancel');
+      stepSign.style.display = 'block';
+      signHint.textContent = '';
+      setButtonLoading(btnSign, false, 'Sign to Enter');
+
+      return new Promise((resolve) => {
+        const cleanup = () => {
+          stepSign.style.display = 'none';
+          btnSign.onclick = null;
+          btnCancel.onclick = null;
+        };
+        btnCancel.onclick = (e) => { e.preventDefault(); cleanup(); resolve(null); };
+
+        btnSign.onclick = async () => {
+          setButtonLoading(btnSign, true, 'Check your wallet…');
+          signHint.textContent = '';
+          let step = 'nonce';
+          try {
+            // Nonce fresco ad ogni tentativo: non scade mai in mano all'utente
+            const nonceRes = await fetch(`${WORKER_BASE}/api/nonce?wallet=${wallet}`);
+            if (!nonceRes.ok) {
+              if (nonceRes.status === 429) {
+                signHint.textContent = 'Too many attempts — wait 5 minutes, then press again. · Troppi tentativi: attendi 5 minuti e ripremi.';
+              } else {
+                const d = await nonceRes.json().catch(() => ({}));
+                signHint.textContent = `Server error (${nonceRes.status})${d.error ? ': ' + d.error : ''} — press to retry. · Errore del server, ripremi per riprovare.`;
+              }
+              setButtonLoading(btnSign, false, 'Sign to Enter');
+              return;
+            }
+            const { nonce, message } = await nonceRes.json();
+
+            step = 'sign';
+            const signature = await signer.signMessage(message);
+
+            step = 'verify';
+            const verifyRes = await fetch(`${WORKER_BASE}/api/verify-wallet`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ wallet, signature, nonce }),
+            });
+            if (!verifyRes.ok) {
+              if (verifyRes.status === 429) {
+                signHint.textContent = 'Too many attempts — wait 10 minutes, then press again. · Troppi tentativi: attendi 10 minuti e ripremi.';
+              } else if (verifyRes.status === 401) {
+                signHint.textContent = 'Signature not valid — make sure the wallet shown above is the one that signed, then press again. · Firma non valida: controlla che a firmare sia il wallet indicato sopra, poi ripremi.';
+              } else {
+                const d = await verifyRes.json().catch(() => ({}));
+                signHint.textContent = `Verification failed (${verifyRes.status})${d.error ? ': ' + d.error : ''} — press to retry. · Verifica fallita, ripremi per riprovare.`;
+              }
+              setButtonLoading(btnSign, false, 'Sign to Enter');
+              return;
+            }
+            const data = await verifyRes.json();
+            cleanup();
+            resolve(data.sessionToken || null);
+
+          } catch (err) {
+            console.error('[auth:' + step + ']', err);
+            const rejected = err && (err.code === 4001 || err.code === 'ACTION_REJECTED'
+              || (err.info && err.info.error && err.info.error.code === 4001));
+            if (rejected) {
+              signHint.textContent = 'Signature rejected — press again whenever you are ready. It is free. · Firma rifiutata: ripremi quando vuoi, è gratuita.';
+            } else if (step === 'sign') {
+              signHint.textContent = 'The wallet popup did not open or did not respond. Check the Trezor window (it may be behind other windows), then press again. · Il popup del wallet non si è aperto o non ha risposto: controlla la finestra Trezor (può essere dietro le altre) e ripremi.';
+            } else {
+              signHint.textContent = 'Network error — check your connection and press again. · Errore di rete: controlla la connessione e ripremi.';
+            }
+            setButtonLoading(btnSign, false, 'Sign to Enter');
+          }
+        };
+      });
+    }
+
+    // ─── Scan token posseduti — blocca subito se zero ─────────────────────────
+    async function scanWalletTokens() {
+      try {
+        const res = await fetch(`${WORKER_BASE}/api/my-tokens`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ wallet, sessionToken }),
+        });
+
+        if (!res.ok) {
+          if (res.status === 401) { resetToConnect(); return; }
+          showDenied('Error verifying ownership. Please try again.');
+          return;
+        }
+
+        const { tokens } = await res.json();
+
+        stepScanning.style.display = 'none';
+
+        if (!tokens || tokens.length === 0) {
+          // Nessun NFT → accesso negato immediato
+          showDenied(`Wallet ${shortAddress(wallet)} does not hold any Nyfurion X token. Access is reserved for verified holders only.`);
+          return;
+        }
+
+        if (tokens.length === 1) {
+          // Un solo token → vai diretto al check
+          await selectToken(tokens[0]);
+        } else {
+          // Più token → mostra selezione
+          renderTokenGrid(tokens);
+        }
+
+      } catch (err) {
+        console.error(err);
+        stepScanning.style.display = 'none';
+        showDenied('Network error while verifying ownership.');
+      }
+    }
+
+    // ─── Render token selection grid ──────────────────────────────────────────
+    function renderTokenGrid(tokens) {
+      tokenGridEl.innerHTML = '';
+      for (const id of tokens) {
+        const card = document.createElement('div');
+        card.className = 'token-card';
+        const u = previewUrl(id);
+        const img = u
+          ? `<img class="tc-img" src="${u}" alt="Nyfurion X #${id}" loading="lazy" decoding="async">`
+          : '<div class="tc-img"></div>';
+        card.innerHTML = `${img}<div class="tc-meta"><span class="tc-num">#${id}</span><span class="tc-label">Nyfurion X</span></div>`;
+        card.addEventListener('click', () => selectToken(id));
+        tokenGridEl.appendChild(card);
+      }
+      mainCard.classList.add('gallery');
+      stepTokens.style.display = 'block';
+    }
+
+    // ─── Seleziona token → check-access → mostra file o claim ────────────────
+    async function selectToken(tokenId) {
+      activeTokenId = tokenId;
+      stepTokens.style.display  = 'none';
+      mainCard.classList.remove('gallery');
+      stepScanning.style.display = 'block';
+
+      try {
+        const res = await fetch(`${WORKER_BASE}/api/check-access`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ wallet, tokenId, sessionToken }),
+        });
+        const data = await res.json();
+
+        stepScanning.style.display = 'none';
+
+        if (!res.ok) {
+          if (res.status === 401) { resetToConnect(); return; }
+          showDenied(data.error || 'Error checking access.');
+          return;
+        }
+
+        if (!data.isOwner) {
+          showDenied(`Nyfurion X #${tokenId} is no longer in this wallet.`);
+          return;
+        }
+
+        // Possiedi il token = archivio sbloccato. Nessun claim, nessuna transazione.
+        stepFilesTitle.textContent = `Nyfurion X #${tokenId}`;
+        stepFiles.style.display = 'block';
+        showStatus('Archive unlocked.', 'success');
+        btnClaim.style.display = 'none';
+        await loadFiles(tokenId);
+
+      } catch (err) {
+        console.error(err);
+        stepScanning.style.display = 'none';
+        showDenied('Network error. Please try again.');
+      }
+    }
+
+    // ─── Back → torna alla selezione token ────────────────────────────────────
+    btnBack.addEventListener('click', async () => {
+      stepFiles.style.display = 'none';
+      fileGrid.style.display  = 'none';
+      fileGrid.innerHTML      = '';
+      const aw = document.getElementById('assets-welcome');
+      if (aw) aw.style.display = 'none';
+      hideStatus();
+      stepScanning.style.display = 'block';
+      await scanWalletTokens();
+    });
+
+    // ─── Claim on-chain ───────────────────────────────────────────────────────
+    btnClaim.addEventListener('click', async () => {
+      const tokenId = activeTokenId;
+      setButtonLoading(btnClaim, true, 'Claiming…');
+      showStatus('Confirm the transaction in your wallet (no ETH cost for this action).', 'info');
+      try {
+        const contract = new ethers.Contract(CLAIM_CONTRACT_ADDRESS, CLAIM_ABI, signer);
+        const tx = await contract.claimArchive(tokenId);
+        showStatus('Transaction sent. Waiting for confirmation…', 'info');
+        await tx.wait();
+        showStatus(`Archive claimed! Nyfurion X #${tokenId} is now unlocked.`, 'success');
+        btnClaim.style.display = 'none';
+        await loadFiles(tokenId);
+      } catch (err) {
+        console.error(err);
+        if (err.code === 4001 || err.code === 'ACTION_REJECTED') {
+          showStatus('Transaction rejected by user.', 'warning');
+        } else {
+          showStatus('Claim failed. Please try again.', 'error');
+        }
+      } finally {
+        setButtonLoading(btnClaim, false, 'Claim On-Chain');
+      }
+    });
+
+    // ─── Load file list da archive.json ───────────────────────────────────────
+    async function loadFiles(tokenId) {
+      const fileKey = `token-${String(tokenId).padStart(3, '0')}/archive.json`;
+      try {
+        const res = await fetch(`${WORKER_BASE}/api/get-file`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ wallet, tokenId, fileKey, sessionToken }),
+        });
+        if (!res.ok) {
+          const d = await res.json();
+          showStatus(d.error || 'Could not load archive index.', 'error');
+          return;
+        }
+        const archive = await res.json();
+        window.__vaultArchive = archive;
+        renderFileGrid(archive, tokenId);
+        const roomBtn = document.getElementById('btn-room');
+        if (roomBtn) roomBtn.style.display = 'inline-flex';
+        // Il museo privato dell'holder si apre da solo appena l'archivio è sbloccato
+        if (window.__openVaultRoom) setTimeout(() => window.__openVaultRoom(), 900);
+      } catch (err) {
+        console.error(err);
+        showStatus('Failed to load file list.', 'error');
+      }
+    }
+
+    // ─── Cache dei file protetti (condivisa con il museo 3D) ─────────────────
+    const FILE_URL_CACHE = {};
+    async function fetchFileUrl(tokenId, fileKey) {
+      if (FILE_URL_CACHE[fileKey]) return FILE_URL_CACHE[fileKey];
+      const res = await fetch(`${WORKER_BASE}/api/get-file`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ wallet, tokenId, fileKey, sessionToken }),
+      });
+      if (!res.ok) throw new Error('file ' + res.status);
+      const u = URL.createObjectURL(await res.blob());
+      FILE_URL_CACHE[fileKey] = u;
+      return u;
+    }
+    const isImageFile = (f) => /\.(png|jpe?g)$/i.test(f.key);
+
+    // ─── Render file cards: le immagini VERE come anteprima ──────────────────
+    function renderFileGrid(archive, tokenId) {
+      fileGrid.innerHTML = '';
+      if (!archive.files || archive.files.length === 0) return;
+      for (const file of archive.files) {
+        const card = document.createElement('div');
+        card.className = 'file-card';
+        if (isImageFile(file)) {
+          card.innerHTML = `
+            <div class="fc-thumb"><span class="fc-badge">${file.type}</span></div>
+            <div class="fc-caption"><span class="fc-label">${file.label}</span><span class="fc-hint">Collect</span></div>
+          `;
+          fetchFileUrl(tokenId, file.key).then((u) => {
+            const t = card.querySelector('.fc-thumb');
+            t.style.backgroundImage = `url(${u})`;
+            t.classList.add('loaded');
+          }).catch(() => {});
+        } else {
+          card.innerHTML = `
+            <div class="fc-doc"><span class="fcd-type">${file.type}</span><span class="fcd-rule"></span></div>
+            <div class="fc-caption"><span class="fc-label">${file.label}</span><span class="fc-hint">Collect</span></div>
+          `;
+        }
+        card.addEventListener('click', () => downloadFile(tokenId, file));
+        fileGrid.appendChild(card);
+      }
+      const wel = document.getElementById('assets-welcome');
+      if (wel) wel.style.display = 'block';
+      fileGrid.style.display = 'grid';
+    }
+
+    // ─── Download file ────────────────────────────────────────────────────────
+    async function downloadFile(tokenId, file) {
+      try {
+        const res = await fetch(`${WORKER_BASE}/api/get-file`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ wallet, tokenId, fileKey: file.key, sessionToken }),
+        });
+        if (!res.ok) {
+          const d = await res.json();
+          showStatus(d.error || 'Access denied.', 'error');
+          return;
+        }
+        const blob = await res.blob();
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+        a.download = file.key.split('/').pop();
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+      } catch (err) {
+        console.error(err);
+        showStatus('Download failed. Please try again.', 'error');
+      }
+    }
+
+    // ─── Denied block ─────────────────────────────────────────────────────────
+    function showDenied(msg) {
+      stepScanning.style.display = 'none';
+      stepTokens.style.display   = 'none';
+      stepFiles.style.display    = 'none';
+      fileGrid.style.display     = 'none';
+      const aw3 = document.getElementById('assets-welcome');
+      if (aw3) aw3.style.display = 'none';
+      deniedMsg.textContent      = msg;
+      deniedBlock.style.display  = 'block';
+      mainCard.classList.add('card--denied');
+    }
+
+    // ─── UI helpers ───────────────────────────────────────────────────────────
+    function showStatus(msg, type) {
+      statusBox.textContent   = msg;
+      statusBox.className     = type;
+      statusBox.style.display = 'block';
+    }
+    function hideStatus() { statusBox.style.display = 'none'; }
+
+    function setButtonLoading(btn, loading, label) {
+      btn.disabled  = loading;
+      btn.innerHTML = loading ? `<span class="spinner"></span> ${label}` : label;
+    }
+
+    function shortAddress(addr) { return addr.slice(0, 6) + '…' + addr.slice(-4); }
+
+    function resetToConnect() {
+      stepConnect.style.display   = 'block';
+      stepScanning.style.display  = 'none';
+      const ss = document.getElementById('step-sign');
+      if (ss) ss.style.display = 'none';
+      stepTokens.style.display    = 'none';
+      stepFiles.style.display     = 'none';
+      deniedBlock.style.display   = 'none';
+      mainCard.classList.remove('card--denied');
+      mainCard.classList.remove('gallery');
+      walletBadge.style.display   = 'none';
+      fileGrid.style.display      = 'none';
+      fileGrid.innerHTML          = '';
+      const aw2 = document.getElementById('assets-welcome');
+      if (aw2) aw2.style.display = 'none';
+      sessionToken = null; wallet = null; signer = null; activeTokenId = null;
+      btnConnect.disabled  = false;
+      btnConnect.textContent = 'Connect Wallet';
+    }
+
+    // ─── MetaMask account/chain change ────────────────────────────────────────
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', () => location.reload());
+      window.ethereum.on('chainChanged',   () => location.reload());
+    }
+  </script>
+
+  <!-- ═══ VAULT ROOM 3D — motore ═══ -->
+  <script>
   (function () {
     const overlay  = document.getElementById('vault-room');
     const exitBtn  = document.getElementById('vr-exit');
@@ -778,7 +1246,6 @@
           else if (n.name.startsWith('Museum_Art_') && n.name.endsWith('_Panel')) artPanels.push(n);
           else if (MATS[matName]) n.material = MATS[matName];
           // collisioni: tutto tranne foglie, acqua, vetrate e telai delle aperture
-          // (i parapetti in vetro restano solidi: contengono "Rail" nel nome)
           const ghost = n.name.startsWith('Leaf_') || n.name === 'Pool_Water'
             || (matName === 'NYF4_Glass' && !n.name.includes('Rail'))
             || (n.name.includes('Frame') && matName === 'NYF4_Metal');
@@ -1032,476 +1499,6 @@
       window.removeEventListener('resize', onResize);
       renderer.domElement.remove(); renderer.dispose(); renderer = null;
       scene = null; exhibits = []; colliders = []; hovered = null;
-      overlay.style.display = 'none';
-    }
-  })();
-  </script>
-
-  <!-- ═══ VAULT ROOM 3D — motore ═══ -->
-  <script>
-  (function () {
-    const overlay  = document.getElementById('vault-room');
-    const exitBtn  = document.getElementById('vr-exit');
-    const hintEl   = document.getElementById('vr-hint');
-    const tokenEl  = document.getElementById('vr-token');
-    const crossEl  = document.getElementById('vr-crosshair');
-    const roomBtn  = document.getElementById('btn-room');
-
-    let renderer = null, scene, camera, raf = null, exhibits = [], hovered = null;
-    let yaw = 0, pitch = 0, dragging = false, lastX = 0, lastY = 0, downX = 0, downY = 0;
-    let lastFrameT = 0;
-    const keys = {};
-    const vel = { x: 0, z: 0 };
-
-    const W = 10, D = 12, H = 4.6;
-    const BOUND = { x: W / 2 - 0.55, zMin: -D / 2 + 0.55, zMax: D / 2 - 0.55 };
-    const IS_TOUCH = window.matchMedia('(pointer: coarse)').matches;
-    const HINT_FREE   = IS_TOUCH
-      ? 'Trascina per guardare · tocca un’opera per scaricarla'
-      : 'Click nella stanza per prendere i comandi · poi WASD per muoverti';
-    const HINT_LOCKED = 'WASD muoviti · mouse guarda · click su un’opera per scaricarla · ESC libera il mouse';
-
-    roomBtn.addEventListener('click', () => {
-      const archive = window.__vaultArchive;
-      if (!archive || !activeTokenId) return;
-      openRoom(activeTokenId, archive);
-    });
-    window.__openVaultRoom = () => {
-      const archive = window.__vaultArchive;
-      if (!archive || !activeTokenId || renderer) return;
-      openRoom(activeTokenId, archive);
-    };
-    exitBtn.addEventListener('click', closeRoom);
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !document.pointerLockElement) closeRoom();
-    });
-
-    // ── Canvas textures: targhe, ottoni, tappeto ──────────────────────────────
-    function plaqueTexture(label, type, w, h) {
-      const c = document.createElement('canvas'); c.width = w; c.height = h;
-      const g = c.getContext('2d');
-      const bg = g.createLinearGradient(0, 0, 0, h);
-      bg.addColorStop(0, '#1a1622'); bg.addColorStop(0.5, '#12101a'); bg.addColorStop(1, '#0c0a10');
-      g.fillStyle = bg; g.fillRect(0, 0, w, h);
-      const vig = g.createRadialGradient(w / 2, h / 2, h * 0.2, w / 2, h / 2, w * 0.7);
-      vig.addColorStop(0, 'rgba(0,0,0,0)'); vig.addColorStop(1, 'rgba(0,0,0,0.45)');
-      g.fillStyle = vig; g.fillRect(0, 0, w, h);
-      const bw = Math.max(5, w * 0.014);
-      g.strokeStyle = '#d4af37'; g.lineWidth = bw;
-      g.strokeRect(bw, bw, w - bw * 2, h - bw * 2);
-      g.strokeStyle = 'rgba(212,175,55,0.4)'; g.lineWidth = 1.5;
-      g.strokeRect(bw * 2.4, bw * 2.4, w - bw * 4.8, h - bw * 4.8);
-      g.fillStyle = '#d4af37';
-      const fd = bw * 2.4, fs = bw * 1.4;
-      [[fd, fd], [w - fd, fd], [fd, h - fd], [w - fd, h - fd]].forEach(([x, y]) => {
-        g.beginPath(); g.moveTo(x, y - fs); g.lineTo(x + fs, y); g.lineTo(x, y + fs); g.lineTo(x - fs, y); g.closePath(); g.fill();
-      });
-      g.textAlign = 'center';
-      const badgeW = w * 0.2, badgeH = h * 0.13, bx = w / 2, by = h * 0.21;
-      g.strokeStyle = 'rgba(212,175,55,0.65)'; g.lineWidth = 1.5;
-      g.strokeRect(bx - badgeW / 2, by - badgeH / 2, badgeW, badgeH);
-      g.fillStyle = '#d4af37'; g.font = '600 ' + Math.round(h * 0.075) + 'px Georgia, serif';
-      g.fillText(type.toUpperCase(), bx, by + h * 0.028);
-      g.fillStyle = '#F2ECDD'; g.font = Math.round(h * 0.15) + 'px Georgia, serif';
-      const words = label.split(' '); let lines = [''];
-      for (const word of words) {
-        if ((lines[lines.length - 1] + ' ' + word).trim().length > 16) lines.push(word);
-        else lines[lines.length - 1] = (lines[lines.length - 1] + ' ' + word).trim();
-      }
-      lines.slice(0, 2).forEach((ln, i) => g.fillText(ln, w / 2, h * (0.5 + i * 0.17)));
-      g.strokeStyle = 'rgba(212,175,55,0.5)'; g.lineWidth = 1;
-      g.beginPath(); g.moveTo(w * 0.32, h * 0.76); g.lineTo(w * 0.68, h * 0.76); g.stroke();
-      g.fillStyle = '#9a8f6e'; g.font = Math.round(h * 0.062) + 'px Georgia, serif';
-      g.fillText('C L I C K   T O   C O L L E C T', w / 2, h * 0.87);
-      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
-    }
-
-    function plateTexture(text, big) {
-      const c = document.createElement('canvas'); c.width = 768; c.height = big ? 168 : 128;
-      const g = c.getContext('2d');
-      const bg = g.createLinearGradient(0, 0, 0, c.height);
-      bg.addColorStop(0, '#33290f'); bg.addColorStop(0.45, '#1e180a'); bg.addColorStop(1, '#141008');
-      g.fillStyle = bg; g.fillRect(0, 0, c.width, c.height);
-      g.strokeStyle = '#d4af37'; g.lineWidth = 5; g.strokeRect(5, 5, c.width - 10, c.height - 10);
-      g.strokeStyle = 'rgba(212,175,55,0.35)'; g.lineWidth = 1.5; g.strokeRect(14, 14, c.width - 28, c.height - 28);
-      g.textAlign = 'center'; g.fillStyle = '#e8cd7a';
-      g.font = '600 ' + (big ? 64 : 46) + 'px Georgia, serif';
-      g.fillText(text, c.width / 2, c.height / 2 + (big ? 22 : 16));
-      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
-    }
-
-    function carpetTexture() {
-      const c = document.createElement('canvas'); c.width = 256; c.height = 1024;
-      const g = c.getContext('2d');
-      g.fillStyle = '#3a0f16'; g.fillRect(0, 0, 256, 1024);
-      // trama del velluto
-      for (let i = 0; i < 2600; i++) {
-        g.fillStyle = 'rgba(' + (30 + Math.random() * 40) + ',8,14,' + (0.12 + Math.random() * 0.2) + ')';
-        g.fillRect(Math.random() * 256, Math.random() * 1024, 2, 2);
-      }
-      // bordi in oro
-      g.fillStyle = '#b8942e'; g.fillRect(10, 0, 5, 1024); g.fillRect(241, 0, 5, 1024);
-      g.fillStyle = 'rgba(212,175,55,0.55)'; g.fillRect(22, 0, 2, 1024); g.fillRect(232, 0, 2, 1024);
-      // rombi centrali
-      g.strokeStyle = 'rgba(212,175,55,0.4)'; g.lineWidth = 2;
-      for (let y = 60; y < 1024; y += 130) {
-        g.beginPath(); g.moveTo(128, y - 32); g.lineTo(158, y); g.lineTo(128, y + 32); g.lineTo(98, y); g.closePath(); g.stroke();
-      }
-      const t = new THREE.CanvasTexture(c);
-      t.encoding = THREE.sRGBEncoding;
-      t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.RepeatWrapping;
-      t.repeat.set(1, 3);
-      return t;
-    }
-
-    // ── Materiali PBR (texture di pietra self-hosted) ─────────────────────────
-    function pbr(base, rx, ry, aniso) {
-      const L = new THREE.TextureLoader();
-      const diff = L.load('tex-' + base + '-diff.jpg');
-      const nor  = L.load('tex-' + base + '-nor_gl.jpg');
-      const rough= L.load('tex-' + base + '-rough.jpg');
-      diff.encoding = THREE.sRGBEncoding;
-      [diff, nor, rough].forEach(t => {
-        t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.RepeatWrapping;
-        t.repeat.set(rx, ry); t.anisotropy = aniso;
-      });
-      return new THREE.MeshStandardMaterial({ map: diff, normalMap: nor, roughnessMap: rough });
-    }
-
-    async function openRoom(tokenId, archive) {
-      overlay.style.display = 'block';
-      tokenEl.textContent = '#' + tokenId;
-      hintEl.textContent = HINT_FREE;
-      yaw = 0; pitch = 0; exhibits = []; hovered = null;
-      vel.x = 0; vel.z = 0; lastFrameT = 0;
-      for (const k in keys) delete keys[k];
-
-      renderer = new THREE.WebGLRenderer({ antialias: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.outputEncoding = THREE.sRGBEncoding;
-      renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.06;
-      overlay.insertBefore(renderer.domElement, overlay.firstChild);
-      const ANISO = renderer.capabilities.getMaxAnisotropy();
-
-      scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x060608);
-      scene.fog = new THREE.FogExp2(0x0a0910, 0.02);
-      camera = new THREE.PerspectiveCamera(72, window.innerWidth / window.innerHeight, 0.1, 60);
-      camera.position.set(0, 1.62, D / 2 - 1.3);
-      camera.rotation.order = 'YXZ';
-
-      // ── La stanza: pietra del castello, oro, velluto ──
-      const wallMatW = pbr('stone_brick_wall_001', W / 2.6, H / 2.6, ANISO);
-      const wallMatD = pbr('stone_brick_wall_001', D / 2.6, H / 2.6, ANISO);
-      const floorMat = pbr('cobblestone_floor_08', W / 2.4, D / 2.4, ANISO);
-      floorMat.roughness = 0.95;
-      const ceilMat  = new THREE.MeshStandardMaterial({ color: 0x0c0b10, roughness: 0.96 });
-      const trimMat  = new THREE.MeshStandardMaterial({ color: 0xd4af37, roughness: 0.32, metalness: 0.85 });
-      const darkTrim = new THREE.MeshStandardMaterial({ color: 0x201a10, roughness: 0.6, metalness: 0.3 });
-
-      const floor = new THREE.Mesh(new THREE.PlaneGeometry(W, D), floorMat);
-      floor.rotation.x = -Math.PI / 2; scene.add(floor);
-      const ceil = new THREE.Mesh(new THREE.PlaneGeometry(W, D), ceilMat);
-      ceil.rotation.x = Math.PI / 2; ceil.position.y = H; scene.add(ceil);
-
-      const mkWall = (wid, mat, x, z, ry) => {
-        const m = new THREE.Mesh(new THREE.PlaneGeometry(wid, H), mat);
-        m.position.set(x, H / 2, z); m.rotation.y = ry; scene.add(m);
-        // battiscopa e cornicione in oro
-        const sk = new THREE.Mesh(new THREE.BoxGeometry(wid, 0.09, 0.05), trimMat);
-        sk.position.set(x, 0.045, z); sk.rotation.y = ry; scene.add(sk);
-        const co = new THREE.Mesh(new THREE.BoxGeometry(wid, 0.07, 0.05), trimMat);
-        co.position.set(x, H - 0.035, z); co.rotation.y = ry; scene.add(co);
-        const mid = new THREE.Mesh(new THREE.BoxGeometry(wid, 0.04, 0.03), darkTrim);
-        mid.position.set(x, 0.98, z); mid.rotation.y = ry; scene.add(mid);
-      };
-      mkWall(W, wallMatW, 0, -D / 2, 0);
-      mkWall(W, wallMatW, 0,  D / 2, Math.PI);
-      mkWall(D, wallMatD, -W / 2, 0,  Math.PI / 2);
-      mkWall(D, wallMatD,  W / 2, 0, -Math.PI / 2);
-
-      // tappeto di velluto verso l'opera principale
-      const carpet = new THREE.Mesh(
-        new THREE.PlaneGeometry(1.9, D - 2.2),
-        new THREE.MeshStandardMaterial({ map: carpetTexture(), roughness: 0.98 })
-      );
-      carpet.rotation.x = -Math.PI / 2;
-      carpet.position.set(0, 0.012, 0);
-      scene.add(carpet);
-
-      // colonne d'angolo
-      const colGeo = new THREE.CylinderGeometry(0.16, 0.2, H, 10);
-      [[-W / 2 + 0.28, -D / 2 + 0.28], [W / 2 - 0.28, -D / 2 + 0.28], [-W / 2 + 0.28, D / 2 - 0.28], [W / 2 - 0.28, D / 2 - 0.28]].forEach(([x, z]) => {
-        const col = new THREE.Mesh(colGeo, darkTrim);
-        col.position.set(x, H / 2, z); scene.add(col);
-        const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.18, 0.12, 10), trimMat);
-        cap.position.set(x, H - 0.06, z); scene.add(cap);
-        const base = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.26, 0.14, 10), trimMat);
-        base.position.set(x, 0.07, z); scene.add(base);
-      });
-
-      // ── Luci: museo notturno, fari caldi ──
-      scene.add(new THREE.AmbientLight(0xfff4e0, 0.22));
-      const centre = new THREE.PointLight(0xd4af37, 0.55, 24, 1.6);
-      centre.position.set(0, H - 0.7, 0); scene.add(centre);
-      const heroSpot = new THREE.SpotLight(0xffe2a8, 1.5, 26, 0.46, 0.5, 1.1);
-      heroSpot.position.set(0, H - 0.25, -D / 2 + 3.6);
-      heroSpot.target.position.set(0, 2.1, -D / 2);
-      scene.add(heroSpot); scene.add(heroSpot.target);
-      const backGlow = new THREE.PointLight(0xfff0d0, 0.3, 14, 1.8);
-      backGlow.position.set(0, 2.6, D / 2 - 2); scene.add(backGlow);
-
-      // ── Le opere: le foto VERE dell'holder appese in cornice ──
-      const files = (archive.files || []);
-      const isImg = f => /\.(png|jpe?g)$/i.test(f.key);
-      const rank = f =>
-        f.key.includes('character-sheet') ? 0 :
-        f.key.includes('image-extra')     ? 1 : 2;
-      const imgs = files.filter(isImg).sort((a, b) => rank(a) - rank(b) || a.key.localeCompare(b.key));
-      const docs = files.filter(f => !isImg(f));
-
-      function hangExhibit(file, x, y, z, ry, maxW, maxH, lit) {
-        const grp = new THREE.Group();
-        grp.position.set(x, y, z); grp.rotation.y = ry;
-        grp.userData.file = file;
-
-        const frame = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 0.09), trimMat);
-        grp.add(frame);
-        const inner = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 0.05), darkTrim);
-        inner.position.z = 0.025; grp.add(inner);
-        const art = new THREE.Mesh(
-          new THREE.PlaneGeometry(1, 1),
-          new THREE.MeshBasicMaterial({ color: 0x14121c })
-        );
-        art.position.z = 0.056; grp.add(art);
-        const setSize = (aw, ah) => {
-          art.scale.set(aw, ah, 1);
-          inner.scale.set(aw + 0.1, ah + 0.1, 1);
-          frame.scale.set(aw + 0.24, ah + 0.24, 1);
-          label.position.y = -ah / 2 - 0.32;
-        };
-        // targhetta d'ottone sotto l'opera
-        const label = new THREE.Mesh(
-          new THREE.PlaneGeometry(1.15, 0.2),
-          new THREE.MeshBasicMaterial({ map: plateTexture(file.label.toUpperCase(), false), transparent: false })
-        );
-        label.position.set(0, -maxH / 2 - 0.32, 0.05);
-        grp.add(label);
-        setSize(maxW * 0.72, maxH * 0.72);
-
-        fetchFileUrl(activeTokenId, file.key).then((u) => {
-          new THREE.TextureLoader().load(u, (tex) => {
-            tex.encoding = THREE.sRGBEncoding;
-            tex.anisotropy = ANISO;
-            const ar = tex.image.width / tex.image.height;
-            let w2 = Math.min(maxW, maxH * ar);
-            let h2 = w2 / ar;
-            if (h2 > maxH) { h2 = maxH; w2 = h2 * ar; }
-            art.material = new THREE.MeshBasicMaterial({ map: tex });
-            setSize(w2, h2);
-          });
-        }).catch(() => {});
-
-        if (lit) {
-          const pl = new THREE.PointLight(0xffe6bb, 0.42, 5.5, 1.7);
-          // la lampada sta davanti all'opera, nel verso della parete
-          pl.position.set(x + Math.sin(ry) * 1.1, y + 1.1, z + Math.cos(ry) * 1.1);
-          scene.add(pl);
-        }
-        scene.add(grp);
-        exhibits.push(grp);
-        return grp;
-      }
-
-      // L'opera principale: LA REFERENCE, davanti a te appena entri
-      if (imgs.length > 0) {
-        hangExhibit(imgs[0], 0, 2.12, -D / 2 + 0.1, 0, 3.4, 2.9, false);
-        // targa della sala sopra l'opera
-        const roomPlate = new THREE.Mesh(
-          new THREE.PlaneGeometry(2.3, 0.42),
-          new THREE.MeshBasicMaterial({ map: plateTexture('CAMERA CAVEAU · No. ' + tokenId, true) })
-        );
-        roomPlate.position.set(0, H - 0.55, -D / 2 + 0.06);
-        scene.add(roomPlate);
-      }
-
-      // Le altre foto: alternate sulle pareti laterali, ognuna con la sua lampada
-      const sideImgs = imgs.slice(1);
-      sideImgs.forEach((f, i) => {
-        const side = i % 2 === 0 ? -1 : 1;               // sinistra, destra, sinistra...
-        const slot = Math.floor(i / 2);
-        const z = -D / 2 + 2.6 + slot * 3.1;
-        hangExhibit(f, side * (W / 2 - 0.1), 1.95, z, side < 0 ? Math.PI / 2 : -Math.PI / 2, 2.3, 2.2, true);
-      });
-
-      // I documenti (licenza, lore): targhe d'onore sulla parete d'ingresso
-      docs.forEach((f, i) => {
-        const n = docs.length;
-        const x = (i - (n - 1) / 2) * 2.6;
-        const tex = plaqueTexture(f.label, f.type, 512, 320);
-        const p = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 0.94), new THREE.MeshBasicMaterial({ map: tex }));
-        p.position.set(x, 1.9, D / 2 - 0.08);
-        p.rotation.y = Math.PI;
-        p.userData.file = f;
-        scene.add(p);
-        exhibits.push(p);
-        const pl = new THREE.PointLight(0xffe6bb, 0.32, 4.5, 1.8);
-        pl.position.set(x, 2.9, D / 2 - 1.1); scene.add(pl);
-      });
-
-      // ── Controlli ──
-      renderer.domElement.addEventListener('click', onCanvasClick);
-      renderer.domElement.addEventListener('pointerdown', onDown);
-      renderer.domElement.addEventListener('pointermove', onMove);
-      renderer.domElement.addEventListener('pointerup', onUp);
-      document.addEventListener('pointerlockchange', onLockChange);
-      document.addEventListener('mousemove', onLockedLook);
-      document.addEventListener('keydown', onKeyDown);
-      document.addEventListener('keyup', onKeyUp);
-      window.addEventListener('resize', onResize);
-      animate(0);
-    }
-
-    const isLocked = () => renderer && document.pointerLockElement === renderer.domElement;
-
-    function onCanvasClick() {
-      if (IS_TOUCH) return;
-      if (!isLocked()) {
-        renderer.domElement.requestPointerLock();
-      } else {
-        const hit = pickCenter();
-        if (hit) collect(hit);
-      }
-    }
-    function onLockChange() {
-      const locked = isLocked();
-      if (crossEl) crossEl.style.display = locked ? 'block' : 'none';
-      hintEl.textContent = locked ? HINT_LOCKED : HINT_FREE;
-    }
-    function onLockedLook(e) {
-      if (!isLocked()) return;
-      yaw   -= e.movementX * 0.0022;
-      pitch -= e.movementY * 0.0022;
-      pitch = Math.max(-1.35, Math.min(1.35, pitch));
-    }
-    function onKeyDown(e) {
-      if (!renderer) return;
-      keys[e.code] = true;
-      if (e.code.startsWith('Arrow')) e.preventDefault();
-    }
-    function onKeyUp(e) { keys[e.code] = false; }
-
-    function onDown(e) { if (isLocked()) return; dragging = true; lastX = downX = e.clientX; lastY = downY = e.clientY; }
-    function onMove(e) {
-      if (isLocked()) return;
-      if (dragging) {
-        yaw   -= (e.clientX - lastX) * 0.005;
-        pitch -= (e.clientY - lastY) * 0.005;
-        pitch = Math.max(-1.35, Math.min(1.35, pitch));
-        lastX = e.clientX; lastY = e.clientY;
-      }
-      const hit = pickAt(e);
-      setHover(hit);
-      renderer.domElement.style.cursor = hit ? 'pointer' : 'grab';
-    }
-    function onUp(e) {
-      if (isLocked()) return;
-      dragging = false;
-      if (Math.abs(e.clientX - downX) < 6 && Math.abs(e.clientY - downY) < 6) {
-        const hit = pickAt(e);
-        if (hit) collect(hit);
-      }
-    }
-
-    function exhibitOf(obj) {
-      let o = obj;
-      while (o) { if (o.userData && o.userData.file) return o; o = o.parent; }
-      return null;
-    }
-    function pickAt(e) {
-      const rect = renderer.domElement.getBoundingClientRect();
-      const v = new THREE.Vector2(
-        ((e.clientX - rect.left) / rect.width) * 2 - 1,
-        -((e.clientY - rect.top) / rect.height) * 2 + 1
-      );
-      const rc = new THREE.Raycaster(); rc.setFromCamera(v, camera);
-      const hits = rc.intersectObjects(exhibits, true);
-      return hits.length ? exhibitOf(hits[0].object) : null;
-    }
-    function pickCenter() {
-      const rc = new THREE.Raycaster();
-      rc.setFromCamera(new THREE.Vector2(0, 0), camera);
-      const hits = rc.intersectObjects(exhibits, true);
-      if (!hits.length || hits[0].distance > 7) return null;
-      return exhibitOf(hits[0].object);
-    }
-    function setHover(hit) {
-      if (hovered && hovered !== hit) { hovered.scale.set(1, 1, 1); hovered = null; }
-      if (hit && hovered !== hit) { hovered = hit; hovered.scale.set(1.04, 1.04, 1.04); }
-      if (isLocked()) {
-        hintEl.textContent = hit
-          ? hit.userData.file.label.toUpperCase() + ' — click per scaricare'
-          : HINT_LOCKED;
-      }
-    }
-    function collect(hit) {
-      hintEl.textContent = 'DOWNLOAD · ' + hit.userData.file.label.toUpperCase() + '…';
-      downloadFile(activeTokenId, hit.userData.file);
-      setTimeout(() => { hintEl.textContent = isLocked() ? HINT_LOCKED : HINT_FREE; }, 2400);
-    }
-
-    function onResize() {
-      if (!renderer) return;
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    }
-
-    function animate(t) {
-      raf = requestAnimationFrame(animate);
-      const dt = Math.min((t - lastFrameT) / 1000 || 0.016, 0.05);
-      lastFrameT = t;
-
-      // camminata: WASD/frecce ruotate secondo lo sguardo, con inerzia
-      const f = (keys['KeyW'] || keys['ArrowUp'] ? 1 : 0) - (keys['KeyS'] || keys['ArrowDown'] ? 1 : 0);
-      const s = (keys['KeyD'] || keys['ArrowRight'] ? 1 : 0) - (keys['KeyA'] || keys['ArrowLeft'] ? 1 : 0);
-      const sp = 2.7;
-      const sin = Math.sin(yaw), cos = Math.cos(yaw);
-      const tx = (-sin * f + cos * s) * sp;
-      const tz = (-cos * f - sin * s) * sp;
-      const k = Math.min(1, dt * 9);
-      vel.x += (tx - vel.x) * k;
-      vel.z += (tz - vel.z) * k;
-      camera.position.x += vel.x * dt;
-      camera.position.z += vel.z * dt;
-      // collisioni con le pareti
-      camera.position.x = Math.max(-BOUND.x, Math.min(BOUND.x, camera.position.x));
-      camera.position.z = Math.max(BOUND.zMin, Math.min(BOUND.zMax, camera.position.z));
-
-      camera.rotation.y = yaw;
-      camera.rotation.x = pitch;
-
-      if (isLocked()) setHover(pickCenter());
-      renderer.render(scene, camera);
-    }
-
-    function closeRoom() {
-      if (!renderer) return;
-      if (document.pointerLockElement) document.exitPointerLock();
-      cancelAnimationFrame(raf); raf = null;
-      renderer.domElement.removeEventListener('click', onCanvasClick);
-      renderer.domElement.removeEventListener('pointerdown', onDown);
-      renderer.domElement.removeEventListener('pointermove', onMove);
-      renderer.domElement.removeEventListener('pointerup', onUp);
-      document.removeEventListener('pointerlockchange', onLockChange);
-      document.removeEventListener('mousemove', onLockedLook);
-      document.removeEventListener('keydown', onKeyDown);
-      document.removeEventListener('keyup', onKeyUp);
-      window.removeEventListener('resize', onResize);
-      renderer.domElement.remove(); renderer.dispose(); renderer = null;
-      scene = null; exhibits = []; hovered = null;
       overlay.style.display = 'none';
     }
   })();
