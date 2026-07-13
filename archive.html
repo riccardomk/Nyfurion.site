@@ -32,86 +32,62 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 48px 16px 80px;
+      justify-content: center;
+      padding: 64px 16px 96px;
       overflow-x: hidden;
     }
 
-    /* ── Il Ponte del Castello (scena ferma + animazione d'ingresso) ── */
-    #castle-bg {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background: url('portal-castle.jpg') center 62% / cover no-repeat;
-      transform-origin: 50% 44%;
-      transition: transform 3s cubic-bezier(0.3, 0.5, 0.15, 1), filter 3s ease;
-    }
-    body.entering #castle-bg { transform: scale(1.35); filter: brightness(1.25) saturate(1.1); }
-    #castle-shade {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    /* ── Sfondo pulito: nessun 3D, nessun portale, caricamento immediato ── */
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background:
-        linear-gradient(rgba(5,5,8,0.72), rgba(5,5,8,0.18) 34%, rgba(5,5,8,0.05) 55%, rgba(5,5,8,0.42)),
-        radial-gradient(ellipse 60% 45% at 50% 46%, rgba(255,205,110,0.10), rgba(0,0,0,0) 70%);
-      animation: doorBreath 5.5s ease-in-out infinite;
+        radial-gradient(ellipse 68% 52% at 50% 26%, rgba(212,175,55,0.11), rgba(0,0,0,0) 58%),
+        radial-gradient(ellipse 120% 85% at 50% 118%, rgba(22,26,46,0.55), rgba(0,0,0,0) 72%),
+        linear-gradient(180deg, #070709 0%, #0a0b12 52%, #060608 100%);
     }
-    @keyframes doorBreath {
-      0%, 100% { opacity: 1; }
-      50%      { opacity: 0.82; }
-    }
-    #castle-mist {
-      position: fixed; left: -20%; right: -20%; bottom: -4%; height: 34%;
-      z-index: 0; pointer-events: none; opacity: 0.5;
-      background: linear-gradient(rgba(0,0,0,0), rgba(190,200,225,0.09) 45%, rgba(160,175,205,0.16));
-      filter: blur(2px);
-      animation: mistDrift 16s ease-in-out infinite alternate;
-    }
-    @keyframes mistDrift {
-      from { transform: translateX(-3%); }
-      to   { transform: translateX(3%); }
-    }
-    #enter-flash {
-      position: fixed; inset: 0; z-index: 5; pointer-events: none; opacity: 0;
-      background: radial-gradient(ellipse 55% 50% at 50% 44%, rgba(255,228,150,0.95), rgba(255,210,120,0.35) 45%, rgba(8,8,9,0) 75%);
-    }
-    body.entering #enter-flash { animation: enterFlash 3s ease-in forwards; }
-    @keyframes enterFlash {
-      0%   { opacity: 0; }
-      55%  { opacity: 0.25; }
-      82%  { opacity: 1; }
-      100% { opacity: 0; }
-    }
-    body.entering #step-connect { opacity: 0; transition: opacity 0.8s; }
-    #main-card { animation: cardIn 0.9s ease 0.2s backwards; }
+    #main-card { animation: cardIn 0.55s ease backwards; }
     @keyframes cardIn {
-      from { opacity: 0; transform: translateY(18px); }
+      from { opacity: 0; transform: translateY(14px); }
       to   { opacity: 1; transform: none; }
     }
-
-    #portal-bg { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+    #step-connect { animation: fadeUp 0.6s ease backwards; }
+    header { animation: fadeUp 0.6s ease backwards; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: none; }
+    }
 
     header, .card, #file-grid, footer, #wallet-badge { position: relative; z-index: 1; }
 
     /* ── Header ── */
-    header { text-align: center; margin-bottom: 0; margin-top: 6px; }
+    header { text-align: center; margin-bottom: 0; }
     header .label {
-      font-size: 0.68rem;
-      letter-spacing: 0.42em;
+      font-size: 0.7rem;
+      letter-spacing: 0.46em;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 14px;
+      margin-bottom: 20px;
     }
     header h1 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.9rem, 4.2vw, 3rem);
+      font-size: clamp(2.4rem, 6vw, 4rem);
       font-weight: 600;
-      letter-spacing: 0.01em;
-      line-height: 1.05;
+      letter-spacing: 0.015em;
+      line-height: 1.04;
       color: #ffffff;
-      text-shadow: 0 0 40px rgba(212,175,55,0.35);
+      text-shadow: 0 0 44px rgba(212,175,55,0.28);
     }
-    header p {
-      margin-top: 16px;
+    header .tagline {
+      margin: 22px auto 0;
       color: var(--muted);
-      font-size: 0.92rem;
-      max-width: 500px;
-      line-height: 1.65;
+      font-size: 0.94rem;
+      max-width: 440px;
+      line-height: 1.7;
+    }
+    /* filetto d'oro decorativo sotto il titolo */
+    header .rule {
+      width: 66px; height: 1px; margin: 26px auto 0;
+      background: linear-gradient(90deg, rgba(212,175,55,0), var(--gold), rgba(212,175,55,0));
     }
 
     /* ── Card generica ── */
@@ -127,7 +103,7 @@
     }
 
     /* ── Step connect ── */
-    #step-connect { text-align: center; margin-top: min(34vh, 340px); }
+    #step-connect { text-align: center; margin-top: 38px; }
     #step-connect p { color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; }
 
     /* ── Scanning state ── */
@@ -412,26 +388,25 @@
     .card.card--denied { border-color: rgba(255,77,109,0.4); background: rgba(255,77,109,0.05); }
 
     @media (prefers-reduced-motion: reduce) {
-      #portal-bg { opacity: 0.5; }
+      #main-card, #step-connect, header { animation: none; }
     }
   </style>
 </head>
 <body>
 
-  <canvas id="portal-bg" aria-hidden="true"></canvas>
-  <div id="enter-flash" aria-hidden="true"></div>
-
   <header>
     <div class="label">The Unique Portal</div>
     <h1>NYFURION<br>HOLDER</h1>
+    <p class="tagline">Your private access to the artwork, lore and commercial license of the fragment you own.</p>
+    <div class="rule"></div>
   </header>
 
   <!-- Wallet badge -->
   <div id="wallet-badge">Connected: <span id="wallet-address"></span></div>
 
-  <!-- Step 1: Connect wallet — fluttua sul ponte, senza card -->
+  <!-- Step 1: Connect wallet -->
   <div id="step-connect" style="position:relative; z-index:1; text-align:center;">
-    <button class="btn btn-primary" id="btn-connect" style="font-size:0.92rem; padding:16px 44px;">Connect Wallet</button>
+    <button class="btn btn-primary" id="btn-connect" style="font-size:0.92rem; padding:16px 44px;">Enter</button>
     <p style="font-size:0.7rem; opacity:0.6; margin-top:1rem; letter-spacing:0.12em;">🔒 OFFICIAL: NYFURION.COM &middot; FREE SIGNATURE &middot; FUNDS UNTOUCHED</p>
   </div>
 
@@ -594,7 +569,7 @@
         const network = await provider.getNetwork();
         if (network.chainId !== 1n) {
           alert('Please switch to Ethereum Mainnet in your wallet.');
-          setButtonLoading(btnConnect, false, 'Connect Wallet');
+          setButtonLoading(btnConnect, false, 'Enter');
           return;
         }
 
@@ -995,7 +970,7 @@
       if (aw2) aw2.style.display = 'none';
       sessionToken = null; wallet = null; signer = null; activeTokenId = null;
       btnConnect.disabled  = false;
-      btnConnect.textContent = 'Connect Wallet';
+      btnConnect.textContent = 'Enter';
     }
 
     // ─── MetaMask account/chain change ────────────────────────────────────────
@@ -1550,11 +1525,10 @@
   <script>
   (function () {
     const card = document.getElementById('main-card');
+    const intro = document.getElementById('step-connect');
     const a0 = authenticateWithWorker;
     authenticateWithWorker = async function () {
-      document.body.classList.add('entering');
-      if (window.__castleEnter) window.__castleEnter();
-      await new Promise((res) => setTimeout(res, 2400));
+      if (intro) intro.style.display = 'none';
       card.style.display = 'block';
       return a0.apply(this, arguments);
     };
@@ -1562,372 +1536,11 @@
     resetToConnect = function () {
       const out = r0.apply(this, arguments);
       card.style.display = 'none';
-      document.body.classList.remove('entering');
-      if (window.__castleReset) window.__castleReset();
+      if (intro) intro.style.display = 'block';
       return out;
     };
   })();
   </script>
-
-  <!-- ═══ IL PONTE DEL PORTALE — scena 3D ═══ -->
-  <script>
-  (function () {
-    const cv = document.getElementById('portal-bg');
-    if (!cv || !window.THREE) return;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.outputEncoding = THREE.sRGBEncoding;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.12;
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    const MAXANISO = renderer.capabilities.getMaxAnisotropy();
-
-    const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x0d0e18, 0.028);
-
-    // ─── Cielo: luna, nebulosa, tre quinte di montagne, orizzonte fuso con la nebbia ───
-    (function sky() {
-      const c = document.createElement('canvas'); c.width = 2048; c.height = 1024;
-      const g = c.getContext('2d');
-      const grad = g.createLinearGradient(0, 0, 0, 1024);
-      grad.addColorStop(0, '#05060c'); grad.addColorStop(0.45, '#0b0d1c');
-      grad.addColorStop(0.72, '#1a1e36'); grad.addColorStop(0.9, '#11121f'); grad.addColorStop(1, '#0d0e18');
-      g.fillStyle = grad; g.fillRect(0, 0, 2048, 1024);
-
-      // nebulosa fredda a destra
-      let neb = g.createRadialGradient(1400, 420, 30, 1400, 420, 500);
-      neb.addColorStop(0, 'rgba(110,140,220,0.13)');
-      neb.addColorStop(0.5, 'rgba(90,110,190,0.05)');
-      neb.addColorStop(1, 'rgba(0,0,0,0)');
-      g.fillStyle = neb; g.fillRect(0, 0, 2048, 1024);
-
-      // stelle
-      for (let i = 0; i < 420; i++) {
-        g.fillStyle = 'rgba(255,255,255,' + (0.12 + Math.random() * 0.6) + ')';
-        const s = Math.random() < 0.94 ? 1 : 2;
-        g.fillRect(Math.random() * 2048, Math.random() * 640, s, s);
-      }
-
-      // luna con alone
-      const mx = 620, my = 300;
-      let halo = g.createRadialGradient(mx, my, 20, mx, my, 260);
-      halo.addColorStop(0, 'rgba(220,230,255,0.30)');
-      halo.addColorStop(0.4, 'rgba(190,205,245,0.10)');
-      halo.addColorStop(1, 'rgba(0,0,0,0)');
-      g.fillStyle = halo; g.fillRect(0, 0, 2048, 1024);
-      g.fillStyle = '#e8edfa';
-      g.beginPath(); g.arc(mx, my, 46, 0, Math.PI * 2); g.fill();
-      g.fillStyle = 'rgba(190,200,225,0.5)';
-      g.beginPath(); g.arc(mx - 14, my - 8, 9, 0, Math.PI * 2); g.fill();
-      g.beginPath(); g.arc(mx + 12, my + 14, 6, 0, Math.PI * 2); g.fill();
-      g.beginPath(); g.arc(mx + 6, my - 18, 5, 0, Math.PI * 2); g.fill();
-
-      // tre quinte di montagne (dal chiaro allo scuro)
-      function ridge(baseY, amp, color) {
-        g.fillStyle = color;
-        g.beginPath(); g.moveTo(0, 1024);
-        let y = baseY;
-        for (let x = 0; x <= 2048; x += 34) {
-          y = Math.max(baseY - amp, Math.min(baseY + amp, y + (Math.random() - 0.5) * amp * 0.9));
-          g.lineTo(x, y);
-        }
-        g.lineTo(2048, 1024); g.closePath(); g.fill();
-      }
-      ridge(700, 90, '#181b2e');
-      ridge(780, 70, '#121424');
-      ridge(850, 55, '#0d0e18');
-
-      // banda d'orizzonte fusa con il colore della nebbia
-      const hz = g.createLinearGradient(0, 820, 0, 1024);
-      hz.addColorStop(0, 'rgba(13,14,24,0)');
-      hz.addColorStop(1, 'rgba(13,14,24,1)');
-      g.fillStyle = hz; g.fillRect(0, 820, 2048, 204);
-
-      const tex = new THREE.CanvasTexture(c); tex.encoding = THREE.sRGBEncoding;
-      const dome = new THREE.Mesh(
-        new THREE.SphereGeometry(100, 40, 24, 0, Math.PI * 2, 0, Math.PI * 0.64),
-        new THREE.MeshBasicMaterial({ map: tex, side: THREE.BackSide, fog: false })
-      );
-      dome.position.y = -10;
-      scene.add(dome);
-    })();
-
-    const camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 0.1, 260);
-    const CAM0 = new THREE.Vector3(0, 1.9, 6.2);
-    camera.position.copy(CAM0);
-    const LOOK = new THREE.Vector3(0, 1.6, -24);
-    camera.lookAt(LOOK);
-
-    (function envmap() {
-      const es = new THREE.Scene();
-      es.background = new THREE.Color(0x181724);
-      const a = new THREE.Mesh(new THREE.PlaneGeometry(16, 9), new THREE.MeshBasicMaterial({ color: 0xffc98a }));
-      a.position.set(0, 3, -10); es.add(a);
-      const b = new THREE.Mesh(new THREE.PlaneGeometry(14, 9), new THREE.MeshBasicMaterial({ color: 0x8fa4dc }));
-      b.position.set(-6, 8, 8); b.rotation.y = Math.PI * 0.8; es.add(b);
-      const pmrem = new THREE.PMREMGenerator(renderer);
-      scene.environment = pmrem.fromScene(es, 0.05).texture;
-      pmrem.dispose();
-    })();
-
-    // ─── Luci con OMBRE VERE ───
-    scene.add(new THREE.HemisphereLight(0x39405e, 0x0a0a10, 0.35));
-    const moon = new THREE.DirectionalLight(0xbcd0f5, 0.95);
-    moon.position.set(-14, 20, 6);
-    moon.castShadow = true;
-    moon.shadow.mapSize.set(2048, 2048);
-    moon.shadow.camera.left = -22; moon.shadow.camera.right = 22;
-    moon.shadow.camera.top = 24; moon.shadow.camera.bottom = -24;
-    moon.shadow.camera.near = 1; moon.shadow.camera.far = 70;
-    moon.shadow.bias = -0.0004;
-    scene.add(moon);
-    const warm = new THREE.PointLight(0xffb066, 0.7, 13);
-    warm.position.set(0, 2.8, -2); scene.add(warm);
-    const endLight = new THREE.PointLight(0xffc46a, 1.0, 26);
-    endLight.position.set(0, 2.4, -22); scene.add(endLight);
-
-    // ─── Texture PBR ───
-    const TL = new THREE.TextureLoader();
-    function maps(name, rx, ry, withDisp) {
-      const out = {};
-      const diff = TL.load('tex-' + name + '-diff.jpg');
-      const nor  = TL.load('tex-' + name + '-nor_gl.jpg');
-      const rgh  = TL.load('tex-' + name + '-rough.jpg');
-      const all = [diff, nor, rgh];
-      if (withDisp) { out.displacementMap = TL.load('tex-' + name + '-disp.png'); all.push(out.displacementMap); }
-      for (const t of all) {
-        t.wrapS = t.wrapT = THREE.RepeatWrapping;
-        t.repeat.set(rx, ry);
-        t.anisotropy = MAXANISO;
-      }
-      diff.encoding = THREE.sRGBEncoding;
-      out.map = diff; out.normalMap = nor; out.roughnessMap = rgh;
-      return out;
-    }
-
-    // ─── Landscape con displacement ───
-    (function terrain() {
-      const m = maps('aerial_rocks_02', 7, 7, true);
-      const geo = new THREE.PlaneGeometry(200, 200, 150, 150);
-      const pa = geo.attributes.position;
-      for (let i = 0; i < pa.count; i++) {
-        const x = pa.getX(i), y = pa.getY(i);
-        const r = Math.sqrt(x * x + y * y);
-        const hill = Math.max(0, (r - 26) / 46);
-        pa.setZ(i, pa.getZ(i) + hill * hill * 30);
-      }
-      geo.computeVertexNormals();
-      const mat = new THREE.MeshStandardMaterial(Object.assign({
-        roughness: 1.0, metalness: 0.0, envMapIntensity: 0.22,
-        displacementScale: 7.5, displacementBias: -1.2,
-        normalScale: new THREE.Vector2(1.5, 1.5)
-      }, m));
-      const t = new THREE.Mesh(geo, mat);
-      t.rotation.x = -Math.PI / 2;
-      t.position.y = -7.5;
-      t.receiveShadow = true;
-      scene.add(t);
-    })();
-
-    const floorMat = new THREE.MeshStandardMaterial(Object.assign({
-      roughness: 1.0, metalness: 0.02, envMapIntensity: 0.35,
-      normalScale: new THREE.Vector2(1.35, 1.35)
-    }, maps('cobblestone_floor_08', 2.2, 12, false)));
-    const wallMat = new THREE.MeshStandardMaterial(Object.assign({
-      roughness: 1.0, metalness: 0.0, envMapIntensity: 0.3,
-      normalScale: new THREE.Vector2(1.15, 1.15)
-    }, maps('stone_brick_wall_001', 10, 0.6, false)));
-    const pillarMat = new THREE.MeshStandardMaterial(Object.assign({
-      roughness: 1.0, metalness: 0.0, envMapIntensity: 0.3,
-      normalScale: new THREE.Vector2(1.15, 1.15)
-    }, maps('stone_brick_wall_001', 0.5, 1.4, false)));
-    const goldM = new THREE.MeshStandardMaterial({
-      color: 0xc9a437, roughness: 0.3, metalness: 1.0,
-      emissive: 0x4a3a0e, emissiveIntensity: 0.08, envMapIntensity: 1.35
-    });
-
-    // ─── Il ponte ───
-    const L = 30;
-    const deckTop = new THREE.Mesh(new THREE.PlaneGeometry(4.6, L), floorMat);
-    deckTop.rotation.x = -Math.PI / 2;
-    deckTop.position.set(0, 0, -7);
-    deckTop.receiveShadow = true;
-    scene.add(deckTop);
-
-    for (const side of [-1, 1]) {
-      const skirt = new THREE.Mesh(new THREE.PlaneGeometry(L, 2.4), wallMat);
-      skirt.position.set(2.3 * side, -1.2, -7);
-      skirt.rotation.y = side < 0 ? -Math.PI / 2 : Math.PI / 2;
-      scene.add(skirt);
-    }
-
-    // archi di sostegno — SOTTO il pavimento, quote corrette
-    for (let i = 0; i < 3; i++) {
-      const z = -1 - i * 9;
-      const arch = new THREE.Mesh(new THREE.CylinderGeometry(2.1, 2.1, 4.4, 22, 1, true, 0, Math.PI), wallMat);
-      arch.rotation.z = Math.PI / 2;
-      arch.rotation.y = Math.PI / 2;
-      arch.position.set(0, -3.6, z);
-      scene.add(arch);
-      for (const side of [-1, 1]) {
-        const pier = new THREE.Mesh(new THREE.BoxGeometry(1.1, 6.4, 1.4), wallMat);
-        pier.position.set(2.0 * side, -4.9, z);
-        pier.castShadow = true;
-        scene.add(pier);
-      }
-    }
-
-    for (const side of [-1, 1]) {
-      const wall = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.78, L), wallMat);
-      wall.position.set(2.35 * side, 0.39, -7);
-      wall.castShadow = true; wall.receiveShadow = true;
-      scene.add(wall);
-      const cap = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.07, L), goldM);
-      cap.position.set(2.35 * side, 0.82, -7);
-      cap.castShadow = true;
-      scene.add(cap);
-      for (let i = 0; i < 7; i++) {
-        const emb = new THREE.Mesh(new THREE.PlaneGeometry(0.3, 0.3), goldM);
-        emb.position.set((2.35 - 0.16) * side, 0.38, 3.5 - i * 3.6);
-        emb.rotation.y = side < 0 ? Math.PI / 2 : -Math.PI / 2;
-        emb.rotation.z = Math.PI / 4;
-        scene.add(emb);
-      }
-    }
-
-    // ─── Lanterne: corpo scuro, vetro caldo, NIENTE blob ───
-    for (let i = 0; i < 5; i++) {
-      for (const side of [-1, 1]) {
-        const z = 3.4 - i * 4.9;
-        const pil = new THREE.Mesh(new THREE.BoxGeometry(0.44, 1.55, 0.44), pillarMat);
-        pil.position.set(2.35 * side, 1.05, z);
-        pil.castShadow = true;
-        scene.add(pil);
-        const cap = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.1, 0.58), goldM);
-        cap.position.set(2.35 * side, 1.88, z);
-        cap.castShadow = true;
-        scene.add(cap);
-        const lampBody = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.34, 0.24),
-          new THREE.MeshStandardMaterial({ color: 0x1d1a16, roughness: 0.5, metalness: 0.6 }));
-        lampBody.position.set(2.35 * side, 2.1, z); scene.add(lampBody);
-        const lampTop = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.14, 4), goldM);
-        lampTop.position.set(2.35 * side, 2.34, z); scene.add(lampTop);
-        const lampCore = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.2, 0.15),
-          new THREE.MeshBasicMaterial({ color: 0xffdca0 }));
-        lampCore.position.set(2.35 * side, 2.1, z); scene.add(lampCore);
-      }
-    }
-    const t1 = new THREE.PointLight(0xffa050, 0.65, 9);
-    t1.position.set(2.35, 2.1, 3.4); scene.add(t1);
-    const t2 = new THREE.PointLight(0xffa050, 0.65, 9);
-    t2.position.set(-2.35, 2.1, -1.5); scene.add(t2);
-    const t3 = new THREE.PointLight(0xffa050, 0.5, 9);
-    t3.position.set(2.35, 2.1, -6.4); scene.add(t3);
-
-    // ─── IL PORTALE — anello d'oro tra colonne di pietra, energia che vortica lenta ───
-    let swirl;
-    (function portalGate() {
-      const PZ = -21.3;
-      for (const side of [-1, 1]) {
-        const col = new THREE.Mesh(new THREE.BoxGeometry(0.62, 4.6, 0.62), pillarMat);
-        col.position.set(1.95 * side, 2.0, PZ);
-        col.castShadow = true;
-        scene.add(col);
-        const colCap = new THREE.Mesh(new THREE.ConeGeometry(0.5, 0.55, 4), goldM);
-        colCap.position.set(1.95 * side, 4.55, PZ);
-        scene.add(colCap);
-      }
-      const ring = new THREE.Mesh(
-        new THREE.TorusGeometry(1.78, 0.13, 20, 72),
-        new THREE.MeshStandardMaterial({
-          color: 0xd4af37, roughness: 0.22, metalness: 1.0,
-          emissive: 0xa8862a, emissiveIntensity: 0.5, envMapIntensity: 1.6
-        })
-      );
-      ring.position.set(0, 2.25, PZ);
-      scene.add(ring);
-
-      // energia interna: vortice che ruota LENTO (la magia del portale)
-      const sc = document.createElement('canvas'); sc.width = sc.height = 512;
-      const sg = sc.getContext('2d');
-      sg.translate(256, 256);
-      for (let a = 0; a < 720; a += 4) {
-        const rad = (a / 720) * 240;
-        const ang = (a * Math.PI) / 180 * 1.8;
-        const alpha = 0.35 * (1 - rad / 240);
-        sg.fillStyle = a % 8 < 4 ? 'rgba(150,215,255,' + alpha + ')' : 'rgba(255,215,150,' + (alpha * 0.6) + ')';
-        sg.beginPath();
-        sg.arc(Math.cos(ang) * rad, Math.sin(ang) * rad, 9 * (1 - rad / 300), 0, Math.PI * 2);
-        sg.fill();
-      }
-      const core = sg.createRadialGradient(0, 0, 2, 0, 0, 90);
-      core.addColorStop(0, 'rgba(230,245,255,0.75)');
-      core.addColorStop(1, 'rgba(150,215,255,0)');
-      sg.fillStyle = core;
-      sg.beginPath(); sg.arc(0, 0, 90, 0, Math.PI * 2); sg.fill();
-      const swirlTex = new THREE.CanvasTexture(sc);
-      swirl = new THREE.Mesh(
-        new THREE.CircleGeometry(1.66, 48),
-        new THREE.MeshBasicMaterial({ map: swirlTex, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide })
-      );
-      swirl.position.set(0, 2.25, PZ + 0.02);
-      scene.add(swirl);
-
-      const gr2 = new THREE.Mesh(
-        new THREE.TorusGeometry(1.95, 0.03, 10, 72),
-        new THREE.MeshBasicMaterial({ color: 0x8fd8ff, transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending })
-      );
-      gr2.position.set(0, 2.25, PZ - 0.05);
-      scene.add(gr2);
-
-      endLight.position.set(0, 2.25, PZ + 1.2);
-      endLight.color.setHex(0x9fd0ff);
-      endLight.intensity = 1.3;
-    })();
-
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    // ─── Unica animazione: l'ingresso col wallet ───
-    let entering = false, tEnter = 0, t = 0;
-    window.__castleEnter = function () { entering = true; tEnter = t; };
-    window.__castleReset = function () {
-      entering = false;
-      camera.position.copy(CAM0);
-      camera.lookAt(LOOK);
-      if (swirl) swirl.material.opacity = 0.5;
-    };
-
-    function animate() {
-      t += 1;
-      if (swirl) swirl.rotation.z -= 0.006;
-      if (entering) {
-        const p = Math.min(1, (t - tEnter) / 160);
-        const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
-        camera.position.z = CAM0.z - e * 30.5;
-        camera.position.y = CAM0.y + e * 0.4;
-        camera.lookAt(0, 2.1, -40);
-        if (swirl) swirl.material.opacity = 0.5 + e * 0.5;
-      }
-      renderer.render(scene, camera);
-      requestAnimationFrame(animate);
-    }
-    if (reduced) {
-      renderer.render(scene, camera);
-      window.__castleEnter = function () {};
-      window.__castleReset = function () {};
-      setTimeout(() => renderer.render(scene, camera), 1500);
-    } else animate();
-  })();
-  </script>
-
 
 </body>
 </html>
