@@ -120,14 +120,21 @@
 
     /* ── Card generica ── */
     .card {
-      background: var(--surface);
+      position: relative;
+      background: linear-gradient(180deg, rgba(16,14,20,0.82), rgba(8,8,11,0.88));
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 30px 34px;
+      border-radius: 16px;
+      padding: 32px 34px;
       width: 100%;
       max-width: 560px;
-      backdrop-filter: blur(14px);
-      box-shadow: 0 0 60px rgba(212,175,55,0.10), 0 20px 60px rgba(0,0,0,0.6);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.4), 0 0 70px rgba(212,175,55,0.12), 0 30px 70px rgba(0,0,0,0.65);
+    }
+    /* filo di luce ciano→oro sul bordo superiore della card */
+    .card::before {
+      content: ''; position: absolute; top: -1px; left: 16%; right: 16%; height: 2px;
+      background: linear-gradient(90deg, rgba(0,229,255,0), var(--energy), var(--gold), rgba(212,175,55,0));
+      border-radius: 2px; box-shadow: 0 0 12px rgba(0,229,255,0.4);
     }
 
     /* ── Step connect ── */
@@ -193,7 +200,7 @@
       border-top: 1px solid rgba(212,175,55,0.18);
     }
     .token-card .tc-num {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 1.1rem;
       font-weight: 600;
       color: var(--gold);
@@ -204,8 +211,11 @@
     /* ── Step files ── */
     #step-files { display: none; }
     #step-files-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.4rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
       color: #fff;
       margin-bottom: 14px;
     }
@@ -244,24 +254,34 @@
       text-align: center;
     }
     #assets-welcome .aw-eyebrow {
-      font-size: 0.64rem;
-      letter-spacing: 0.42em;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.4em;
       text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 10px;
+      color: var(--energy);
+      margin-bottom: 12px;
+      text-shadow: 0 0 16px rgba(0,229,255,0.35);
     }
     #assets-welcome h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.6rem, 3.4vw, 2.3rem);
-      font-weight: 600;
-      color: #fff;
-      text-shadow: 0 0 30px rgba(212,175,55,0.3);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #f5f5f7;
+    }
+    #assets-welcome h2 b { color: var(--gold); font-weight: 500; }
+    #assets-welcome .aw-rule {
+      width: 70px; height: 2px; margin: 16px auto 0; border-radius: 2px;
+      background: linear-gradient(90deg, rgba(0,229,255,0), var(--energy), var(--gold), rgba(212,175,55,0));
     }
     #assets-welcome p {
-      margin-top: 8px;
-      color: var(--muted);
+      margin-top: 14px;
+      color: #a9a9b0;
       font-size: 0.85rem;
-      letter-spacing: 0.06em;
+      font-weight: 300;
+      letter-spacing: 0.05em;
     }
     #file-grid {
       display: none;
@@ -315,7 +335,7 @@
         linear-gradient(165deg, #191521, #0c0a10);
     }
     .fc-doc .fcd-type {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 2.1rem; font-weight: 600;
       color: var(--gold); letter-spacing: 0.12em;
     }
@@ -352,7 +372,7 @@
       font-weight: 700;
       box-shadow: 0 0 26px rgba(212,175,55,0.35);
     }
-    .btn-primary:hover { box-shadow: 0 0 44px rgba(212,175,55,0.55); transform: translateY(-1px); }
+    .btn-primary:hover { box-shadow: 0 0 44px rgba(212,175,55,0.55), 0 0 22px rgba(0,229,255,0.3); transform: translateY(-1px); }
     .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
     .btn-outline { background: transparent; color: var(--ivory); }
@@ -400,7 +420,7 @@
     #denied-block { display: none; text-align: center; padding: 8px 0; }
     #denied-block .denied-icon { font-size: 2.8rem; margin-bottom: 16px; }
     #denied-block .denied-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 1.5rem;
       font-weight: 600;
       color: var(--error);
@@ -494,7 +514,8 @@
   <!-- File grid (mostrata dopo accesso confermato) -->
   <div id="assets-welcome">
     <div class="aw-eyebrow">Holder Assets · Verified On-Chain</div>
-    <h2>Benvenuto, Detentore — il viaggio inizia</h2>
+    <h2>Welcome, <b>Holder</b> — the journey begins</h2>
+    <div class="aw-rule"></div>
     <p>These assets belong to you alone. Click any piece to collect it.</p>
   </div>
   <div id="file-grid"></div>
@@ -1134,7 +1155,20 @@
       g.fillText('NYFURION', 192, 340); g.fillText('COLLECTOR CARD', 192, 372);
       g.fillStyle = '#8d8576'; g.font = '18px Georgia, serif';
       g.fillText('IN ARRIVO · COMING SOON', 192, 470);
-      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.flipY = false; return t;
+      // niente flipY=false: è applicata a un box THREE, non a UV glTF → dritta
+      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
+    }
+
+    // alone luminoso dietro la card
+    function haloTexture() {
+      const c = document.createElement('canvas'); c.width = 256; c.height = 256;
+      const g = c.getContext('2d');
+      const r = g.createRadialGradient(128, 128, 8, 128, 128, 128);
+      r.addColorStop(0, 'rgba(255,224,150,0.55)');
+      r.addColorStop(0.35, 'rgba(255,205,110,0.20)');
+      r.addColorStop(1, 'rgba(255,205,110,0)');
+      g.fillStyle = r; g.fillRect(0, 0, 256, 256);
+      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
     }
 
     function tvTexture() {
@@ -1241,7 +1275,7 @@
       } catch (e) { /* senza envmap la scena vive lo stesso */ }
 
       // ── Luci soffuse e di stile (museo notturno, morbido) ──
-      scene.add(new THREE.HemisphereLight(0x3a4664, 0x161009, 0.9));
+      scene.add(new THREE.HemisphereLight(0x3a4664, 0x161009, 0.62));
       const moon = new THREE.DirectionalLight(0xaebfe6, 0.32);
       moon.position.set(30, 42, -16); scene.add(moon);
       const fill = new THREE.DirectionalLight(0xfff2dc, 0.28);   // riempimento morbido dall'alto
@@ -1310,9 +1344,13 @@
           else if (n.name.startsWith('Plaque_')) { plaqueSlots.push(n); }
           else if (n.name === 'RoomPlate') { roomPlate = n; }
           else if (MATS[matName]) { n.material = MATS[matName]; }
+          // attraversabili: piante, fiamme, acqua, vetrate + telai/mullion delle aperture,
+          // conca piscina (così cammini fino al bordo), gole di luce, opere
           const ghost = n.name.startsWith('Plant_') || n.name.startsWith('Flame_')
-            || n.name === 'Pool_Water' || matName === 'NYFP_Glass'
-            || matName === 'NYFP_Cove' || n.name.startsWith('Exhibit_')
+            || n.name === 'Pool_Water' || n.name === 'Pool_Shell'
+            || matName === 'NYFP_Glass' || matName === 'NYFP_Cove'
+            || n.name.startsWith('Mullion') || n.name.includes('Frame')
+            || n.name.startsWith('Exhibit_')
             || n.name.startsWith('Plaque_') || n.name === 'RoomPlate';
           if (!ghost) colliders.push(n);
         });
@@ -1327,8 +1365,8 @@
           const na = mesh.geometry.getAttribute('normal');
           if (na) nrm.set(na.getX(0), na.getY(0), na.getZ(0));
           nrm.transformDirection(mesh.matrixWorld).normalize();
-          const sp = new THREE.SpotLight(0xffe2a8, 1.0, 9, 0.5, 0.55, 1.2);
-          sp.position.copy(pos).addScaledVector(nrm, 1.6); sp.position.y += 1.3;
+          const sp = new THREE.SpotLight(0xfff0d8, 1.9, 10, 0.55, 0.6, 1.3);
+          sp.position.copy(pos).addScaledVector(nrm, 1.7); sp.position.y += 1.4;
           sp.target.position.copy(pos);
           scene.add(sp); scene.add(sp.target);
         };
@@ -1380,26 +1418,52 @@
           exhibitSlots.forEach((p, i) => dressPanel(p, ordered[i]));
         }
 
-        // ── Vetrina della Card al centro del museo (pronta per la tua card) ──
+        // ── LA VETRINA DELLA CARD — cuore della villa, al centro del museo ──
         (function cardShowcase() {
           const cx = 4.0, cz = 0, fy = 0.02;
-          const ped = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.52, 0.85, 28), MATS.NYFP_StoneDark);
-          ped.position.set(cx, fy + 0.42, cz); scene.add(ped); colliders.push(ped);
-          const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.47, 0.4, 0.06, 28), gold);
-          cap.position.set(cx, fy + 0.88, cz); scene.add(cap);
-          const caseH = 0.92;
+          // basamento a due gradoni con anello d'oro luminoso
+          const base1 = new THREE.Mesh(new THREE.CylinderGeometry(0.95, 1.1, 0.22, 40), MATS.NYFP_StoneDark);
+          base1.position.set(cx, fy + 0.11, cz); scene.add(base1); colliders.push(base1);
+          const base2 = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.82, 0.9, 36), MATS.NYFP_StoneDark);
+          base2.position.set(cx, fy + 0.6, cz); scene.add(base2); colliders.push(base2);
+          const ring = new THREE.Mesh(new THREE.TorusGeometry(0.78, 0.03, 12, 48),
+            new THREE.MeshBasicMaterial({ color: 0xffe6a8 }));
+          ring.rotation.x = Math.PI / 2; ring.position.set(cx, fy + 0.24, cz); scene.add(ring);
+          const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.78, 0.7, 0.08, 36), gold);
+          cap.position.set(cx, fy + 1.09, cz); scene.add(cap);
+
+          // teca di vetro alta
+          const caseH = 1.7, caseR = 0.62;
           const glassCase = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.35, 0.35, caseH, 26, 1, true), MATS.NYFP_Glass);
-          glassCase.position.set(cx, fy + 0.88 + caseH / 2, cz); scene.add(glassCase);
-          const capTop = new THREE.Mesh(new THREE.CylinderGeometry(0.41, 0.36, 0.05, 26), gold);
-          capTop.position.set(cx, fy + 0.88 + caseH, cz); scene.add(capTop);
-          showcaseCard = new THREE.Mesh(
-            new THREE.BoxGeometry(0.34, 0.52, 0.016),
-            new THREE.MeshBasicMaterial({ map: cardPlaceholderTexture() }));
-          showcaseCard.position.set(cx, fy + 0.88 + caseH * 0.55, cz); scene.add(showcaseCard);
-          const cs = new THREE.SpotLight(0xffe9c8, 1.5, 6.5, 0.7, 0.5, 1.2);
-          cs.position.set(cx, fy + 3.4, cz); cs.target.position.set(cx, fy + 1.3, cz);
-          scene.add(cs); scene.add(cs.target);
+            new THREE.CylinderGeometry(caseR, caseR, caseH, 40, 1, true), MATS.NYFP_Glass);
+          glassCase.position.set(cx, fy + 1.13 + caseH / 2, cz); scene.add(glassCase);
+          const capTop = new THREE.Mesh(new THREE.CylinderGeometry(0.7, caseR, 0.12, 36), gold);
+          capTop.position.set(cx, fy + 1.13 + caseH, cz); scene.add(capTop);
+          const finial = new THREE.Mesh(new THREE.SphereGeometry(0.09, 18, 14), gold);
+          finial.position.set(cx, fy + 1.13 + caseH + 0.12, cz); scene.add(finial);
+
+          // LA CARD — grande, dritta, che ruota
+          const cardY = fy + 1.13 + caseH * 0.52;
+          const cardMat = new THREE.MeshBasicMaterial({ map: cardPlaceholderTexture() });
+          showcaseCard = new THREE.Mesh(new THREE.BoxGeometry(0.72, 1.08, 0.03), [
+            gold, gold, gold, gold, cardMat, cardMat,   // bordi oro, facce = card
+          ]);
+          showcaseCard.position.set(cx, cardY, cz); scene.add(showcaseCard);
+
+          // alone dorato dietro la card (glow)
+          const halo = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 2.4),
+            new THREE.MeshBasicMaterial({ map: haloTexture(), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+          halo.position.set(cx, cardY, cz); scene.add(halo);
+          showcaseCard.userData.halo = halo;
+
+          // luci drammatiche sul cuore
+          const key = new THREE.SpotLight(0xffe6c0, 3.0, 8, 0.6, 0.45, 1.2);
+          key.position.set(cx, fy + 4.2, cz); key.target.position.set(cx, cardY, cz);
+          scene.add(key); scene.add(key.target);
+          const glowPt = new THREE.PointLight(0xffcf7a, 1.4, 4, 2);
+          glowPt.position.set(cx, cardY, cz); scene.add(glowPt);       // la card irradia luce
+          const rimPt = new THREE.PointLight(0x46dcff, 0.6, 3.5, 2);
+          rimPt.position.set(cx, fy + 0.3, cz); scene.add(rimPt);      // anello ciano dal basso
         })();
 
         // licenza e lore sulle targhe d'onore
@@ -1414,13 +1478,7 @@
         // targa della sala col numero del pezzo
         if (roomPlate) roomPlate.material = new THREE.MeshBasicMaterial({ map: plateTexture('VILLA PRIME · No. ' + tokenId) });
 
-        // barriere invisibili attorno alla piscina
-        const invis = new THREE.MeshBasicMaterial({ visible: false });
-        [[-2, -7.45, 9.2, 0.3], [-2, -11.4, 9.2, 0.3], [-6.5, -9.4, 0.3, 4.4], [2.5, -9.4, 0.3, 4.4]].forEach(([x, z, sx, sz]) => {
-          const b = new THREE.Mesh(new THREE.BoxGeometry(sx, 2.4, sz), invis);
-          b.position.set(x, 1.2, z);
-          scene.add(b); colliders.push(b);
-        });
+        // (nessuna barriera: la terrazza e il bordo piscina sono liberamente calpestabili)
 
         scene.add(villa);
         hintEl.textContent = HINT_FREE;
@@ -1593,7 +1651,10 @@
         if (hits.length) feet.y += (hits[0].point.y - feet.y) * Math.min(1, dt * 12);
       }
 
-      if (showcaseCard) showcaseCard.rotation.y += dt * 0.5;   // la card gira in vetrina
+      if (showcaseCard) {
+        showcaseCard.rotation.y += dt * 0.5;                   // la card gira in vetrina
+        if (showcaseCard.userData.halo) showcaseCard.userData.halo.quaternion.copy(camera.quaternion);
+      }
 
       // leggerissima oscillazione della camminata (niente rimbalzo)
       const speed = Math.hypot(vel.x, vel.z);
