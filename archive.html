@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nyfurion Holder Archive</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -14,7 +14,8 @@
       --gold:      #d4af37;
       --gold-deep: #a8862a;
       --gold-dim:  rgba(212,175,55,0.14);
-      --energy:    #8fd8ff;
+      --energy:    #00E5FF;
+      --red:       #E30B17;
       --surface:   rgba(10,9,12,0.62);
       --border:    rgba(212,175,55,0.28);
       --text:      #ECE6D8;
@@ -25,9 +26,14 @@
     }
 
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Space Grotesk', sans-serif;
+      background-color: var(--bg);
+      background-image: linear-gradient(rgba(8,8,9,0.82), rgba(8,8,9,0.9)), url('bg-main.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      color: #F2F2F2;
+      font-family: 'Inter', sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -36,58 +42,79 @@
       padding: 64px 16px 96px;
       overflow-x: hidden;
     }
+    ::selection { background: var(--energy); color: #06121a; }
 
-    /* ── Sfondo pulito: nessun 3D, nessun portale, caricamento immediato ── */
+    /* ── Grana filmica come sul sito ── */
     body::before {
       content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background:
-        radial-gradient(ellipse 68% 52% at 50% 26%, rgba(212,175,55,0.11), rgba(0,0,0,0) 58%),
-        radial-gradient(ellipse 120% 85% at 50% 118%, rgba(22,26,46,0.55), rgba(0,0,0,0) 72%),
-        linear-gradient(180deg, #070709 0%, #0a0b12 52%, #060608 100%);
+      opacity: 0.05; mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
+    /* ── Livello interattivo: particelle/braci + parallasse ── */
+    #hero-fx {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    }
+    /* ── Bagliore che segue il cursore ── */
+    #cursor-glow {
+      position: fixed; width: 460px; height: 460px; left: 0; top: 0; z-index: 0;
+      margin: -230px 0 0 -230px; pointer-events: none; opacity: 0;
+      background: radial-gradient(circle, rgba(0,229,255,0.10), rgba(0,229,255,0.04) 38%, rgba(0,0,0,0) 70%);
+      transition: opacity 0.6s ease;
+    }
+    body.has-cursor #cursor-glow { opacity: 1; }
+
     #main-card { animation: cardIn 0.55s ease backwards; }
     @keyframes cardIn {
       from { opacity: 0; transform: translateY(14px); }
       to   { opacity: 1; transform: none; }
     }
-    #step-connect { animation: fadeUp 0.6s ease backwards; }
-    header { animation: fadeUp 0.6s ease backwards; }
+    #step-connect { animation: fadeUp 0.7s ease 0.05s backwards; }
+    header { animation: fadeUp 0.7s ease backwards; }
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
+      from { opacity: 0; transform: translateY(14px); }
       to   { opacity: 1; transform: none; }
     }
 
     header, .card, #file-grid, footer, #wallet-badge { position: relative; z-index: 1; }
+    /* il gruppo hero si sposta appena col mouse (parallasse) */
+    #hero { position: relative; z-index: 1; text-align: center; will-change: transform; }
 
-    /* ── Header ── */
+    /* ── Header (stile sito: Space Grotesk, maiuscolo, tecnico) ── */
     header { text-align: center; margin-bottom: 0; }
     header .label {
-      font-size: 0.7rem;
-      letter-spacing: 0.46em;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.44em;
       text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 20px;
+      color: var(--energy);
+      margin-bottom: 22px;
+      text-shadow: 0 0 18px rgba(0,229,255,0.4);
     }
     header h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      font-weight: 600;
-      letter-spacing: 0.015em;
-      line-height: 1.04;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem, 5.4vw, 3.7rem);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      line-height: 1.06;
+      text-transform: uppercase;
       color: #ffffff;
-      text-shadow: 0 0 44px rgba(212,175,55,0.28);
+      text-shadow: 0 2px 30px rgba(0,0,0,0.6);
     }
+    header h1 .accent { color: var(--gold); }
     header .tagline {
       margin: 22px auto 0;
-      color: var(--muted);
-      font-size: 0.94rem;
-      max-width: 440px;
+      color: #b8b8bd;
+      font-size: 0.95rem;
+      font-weight: 300;
+      max-width: 430px;
       line-height: 1.7;
     }
-    /* filetto d'oro decorativo sotto il titolo */
+    /* filetto ciano→oro decorativo sotto il titolo */
     header .rule {
-      width: 66px; height: 1px; margin: 26px auto 0;
-      background: linear-gradient(90deg, rgba(212,175,55,0), var(--gold), rgba(212,175,55,0));
+      width: 84px; height: 2px; margin: 28px auto 0; border-radius: 2px;
+      background: linear-gradient(90deg, rgba(0,229,255,0), var(--energy), var(--gold), rgba(212,175,55,0));
+      box-shadow: 0 0 14px rgba(0,229,255,0.35);
     }
 
     /* ── Card generica ── */
@@ -394,21 +421,26 @@
 </head>
 <body>
 
-  <header>
-    <div class="label">The Unique Portal</div>
-    <h1>NYFURION<br>HOLDER</h1>
-    <p class="tagline">Your private access to the artwork, lore and commercial license of the fragment you own.</p>
-    <div class="rule"></div>
-  </header>
+  <canvas id="hero-fx" aria-hidden="true"></canvas>
+  <div id="cursor-glow" aria-hidden="true"></div>
+
+  <div id="hero">
+    <header>
+      <div class="label">The Unique Portal</div>
+      <h1>NYFURION<br><span class="accent">HOLDER</span></h1>
+      <p class="tagline">Your private access to the artwork, lore and commercial license of the fragment you own.</p>
+      <div class="rule"></div>
+    </header>
+
+    <!-- Step 1: Connect wallet -->
+    <div id="step-connect" style="position:relative; z-index:1; text-align:center;">
+      <button class="btn btn-primary" id="btn-connect" style="font-size:0.92rem; padding:16px 44px;">Enter</button>
+      <p style="font-size:0.7rem; opacity:0.6; margin-top:1rem; letter-spacing:0.12em;">🔒 OFFICIAL: NYFURION.COM &middot; FREE SIGNATURE &middot; FUNDS UNTOUCHED</p>
+    </div>
+  </div>
 
   <!-- Wallet badge -->
   <div id="wallet-badge">Connected: <span id="wallet-address"></span></div>
-
-  <!-- Step 1: Connect wallet -->
-  <div id="step-connect" style="position:relative; z-index:1; text-align:center;">
-    <button class="btn btn-primary" id="btn-connect" style="font-size:0.92rem; padding:16px 44px;">Enter</button>
-    <p style="font-size:0.7rem; opacity:0.6; margin-top:1rem; letter-spacing:0.12em;">🔒 OFFICIAL: NYFURION.COM &middot; FREE SIGNATURE &middot; FUNDS UNTOUCHED</p>
-  </div>
 
   <!-- Card principale (appare dopo la connessione) -->
   <div class="card" id="main-card" style="display:none;">
@@ -1539,6 +1571,109 @@
       if (intro) intro.style.display = 'block';
       return out;
     };
+  })();
+  </script>
+
+  <!-- ═══ Rete di catene interattiva (sfondo hero) ═══ -->
+  <script>
+  (function () {
+    const cv = document.getElementById('hero-fx');
+    const glow = document.getElementById('cursor-glow');
+    const hero = document.getElementById('hero');
+    if (!cv) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const ctx = cv.getContext('2d');
+    let W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let nodes = [];
+    const mouse = { x: -9999, y: -9999, active: false };
+    const px = { x: 0, y: 0 };        // parallasse morbida
+
+    function resize() {
+      W = window.innerWidth; H = window.innerHeight;
+      cv.width = W * dpr; cv.height = H * dpr;
+      cv.style.width = W + 'px'; cv.style.height = H + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const count = Math.round(Math.min(90, Math.max(38, (W * H) / 24000)));
+      nodes = [];
+      for (let i = 0; i < count; i++) {
+        nodes.push({
+          x: Math.random() * W, y: Math.random() * H,
+          vx: (Math.random() - 0.5) * 0.14, vy: (Math.random() - 0.5) * 0.14,
+          r: 1 + Math.random() * 1.6,
+          gold: Math.random() < 0.32,
+        });
+      }
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX; mouse.y = e.clientY; mouse.active = true;
+      document.body.classList.add('has-cursor');
+      if (glow) { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; }
+    });
+    window.addEventListener('mouseleave', () => { mouse.active = false; mouse.x = mouse.y = -9999; });
+
+    const LINK = 132, PULL = 168;
+    function frame() {
+      requestAnimationFrame(frame);
+      ctx.clearRect(0, 0, W, H);
+
+      // parallasse dolce dell'hero verso il cursore
+      if (hero && mouse.active) {
+        const tx = (mouse.x - W / 2) / W * 14, ty = (mouse.y - H / 2) / H * 12;
+        px.x += (tx - px.x) * 0.06; px.y += (ty - px.y) * 0.06;
+        hero.style.transform = 'translate(' + (-px.x) + 'px,' + (-px.y) + 'px)';
+      }
+
+      for (const n of nodes) {
+        n.x += n.vx; n.y += n.vy;
+        if (n.x < -20) n.x = W + 20; else if (n.x > W + 20) n.x = -20;
+        if (n.y < -20) n.y = H + 20; else if (n.y > H + 20) n.y = -20;
+        // il cursore attira delicatamente i nodi vicini
+        if (mouse.active) {
+          const dx = mouse.x - n.x, dy = mouse.y - n.y, d = Math.hypot(dx, dy);
+          if (d < PULL && d > 0.1) {
+            const f = (1 - d / PULL) * 0.6;
+            n.x += (dx / d) * f; n.y += (dy / d) * f;
+          }
+        }
+      }
+
+      // catene fra nodi vicini
+      for (let i = 0; i < nodes.length; i++) {
+        const a = nodes[i];
+        for (let j = i + 1; j < nodes.length; j++) {
+          const b = nodes[j];
+          const dx = a.x - b.x, dy = a.y - b.y, d = Math.hypot(dx, dy);
+          if (d < LINK) {
+            const o = (1 - d / LINK) * 0.5;
+            ctx.strokeStyle = 'rgba(0,229,255,' + (o * 0.5) + ')';
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+          }
+        }
+        // catena verso il cursore
+        if (mouse.active) {
+          const dx = a.x - mouse.x, dy = a.y - mouse.y, d = Math.hypot(dx, dy);
+          if (d < PULL) {
+            const o = (1 - d / PULL) * 0.7;
+            ctx.strokeStyle = 'rgba(212,175,55,' + (o * 0.55) + ')';
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+          }
+        }
+      }
+
+      // nodi
+      for (const n of nodes) {
+        ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = n.gold ? 'rgba(212,175,55,0.85)' : 'rgba(0,229,255,0.7)';
+        ctx.fill();
+      }
+    }
+    if (!reduced) frame();
+    else resize();
   })();
   </script>
 
