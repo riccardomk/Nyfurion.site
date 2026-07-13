@@ -1022,15 +1022,19 @@
     const keys = {};
     const vel = { x: 0, z: 0 };
     const EYE = 1.62;
+    const PLAYER_R = 0.34;                 // raggio del corpo per le collisioni
+    const feet = new THREE.Vector3();      // posizione a terra del giocatore (fonte di verità)
+    let bobPhase = 0, moving = 0;          // oscillazione naturale della camminata
     const rayH = new THREE.Raycaster();
     const rayV = new THREE.Raycaster();
     const DOWN = new THREE.Vector3(0, -1, 0);
+    const _tmp = new THREE.Vector3();
 
     const IS_TOUCH = window.matchMedia('(pointer: coarse)').matches;
     const HINT_FREE = IS_TOUCH
       ? 'Trascina per guardare · tocca un’opera per scaricarla'
       : 'Click nella villa per i comandi · WASD muoviti · il museo è oltre il colonnato, a destra';
-    const HINT_LOCKED = 'WASD muoviti · mouse guarda · museo oltre il colonnato a destra · click su un’opera per scaricarla · ESC libera il mouse';
+    const HINT_LOCKED = 'WASD muoviti · Shift corri · mouse guarda · click su un’opera per scaricarla · ESC libera il mouse';
 
     roomBtn.addEventListener('click', () => {
       const archive = window.__vaultArchive;
@@ -1164,6 +1168,7 @@
       hintEl.textContent = 'Apertura della Villa Prime…';
       yaw = 0; pitch = 0; exhibits = []; colliders = []; hovered = null;
       vel.x = 0; vel.z = 0; lastFrameT = 0;
+      bobPhase = 0; moving = 0;
       for (const k in keys) delete keys[k];
 
       renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -1178,9 +1183,11 @@
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0x05060c);
       scene.fog = new THREE.FogExp2(0x0a0c16, 0.011);
-      camera = new THREE.PerspectiveCamera(72, window.innerWidth / window.innerHeight, 0.1, 220);
-      camera.position.set(-4.2, EYE + 0.3, 7.6);   // DENTRO, tra le due torce dell'ingresso
+      // FOV 60° = prospettiva naturale, niente distorsione "grandangolo" ai bordi
+      camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.05, 260);
       camera.rotation.order = 'YXZ';
+      feet.set(-4.2, 0, 7.6);              // DENTRO, tra le due torce dell'ingresso
+      camera.position.set(feet.x, feet.y + EYE, feet.z);
 
       // cielo notturno + orizzonte
       const sky = new THREE.Mesh(
@@ -1194,8 +1201,18 @@
       );
       horizon.rotation.x = -Math.PI / 2; horizon.position.y = -0.35; scene.add(horizon);
 
+      // ── Riflessi realistici: envmap dal cielo notturno (oro, vetro, acqua) ──
+      try {
+        const envTex = skyTexture();
+        envTex.mapping = THREE.EquirectangularReflectionMapping;
+        const pmrem = new THREE.PMREMGenerator(renderer);
+        pmrem.compileEquirectangularShader();
+        scene.environment = pmrem.fromEquirectangular(envTex).texture;
+        envTex.dispose();
+      } catch (e) { /* senza envmap la scena vive lo stesso */ }
+
       // ── Luci: notte di Nyfurion ──
-      scene.add(new THREE.HemisphereLight(0x27324f, 0x0a0908, 0.5));
+      scene.add(new THREE.HemisphereLight(0x2c3856, 0x0b0a09, 0.62));
       const moon = new THREE.DirectionalLight(0x9fb4e8, 0.4);
       moon.position.set(30, 42, -16); scene.add(moon);
       const addPt = (x, y, z, color, i2, d) => {
@@ -1442,13 +1459,19 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
+    const _dir = new THREE.Vector3();
     function blocked(dx, dz) {
       const len = Math.hypot(dx, dz);
       if (len < 1e-6) return false;
-      const origin = new THREE.Vector3(camera.position.x, camera.position.y - EYE + 0.95, camera.position.z);
-      rayH.set(origin, new THREE.Vector3(dx / len, 0, dz / len));
-      rayH.far = len + 0.42;
-      return rayH.intersectObjects(colliders, false).length > 0;
+      _dir.set(dx / len, 0, dz / len);
+      const reach = len + PLAYER_R;
+      // tre altezze — caviglia, bacino, spalle — così nessun muro basso o alto sfugge
+      for (let i = 0; i < 3; i++) {
+        rayH.set(_tmp.set(feet.x, feet.y + (i === 0 ? 0.35 : i === 1 ? 1.0 : 1.55), feet.z), _dir);
+        rayH.far = reach;
+        if (rayH.intersectObjects(colliders, false).length) return true;
+      }
+      return false;
     }
 
     function animate(t) {
@@ -1458,39 +1481,46 @@
 
       const f = (keys['KeyW'] || keys['ArrowUp'] ? 1 : 0) - (keys['KeyS'] || keys['ArrowDown'] ? 1 : 0);
       const s = (keys['KeyD'] || keys['ArrowRight'] ? 1 : 0) - (keys['KeyA'] || keys['ArrowLeft'] ? 1 : 0);
-      const sp = 3.1;
+      const run = (keys['ShiftLeft'] || keys['ShiftRight']) ? 1.7 : 1;
+      const sp = 2.8 * run;
       const sin = Math.sin(yaw), cos = Math.cos(yaw);
-      const tx = (-sin * f + cos * s) * sp;
-      const tz = (-cos * f - sin * s) * sp;
-      const k = Math.min(1, dt * 9);
+      let tx = (-sin * f + cos * s), tz = (-cos * f - sin * s);
+      const mag = Math.hypot(tx, tz);
+      if (mag > 1) { tx /= mag; tz /= mag; }        // niente scatto extra in diagonale
+      tx *= sp; tz *= sp;
+      const k = Math.min(1, dt * 10);
       vel.x += (tx - vel.x) * k;
       vel.z += (tz - vel.z) * k;
 
       let dx = vel.x * dt, dz = vel.z * dt;
-      if (colliders.length) {
-        if (blocked(dx, dz)) {
-          if (!blocked(dx, 0)) { dz = 0; }
-          else if (!blocked(0, dz)) { dx = 0; }
-          else { dx = 0; dz = 0; }
-        }
+      if (colliders.length && blocked(dx, dz)) {   // scivola lungo il muro invece di incastrarti
+        if (!blocked(dx, 0)) dz = 0;
+        else if (!blocked(0, dz)) dx = 0;
+        else { dx = 0; dz = 0; vel.x = 0; vel.z = 0; }
       }
-      camera.position.x += dx;
-      camera.position.z += dz;
-      camera.position.x = Math.max(-13.0, Math.min(11.0, camera.position.x));
-      camera.position.z = Math.max(-20.0, Math.min(10.0, camera.position.z));
+      feet.x = Math.max(-13.0, Math.min(11.0, feet.x + dx));
+      feet.z = Math.max(-20.0, Math.min(10.0, feet.z + dz));
 
+      // il pavimento segue il giocatore (scale, terrazza, museo) senza scatti
       if (colliders.length) {
-        rayV.set(new THREE.Vector3(camera.position.x, camera.position.y + 0.55, camera.position.z), DOWN);
-        rayV.far = 7;
+        rayV.set(_tmp.set(feet.x, feet.y + 2.2, feet.z), DOWN);
+        rayV.far = 9;
         const hits = rayV.intersectObjects(colliders, false);
-        if (hits.length) {
-          const ty = hits[0].point.y + EYE;
-          camera.position.y += (ty - camera.position.y) * Math.min(1, dt * 11);
-        }
+        if (hits.length) feet.y += (hits[0].point.y - feet.y) * Math.min(1, dt * 12);
       }
 
+      // oscillazione naturale della camminata
+      const speed = Math.hypot(vel.x, vel.z);
+      moving += ((speed > 0.4 ? 1 : 0) - moving) * Math.min(1, dt * 8);
+      bobPhase += dt * (0.9 + speed * 1.9);
+      const bobY = Math.sin(bobPhase * 2) * 0.035 * moving;
+      const bobX = Math.cos(bobPhase) * 0.02 * moving;
+
+      // Prima persona: camera all'altezza occhi, con la lieve oscillazione del passo
+      camera.position.set(feet.x + bobX, feet.y + EYE + bobY, feet.z);
       camera.rotation.y = yaw;
       camera.rotation.x = pitch;
+      camera.rotation.z = 0;
 
       if (isLocked()) setHover(pickCenter());
       renderer.render(scene, camera);
