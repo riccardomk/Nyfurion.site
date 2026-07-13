@@ -93,22 +93,23 @@
     }
     header h1 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(2rem, 5.4vw, 3.7rem);
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      line-height: 1.06;
-      text-transform: uppercase;
-      color: #ffffff;
-      text-shadow: 0 2px 30px rgba(0,0,0,0.6);
-    }
-    header h1 .accent { color: var(--gold); }
-    header .tagline {
-      margin: 22px auto 0;
-      color: #b8b8bd;
-      font-size: 0.95rem;
+      font-size: clamp(1.9rem, 5vw, 3.4rem);
       font-weight: 300;
-      max-width: 430px;
-      line-height: 1.7;
+      letter-spacing: 0.16em;
+      line-height: 1.16;
+      text-transform: uppercase;
+      color: #f5f5f7;
+      text-shadow: 0 2px 26px rgba(0,0,0,0.55);
+    }
+    header h1 .accent { color: var(--gold); font-weight: 500; }
+    header .tagline {
+      margin: 24px auto 0;
+      color: #b4b4ba;
+      font-size: 0.92rem;
+      font-weight: 300;
+      letter-spacing: 0.01em;
+      max-width: 420px;
+      line-height: 1.75;
     }
     /* filetto ciano→oro decorativo sotto il titolo */
     header .rule {
@@ -1032,6 +1033,7 @@
     const PLAYER_R = 0.34;                 // raggio del corpo per le collisioni
     const feet = new THREE.Vector3();      // posizione a terra del giocatore (fonte di verità)
     let bobPhase = 0, moving = 0;          // oscillazione naturale della camminata
+    let showcaseCard = null;               // card in vetrina (ruota lentamente)
     const rayH = new THREE.Raycaster();
     const rayV = new THREE.Raycaster();
     const DOWN = new THREE.Vector3(0, -1, 0);
@@ -1115,6 +1117,26 @@
       const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.flipY = false; return t;
     }
 
+    // Segnaposto della card da collezione (verticale) — sostituibile con la foto vera
+    function cardPlaceholderTexture() {
+      const c = document.createElement('canvas'); c.width = 384; c.height = 560;
+      const g = c.getContext('2d');
+      const bg = g.createLinearGradient(0, 0, 0, 560);
+      bg.addColorStop(0, '#141019'); bg.addColorStop(0.5, '#0e0b12'); bg.addColorStop(1, '#08070b');
+      g.fillStyle = bg; g.fillRect(0, 0, 384, 560);
+      g.strokeStyle = '#d4af37'; g.lineWidth = 6; g.strokeRect(12, 12, 360, 536);
+      g.strokeStyle = 'rgba(212,175,55,0.4)'; g.lineWidth = 1.5; g.strokeRect(24, 24, 336, 512);
+      g.textAlign = 'center';
+      g.strokeStyle = 'rgba(212,175,55,0.6)'; g.lineWidth = 2.5;
+      g.beginPath(); g.arc(192, 214, 82, 0, Math.PI * 2); g.stroke();
+      g.fillStyle = '#d4af37'; g.font = '600 62px Georgia, serif'; g.fillText('N', 192, 236);
+      g.font = '600 24px Georgia, serif'; g.fillStyle = '#e8cd7a';
+      g.fillText('NYFURION', 192, 340); g.fillText('COLLECTOR CARD', 192, 372);
+      g.fillStyle = '#8d8576'; g.font = '18px Georgia, serif';
+      g.fillText('IN ARRIVO · COMING SOON', 192, 470);
+      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.flipY = false; return t;
+    }
+
     function tvTexture() {
       const c = document.createElement('canvas'); c.width = 1024; c.height = 560;
       const g = c.getContext('2d');
@@ -1175,7 +1197,7 @@
       hintEl.textContent = 'Apertura della Villa Prime…';
       yaw = 0; pitch = 0; exhibits = []; colliders = []; hovered = null;
       vel.x = 0; vel.z = 0; lastFrameT = 0;
-      bobPhase = 0; moving = 0;
+      bobPhase = 0; moving = 0; showcaseCard = null;
       for (const k in keys) delete keys[k];
 
       renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -1183,13 +1205,13 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.outputEncoding = THREE.sRGBEncoding;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.1;
+      renderer.toneMappingExposure = 1.2;
       overlay.insertBefore(renderer.domElement, overlay.firstChild);
       const ANISO = renderer.capabilities.getMaxAnisotropy();
 
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0x05060c);
-      scene.fog = new THREE.FogExp2(0x0a0c16, 0.011);
+      scene.fog = new THREE.FogExp2(0x0c0e18, 0.008);
       // FOV 60° = prospettiva naturale, niente distorsione "grandangolo" ai bordi
       camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.05, 260);
       camera.rotation.order = 'YXZ';
@@ -1218,47 +1240,50 @@
         envTex.dispose();
       } catch (e) { /* senza envmap la scena vive lo stesso */ }
 
-      // ── Luci: notte di Nyfurion ──
-      scene.add(new THREE.HemisphereLight(0x2c3856, 0x0b0a09, 0.62));
-      const moon = new THREE.DirectionalLight(0x9fb4e8, 0.4);
+      // ── Luci soffuse e di stile (museo notturno, morbido) ──
+      scene.add(new THREE.HemisphereLight(0x3a4664, 0x161009, 0.9));
+      const moon = new THREE.DirectionalLight(0xaebfe6, 0.32);
       moon.position.set(30, 42, -16); scene.add(moon);
+      const fill = new THREE.DirectionalLight(0xfff2dc, 0.28);   // riempimento morbido dall'alto
+      fill.position.set(-6, 30, 8); scene.add(fill);
+      // decadimento 2 = falloff realistico e soffice; raggi ampi = niente coni duri
       const addPt = (x, y, z, color, i2, d) => {
-        const p = new THREE.PointLight(color, i2, d, 1.6); p.position.set(x, y, z); scene.add(p);
+        const p = new THREE.PointLight(color, i2, d, 2); p.position.set(x, y, z); scene.add(p);
       };
-      addPt(-4.5, 3.3, 0, 0xffd9a0, 0.85, 13);        // lounge
-      addPt(-7.6, 1.95, -2.1, 0xffe6bb, 0.5, 5);      // lampada 1
-      addPt(-1.6, 1.95, 2.3, 0xffe6bb, 0.5, 5);       // lampada 2
-      addPt(-8.4, 0.5, -0.4, 0xff9a3c, 0.55, 4);      // camino di luce
-      addPt(4.8, 3.5, 0, 0xffeecf, 0.75, 12);         // museo centro
-      addPt(0.3, 3.4, 0, 0xffd9a0, 0.5, 7);           // colonnato
-      addPt(-3.5, 0.5, -9.4, 0x3fd9ff, 0.9, 7);       // piscina
-      addPt(0.5, 0.5, -9.4, 0x3fd9ff, 0.9, 7);        // piscina
-      addPt(-2.1, 1.6, 7.6, 0xffb43c, 0.65, 6);       // braciere sx
-      addPt(2.1, 1.6, 7.6, 0xffb43c, 0.65, 6);        // braciere dx
-      addPt(0, 3.2, 6.2, 0xffd9a0, 0.5, 7);           // portale d'ingresso
+      addPt(-4.5, 3.4, 0, 0xffe2b4, 1.5, 16);         // lounge (caldo, ampio)
+      addPt(-7.6, 2.0, -2.1, 0xffe9c4, 0.9, 7);       // lampada 1
+      addPt(-1.6, 2.0, 2.3, 0xffe9c4, 0.9, 7);        // lampada 2
+      addPt(-8.4, 0.6, -0.4, 0xff9a3c, 0.9, 5.5);     // camino di luce
+      addPt(4.8, 3.6, 0, 0xfff0d6, 1.6, 15);          // museo centro (soffuso)
+      addPt(0.3, 3.5, 0, 0xffe2b4, 0.9, 9);           // colonnato
+      addPt(-3.5, 0.6, -9.4, 0x46dcff, 1.2, 8);       // piscina
+      addPt(0.5, 0.6, -9.4, 0x46dcff, 1.2, 8);        // piscina
+      addPt(-2.1, 1.7, 7.6, 0xffb552, 1.1, 7);        // braciere sx
+      addPt(2.1, 1.7, 7.6, 0xffb552, 1.1, 7);         // braciere dx
+      addPt(0, 3.3, 6.2, 0xffe2b4, 0.9, 9);           // portale d'ingresso
 
-      // ── Materiali del mondo Nyfurion Prime ──
-      const gold = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.85, roughness: 0.3 });
+      // ── Materiali del mondo Nyfurion Prime (rifiniti, con riflessi) ──
+      const gold = new THREE.MeshStandardMaterial({ color: 0xcaa544, metalness: 0.95, roughness: 0.24, envMapIntensity: 1.4 });
       const MATS = {
-        NYFP_Plaster:    pbr('painted_plaster_wall', ANISO, { color: 0xd8d2c4 }),
-        NYFP_Stone:      pbr('cobblestone_floor_08', ANISO, { color: 0xb5b0a6 }),
-        NYFP_StoneDark:  pbr('cobblestone_floor_08', ANISO, { color: 0x57544e }),
-        NYFP_WoodFloor:  pbr('wood_floor_deck', ANISO),
-        NYFP_WoodDark:   pbr('dark_wood', ANISO),
+        NYFP_Plaster:    pbr('painted_plaster_wall', ANISO, { color: 0xe4ddce, roughness: 0.9, envMapIntensity: 0.35 }),
+        NYFP_Stone:      pbr('cobblestone_floor_08', ANISO, { color: 0xc2bdb2, roughness: 0.92 }),
+        NYFP_StoneDark:  pbr('cobblestone_floor_08', ANISO, { color: 0x4f4c47, roughness: 0.9, envMapIntensity: 0.5 }),
+        NYFP_WoodFloor:  pbr('wood_floor_deck', ANISO, { roughness: 0.62, envMapIntensity: 0.6 }),
+        NYFP_WoodDark:   pbr('dark_wood', ANISO, { roughness: 0.5, envMapIntensity: 0.6 }),
         NYFP_Gold:       gold,
-        NYFP_Metal:      new THREE.MeshStandardMaterial({ color: 0x2b2d33, metalness: 0.9, roughness: 0.35 }),
-        NYFP_Glass:      new THREE.MeshStandardMaterial({ color: 0xbfdcec, transparent: true, opacity: 0.15, roughness: 0.06, metalness: 0.1, side: THREE.DoubleSide, depthWrite: false }),
-        NYFP_Water:      new THREE.MeshStandardMaterial({ color: 0x2a7fa8, emissive: 0x0d4460, emissiveIntensity: 1.0, transparent: true, opacity: 0.9, roughness: 0.1, metalness: 0.2 }),
-        NYFP_PoolShell:  new THREE.MeshStandardMaterial({ color: 0x1c5f7c, roughness: 0.4 }),
-        NYFP_Fabric:     new THREE.MeshStandardMaterial({ color: 0xd3cbba, roughness: 0.92 }),
-        NYFP_FabricDark: new THREE.MeshStandardMaterial({ color: 0x3a3f4b, roughness: 0.95 }),
-        NYFP_Plant:      new THREE.MeshStandardMaterial({ color: 0x2f5d3a, roughness: 0.85 }),
-        NYFP_Rug:        new THREE.MeshStandardMaterial({ color: 0x4a3b20, roughness: 0.98 }),
-        NYFP_Ceiling:    new THREE.MeshStandardMaterial({ color: 0x191720, roughness: 0.95 }),
+        NYFP_Metal:      new THREE.MeshStandardMaterial({ color: 0x33353c, metalness: 0.95, roughness: 0.28, envMapIntensity: 1.1 }),
+        NYFP_Glass:      new THREE.MeshStandardMaterial({ color: 0xcfe6f2, transparent: true, opacity: 0.12, roughness: 0.04, metalness: 0.1, envMapIntensity: 1.4, side: THREE.DoubleSide, depthWrite: false }),
+        NYFP_Water:      new THREE.MeshStandardMaterial({ color: 0x2f88b0, emissive: 0x0e4a63, emissiveIntensity: 0.9, transparent: true, opacity: 0.88, roughness: 0.08, metalness: 0.3, envMapIntensity: 1.2 }),
+        NYFP_PoolShell:  new THREE.MeshStandardMaterial({ color: 0x1f6684, roughness: 0.35 }),
+        NYFP_Fabric:     new THREE.MeshStandardMaterial({ color: 0xdcd4c2, roughness: 0.9 }),
+        NYFP_FabricDark: new THREE.MeshStandardMaterial({ color: 0x40454f, roughness: 0.92 }),
+        NYFP_Plant:      new THREE.MeshStandardMaterial({ color: 0x315f3c, roughness: 0.82 }),
+        NYFP_Rug:        new THREE.MeshStandardMaterial({ color: 0x543423, roughness: 0.98 }),
+        NYFP_Ceiling:    new THREE.MeshStandardMaterial({ color: 0x1c1a24, roughness: 0.92 }),
         NYFP_Screen:     new THREE.MeshBasicMaterial({ map: tvTexture() }),
-        NYFP_Cove:       new THREE.MeshBasicMaterial({ color: 0xffdf9e }),
-        NYFP_Flame:      new THREE.MeshBasicMaterial({ color: 0xffb03a }),
-        NYFP_Art:        new THREE.MeshStandardMaterial({ color: 0x14121c, roughness: 0.6 }),
+        NYFP_Cove:       new THREE.MeshBasicMaterial({ color: 0xffe6b0 }),
+        NYFP_Flame:      new THREE.MeshBasicMaterial({ color: 0xffb84a }),
+        NYFP_Art:        new THREE.MeshStandardMaterial({ color: 0x141220, roughness: 0.55 }),
       };
 
       // ── I file: la reference per prima ──
@@ -1308,9 +1333,9 @@
           scene.add(sp); scene.add(sp.target);
         };
 
-        // le opere VERE dell'holder sugli espositori (sigillo d'oro sugli slot vuoti)
-        exhibitSlots.forEach((panel, i) => {
-          const f = imgs[i];
+        // veste un pannello con l'opera (o un sigillo d'oro se lo slot è vuoto)
+        const dressPanel = (panel, f) => {
+          if (!panel) return;
           spotFor(panel);
           if (!f) { panel.material = new THREE.MeshBasicMaterial({ map: sealTexture() }); return; }
           panel.material = new THREE.MeshBasicMaterial({ color: 0x101018 });
@@ -1323,7 +1348,59 @@
               panel.material = new THREE.MeshBasicMaterial({ map: tex });
             });
           }).catch(() => {});
-        });
+        };
+
+        // ── Disposizione con senso ──
+        //  Parete EST (3 slot):  i 3 extra (fronte/lato/retro) affiancati
+        //  Parete NORD (2 slot): reference + NFT ufficiale affiancati
+        //  Parete SUD (2 slot):  riservati (sigillo)
+        const refImg   = imgs.find(f => f.key.includes('character-sheet'));
+        const nftImg   = imgs.find(f => /\/preview\./.test(f.key)) ||
+                         imgs.find(f => !f.key.includes('character-sheet') && !f.key.includes('image-extra'));
+        const extraImgs = imgs.filter(f => f.key.includes('image-extra')).sort((a, b) => a.key.localeCompare(b.key));
+
+        const byName = {}; exhibitSlots.forEach(p => { byName[p.name] = p; });
+        const pick = names => names.map(n => byName[n]).filter(Boolean);
+        const eastWall  = pick(['Exhibit_01', 'Exhibit_02', 'Exhibit_03']);
+        const northWall = pick(['Exhibit_04', 'Exhibit_05']);
+        const southWall = pick(['Exhibit_06', 'Exhibit_07']);
+
+        if (eastWall.length + northWall.length >= 5) {
+          eastWall.forEach(p => p.updateWorldMatrix(true, false));
+          eastWall.sort((a, b) => {
+            const pa = new THREE.Vector3(), pb = new THREE.Vector3();
+            a.getWorldPosition(pa); b.getWorldPosition(pb); return pa.z - pb.z;
+          });
+          eastWall.forEach((p, i) => dressPanel(p, extraImgs[i]));      // fronte/lato/retro in fila
+          dressPanel(northWall[0], refImg || nftImg);                   // reference
+          dressPanel(northWall[1], (refImg && nftImg) ? nftImg : null); // NFT ufficiale accanto
+          southWall.forEach(p => dressPanel(p, null));                  // riservati
+        } else {
+          const ordered = [refImg, nftImg, ...extraImgs].filter(Boolean);
+          exhibitSlots.forEach((p, i) => dressPanel(p, ordered[i]));
+        }
+
+        // ── Vetrina della Card al centro del museo (pronta per la tua card) ──
+        (function cardShowcase() {
+          const cx = 4.0, cz = 0, fy = 0.02;
+          const ped = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.52, 0.85, 28), MATS.NYFP_StoneDark);
+          ped.position.set(cx, fy + 0.42, cz); scene.add(ped); colliders.push(ped);
+          const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.47, 0.4, 0.06, 28), gold);
+          cap.position.set(cx, fy + 0.88, cz); scene.add(cap);
+          const caseH = 0.92;
+          const glassCase = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.35, 0.35, caseH, 26, 1, true), MATS.NYFP_Glass);
+          glassCase.position.set(cx, fy + 0.88 + caseH / 2, cz); scene.add(glassCase);
+          const capTop = new THREE.Mesh(new THREE.CylinderGeometry(0.41, 0.36, 0.05, 26), gold);
+          capTop.position.set(cx, fy + 0.88 + caseH, cz); scene.add(capTop);
+          showcaseCard = new THREE.Mesh(
+            new THREE.BoxGeometry(0.34, 0.52, 0.016),
+            new THREE.MeshBasicMaterial({ map: cardPlaceholderTexture() }));
+          showcaseCard.position.set(cx, fy + 0.88 + caseH * 0.55, cz); scene.add(showcaseCard);
+          const cs = new THREE.SpotLight(0xffe9c8, 1.5, 6.5, 0.7, 0.5, 1.2);
+          cs.position.set(cx, fy + 3.4, cz); cs.target.position.set(cx, fy + 1.3, cz);
+          scene.add(cs); scene.add(cs.target);
+        })();
 
         // licenza e lore sulle targhe d'onore
         plaqueSlots.forEach((p, i) => {
@@ -1516,12 +1593,14 @@
         if (hits.length) feet.y += (hits[0].point.y - feet.y) * Math.min(1, dt * 12);
       }
 
-      // oscillazione naturale della camminata
+      if (showcaseCard) showcaseCard.rotation.y += dt * 0.5;   // la card gira in vetrina
+
+      // leggerissima oscillazione della camminata (niente rimbalzo)
       const speed = Math.hypot(vel.x, vel.z);
-      moving += ((speed > 0.4 ? 1 : 0) - moving) * Math.min(1, dt * 8);
-      bobPhase += dt * (0.9 + speed * 1.9);
-      const bobY = Math.sin(bobPhase * 2) * 0.035 * moving;
-      const bobX = Math.cos(bobPhase) * 0.02 * moving;
+      moving += ((speed > 0.3 ? 1 : 0) - moving) * Math.min(1, dt * 6);
+      bobPhase += dt * speed * 1.35;
+      const bobY = Math.sin(bobPhase * 2) * 0.010 * moving;
+      const bobX = Math.cos(bobPhase) * 0.005 * moving;
 
       // Prima persona: camera all'altezza occhi, con la lieve oscillazione del passo
       camera.position.set(feet.x + bobX, feet.y + EYE + bobY, feet.z);
@@ -1547,7 +1626,7 @@
       document.removeEventListener('keyup', onKeyUp);
       window.removeEventListener('resize', onResize);
       renderer.domElement.remove(); renderer.dispose(); renderer = null;
-      scene = null; exhibits = []; colliders = []; hovered = null;
+      scene = null; exhibits = []; colliders = []; hovered = null; showcaseCard = null;
       overlay.style.display = 'none';
     }
   })();
@@ -1619,13 +1698,7 @@
       requestAnimationFrame(frame);
       ctx.clearRect(0, 0, W, H);
 
-      // parallasse dolce dell'hero verso il cursore
-      if (hero && mouse.active) {
-        const tx = (mouse.x - W / 2) / W * 14, ty = (mouse.y - H / 2) / H * 12;
-        px.x += (tx - px.x) * 0.06; px.y += (ty - px.y) * 0.06;
-        hero.style.transform = 'translate(' + (-px.x) + 'px,' + (-px.y) + 'px)';
-      }
-
+      // il testo resta FERMO: si muove solo la rete di catene dietro
       for (const n of nodes) {
         n.x += n.vx; n.y += n.vy;
         if (n.x < -20) n.x = W + 20; else if (n.x > W + 20) n.x = -20;
