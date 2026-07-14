@@ -1257,8 +1257,7 @@
       g.strokeStyle = 'rgba(212,175,55,0.3)'; g.lineWidth = 1.5;
       g.beginPath(); g.arc(256, 236, 148, 0, Math.PI * 2); g.stroke();
       g.textAlign = 'center'; g.fillStyle = '#d4af37';
-      g.font = '600 54px Georgia, serif'; g.fillText('N', 256, 218);
-      g.font = '26px Georgia, serif'; g.fillText('NYFURION', 256, 268);
+      g.font = '600 34px Georgia, serif'; g.fillText('NYFURION', 256, 248);
       g.fillStyle = '#8d8576'; g.font = '20px Georgia, serif';
       g.fillText('AWAITING RELIC', 256, 420);
       const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.flipY = false; return t;
@@ -1373,8 +1372,9 @@
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0x05060c);
       scene.fog = new THREE.FogExp2(0x0c0e18, 0.008);
-      // FOV 60: lo standard dei giochi in prima persona — campo visivo naturale e costante
-      camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.05, 260);
+      // FOV 50: minimo allargamento ai bordi possibile su schermo piatto,
+      // compensato da passo più veloce per non sembrare "lontani"
+      camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.05, 260);
       camera.rotation.order = 'YXZ';
       feet.set(-4.2, 0, 7.6);              // DENTRO, tra le due torce dell'ingresso
       camera.position.set(feet.x, feet.y + EYE, feet.z);
@@ -1573,15 +1573,8 @@
           const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.78, 0.7, 0.08, 36), gold);
           cap.position.set(cx, fy + 1.09, cz); scene.add(cap);
 
-          // teca di vetro alta
-          const caseH = 1.7, caseR = 0.62;
-          const glassCase = new THREE.Mesh(
-            new THREE.CylinderGeometry(caseR, caseR, caseH, 40, 1, true), MATS.NYFP_Glass);
-          glassCase.position.set(cx, fy + 1.13 + caseH / 2, cz); scene.add(glassCase);
-          const capTop = new THREE.Mesh(new THREE.CylinderGeometry(0.7, caseR, 0.12, 36), gold);
-          capTop.position.set(cx, fy + 1.13 + caseH, cz); scene.add(capTop);
-          const finial = new THREE.Mesh(new THREE.SphereGeometry(0.09, 18, 14), gold);
-          finial.position.set(cx, fy + 1.13 + caseH + 0.12, cz); scene.add(finial);
+          // niente teca: la card fluttua libera sopra il piedistallo
+          const caseH = 1.7;
 
           // LA CARD — quella VERA del token (3D dal caveau); segnaposto se non c'è ancora
           const cardY = fy + 1.13 + caseH * 0.52;
@@ -1843,7 +1836,7 @@
       const f = (keys['KeyW'] || keys['ArrowUp'] ? 1 : 0) - (keys['KeyS'] || keys['ArrowDown'] ? 1 : 0);
       const s = (keys['KeyD'] || keys['ArrowRight'] ? 1 : 0) - (keys['KeyA'] || keys['ArrowLeft'] ? 1 : 0);
       const run = (keys['ShiftLeft'] || keys['ShiftRight']) ? 1.7 : 1;
-      const sp = 2.8 * run;
+      const sp = 3.4 * run;
       const sin = Math.sin(yaw), cos = Math.cos(yaw);
       let tx = (-sin * f + cos * s), tz = (-cos * f - sin * s);
       const mag = Math.hypot(tx, tz);
