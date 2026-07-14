@@ -1582,13 +1582,29 @@
           const finial = new THREE.Mesh(new THREE.SphereGeometry(0.09, 18, 14), gold);
           finial.position.set(cx, fy + 1.13 + caseH + 0.12, cz); scene.add(finial);
 
-          // LA CARD — grande, dritta, che ruota
+          // LA CARD — quella VERA del token (3D dal caveau); segnaposto se non c'è ancora
           const cardY = fy + 1.13 + caseH * 0.52;
           const cardMat = new THREE.MeshBasicMaterial({ map: cardPlaceholderTexture() });
           showcaseCard = new THREE.Mesh(new THREE.BoxGeometry(0.72, 1.08, 0.03), [
-            gold, gold, gold, gold, cardMat, cardMat,   // bordi oro, facce = card
+            gold, gold, gold, gold, cardMat, cardMat,
           ]);
           showcaseCard.position.set(cx, cardY, cz); scene.add(showcaseCard);
+          const cardKey = 'token-' + String(tokenId).padStart(3, '0') + '/card-3d.glb';
+          fetchFileUrl(tokenId, cardKey).then((u) => fetch(u)).then((r) => r.arrayBuffer()).then((buf) => {
+            new THREE.GLTFLoader().parse(buf, '', (g) => {
+              const real = g.scene;
+              real.scale.setScalar(11.5);                    // 8.8cm -> ~1m in vetrina
+              const grp = new THREE.Group();
+              grp.add(real);
+              grp.position.set(cx, cardY, cz);
+              grp.rotation.y = showcaseCard.rotation.y;
+              const halo2 = showcaseCard.userData.halo;
+              scene.remove(showcaseCard);
+              showcaseCard = grp;
+              showcaseCard.userData.halo = halo2;
+              scene.add(showcaseCard);
+            }, () => {});
+          }).catch(() => { /* resta il segnaposto */ });
 
           // alone dorato dietro la card (glow)
           const halo = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 2.4),
