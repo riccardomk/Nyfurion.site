@@ -50,7 +50,7 @@ const RATE_LIMITS = {
 };
 
 // Regex STRICT per fileKey — blocca qualsiasi path traversal
-const FILE_KEY_RE = /^token-(\d{3})\/(preview|image-extra-\d{2}|character-sheet|lore|license|card|card-3d|model|archive)\.(jpg|jpeg|png|pdf|json|glb|stl)$/;
+const FILE_KEY_RE = /^token-(\d{3})\/(preview|image-extra-\d{2}|character-sheet|lore|license|card|card-3d|model|archive|ref-[a-z0-9-]{1,40})\.(jpg|jpeg|png|pdf|json|glb|stl)$/;
 
 // ─── Origins permesse ─────────────────────────────────────────────────────────
 const ALLOWED_ORIGINS = [
