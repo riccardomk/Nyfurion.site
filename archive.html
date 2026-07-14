@@ -1594,6 +1594,7 @@
             new THREE.GLTFLoader().parse(buf, '', (g) => {
               const real = g.scene;
               real.scale.setScalar(11.5);                    // 8.8cm -> ~1m in vetrina
+              real.rotation.x = Math.PI / 2;                 // in piedi (Blender Z-up -> web Y-up)
               const grp = new THREE.Group();
               grp.add(real);
               grp.position.set(cx, cardY, cz);
