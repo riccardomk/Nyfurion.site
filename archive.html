@@ -1706,13 +1706,14 @@
       return exhibitOf(hits[0].object);
     }
     function setHover(hit) {
-      if (hovered && hovered !== hit) { hovered.scale.set(1, 1, 1); hovered = null; }
-      if (hit && hovered !== hit) { hovered = hit; hovered.scale.set(1.04, 1.04, 1.04); }
+      // niente ingrandimento dell'opera: la geometria non si tocca mai
+      hovered = hit || null;
       if (isLocked()) {
         hintEl.textContent = hit
           ? hit.userData.file.label.toUpperCase() + ' — click per scaricare'
           : HINT_LOCKED;
       }
+      if (!isLocked() && renderer) renderer.domElement.style.cursor = hit ? 'pointer' : 'grab';
     }
     function collect(hit) {
       hintEl.textContent = 'DOWNLOAD · ' + hit.userData.file.label.toUpperCase() + '…';
@@ -1732,7 +1733,9 @@
       const len = Math.hypot(dx, dz);
       if (len < 1e-6) return false;
       _dir.set(dx / len, 0, dz / len);
-      const reach = len + PLAYER_R;
+      // distanza di rispetto: mai a meno di ~85cm da muri e opere,
+      // così la prospettiva resta sempre corretta (niente effetto zoom)
+      const reach = len + 0.85;
       // tre altezze — caviglia, bacino, spalle — così nessun muro basso o alto sfugge
       for (let i = 0; i < 3; i++) {
         rayH.set(_tmp.set(feet.x, feet.y + (i === 0 ? 0.35 : i === 1 ? 1.0 : 1.55), feet.z), _dir);
