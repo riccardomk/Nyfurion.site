@@ -1171,7 +1171,7 @@
     const roomBtn  = document.getElementById('btn-room');
 
     let renderer = null, scene, camera, raf = null;
-    let exhibits = [], colliders = [], hovered = null;
+    let exhibits = [], colliders = [], walkables = [], hovered = null;
     let yaw = 0, pitch = 0, dragging = false, lastX = 0, lastY = 0, downX = 0, downY = 0;
     let lastFrameT = 0;
     const keys = {};
@@ -1179,7 +1179,6 @@
     const EYE = 1.62;
     const PLAYER_R = 0.34;                 // raggio del corpo per le collisioni
     const feet = new THREE.Vector3();      // posizione a terra del giocatore (fonte di verità)
-    let bobPhase = 0, moving = 0;          // oscillazione naturale della camminata
     let showcaseCard = null;               // card in vetrina (ruota lentamente)
     const rayH = new THREE.Raycaster();
     const rayV = new THREE.Raycaster();
@@ -1355,9 +1354,9 @@
       overlay.style.display = 'block';
       tokenEl.textContent = '#' + tokenId;
       hintEl.textContent = 'Apertura della Villa Prime…';
-      yaw = 0; pitch = 0; exhibits = []; colliders = []; hovered = null;
+      yaw = 0; pitch = 0; exhibits = []; colliders = []; walkables = []; hovered = null;
       vel.x = 0; vel.z = 0; lastFrameT = 0;
-      bobPhase = 0; moving = 0; showcaseCard = null;
+      showcaseCard = null;
       for (const k in keys) delete keys[k];
 
       renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -1485,6 +1484,11 @@
             || n.name.startsWith('Exhibit_')
             || n.name.startsWith('Plaque_') || n.name === 'RoomPlate';
           if (!ghost) colliders.push(n);
+          // SOLO i veri pavimenti guidano l'altezza dello sguardo:
+          // niente più saliscendi su tappeti, battiscopa, basamenti
+          if (!ghost && /^(Floor|Deck|Entry_Path|Museum_Step|Steel Stairs|Cube)/.test(n.name)) {
+            walkables.push(n);
+          }
         });
         exhibitSlots.sort((a, b) => a.name.localeCompare(b.name));
         plaqueSlots.sort((a, b) => a.name.localeCompare(b.name));
@@ -1855,12 +1859,17 @@
       feet.x = Math.max(-13.0, Math.min(11.0, feet.x + dx));
       feet.z = Math.max(-20.0, Math.min(10.0, feet.z + dz));
 
-      // il pavimento segue il giocatore (scale, terrazza, museo) senza scatti
-      if (colliders.length) {
+      // altezza sguardo: SOLO dai veri pavimenti, transizione lenta, zona morta
+      const groundSet = walkables.length ? walkables : colliders;
+      if (groundSet.length) {
         rayV.set(_tmp.set(feet.x, feet.y + 2.2, feet.z), DOWN);
         rayV.far = 9;
-        const hits = rayV.intersectObjects(colliders, false);
-        if (hits.length) feet.y += (hits[0].point.y - feet.y) * Math.min(1, dt * 12);
+        const hits = rayV.intersectObjects(groundSet, false);
+        if (hits.length) {
+          const dyv = hits[0].point.y - feet.y;
+          // 1.5cm di zona morta: le micro-quote non muovono MAI la camera
+          if (Math.abs(dyv) > 0.015) feet.y += dyv * Math.min(1, dt * 7);
+        }
       }
 
       if (showcaseCard) {
@@ -1879,15 +1888,8 @@
         dp.needsUpdate = true;
       }
 
-      // leggerissima oscillazione della camminata (niente rimbalzo)
-      const speed = Math.hypot(vel.x, vel.z);
-      moving += ((speed > 0.3 ? 1 : 0) - moving) * Math.min(1, dt * 6);
-      bobPhase += dt * speed * 1.35;
-      const bobY = Math.sin(bobPhase * 2) * 0.010 * moving;
-      const bobX = Math.cos(bobPhase) * 0.005 * moving;
-
-      // Prima persona: camera all'altezza occhi, con la lieve oscillazione del passo
-      camera.position.set(feet.x + bobX, feet.y + EYE + bobY, feet.z);
+      // NESSUNA oscillazione: camera perfettamente stabile, da gioco competitivo
+      camera.position.set(feet.x, feet.y + EYE, feet.z);
       camera.rotation.y = yaw;
       camera.rotation.x = pitch;
       camera.rotation.z = 0;
@@ -1910,7 +1912,7 @@
       document.removeEventListener('keyup', onKeyUp);
       window.removeEventListener('resize', onResize);
       renderer.domElement.remove(); renderer.dispose(); renderer = null;
-      scene = null; exhibits = []; colliders = []; hovered = null; showcaseCard = null;
+      scene = null; exhibits = []; colliders = []; walkables = []; hovered = null; showcaseCard = null;
       window.__villaDust = null;
       overlay.style.display = 'none';
     }
