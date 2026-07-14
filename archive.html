@@ -1373,8 +1373,8 @@
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0x05060c);
       scene.fog = new THREE.FogExp2(0x0c0e18, 0.008);
-      // FOV 46° ≈ obiettivo 50mm: campo visivo costante, niente avvicinamento ai bordi
-      camera = new THREE.PerspectiveCamera(46, window.innerWidth / window.innerHeight, 0.05, 260);
+      // FOV 60: lo standard dei giochi in prima persona — campo visivo naturale e costante
+      camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.05, 260);
       camera.rotation.order = 'YXZ';
       feet.set(-4.2, 0, 7.6);              // DENTRO, tra le due torce dell'ingresso
       camera.position.set(feet.x, feet.y + EYE, feet.z);
@@ -1426,10 +1426,10 @@
       // ── Materiali del mondo Nyfurion Prime (rifiniti, con riflessi) ──
       const gold = new THREE.MeshStandardMaterial({ color: 0xcaa544, metalness: 0.95, roughness: 0.24, envMapIntensity: 1.4 });
       const MATS = {
-        NYFP_Plaster:    pbr('painted_plaster_wall', ANISO, { color: 0xd6cdbc, roughness: 0.93, envMapIntensity: 0.35 }, 2),
+        NYFP_Plaster:    pbr('beige_wall_001', ANISO, { color: 0xe8e2d6, envMapIntensity: 0.35 }, 2.2),
         NYFP_Stone:      pbr('cobblestone_floor_08', ANISO, { color: 0xc2bdb2, roughness: 0.92 }, 1.6),
         NYFP_StoneDark:  pbr('cobblestone_floor_08', ANISO, { color: 0x4f4c47, roughness: 0.9, envMapIntensity: 0.5 }, 1.6),
-        NYFP_WoodFloor:  pbr('wood_floor_deck', ANISO, { roughness: 0.62, envMapIntensity: 0.6 }, 2.4),
+        NYFP_WoodFloor:  pbr('wood_floor', ANISO, { envMapIntensity: 0.6 }, 2.2),
         NYFP_WoodDark:   pbr('dark_wood', ANISO, { roughness: 0.5, envMapIntensity: 0.6 }, 2),
         NYFP_Gold:       gold,
         NYFP_Metal:      new THREE.MeshStandardMaterial({ color: 0x33353c, metalness: 0.95, roughness: 0.28, envMapIntensity: 1.1 }),
@@ -1464,10 +1464,10 @@
         const villa = gltf.scene;
         const exhibitSlots = [], plaqueSlots = [];
         let roomPlate = null;
-        // pavimento del museo: pietra scura LUCIDATA che riflette luci e opere
-        const polishedFloor = new THREE.MeshStandardMaterial({
-          color: 0x16141c, roughness: 0.22, metalness: 0.08, envMapIntensity: 1.15,
-        });
+        // pavimento del museo: MARMO vero, lucidato, che riflette luci e opere
+        const polishedFloor = pbr('marble_01', ANISO, {
+          roughness: 0.16, metalness: 0.05, envMapIntensity: 1.2,
+        }, 1.4);
         villa.traverse((n) => {
           if (!n.isMesh) return;
           const matName = (n.material && n.material.name) || '';
@@ -1596,6 +1596,18 @@
               const real = g.scene;
               real.scale.setScalar(11.5);                    // 8.8cm -> ~1m in vetrina
               real.rotation.x = Math.PI / 2;                 // in piedi (Blender Z-up -> web Y-up)
+              // resa da vetrina: foto sempre accesa, oro specchiante, corpo ricco
+              real.traverse((n) => {
+                if (!n.isMesh || !n.material) return;
+                const nm = n.material.name || '';
+                if (nm === 'Card_Photo') {
+                  n.material = new THREE.MeshBasicMaterial({ map: n.material.map });
+                } else if (nm === 'Card_Gold') {
+                  n.material = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 1.0, roughness: 0.18, envMapIntensity: 1.7 });
+                } else if (nm === 'Card_Body') {
+                  n.material = new THREE.MeshStandardMaterial({ color: 0x100e16, metalness: 0.4, roughness: 0.32, envMapIntensity: 1.1 });
+                }
+              });
               const grp = new THREE.Group();
               grp.add(real);
               grp.position.set(cx, cardY, cz);
@@ -1728,8 +1740,8 @@
     }
     function onLockedLook(e) {
       if (!isLocked()) return;
-      yaw   -= e.movementX * 0.0018;
-      pitch -= e.movementY * 0.0018;
+      yaw   -= e.movementX * 0.002;
+      pitch -= e.movementY * 0.002;
       pitch = Math.max(-1.35, Math.min(1.35, pitch));
     }
     function onKeyDown(e) {
