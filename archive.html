@@ -1401,7 +1401,7 @@
       } catch (e) { /* senza envmap la scena vive lo stesso */ }
 
       // ── Luci soffuse e di stile (museo notturno, morbido) ──
-      scene.add(new THREE.HemisphereLight(0x3a4664, 0x161009, 0.62));
+      scene.add(new THREE.HemisphereLight(0x3a4664, 0x161009, 0.52));
       const moon = new THREE.DirectionalLight(0xaebfe6, 0.32);
       moon.position.set(30, 42, -16); scene.add(moon);
       const fill = new THREE.DirectionalLight(0xfff2dc, 0.28);   // riempimento morbido dall'alto
@@ -1439,7 +1439,7 @@
         NYFP_FabricDark: new THREE.MeshStandardMaterial({ color: 0x40454f, roughness: 0.92 }),
         NYFP_Plant:      new THREE.MeshStandardMaterial({ color: 0x315f3c, roughness: 0.82 }),
         NYFP_Rug:        new THREE.MeshStandardMaterial({ color: 0x543423, roughness: 0.98 }),
-        NYFP_Ceiling:    new THREE.MeshStandardMaterial({ color: 0x1c1a24, roughness: 0.92 }),
+        NYFP_Ceiling:    new THREE.MeshStandardMaterial({ color: 0x171420, roughness: 0.9, emissive: 0x241a0e, emissiveIntensity: 0.55 }),
         NYFP_Screen:     new THREE.MeshBasicMaterial({ map: tvTexture() }),
         NYFP_Cove:       new THREE.MeshBasicMaterial({ color: 0xffe6b0 }),
         NYFP_Flame:      new THREE.MeshBasicMaterial({ color: 0xffb84a }),
@@ -1463,12 +1463,17 @@
         const villa = gltf.scene;
         const exhibitSlots = [], plaqueSlots = [];
         let roomPlate = null;
+        // pavimento del museo: pietra scura LUCIDATA che riflette luci e opere
+        const polishedFloor = new THREE.MeshStandardMaterial({
+          color: 0x16141c, roughness: 0.22, metalness: 0.08, envMapIntensity: 1.15,
+        });
         villa.traverse((n) => {
           if (!n.isMesh) return;
           const matName = (n.material && n.material.name) || '';
           if (n.name.startsWith('Exhibit_')) { exhibitSlots.push(n); }
           else if (n.name.startsWith('Plaque_')) { plaqueSlots.push(n); }
           else if (n.name === 'RoomPlate') { roomPlate = n; }
+          else if (n.name === 'Floor_Museum' || n.name === 'Museum_Step') { n.material = polishedFloor; }
           else if (MATS[matName]) { n.material = MATS[matName]; }
           // attraversabili: piante, fiamme, acqua, vetrate + telai/mullion delle aperture,
           // conca piscina (così cammini fino al bordo), gole di luce, opere
@@ -1483,7 +1488,8 @@
         exhibitSlots.sort((a, b) => a.name.localeCompare(b.name));
         plaqueSlots.sort((a, b) => a.name.localeCompare(b.name));
 
-        // faretto automatico davanti a ogni espositore, orientato dalla normale
+        // faretto automatico + pozza di luce sul pavimento davanti a ogni opera
+        const poolTex = haloTexture();
         const spotFor = (mesh) => {
           mesh.updateWorldMatrix(true, false);
           const pos = new THREE.Vector3(); mesh.getWorldPosition(pos);
@@ -1491,10 +1497,18 @@
           const na = mesh.geometry.getAttribute('normal');
           if (na) nrm.set(na.getX(0), na.getY(0), na.getZ(0));
           nrm.transformDirection(mesh.matrixWorld).normalize();
-          const sp = new THREE.SpotLight(0xfff0d8, 1.9, 10, 0.55, 0.6, 1.3);
-          sp.position.copy(pos).addScaledVector(nrm, 1.7); sp.position.y += 1.4;
+          const sp = new THREE.SpotLight(0xffedd2, 2.3, 10, 0.5, 0.65, 1.3);
+          sp.position.copy(pos).addScaledVector(nrm, 1.7); sp.position.y += 1.5;
           sp.target.position.copy(pos);
           scene.add(sp); scene.add(sp.target);
+          // pozza di luce calda sul pavimento sotto l'opera
+          const pool = new THREE.Mesh(
+            new THREE.PlaneGeometry(1.9, 1.1),
+            new THREE.MeshBasicMaterial({ map: poolTex, transparent: true, opacity: 0.3, depthWrite: false, blending: THREE.AdditiveBlending })
+          );
+          pool.rotation.x = -Math.PI / 2;
+          pool.position.set(pos.x + nrm.x * 0.55, 0.24, pos.z + nrm.z * 0.55);
+          scene.add(pool);
         };
 
         // veste un pannello con l'opera (o un sigillo d'oro se lo slot è vuoto)
@@ -1603,6 +1617,52 @@
 
         // targa della sala col numero del pezzo
         if (roomPlate) roomPlate.material = new THREE.MeshBasicMaterial({ map: plateTexture('VILLA PRIME · No. ' + tokenId) });
+
+        // ── Runner di velluto verso la vetrina ──
+        (function velvetRunner() {
+          const c = document.createElement('canvas'); c.width = 256; c.height = 1024;
+          const g = c.getContext('2d');
+          g.fillStyle = '#38111a'; g.fillRect(0, 0, 256, 1024);
+          for (let i = 0; i < 2200; i++) {
+            g.fillStyle = 'rgba(' + (34 + Math.random() * 42) + ',10,18,' + (0.14 + Math.random() * 0.2) + ')';
+            g.fillRect(Math.random() * 256, Math.random() * 1024, 2, 2);
+          }
+          g.fillStyle = '#b8942e'; g.fillRect(8, 0, 5, 1024); g.fillRect(243, 0, 5, 1024);
+          g.strokeStyle = 'rgba(212,175,55,0.4)'; g.lineWidth = 2;
+          for (let y = 70; y < 1024; y += 150) {
+            g.beginPath(); g.moveTo(128, y - 34); g.lineTo(160, y); g.lineTo(128, y + 34); g.lineTo(96, y); g.closePath(); g.stroke();
+          }
+          const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding;
+          t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 3);
+          t.rotation = Math.PI / 2; t.center.set(0.5, 0.5);
+          const runner = new THREE.Mesh(
+            new THREE.PlaneGeometry(6.2, 1.6),
+            new THREE.MeshStandardMaterial({ map: t, roughness: 0.98 })
+          );
+          runner.rotation.x = -Math.PI / 2;
+          runner.position.set(4.2, 0.235, 0);
+          scene.add(runner);
+        })();
+
+        // ── Polvere dorata che fluttua nell'aria del museo ──
+        (function goldDust() {
+          const N = 140;
+          const geo = new THREE.BufferGeometry();
+          const posArr = new Float32Array(N * 3);
+          for (let i = 0; i < N; i++) {
+            posArr[i * 3]     = 1.5 + Math.random() * 7.0;   // x nel museo
+            posArr[i * 3 + 1] = 0.4 + Math.random() * 3.2;   // altezza
+            posArr[i * 3 + 2] = -5.2 + Math.random() * 10.4; // z
+          }
+          geo.setAttribute('position', new THREE.BufferAttribute(posArr, 3));
+          const dust = new THREE.Points(geo, new THREE.PointsMaterial({
+            color: 0xffdf9e, size: 0.02, transparent: true, opacity: 0.5,
+            depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true,
+          }));
+          dust.userData.baseY = posArr.slice();
+          scene.add(dust);
+          window.__villaDust = dust;
+        })();
 
         // (nessuna barriera: la terrazza e il bordo piscina sono liberamente calpestabili)
 
@@ -1784,6 +1844,17 @@
         showcaseCard.rotation.y += dt * 0.5;                   // la card gira in vetrina
         if (showcaseCard.userData.halo) showcaseCard.userData.halo.quaternion.copy(camera.quaternion);
       }
+      // la polvere dorata sale e deriva lentamente
+      if (window.__villaDust && scene) {
+        const dp = window.__villaDust.geometry.attributes.position;
+        const tt = lastFrameT * 0.00022;
+        for (let i = 0; i < dp.count; i++) {
+          const b = window.__villaDust.userData.baseY;
+          dp.array[i * 3 + 1] = b[i * 3 + 1] + Math.sin(tt * 3 + i * 1.7) * 0.12;
+          dp.array[i * 3]     = b[i * 3]     + Math.sin(tt * 2 + i * 0.9) * 0.08;
+        }
+        dp.needsUpdate = true;
+      }
 
       // leggerissima oscillazione della camminata (niente rimbalzo)
       const speed = Math.hypot(vel.x, vel.z);
@@ -1817,6 +1888,7 @@
       window.removeEventListener('resize', onResize);
       renderer.domElement.remove(); renderer.dispose(); renderer = null;
       scene = null; exhibits = []; colliders = []; hovered = null; showcaseCard = null;
+      window.__villaDust = null;
       overlay.style.display = 'none';
     }
   })();
