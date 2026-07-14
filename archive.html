@@ -103,17 +103,17 @@
     }
     header h1 .accent { color: var(--gold); font-weight: 500; }
     header .tagline {
-      margin: 24px auto 0;
+      margin: 30px auto 0;
       color: #b4b4ba;
       font-size: 0.92rem;
       font-weight: 300;
-      letter-spacing: 0.01em;
+      letter-spacing: 0.02em;
       max-width: 420px;
-      line-height: 1.75;
+      line-height: 1.85;
     }
     /* filetto ciano→oro decorativo sotto il titolo */
     header .rule {
-      width: 84px; height: 2px; margin: 28px auto 0; border-radius: 2px;
+      width: 84px; height: 2px; margin: 34px auto 0; border-radius: 2px;
       background: linear-gradient(90deg, rgba(0,229,255,0), var(--energy), var(--gold), rgba(212,175,55,0));
       box-shadow: 0 0 14px rgba(0,229,255,0.35);
     }
@@ -138,8 +138,43 @@
     }
 
     /* ── Step connect ── */
-    #step-connect { text-align: center; margin-top: 38px; }
+    #step-connect { text-align: center; margin-top: 56px; }
     #step-connect p { color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; }
+    #step-connect .security-line { margin-top: 1.5rem !important; }
+
+    /* ── Step firma (Identity Check) ── */
+    #step-sign { text-align: center; padding: 22px 6px 14px; }
+    #step-sign .ss-eyebrow {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.64rem; font-weight: 500;
+      letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--energy); margin-bottom: 14px;
+      text-shadow: 0 0 14px rgba(0,229,255,0.35);
+    }
+    #step-sign .ss-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem; font-weight: 300;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: #f5f5f7; margin-bottom: 18px;
+    }
+    #step-sign .ss-title b { color: var(--gold); font-weight: 500; }
+    #step-sign .ss-sub {
+      color: #a9a9b0; font-size: 0.88rem; font-weight: 300;
+      line-height: 1.8; margin: 0 auto 30px; max-width: 400px;
+    }
+    #btn-sign { font-size: 0.9rem; padding: 17px 52px; }
+    #sign-hint {
+      color: var(--warning); font-size: 0.8rem; line-height: 1.6;
+      margin-top: 20px; min-height: 1em; max-width: 400px;
+      margin-left: auto; margin-right: auto;
+    }
+    .ss-cancel-row { margin-top: 20px; }
+    .ss-cancel-row a {
+      color: var(--muted); font-size: 0.72rem;
+      letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
+      transition: color 0.25s;
+    }
+    .ss-cancel-row a:hover { color: var(--energy); }
 
     /* ── Scanning state ── */
     #step-scanning { display: none; text-align: center; padding: 16px 0; }
@@ -455,8 +490,8 @@
 
     <!-- Step 1: Connect wallet -->
     <div id="step-connect" style="position:relative; z-index:1; text-align:center;">
-      <button class="btn btn-primary" id="btn-connect" style="font-size:0.92rem; padding:16px 44px;">Enter</button>
-      <p style="font-size:0.7rem; opacity:0.6; margin-top:1rem; letter-spacing:0.12em;">🔒 OFFICIAL: NYFURION.COM &middot; FREE SIGNATURE &middot; FUNDS UNTOUCHED</p>
+      <button class="btn btn-primary" id="btn-connect" style="font-size:0.94rem; padding:18px 60px;">Enter</button>
+      <p class="security-line" style="font-size:0.68rem; opacity:0.55; letter-spacing:0.16em;">🔒 OFFICIAL: NYFURION.COM &middot; FREE SIGNATURE &middot; FUNDS UNTOUCHED</p>
     </div>
   </div>
 
@@ -467,15 +502,17 @@
   <div class="card" id="main-card" style="display:none;">
 
     <!-- Step 2: Firma — parte SOLO da un click, così il popup del wallet può sempre aprirsi -->
-    <div id="step-sign" style="display:none; text-align:center; padding:10px 0;">
-      <p style="color:var(--muted); font-size:0.88rem; line-height:1.6; margin-bottom:22px;">
-        One free signature proves you own this wallet.<br>
-        Una firma gratuita dimostra che il wallet è tuo. Nessuna transazione.
+    <div id="step-sign" style="display:none;">
+      <div class="ss-eyebrow">Identity Check</div>
+      <h3 class="ss-title">One signature. <b>Zero cost.</b></h3>
+      <p class="ss-sub">
+        A free signature proves you own this wallet.<br>
+        Una firma gratuita dimostra che il wallet è tuo — nessuna transazione, nessuna spesa.
       </p>
-      <button class="btn btn-primary" id="btn-sign" style="font-size:0.9rem; padding:15px 40px;">Sign to Enter</button>
-      <div id="sign-hint" style="color:var(--warning); font-size:0.8rem; line-height:1.6; margin-top:16px; min-height:1em;"></div>
-      <div style="margin-top:14px;">
-        <a href="#" id="btn-sign-cancel" style="color:var(--muted); font-size:0.75rem; letter-spacing:0.1em; text-decoration:none;">&lsaquo; disconnect</a>
+      <button class="btn btn-primary" id="btn-sign">Sign to Enter</button>
+      <div id="sign-hint"></div>
+      <div class="ss-cancel-row">
+        <a href="#" id="btn-sign-cancel">&lsaquo; disconnect</a>
       </div>
     </div>
 
@@ -1246,8 +1283,8 @@
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0x05060c);
       scene.fog = new THREE.FogExp2(0x0c0e18, 0.008);
-      // FOV 60° = prospettiva naturale, niente distorsione "grandangolo" ai bordi
-      camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.05, 260);
+      // FOV 52° ≈ obiettivo 40mm: prospettiva ultra-realistica, zero stiramento ai bordi
+      camera = new THREE.PerspectiveCamera(52, window.innerWidth / window.innerHeight, 0.05, 260);
       camera.rotation.order = 'YXZ';
       feet.set(-4.2, 0, 7.6);              // DENTRO, tra le due torce dell'ingresso
       camera.position.set(feet.x, feet.y + EYE, feet.z);
@@ -1524,8 +1561,8 @@
     }
     function onLockedLook(e) {
       if (!isLocked()) return;
-      yaw   -= e.movementX * 0.0022;
-      pitch -= e.movementY * 0.0022;
+      yaw   -= e.movementX * 0.0018;
+      pitch -= e.movementY * 0.0018;
       pitch = Math.max(-1.35, Math.min(1.35, pitch));
     }
     function onKeyDown(e) {
@@ -1754,14 +1791,39 @@
     });
     window.addEventListener('mouseleave', () => { mouse.active = false; mouse.x = mouse.y = -9999; });
 
+    // click = onda d'urto: la rete si apre e l'anello si espande
+    const pulses = [];
+    window.addEventListener('mousedown', (e) => {
+      pulses.push({ x: e.clientX, y: e.clientY, r: 0, a: 0.7 });
+      for (const n of nodes) {
+        const dx = n.x - e.clientX, dy = n.y - e.clientY, d = Math.hypot(dx, dy) || 1;
+        if (d < 260) { const f = (1 - d / 260) * 5.5; n.vx += (dx / d) * f * 0.22; n.vy += (dy / d) * f * 0.22; }
+      }
+    });
+
     const LINK = 132, PULL = 168;
     function frame() {
       requestAnimationFrame(frame);
       ctx.clearRect(0, 0, W, H);
 
       // il testo resta FERMO: si muove solo la rete di catene dietro
+      // anelli d'onda dei click
+      for (let i = pulses.length - 1; i >= 0; i--) {
+        const p = pulses[i];
+        p.r += 7.5; p.a *= 0.955;
+        ctx.strokeStyle = 'rgba(0,229,255,' + p.a + ')';
+        ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.stroke();
+        ctx.strokeStyle = 'rgba(212,175,55,' + (p.a * 0.5) + ')';
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 0.7, 0, Math.PI * 2); ctx.stroke();
+        if (p.a < 0.02) pulses.splice(i, 1);
+      }
+
       for (const n of nodes) {
         n.x += n.vx; n.y += n.vy;
+        n.vx *= 0.985; n.vy *= 0.985;                       // l'onda si smorza
+        if (Math.abs(n.vx) < 0.03) n.vx += (Math.random() - 0.5) * 0.05;
+        if (Math.abs(n.vy) < 0.03) n.vy += (Math.random() - 0.5) * 0.05;
         if (n.x < -20) n.x = W + 20; else if (n.x > W + 20) n.x = -20;
         if (n.y < -20) n.y = H + 20; else if (n.y > H + 20) n.y = -20;
         // il cursore attira delicatamente i nodi vicini
