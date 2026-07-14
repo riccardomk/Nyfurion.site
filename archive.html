@@ -1335,12 +1335,13 @@
       const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
     }
 
-    function pbr(base, aniso, extra) {
+    function pbr(base, aniso, extra, rep) {
       const L = new THREE.TextureLoader();
       const maps = {};
       ['diff', 'nor_gl', 'rough'].forEach((m) => {
         const t = L.load('tex-' + base + '-' + m + '.jpg');
         t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.RepeatWrapping;
+        if (rep) t.repeat.set(rep, rep);   // scala del pattern (1 = ogni 2m; 2 = ogni 1m)
         t.anisotropy = aniso;
         t.flipY = false;   // le UV del glTF hanno la V invertita
         maps[m] = t;
@@ -1372,8 +1373,8 @@
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0x05060c);
       scene.fog = new THREE.FogExp2(0x0c0e18, 0.008);
-      // FOV 52° ≈ obiettivo 40mm: prospettiva ultra-realistica, zero stiramento ai bordi
-      camera = new THREE.PerspectiveCamera(52, window.innerWidth / window.innerHeight, 0.05, 260);
+      // FOV 46° ≈ obiettivo 50mm: campo visivo costante, niente avvicinamento ai bordi
+      camera = new THREE.PerspectiveCamera(46, window.innerWidth / window.innerHeight, 0.05, 260);
       camera.rotation.order = 'YXZ';
       feet.set(-4.2, 0, 7.6);              // DENTRO, tra le due torce dell'ingresso
       camera.position.set(feet.x, feet.y + EYE, feet.z);
@@ -1425,11 +1426,11 @@
       // ── Materiali del mondo Nyfurion Prime (rifiniti, con riflessi) ──
       const gold = new THREE.MeshStandardMaterial({ color: 0xcaa544, metalness: 0.95, roughness: 0.24, envMapIntensity: 1.4 });
       const MATS = {
-        NYFP_Plaster:    pbr('painted_plaster_wall', ANISO, { color: 0xe4ddce, roughness: 0.9, envMapIntensity: 0.35 }),
-        NYFP_Stone:      pbr('cobblestone_floor_08', ANISO, { color: 0xc2bdb2, roughness: 0.92 }),
-        NYFP_StoneDark:  pbr('cobblestone_floor_08', ANISO, { color: 0x4f4c47, roughness: 0.9, envMapIntensity: 0.5 }),
-        NYFP_WoodFloor:  pbr('wood_floor_deck', ANISO, { roughness: 0.62, envMapIntensity: 0.6 }),
-        NYFP_WoodDark:   pbr('dark_wood', ANISO, { roughness: 0.5, envMapIntensity: 0.6 }),
+        NYFP_Plaster:    pbr('painted_plaster_wall', ANISO, { color: 0xd6cdbc, roughness: 0.93, envMapIntensity: 0.35 }, 2),
+        NYFP_Stone:      pbr('cobblestone_floor_08', ANISO, { color: 0xc2bdb2, roughness: 0.92 }, 1.6),
+        NYFP_StoneDark:  pbr('cobblestone_floor_08', ANISO, { color: 0x4f4c47, roughness: 0.9, envMapIntensity: 0.5 }, 1.6),
+        NYFP_WoodFloor:  pbr('wood_floor_deck', ANISO, { roughness: 0.62, envMapIntensity: 0.6 }, 2.4),
+        NYFP_WoodDark:   pbr('dark_wood', ANISO, { roughness: 0.5, envMapIntensity: 0.6 }, 2),
         NYFP_Gold:       gold,
         NYFP_Metal:      new THREE.MeshStandardMaterial({ color: 0x33353c, metalness: 0.95, roughness: 0.28, envMapIntensity: 1.1 }),
         NYFP_Glass:      new THREE.MeshStandardMaterial({ color: 0xcfe6f2, transparent: true, opacity: 0.12, roughness: 0.04, metalness: 0.1, envMapIntensity: 1.4, side: THREE.DoubleSide, depthWrite: false }),
