@@ -27,11 +27,6 @@
 
     body {
       background-color: var(--bg);
-      background-image: linear-gradient(rgba(8,8,9,0.82), rgba(8,8,9,0.9)), url('bg-main.png');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
       color: #F2F2F2;
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
@@ -39,10 +34,59 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 64px 16px 96px;
+      padding: 72px 16px 104px;
       overflow-x: hidden;
     }
     ::selection { background: var(--energy); color: #06121a; }
+
+    /* ── Sfondo cinematografico: respiro lento + scrim + vignettatura ── */
+    #bg-cine {
+      position: fixed; inset: -4%; z-index: 0; pointer-events: none;
+      background: url('bg-main.png') center 30% / cover no-repeat;
+      filter: brightness(0.5) saturate(1.08);
+      animation: cineBreath 36s ease-in-out infinite alternate;
+    }
+    @keyframes cineBreath {
+      from { transform: scale(1); }
+      to   { transform: scale(1.07); }
+    }
+    #bg-scrim {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 90% 70% at 50% 42%, rgba(0,0,0,0) 30%, rgba(5,5,8,0.55) 78%, rgba(5,5,8,0.85)),
+        linear-gradient(180deg, rgba(5,5,8,0.55), rgba(5,5,8,0.05) 30%, rgba(5,5,8,0.05) 62%, rgba(5,5,8,0.72));
+    }
+    /* ── Cornice di lusso ai bordi dello schermo ── */
+    #frame-lines {
+      position: fixed; inset: 20px; z-index: 2; pointer-events: none;
+      border: 1px solid rgba(212,175,55,0.16);
+    }
+    #frame-lines::before, #frame-lines::after {
+      content: ''; position: absolute; width: 34px; height: 34px;
+    }
+    #frame-lines::before {
+      top: -1px; left: -1px;
+      border-top: 2px solid rgba(212,175,55,0.75);
+      border-left: 2px solid rgba(212,175,55,0.75);
+    }
+    #frame-lines::after {
+      bottom: -1px; right: -1px;
+      border-bottom: 2px solid rgba(212,175,55,0.75);
+      border-right: 2px solid rgba(212,175,55,0.75);
+    }
+    #frame-lines .fl-tr, #frame-lines .fl-bl {
+      position: absolute; width: 34px; height: 34px;
+    }
+    #frame-lines .fl-tr {
+      top: -1px; right: -1px;
+      border-top: 2px solid rgba(0,229,255,0.5);
+      border-right: 2px solid rgba(0,229,255,0.5);
+    }
+    #frame-lines .fl-bl {
+      bottom: -1px; left: -1px;
+      border-bottom: 2px solid rgba(0,229,255,0.5);
+      border-left: 2px solid rgba(0,229,255,0.5);
+    }
 
     /* ── Grana filmica come sul sito ── */
     body::before {
@@ -79,29 +123,43 @@
     /* il gruppo hero si sposta appena col mouse (parallasse) */
     #hero { position: relative; z-index: 1; text-align: center; will-change: transform; }
 
-    /* ── Header (stile sito: Space Grotesk, maiuscolo, tecnico) ── */
+    /* ── Header: lockup monumentale ── */
     header { text-align: center; margin-bottom: 0; }
     header .label {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 500;
-      letter-spacing: 0.44em;
+      letter-spacing: 0.6em;
+      text-indent: 0.6em;
       text-transform: uppercase;
       color: var(--energy);
-      margin-bottom: 22px;
+      margin-bottom: 30px;
       text-shadow: 0 0 18px rgba(0,229,255,0.4);
     }
     header h1 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(1.9rem, 5vw, 3.4rem);
-      font-weight: 300;
-      letter-spacing: 0.16em;
-      line-height: 1.16;
+      font-size: clamp(2rem, 5.6vw, 3.9rem);
+      font-weight: 200;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+      line-height: 1.22;
       text-transform: uppercase;
-      color: #f5f5f7;
-      text-shadow: 0 2px 26px rgba(0,0,0,0.55);
+      color: #f7f7f9;
+      text-shadow: 0 2px 30px rgba(0,0,0,0.65);
     }
-    header h1 .accent { color: var(--gold); font-weight: 500; }
+    header h1 .accent {
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      background: linear-gradient(105deg, #7c6120 0%, #d4af37 28%, #f6e39a 50%, #d4af37 72%, #7c6120 100%);
+      background-size: 220% 100%;
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: transparent;
+      animation: goldSheen 7s ease-in-out infinite;
+    }
+    @keyframes goldSheen {
+      0%, 100% { background-position: 0% 0; }
+      50%      { background-position: 100% 0; }
+    }
     header .tagline {
       margin: 30px auto 0;
       color: #b4b4ba;
@@ -414,6 +472,34 @@
     .btn-outline:hover { border-color: var(--gold); background: var(--gold-dim); }
     .btn-outline:disabled { opacity: 0.4; cursor: not-allowed; }
 
+    /* ── Bottone da maison (landing) ── */
+    .btn-hero {
+      position: relative; overflow: hidden;
+      background: rgba(212,175,55,0.05);
+      border: 1px solid rgba(212,175,55,0.65);
+      color: #ecd98a;
+      font-weight: 500;
+      letter-spacing: 0.34em;
+      text-indent: 0.34em;
+      padding: 20px 66px;
+      border-radius: 2px;
+      transition: all 0.35s ease;
+    }
+    .btn-hero::before {
+      content: ''; position: absolute; top: 0; bottom: 0; left: -80%; width: 55%;
+      background: linear-gradient(100deg, rgba(255,240,190,0) 0%, rgba(255,240,190,0.28) 50%, rgba(255,240,190,0) 100%);
+      transform: skewX(-18deg);
+      transition: left 0.7s ease;
+    }
+    .btn-hero:hover {
+      border-color: var(--gold);
+      background: rgba(212,175,55,0.12);
+      box-shadow: 0 0 34px rgba(212,175,55,0.35), inset 0 0 22px rgba(212,175,55,0.08);
+      color: #f6e39a;
+    }
+    .btn-hero:hover::before { left: 130%; }
+    .btn-hero:disabled { opacity: 0.4; cursor: not-allowed; }
+
     #btn-row { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
 
     /* ── Spinner ── */
@@ -471,27 +557,30 @@
     .card.card--denied { border-color: rgba(255,77,109,0.4); background: rgba(255,77,109,0.05); }
 
     @media (prefers-reduced-motion: reduce) {
-      #main-card, #step-connect, header { animation: none; }
+      #main-card, #step-connect, header, #bg-cine, header h1 .accent { animation: none; }
     }
   </style>
 </head>
 <body>
 
+  <div id="bg-cine" aria-hidden="true"></div>
+  <div id="bg-scrim" aria-hidden="true"></div>
   <canvas id="hero-fx" aria-hidden="true"></canvas>
   <div id="cursor-glow" aria-hidden="true"></div>
+  <div id="frame-lines" aria-hidden="true"><span class="fl-tr"></span><span class="fl-bl"></span></div>
 
   <div id="hero">
     <header>
       <div class="label">The Unique Portal</div>
-      <h1>NYFURION<br><span class="accent">HOLDER</span></h1>
+      <h1 translate="no" class="notranslate">NYFURION<br><span class="accent">HOLDER</span></h1>
       <p class="tagline">Your private access to the artwork, lore and commercial license of the fragment you own.</p>
       <div class="rule"></div>
     </header>
 
     <!-- Step 1: Connect wallet -->
     <div id="step-connect" style="position:relative; z-index:1; text-align:center;">
-      <button class="btn btn-primary" id="btn-connect" style="font-size:0.94rem; padding:18px 60px;">Enter</button>
-      <p class="security-line" style="font-size:0.68rem; opacity:0.55; letter-spacing:0.16em;">🔒 OFFICIAL: NYFURION.COM &middot; FREE SIGNATURE &middot; FUNDS UNTOUCHED</p>
+      <button class="btn btn-hero" id="btn-connect" style="font-size:0.88rem;">Enter</button>
+      <p class="security-line" style="font-size:0.66rem; opacity:0.5; letter-spacing:0.18em;">🔒 OFFICIAL: NYFURION.COM &middot; FREE SIGNATURE &middot; FUNDS UNTOUCHED</p>
     </div>
   </div>
 
