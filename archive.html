@@ -1377,15 +1377,18 @@
       //  orizzontale oltre i 90°: era QUELLO l'effetto "i lati si avvicinano")
       camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.05, 260);
       camera.rotation.order = 'YXZ';
-      const H_FOV = 66 * Math.PI / 180;
+      // stile GTA: base 74° orizzontali costanti + leggero allargamento in sprint
+      let hFovBoost = 0;
       const setFov = () => {
         const aspect = window.innerWidth / window.innerHeight;
+        const h = (74 + hFovBoost) * Math.PI / 180;
         camera.aspect = aspect;
-        camera.fov = 2 * Math.atan(Math.tan(H_FOV / 2) / aspect) * 180 / Math.PI;
+        camera.fov = 2 * Math.atan(Math.tan(h / 2) / aspect) * 180 / Math.PI;
         camera.updateProjectionMatrix();
       };
       setFov();
       window.__villaSetFov = setFov;
+      window.__villaFovBoost = (v) => { hFovBoost = v; setFov(); };
       feet.set(-4.2, 0, 7.6);              // DENTRO, tra le due torce dell'ingresso
       camera.position.set(feet.x, feet.y + EYE, feet.z);
 
@@ -1853,16 +1856,23 @@
 
       const f = (keys['KeyW'] || keys['ArrowUp'] ? 1 : 0) - (keys['KeyS'] || keys['ArrowDown'] ? 1 : 0);
       const s = (keys['KeyD'] || keys['ArrowRight'] ? 1 : 0) - (keys['KeyA'] || keys['ArrowLeft'] ? 1 : 0);
-      const run = (keys['ShiftLeft'] || keys['ShiftRight']) ? 1.7 : 1;
-      const sp = 3.4 * run;
+      const sprinting = (keys['ShiftLeft'] || keys['ShiftRight']) && (f !== 0 || s !== 0);
+      // GTA: passo 2.1 m/s, sprint 5.2 m/s, corpo con peso (parte e frena con inerzia)
+      const sp = sprinting ? 5.2 : 2.1;
       const sin = Math.sin(yaw), cos = Math.cos(yaw);
       let tx = (-sin * f + cos * s), tz = (-cos * f - sin * s);
       const mag = Math.hypot(tx, tz);
       if (mag > 1) { tx /= mag; tz /= mag; }        // niente scatto extra in diagonale
       tx *= sp; tz *= sp;
-      const k = Math.min(1, dt * 10);
+      const accel = (f !== 0 || s !== 0) ? 5.5 : 9;  // parte morbido, frena deciso
+      const k = Math.min(1, dt * accel);
       vel.x += (tx - vel.x) * k;
       vel.z += (tz - vel.z) * k;
+      // firma GTA: lo sprint apre leggermente la visuale (proporzionale alla velocità reale)
+      if (window.__villaFovBoost) {
+        const boost = sprinting ? 7 * Math.min(1, Math.hypot(vel.x, vel.z) / 5.2) : 0;
+        window.__villaFovBoost(boost);
+      }
 
       let dx = vel.x * dt, dz = vel.z * dt;
       if (colliders.length && blocked(dx, dz)) {   // scivola lungo il muro invece di incastrarti
