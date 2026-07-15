@@ -1436,29 +1436,32 @@
       addPt(2.1, 1.7, 7.6, 0xffb552, 1.1, 7);         // braciere dx
       addPt(0, 3.3, 6.2, 0xffe2b4, 0.9, 9);           // portale d'ingresso
 
-      // ── Materiali del mondo Nyfurion Prime (rifiniti, con riflessi) ──
-      const gold = new THREE.MeshStandardMaterial({ color: 0xcaa544, metalness: 0.95, roughness: 0.24, envMapIntensity: 1.4 });
+      // ── Materiali del mondo Nyfurion Prime — palette "museo iconico" ──
+      // intonaco fine avorio, ardesia, parquet chevron, velluto bordeaux, jacquard, oro caldo
+      const gold = new THREE.MeshStandardMaterial({ color: 0xd8b64e, metalness: 0.96, roughness: 0.2, envMapIntensity: 1.6 });
+      const deckWood = pbr('wood_floor_deck', ANISO, { roughness: 0.82 }, 1.8);
+      const walnut = new THREE.MeshStandardMaterial({ color: 0x2c1f15, roughness: 0.55, envMapIntensity: 0.5 });
       const MATS = {
-        NYFP_Plaster:    pbr('beige_wall_001', ANISO, { color: 0xe8e2d6, envMapIntensity: 0.35 }, 2.2),
-        NYFP_Stone:      pbr('cobblestone_floor_08', ANISO, { color: 0xc2bdb2, roughness: 0.92 }, 1.6),
-        NYFP_StoneDark:  pbr('cobblestone_floor_08', ANISO, { color: 0x4f4c47, roughness: 0.9, envMapIntensity: 0.5 }, 1.6),
-        NYFP_WoodFloor:  pbr('wood_floor', ANISO, { envMapIntensity: 0.6 }, 2.2),
-        NYFP_WoodDark:   pbr('dark_wood', ANISO, { roughness: 0.5, envMapIntensity: 0.6 }, 2),
+        NYFP_Plaster:    pbr('painted_plaster_wall', ANISO, { color: 0xe9e2d4, envMapIntensity: 0.3 }, 2.4),
+        NYFP_Stone:      pbr('slate_floor_02', ANISO, { color: 0xb5aea2, roughness: 0.86 }, 1.3),
+        NYFP_StoneDark:  pbr('slate_floor_02', ANISO, { color: 0x6a635a, roughness: 0.8, envMapIntensity: 0.5 }, 1.3),
+        NYFP_WoodFloor:  pbr('herringbone_parquet', ANISO, { envMapIntensity: 0.55 }, 1.6),
+        NYFP_WoodDark:   pbr('dark_wood', ANISO, { roughness: 0.45, envMapIntensity: 0.7 }, 2),
         NYFP_Gold:       gold,
-        NYFP_Metal:      new THREE.MeshStandardMaterial({ color: 0x33353c, metalness: 0.95, roughness: 0.28, envMapIntensity: 1.1 }),
+        NYFP_Metal:      new THREE.MeshStandardMaterial({ color: 0x2c2721, metalness: 0.92, roughness: 0.32, envMapIntensity: 1.2 }),
         NYFP_Glass:      new THREE.MeshStandardMaterial({ color: 0xcfe6f2, transparent: true, opacity: 0.12, roughness: 0.04, metalness: 0.1, envMapIntensity: 1.4, side: THREE.DoubleSide, depthWrite: false }),
         NYFP_Water:      new THREE.MeshStandardMaterial({ color: 0x2f88b0, emissive: 0x0e4a63, emissiveIntensity: 0.9, transparent: true, opacity: 0.88, roughness: 0.08, metalness: 0.3, envMapIntensity: 1.2 }),
         NYFP_PoolShell:  new THREE.MeshStandardMaterial({ color: 0x1f6684, roughness: 0.35 }),
-        NYFP_Fabric:     new THREE.MeshStandardMaterial({ color: 0xdcd4c2, roughness: 0.9 }),
-        NYFP_FabricDark: new THREE.MeshStandardMaterial({ color: 0x40454f, roughness: 0.92 }),
+        NYFP_Fabric:     pbr('quatrefoil_jacquard_fabric', ANISO, { roughness: 0.95, envMapIntensity: 0.25 }, 3),
+        NYFP_FabricDark: pbr('velour_velvet', ANISO, { color: 0x8a3344, roughness: 0.95, envMapIntensity: 0.2 }, 2.5),
         NYFP_Plant:      new THREE.MeshStandardMaterial({ color: 0x315f3c, roughness: 0.82 }),
-        NYFP_Rug:        new THREE.MeshStandardMaterial({ color: 0x543423, roughness: 0.98 }),
-        NYFP_Ceiling:    new THREE.MeshStandardMaterial({ color: 0x171420, roughness: 0.9, emissive: 0x241a0e, emissiveIntensity: 0.55 }),
+        NYFP_Ceiling:    new THREE.MeshStandardMaterial({ color: 0x14111c, roughness: 0.9, emissive: 0x241809, emissiveIntensity: 0.5 }),
         NYFP_Screen:     new THREE.MeshBasicMaterial({ map: tvTexture() }),
         NYFP_Cove:       new THREE.MeshBasicMaterial({ color: 0xffe6b0 }),
         NYFP_Flame:      new THREE.MeshBasicMaterial({ color: 0xffb84a }),
         NYFP_Art:        new THREE.MeshStandardMaterial({ color: 0x141220, roughness: 0.55 }),
       };
+      MATS.NYFP_Rug = MATS.NYFP_Fabric;   // stesso jacquard, niente doppio caricamento
 
       // ── I file: la reference per prima ──
       const files = (archive.files || []);
@@ -1476,18 +1479,22 @@
       const parseVilla = (gltf) => {
         const villa = gltf.scene;
         const exhibitSlots = [], plaqueSlots = [];
-        let roomPlate = null;
-        // pavimento del museo: MARMO vero, lucidato, che riflette luci e opere
-        const polishedFloor = pbr('marble_01', ANISO, {
-          roughness: 0.16, metalness: 0.05, envMapIntensity: 1.2,
-        }, 1.4);
+        let roomPlate = null, houseShell = null;
+        // pavimento del museo: NERO MARQUINA lucidato a specchio, vene avorio e oro
+        const polishedFloor = pbr('nyf_marble_nero', ANISO, {
+          metalness: 0.05, envMapIntensity: 1.5,
+        }, 0.8);
         villa.traverse((n) => {
           if (!n.isMesh) return;
-          const matName = (n.material && n.material.name) || '';
+          // il nome del materiale si aggancia anche se Blender ha aggiunto ".001"
+          let matName = ((n.material && n.material.name) || '').replace(/\.\d{3}$/, '');
+          if (matName === 'Stainless steel') matName = 'NYFP_Metal';
+          if (n.name === 'Cube' || n.name === 'house') houseShell = n;
           if (n.name.startsWith('Exhibit_')) { exhibitSlots.push(n); }
           else if (n.name.startsWith('Plaque_')) { plaqueSlots.push(n); }
           else if (n.name === 'RoomPlate') { roomPlate = n; }
           else if (n.name === 'Floor_Museum' || n.name === 'Museum_Step') { n.material = polishedFloor; }
+          else if (n.name === 'Deck') { n.material = deckWood; }
           else if (MATS[matName]) { n.material = MATS[matName]; }
           // attraversabili: piante, fiamme, acqua, vetrate + telai/mullion delle aperture,
           // conca piscina (così cammini fino al bordo), gole di luce, opere
@@ -1586,7 +1593,8 @@
 
         // ── LA VETRINA DELLA CARD — cuore della villa, al centro del museo ──
         (function cardShowcase() {
-          const cx = 4.0, cz = 0, fy = 0.02;
+          // x 2.4 = fuoco prospettico della sala (la panchina del modello resta libera a est)
+          const cx = 2.4, cz = 0, fy = 0.22;   // fy = QUOTA REALE del marmo: basamento in vista, non affondato
           // basamento a due gradoni con anello d'oro luminoso
           const base1 = new THREE.Mesh(new THREE.CylinderGeometry(0.95, 1.1, 0.22, 40), MATS.NYFP_StoneDark);
           base1.position.set(cx, fy + 0.11, cz); scene.add(base1); colliders.push(base1);
@@ -1678,14 +1686,15 @@
             g.beginPath(); g.moveTo(128, y - 34); g.lineTo(160, y); g.lineTo(128, y + 34); g.lineTo(96, y); g.closePath(); g.stroke();
           }
           const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding;
-          t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 3);
+          t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 2);
           t.rotation = Math.PI / 2; t.center.set(0.5, 0.5);
+          // dal colonnato fino al bordo del piedistallo (x 1.3)
           const runner = new THREE.Mesh(
-            new THREE.PlaneGeometry(6.2, 1.6),
+            new THREE.PlaneGeometry(4.3, 1.6),
             new THREE.MeshStandardMaterial({ map: t, roughness: 0.98 })
           );
           runner.rotation.x = -Math.PI / 2;
-          runner.position.set(4.2, 0.235, 0);
+          runner.position.set(-0.85, 0.235, 0);
           scene.add(runner);
         })();
 
@@ -1695,7 +1704,7 @@
           const geo = new THREE.BufferGeometry();
           const posArr = new Float32Array(N * 3);
           for (let i = 0; i < N; i++) {
-            posArr[i * 3]     = 1.5 + Math.random() * 7.0;   // x nel museo
+            posArr[i * 3]     = -0.5 + Math.random() * 9.0;  // x nel museo (vetrina compresa)
             posArr[i * 3 + 1] = 0.4 + Math.random() * 3.2;   // altezza
             posArr[i * 3 + 2] = -5.2 + Math.random() * 10.4; // z
           }
@@ -1707,6 +1716,106 @@
           dust.userData.baseY = posArr.slice();
           scene.add(dust);
           window.__villaDust = dust;
+        })();
+
+        // ── MUSEO ICONICO: cassettoni, boiserie, intarsio d'oro, lampadario, applique ──
+        (function museumDecor() {
+          villa.updateMatrixWorld(true);
+          const FY = 0.22;                       // quota del marmo
+          // 1) intarsio dorato nel pavimento: cornice che abbraccia la sala
+          const inlay = (w, d2, x, z) => {
+            const m = new THREE.Mesh(new THREE.BoxGeometry(w, 0.012, d2), gold);
+            m.position.set(x, FY + 0.008, z); scene.add(m);
+          };
+          inlay(11.4, 0.06, 2.65, -5.3); inlay(11.4, 0.06, 2.65, 5.3);
+          inlay(0.06, 10.66, -3.05, 0);  inlay(0.06, 10.66, 8.35, 0);
+          // anello d'intarsio attorno alla vetrina
+          const ringIn = new THREE.Mesh(new THREE.TorusGeometry(1.55, 0.028, 8, 64), gold);
+          ringIn.rotation.x = Math.PI / 2; ringIn.position.set(2.4, FY + 0.008, 0); scene.add(ringIn);
+
+          // 2) boiserie in noce con corrimano d'oro lungo le tre pareti espositive
+          const wains = (w, d2, x, z) => {
+            const p = new THREE.Mesh(new THREE.BoxGeometry(w, 0.5, d2), walnut);
+            p.position.set(x, FY + 0.25, z); scene.add(p);
+            const r = new THREE.Mesh(new THREE.BoxGeometry(w === 0.05 ? 0.075 : w + 0.02, 0.045, d2 === 0.05 ? 0.075 : d2 + 0.02), gold);
+            r.position.set(x, FY + 0.52, z); scene.add(r);
+          };
+          wains(0.05, 11.4, 8.77, 0);            // parete est (sotto la board)
+          wains(12.3, 0.05, 2.55, -5.77);        // parete nord
+          wains(12.3, 0.05, 2.55, 5.77);         // parete sud
+
+          // 3) soffitto a cassettoni in noce (y 3.92, sotto il solaio a 4.0)
+          const beam = (w, d2, x, z) => {
+            const b = new THREE.Mesh(new THREE.BoxGeometry(w, 0.16, d2), walnut);
+            b.position.set(x, 3.92, z); scene.add(b);
+          };
+          [-3.9, -1.95, 0, 1.95, 3.9].forEach(z => beam(12.4, 0.14, 2.55, z));
+          [-1.6, 0.45, 2.5, 4.55, 6.6].forEach(x => beam(0.14, 11.6, x, 0));
+          beam(12.4, 0.2, 2.55, -5.7); beam(12.4, 0.2, 2.55, 5.7);
+          beam(0.2, 11.6, -3.55, 0);   beam(0.2, 11.6, 8.7, 0);
+
+          // 4) lampadario a corona d'oro sopra la card (due anelli di candele)
+          const chGrp = new THREE.Group();
+          const chain = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 1.0, 8), gold);
+          chain.position.y = 3.5; chGrp.add(chain);
+          const mkRing = (rad, y, nC) => {
+            const ring = new THREE.Mesh(new THREE.TorusGeometry(rad, 0.042, 10, 48), gold);
+            ring.rotation.x = Math.PI / 2; ring.position.y = y; chGrp.add(ring);
+            for (let i = 0; i < nC; i++) {
+              const a = (i / nC) * Math.PI * 2;
+              const st = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.1, 6), gold);
+              st.position.set(Math.cos(a) * rad, y + 0.09, Math.sin(a) * rad); chGrp.add(st);
+              const fl = new THREE.Mesh(new THREE.SphereGeometry(0.028, 8, 8),
+                new THREE.MeshBasicMaterial({ color: 0xffd9a2 }));
+              fl.position.set(Math.cos(a) * rad, y + 0.17, Math.sin(a) * rad); chGrp.add(fl);
+            }
+          };
+          mkRing(0.62, 3.0, 10);
+          const chain2 = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.3, 8), gold);
+          chain2.position.y = 2.86; chGrp.add(chain2);
+          mkRing(0.38, 2.7, 6);
+          chGrp.position.set(2.4, 0, 0); scene.add(chGrp);
+          const chLight = new THREE.PointLight(0xffd9a0, 1.5, 10, 2);
+          chLight.position.set(2.4, 2.85, 0); scene.add(chLight);
+
+          // 5) applique a fiamma ai lati dell'opera d'onore (parete est)
+          [-1.9, 1.9].forEach((dz) => {
+            const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.028, 0.16, 10), gold);
+            cup.position.set(8.72, 2.85, dz); scene.add(cup);
+            const fl = new THREE.Mesh(new THREE.SphereGeometry(0.038, 8, 8),
+              new THREE.MeshBasicMaterial({ color: 0xffc27a }));
+            fl.position.set(8.72, 2.98, dz); scene.add(fl);
+            const pl = new THREE.PointLight(0xffc27a, 0.55, 3.5, 2);
+            pl.position.set(8.6, 3.0, dz); scene.add(pl);
+          });
+        })();
+
+        // ── LOUNGE: parquet chevron a vista + tappeto damascato Nyfurion ──
+        (function loungeDressing() {
+          villa.updateMatrixWorld(true);
+          // quota reale del pavimento del lounge, misurata sul guscio
+          let floorY = 0.22;
+          if (houseShell) {
+            const rc = new THREE.Raycaster(new THREE.Vector3(-8.3, 3, 0), new THREE.Vector3(0, -1, 0), 0, 8);
+            const h = rc.intersectObject(houseShell, false);
+            if (h.length) floorY = h[0].point.y;
+          }
+          // clona il parquet già caricato (stesse immagini, repeat su misura del piano)
+          const pq = MATS.NYFP_WoodFloor.clone();
+          ['map', 'normalMap', 'roughnessMap'].forEach((k) => {
+            if (pq[k]) { pq[k] = pq[k].clone(); pq[k].repeat.set(7.2, 9.4); pq[k].needsUpdate = true; }
+          });
+          const floor = new THREE.Mesh(new THREE.PlaneGeometry(8.9, 11.7), pq);
+          floor.rotation.x = -Math.PI / 2;
+          floor.position.set(-8.3, floorY + 0.012, 0);
+          scene.add(floor);
+          const rt = new THREE.TextureLoader().load('tex-nyf_rug-diff.jpg');
+          rt.encoding = THREE.sRGBEncoding; rt.anisotropy = ANISO;
+          const rug = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 3.8),
+            new THREE.MeshStandardMaterial({ map: rt, roughness: 0.96 }));
+          rug.rotation.x = -Math.PI / 2;
+          rug.position.set(-8.0, floorY + 0.024, 0.8);
+          scene.add(rug);
         })();
 
         // (nessuna barriera: la terrazza e il bordo piscina sono liberamente calpestabili)
