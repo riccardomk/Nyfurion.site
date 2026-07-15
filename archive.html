@@ -1371,10 +1371,21 @@
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0x05060c);
       scene.fog = new THREE.FogExp2(0x0c0e18, 0.008);
-      // FOV 50: minimo allargamento ai bordi possibile su schermo piatto,
-      // compensato da passo più veloce per non sembrare "lontani"
+      // FOV ORIZZONTALE COSTANTE (66°): la distorsione ai bordi resta identica
+      // e bassa su QUALSIASI forma di finestra — anche ultrawide.
+      // (a FOV verticale fisso, una finestra larga fa esplodere l'angolo
+      //  orizzontale oltre i 90°: era QUELLO l'effetto "i lati si avvicinano")
       camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.05, 260);
       camera.rotation.order = 'YXZ';
+      const H_FOV = 66 * Math.PI / 180;
+      const setFov = () => {
+        const aspect = window.innerWidth / window.innerHeight;
+        camera.aspect = aspect;
+        camera.fov = 2 * Math.atan(Math.tan(H_FOV / 2) / aspect) * 180 / Math.PI;
+        camera.updateProjectionMatrix();
+      };
+      setFov();
+      window.__villaSetFov = setFov;
       feet.set(-4.2, 0, 7.6);              // DENTRO, tra le due torce dell'ingresso
       camera.position.set(feet.x, feet.y + EYE, feet.z);
 
@@ -1534,30 +1545,37 @@
         };
 
         // ── Disposizione con senso ──
-        //  Parete EST (3 slot):  i 3 extra (fronte/lato/retro) affiancati
-        //  Parete NORD (2 slot): reference + NFT ufficiale affiancati
-        //  Parete SUD (2 slot):  riservati (sigillo)
+        const K = (pat) => imgs.find(f => f.key.includes(pat));
+        const board    = K('ref-16');                 // LA REFERENZA GRANDE
         const refImg   = imgs.find(f => f.key.includes('character-sheet'));
-        const nftImg   = imgs.find(f => /\/preview\./.test(f.key)) ||
-                         imgs.find(f => !f.key.includes('character-sheet') && !f.key.includes('image-extra'));
+        const nftImg   = imgs.find(f => /\/preview\./.test(f.key));
         const extraImgs = imgs.filter(f => f.key.includes('image-extra')).sort((a, b) => a.key.localeCompare(b.key));
 
         const byName = {}; exhibitSlots.forEach(p => { byName[p.name] = p; });
         const pick = names => names.map(n => byName[n]).filter(Boolean);
-        const eastWall  = pick(['Exhibit_01', 'Exhibit_02', 'Exhibit_03']);
+        const eastWall  = pick(['Exhibit_01', 'Exhibit_02', 'Exhibit_03']);   // 01 = slot grande centrale
         const northWall = pick(['Exhibit_04', 'Exhibit_05']);
         const southWall = pick(['Exhibit_06', 'Exhibit_07']);
 
-        if (eastWall.length + northWall.length >= 5) {
+        if (board && eastWall.length >= 1) {
+          // Reference Pack presente: la BOARD domina la parete d'onore
+          dressPanel(byName['Exhibit_01'], board);
+          dressPanel(byName['Exhibit_02'], K('ref-02') || extraImgs[0]);       // front
+          dressPanel(byName['Exhibit_03'], K('ref-04') || extraImgs[2]);       // back
+          dressPanel(northWall[0], K('ref-10') || nftImg);                     // portrait
+          dressPanel(northWall[1], K('ref-17') || refImg);                     // hero
+          dressPanel(southWall[0], K('ref-03') || extraImgs[1]);               // side
+          dressPanel(southWall[1], K('ref-13') || null);                       // clay sculpt
+        } else if (eastWall.length + northWall.length >= 5) {
           eastWall.forEach(p => p.updateWorldMatrix(true, false));
           eastWall.sort((a, b) => {
             const pa = new THREE.Vector3(), pb = new THREE.Vector3();
             a.getWorldPosition(pa); b.getWorldPosition(pb); return pa.z - pb.z;
           });
-          eastWall.forEach((p, i) => dressPanel(p, extraImgs[i]));      // fronte/lato/retro in fila
-          dressPanel(northWall[0], refImg || nftImg);                   // reference
-          dressPanel(northWall[1], (refImg && nftImg) ? nftImg : null); // NFT ufficiale accanto
-          southWall.forEach(p => dressPanel(p, null));                  // riservati
+          eastWall.forEach((p, i) => dressPanel(p, extraImgs[i]));
+          dressPanel(northWall[0], refImg || nftImg);
+          dressPanel(northWall[1], (refImg && nftImg) ? nftImg : null);
+          southWall.forEach(p => dressPanel(p, null));
         } else {
           const ordered = [refImg, nftImg, ...extraImgs].filter(Boolean);
           exhibitSlots.forEach((p, i) => dressPanel(p, ordered[i]));
@@ -1577,11 +1595,8 @@
           const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.78, 0.7, 0.08, 36), gold);
           cap.position.set(cx, fy + 1.09, cz); scene.add(cap);
 
-          // niente teca: la card fluttua libera sopra il piedistallo
-          const caseH = 1.7;
-
-          // LA CARD — quella VERA del token (3D dal caveau); segnaposto se non c'è ancora
-          const cardY = fy + 1.13 + caseH * 0.52;
+          // niente teca: la card levita APPENA sopra il piedistallo, attaccata a lui
+          const cardY = fy + 1.13 + 0.62;
           const cardMat = new THREE.MeshBasicMaterial({ map: cardPlaceholderTexture() });
           showcaseCard = new THREE.Mesh(new THREE.BoxGeometry(0.72, 1.08, 0.03), [
             gold, gold, gold, gold, cardMat, cardMat,
@@ -1810,8 +1825,7 @@
 
     function onResize() {
       if (!renderer) return;
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
+      if (window.__villaSetFov) window.__villaSetFov();
       renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
