@@ -1377,18 +1377,18 @@
       //  orizzontale oltre i 90°: era QUELLO l'effetto "i lati si avvicinano")
       camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.05, 260);
       camera.rotation.order = 'YXZ';
-      // stile GTA: base 74° orizzontali costanti + leggero allargamento in sprint
-      let hFovBoost = 0;
+      // PROIEZIONE IMMUTABILE: 70° orizzontali FISSI, per sempre.
+      // Ricalcolata SOLO al ridimensionamento della finestra.
+      // Nessuno zoom dinamico, di nessun tipo, mai — niente può toccare il fov in gioco.
+      const H_FOV = 70 * Math.PI / 180;
       const setFov = () => {
         const aspect = window.innerWidth / window.innerHeight;
-        const h = (74 + hFovBoost) * Math.PI / 180;
         camera.aspect = aspect;
-        camera.fov = 2 * Math.atan(Math.tan(h / 2) / aspect) * 180 / Math.PI;
+        camera.fov = 2 * Math.atan(Math.tan(H_FOV / 2) / aspect) * 180 / Math.PI;
         camera.updateProjectionMatrix();
       };
       setFov();
       window.__villaSetFov = setFov;
-      window.__villaFovBoost = (v) => { hFovBoost = v; setFov(); };
       feet.set(-4.2, 0, 7.6);              // DENTRO, tra le due torce dell'ingresso
       camera.position.set(feet.x, feet.y + EYE, feet.z);
 
@@ -1868,11 +1868,6 @@
       const k = Math.min(1, dt * accel);
       vel.x += (tx - vel.x) * k;
       vel.z += (tz - vel.z) * k;
-      // firma GTA: lo sprint apre leggermente la visuale (proporzionale alla velocità reale)
-      if (window.__villaFovBoost) {
-        const boost = sprinting ? 7 * Math.min(1, Math.hypot(vel.x, vel.z) / 5.2) : 0;
-        window.__villaFovBoost(boost);
-      }
 
       let dx = vel.x * dt, dz = vel.z * dt;
       if (colliders.length && blocked(dx, dz)) {   // scivola lungo il muro invece di incastrarti
