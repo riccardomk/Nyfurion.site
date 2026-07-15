@@ -1234,16 +1234,41 @@
     }
 
     function plateTexture(text) {
-      const c = document.createElement('canvas'); c.width = 1024; c.height = 196;
+      const c = document.createElement('canvas'); c.width = 1024; c.height = 224;
       const g = c.getContext('2d');
-      const bg = g.createLinearGradient(0, 0, 0, 196);
-      bg.addColorStop(0, '#33290f'); bg.addColorStop(0.45, '#1e180a'); bg.addColorStop(1, '#141008');
-      g.fillStyle = bg; g.fillRect(0, 0, 1024, 196);
-      g.strokeStyle = '#d4af37'; g.lineWidth = 6; g.strokeRect(6, 6, 1012, 184);
-      g.strokeStyle = 'rgba(212,175,55,0.35)'; g.lineWidth = 2; g.strokeRect(18, 18, 988, 160);
-      g.textAlign = 'center'; g.fillStyle = '#e8cd7a';
-      g.font = '600 72px Georgia, serif';
-      g.fillText(text, 512, 124);
+      // fondo nero-bruno con velatura damascata
+      const bg = g.createLinearGradient(0, 0, 0, 224);
+      bg.addColorStop(0, '#191307'); bg.addColorStop(0.5, '#0d0a05'); bg.addColorStop(1, '#070503');
+      g.fillStyle = bg; g.fillRect(0, 0, 1024, 224);
+      for (let i = 0; i < 900; i++) {
+        const x = Math.random() * 1024, y = Math.random() * 224, s = 4 + Math.random() * 14;
+        g.strokeStyle = 'rgba(212,175,55,' + (0.015 + Math.random() * 0.03) + ')';
+        g.beginPath(); g.arc(x, y, s, Math.random() * 6.3, Math.random() * 6.3); g.stroke();
+      }
+      // doppia cornice con angoli intagliati
+      g.strokeStyle = '#c9a544'; g.lineWidth = 5; g.strokeRect(8, 8, 1008, 208);
+      const nch = 26;
+      g.strokeStyle = 'rgba(212,175,55,0.85)'; g.lineWidth = 2.5;
+      g.beginPath();
+      g.moveTo(24 + nch, 24); g.lineTo(1000 - nch, 24); g.lineTo(1000, 24 + nch);
+      g.lineTo(1000, 200 - nch); g.lineTo(1000 - nch, 200); g.lineTo(24 + nch, 200);
+      g.lineTo(24, 200 - nch); g.lineTo(24, 24 + nch); g.closePath(); g.stroke();
+      // testo con gradiente d'oro e ombra
+      g.textAlign = 'center';
+      g.font = '600 66px Georgia, serif';
+      const w = Math.min(g.measureText(text).width, 780);
+      g.fillStyle = 'rgba(0,0,0,0.8)'; g.fillText(text, 515, 138, 780);
+      const tg = g.createLinearGradient(0, 66, 0, 148);
+      tg.addColorStop(0, '#f6e3a0'); tg.addColorStop(0.55, '#d9b64f'); tg.addColorStop(1, '#96742a');
+      g.fillStyle = tg; g.fillText(text, 512, 135, 780);
+      // ornamenti a rombo ai lati del testo
+      const orn = (x, dir) => {
+        g.strokeStyle = '#c9a544'; g.lineWidth = 2.5;
+        g.beginPath(); g.moveTo(x, 112); g.lineTo(x + 40 * dir, 112); g.stroke();
+        const dx = x + 52 * dir;
+        g.beginPath(); g.moveTo(dx, 100); g.lineTo(dx + 10 * dir, 112); g.lineTo(dx, 124); g.lineTo(dx - 10 * dir, 112); g.closePath(); g.stroke();
+      };
+      orn(512 - w / 2 - 84, 1); orn(512 + w / 2 + 84, -1);
       const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.flipY = false; return t;
     }
 
@@ -1392,27 +1417,24 @@
       feet.set(-4.2, 0, 7.6);              // DENTRO, tra le due torce dell'ingresso
       camera.position.set(feet.x, feet.y + EYE, feet.z);
 
-      // cielo notturno + orizzonte
-      const sky = new THREE.Mesh(
-        new THREE.SphereGeometry(150, 32, 20),
-        new THREE.MeshBasicMaterial({ map: skyTexture(), side: THREE.BackSide, fog: false })
-      );
-      sky.position.y = 8; scene.add(sky);
+      // ── CIELO HDRI REALE (come in Blender): via lattea + orizzonte di luci ──
+      // sfondo E riflessi (envmap) vengono dalla stessa fotografia notturna
+      new THREE.TextureLoader().load('hdri-notte.jpg', (t) => {
+        t.mapping = THREE.EquirectangularReflectionMapping;
+        t.encoding = THREE.sRGBEncoding;
+        if (!scene) return;
+        scene.background = t;
+        try {
+          const pmrem = new THREE.PMREMGenerator(renderer);
+          pmrem.compileEquirectangularShader();
+          scene.environment = pmrem.fromEquirectangular(t).texture;
+        } catch (e) { /* senza envmap la scena vive lo stesso */ }
+      });
       const horizon = new THREE.Mesh(
         new THREE.CircleGeometry(150, 48),
         new THREE.MeshStandardMaterial({ color: 0x0a0b10, roughness: 1 })
       );
       horizon.rotation.x = -Math.PI / 2; horizon.position.y = -0.35; scene.add(horizon);
-
-      // ── Riflessi realistici: envmap dal cielo notturno (oro, vetro, acqua) ──
-      try {
-        const envTex = skyTexture();
-        envTex.mapping = THREE.EquirectangularReflectionMapping;
-        const pmrem = new THREE.PMREMGenerator(renderer);
-        pmrem.compileEquirectangularShader();
-        scene.environment = pmrem.fromEquirectangular(envTex).texture;
-        envTex.dispose();
-      } catch (e) { /* senza envmap la scena vive lo stesso */ }
 
       // ── Luci soffuse e di stile (museo notturno, morbido) ──
       scene.add(new THREE.HemisphereLight(0x3a4664, 0x161009, 0.52));
@@ -1438,10 +1460,11 @@
       // ── Materiali del mondo Nyfurion Prime — palette "museo iconico" ──
       // intonaco fine avorio, ardesia, parquet chevron, velluto bordeaux, jacquard, oro caldo
       const gold = new THREE.MeshStandardMaterial({ color: 0xd8b64e, metalness: 0.96, roughness: 0.2, envMapIntensity: 1.6 });
-      const deckWood = pbr('wood_floor_deck', ANISO, { roughness: 0.82 }, 1.8);
+      const deckStone = pbr('large_floor_tiles_02', ANISO, { color: 0xb9b2a4, roughness: 0.9 }, 1.1);
       const walnut = new THREE.MeshStandardMaterial({ color: 0x2c1f15, roughness: 0.55, envMapIntensity: 0.5 });
       const MATS = {
-        NYFP_Plaster:    pbr('painted_plaster_wall', ANISO, { color: 0xe9e2d4, envMapIntensity: 0.3 }, 2.4),
+        // pareti scure da galleria d'arte: le opere e l'oro risaltano
+        NYFP_Plaster:    pbr('painted_plaster_wall', ANISO, { color: 0x4a423a, envMapIntensity: 0.35 }, 2.4),
         NYFP_Stone:      new THREE.MeshStandardMaterial({ color: 0x8f887c, roughness: 0.85 }),
         NYFP_StoneDark:  new THREE.MeshStandardMaterial({ color: 0x38342e, roughness: 0.78, envMapIntensity: 0.4 }),
         NYFP_WoodFloor:  pbr('herringbone_parquet', ANISO, { envMapIntensity: 0.55 }, 1.6),
@@ -1489,14 +1512,15 @@
           let matName = ((n.material && n.material.name) || '').replace(/\.\d{3}$/, '');
           if (matName === 'Stainless steel') matName = 'NYFP_Metal';
           if (n.name === 'Cube' || n.name === 'house') houseShell = n;
-          // via la piscina (al suo posto nasce la Galleria Panoramica) e via il divanetto
-          if (n.name.startsWith('Pool_') || n.name.startsWith('Bench')) { n.visible = false; return; }
+          // via piscina, scaletta, divanetto e la fioriera davanti alla galleria
+          if (n.name.startsWith('Pool_') || n.name.startsWith('Bench') || n.name.startsWith('Steel Stairs')
+            || n.name === 'Plant_1' || n.name === 'PlantTrunk_1' || n.name === 'Planter_1') { n.visible = false; return; }
           if (n.name.startsWith('Exhibit_')) { exhibitSlots.push(n); }
           else if (n.name.startsWith('Plaque_')) { plaqueSlots.push(n); }
           else if (n.name === 'RoomPlate') { roomPlate = n; }
           else if (n.name === 'Floor_Museum' || n.name === 'Museum_Step') { n.material = polishedFloor; }
           else if (n.name.startsWith('Entry_Path')) { n.material = polishedFloor; }
-          else if (n.name === 'Deck') { n.material = deckWood; }
+          else if (n.name === 'Deck') { n.material = deckStone; }
           else if (MATS[matName]) { n.material = MATS[matName]; }
           // attraversabili: piante, fiamme, acqua, vetrate + telai/mullion delle aperture,
           // conca piscina (così cammini fino al bordo), gole di luce, opere
@@ -1860,9 +1884,10 @@
             const h = rc.intersectObject(deckMesh, false);
             if (h.length) dy = h[0].point.y;
           }
-          const HX0 = -9.6, HX1 = 4.4, HZ0 = -19.6, HZ1 = -12.4;
-          const HCX = (HX0 + HX1) / 2, HCZ = (HZ0 + HZ1) / 2;   // -2.6, -16
-          const wallIvory = new THREE.MeshStandardMaterial({ color: 0xe6dfd2, roughness: 0.85 });
+          // più vicina alla villa (niente vuoto sotto: fondazione piena fino a terra)
+          const HX0 = -9.6, HX1 = 4.4, HZ0 = -18.2, HZ1 = -11.0;
+          const HCX = (HX0 + HX1) / 2, HCZ = (HZ0 + HZ1) / 2;   // -2.6, -14.6
+          const by = dy + 0.02;                                  // quota della soletta
           const glassHall = new THREE.MeshStandardMaterial({
             color: 0xcfe6f2, transparent: true, opacity: 0.1, roughness: 0.04,
             metalness: 0.1, envMapIntensity: 1.5, side: THREE.DoubleSide, depthWrite: false,
@@ -1873,68 +1898,102 @@
             if (solid) colliders.push(s);
             return s;
           };
+          // intonaco scuro REALE (clonato con ripetizione su misura: niente pareti piatte)
+          const paraMat = (len, hgt) => {
+            const m2 = MATS.NYFP_Plaster.clone();
+            ['map', 'normalMap', 'roughnessMap'].forEach((k) => {
+              if (m2[k]) { m2[k] = m2[k].clone(); m2[k].repeat.set(len / 1.3, hgt / 1.3); m2[k].needsUpdate = true; }
+            });
+            return m2;
+          };
 
-          // pavimento: soletta che sigilla la vasca + Nero Marquina a specchio
-          const slab = strip(14.0, 0.1, 7.2, HCX, dy - 0.05, HCZ, new THREE.MeshStandardMaterial({ color: 0x26242a, roughness: 0.9 }));
+          // fondazione in pietra scura: sigilla TUTTA la vecchia vasca fino a terra
+          const fh = dy + 0.4;
+          strip(17.0, fh, 9.2, -2.7, (dy - 0.02 - 0.42) / 2, -15.9,
+            new THREE.MeshStandardMaterial({ color: 0x24211d, roughness: 0.92 }));
+
+          // soletta calpestabile + Nero Marquina a specchio
+          const slab = strip(14.0, 0.1, 7.2, HCX, by - 0.05, HCZ, new THREE.MeshStandardMaterial({ color: 0x26242a, roughness: 0.9 }));
           walkables.push(slab);
           const hm = polishedFloor.clone();
           ['map', 'normalMap', 'roughnessMap'].forEach((k) => {
             if (hm[k]) { hm[k] = hm[k].clone(); hm[k].repeat.set(5.6, 2.9); hm[k].needsUpdate = true; }
           });
           const hallFloor = new THREE.Mesh(new THREE.PlaneGeometry(13.9, 7.1), hm);
-          hallFloor.rotation.x = -Math.PI / 2; hallFloor.position.set(HCX, dy + 0.006, HCZ);
+          hallFloor.rotation.x = -Math.PI / 2; hallFloor.position.set(HCX, by + 0.006, HCZ);
           scene.add(hallFloor);
 
-          // pareti vetrate: parapetto, cristallo, montanti d'oro, architrave
+          // pareti vetrate: parapetto in intonaco scuro, copertina d'oro, cristallo, montanti
           const glassWall = (cxw, czw, len, axis) => {
             const horiz = axis === 'x';
-            strip(horiz ? len : 0.14, 0.78, horiz ? 0.14 : len, cxw, dy + 0.39, czw, wallIvory, true);
-            strip(horiz ? len : 0.05, 2.3, horiz ? 0.05 : len, cxw, dy + 1.93, czw, glassHall, true);
-            strip(horiz ? len : 0.16, 0.34, horiz ? 0.16 : len, cxw, dy + 3.25, czw, wallIvory);
+            strip(horiz ? len : 0.14, 0.78, horiz ? 0.14 : len, cxw, by + 0.39, czw, paraMat(len, 0.78), true);
+            strip(horiz ? len + 0.04 : 0.18, 0.035, horiz ? 0.18 : len + 0.04, cxw, by + 0.8, czw, gold);
+            strip(horiz ? len : 0.05, 2.3, horiz ? 0.05 : len, cxw, by + 1.95, czw, glassHall, true);
+            strip(horiz ? len : 0.16, 0.34, horiz ? 0.16 : len, cxw, by + 3.27, czw, paraMat(len, 0.34));
             const nSeg = Math.max(2, Math.round(len / 2.2));
             for (let i = 0; i <= nSeg; i++) {
               const t = -len / 2 + (len / nSeg) * i;
-              strip(horiz ? 0.08 : 0.11, 2.34, horiz ? 0.11 : 0.08,
-                cxw + (horiz ? t : 0), dy + 1.95, czw + (horiz ? 0 : t), gold);
+              strip(horiz ? 0.08 : 0.11, 2.36, horiz ? 0.11 : 0.08,
+                cxw + (horiz ? t : 0), by + 1.97, czw + (horiz ? 0 : t), gold);
             }
           };
-          glassWall(HCX, HZ0 + 0.07, 14.0, 'x');            // nord: vista mare
+          glassWall(HCX, HZ0 + 0.07, 14.0, 'x');            // nord: paesaggio
           glassWall(HX0 + 0.07, HCZ, 7.2, 'z');             // ovest
           glassWall(HX1 - 0.07, HCZ, 7.2, 'z');             // est
           glassWall(-7.1, HZ1 - 0.07, 5.0, 'x');            // sud sx (ingresso al centro)
           glassWall(1.9, HZ1 - 0.07, 5.0, 'x');             // sud dx
 
-          // portale d'ingresso in oro + targa della sala
-          strip(0.14, 3.3, 0.14, -4.6, dy + 1.65, HZ1 - 0.07, gold, true);
-          strip(0.14, 3.3, 0.14, -0.6, dy + 1.65, HZ1 - 0.07, gold, true);
-          strip(4.3, 0.16, 0.16, HCX, dy + 3.36, HZ1 - 0.07, gold);
-          const pt = plateTexture('GALLERIA PANORAMICA');
+          // portale d'ingresso in oro + targa personale dell'NFT
+          strip(0.14, 3.32, 0.14, -4.6, by + 1.66, HZ1 - 0.07, gold, true);
+          strip(0.14, 3.32, 0.14, -0.6, by + 1.66, HZ1 - 0.07, gold, true);
+          strip(4.3, 0.16, 0.16, HCX, by + 3.38, HZ1 - 0.07, gold);
+          const pt = plateTexture('GALLERIA · No. ' + tokenId);
           pt.flipY = true;
-          const plate = new THREE.Mesh(new THREE.PlaneGeometry(2.3, 0.44),
+          const plate = new THREE.Mesh(new THREE.PlaneGeometry(2.3, 0.5),
             new THREE.MeshBasicMaterial({ map: pt }));
           plate.rotation.y = Math.PI;
-          plate.position.set(HCX, dy + 2.85, HZ1 - 0.17);
+          plate.position.set(HCX, by + 2.86, HZ1 - 0.17);
           scene.add(plate);
 
           // tetto + soffitto caldo
-          strip(14.3, 0.12, 7.5, HCX, dy + 3.48, HCZ, walnut);
+          strip(14.3, 0.12, 7.5, HCX, by + 3.5, HCZ, walnut);
           const ceil = new THREE.Mesh(new THREE.PlaneGeometry(13.9, 7.1), MATS.NYFP_Ceiling);
-          ceil.rotation.x = Math.PI / 2; ceil.position.set(HCX, dy + 3.41, HCZ);
+          ceil.rotation.x = Math.PI / 2; ceil.position.set(HCX, by + 3.43, HCZ);
           scene.add(ceil);
 
           // due lampadari a corona
-          makeChandelier(-6.1, HCZ, dy + 3.35);
-          makeChandelier(0.9, HCZ, dy + 3.35);
+          makeChandelier(-6.1, HCZ, by + 3.37);
+          makeChandelier(0.9, HCZ, by + 3.37);
+
+          // targhetta "COMING SOON" per la postazione del personaggio 3D
+          const comingPlate = () => {
+            const c = document.createElement('canvas'); c.width = 512; c.height = 168;
+            const g = c.getContext('2d');
+            g.fillStyle = '#0c0906'; g.fillRect(0, 0, 512, 168);
+            g.strokeStyle = '#c9a544'; g.lineWidth = 4; g.strokeRect(6, 6, 500, 156);
+            g.strokeStyle = 'rgba(212,175,55,0.4)'; g.lineWidth = 1.5; g.strokeRect(16, 16, 480, 136);
+            g.textAlign = 'center';
+            g.fillStyle = '#e8cd7a'; g.font = '600 44px Georgia, serif';
+            g.fillText('3D CHARACTER · #' + tokenId, 256, 72);
+            g.fillStyle = '#9a8d6d'; g.font = '600 34px Georgia, serif';
+            g.fillText('C O M I N G   S O O N', 256, 128);
+            const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
+          };
 
           // tre plinti in marmo pronti per i personaggi 3D (stesso stile della vetrina)
           const pedMat = polishedFloor.clone();
           ['map', 'normalMap', 'roughnessMap'].forEach((k) => {
             if (pedMat[k]) { pedMat[k] = pedMat[k].clone(); pedMat[k].repeat.set(0.5, 0.5); pedMat[k].offset.set(0.55, 0.4); pedMat[k].needsUpdate = true; }
           });
+          const pedTex = comingPlate();
           [-7.4, -2.6, 2.2].forEach((px) => {
-            strip(0.8, 1.0, 0.8, px, dy + 0.5, -18.4, pedMat, true);
-            strip(0.84, 0.04, 0.84, px, dy + 0.02, -18.4, gold);
-            strip(0.83, 0.03, 0.83, px, dy + 0.985, -18.4, gold);
+            strip(0.8, 1.0, 0.8, px, by + 0.5, -17.3, pedMat, true);
+            strip(0.84, 0.04, 0.84, px, by + 0.02, -17.3, gold);
+            strip(0.83, 0.03, 0.83, px, by + 0.985, -17.3, gold);
+            const pp = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 0.2),
+              new THREE.MeshBasicMaterial({ map: pedTex }));
+            pp.position.set(px, by + 0.58, -16.895);
+            scene.add(pp);
           });
         })();
 
