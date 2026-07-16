@@ -1534,11 +1534,7 @@
       const addPt = (x, y, z, color, i2, d) => {
         const p = new THREE.PointLight(color, i2, d, 2); p.position.set(x, y, z); scene.add(p);
       };
-      // luci adattate al modello v2: museo grande a est, colonnato, ala ovest
-      addPt(-13, 3.8, 0, 0xffe2b4, 1.4, 16);          // ala ovest (calda, ampia)
-      addPt(-7.5, 3.8, 0, 0xffe2b4, 1.0, 10);         // colonnato
-      addPt(4.8, 4.2, 0, 0xfff0d6, 1.6, 16);          // museo est (soffuso)
-      addPt(-3, 4.2, 0, 0xffe8c8, 1.1, 12);           // museo ovest
+      // (le luci interne vengono calcolate DENTRO parseVilla, sulle misure vere del modello)
 
       // ── Materiali del mondo Nyfurion Prime — palette "museo iconico" ──
       // intonaco fine avorio, ardesia, parquet chevron, velluto bordeaux, jacquard, oro caldo
@@ -1626,6 +1622,33 @@
         exhibitSlots.sort((a, b) => a.name.localeCompare(b.name));
         plaqueSlots.sort((a, b) => a.name.localeCompare(b.name));
 
+        // ── MISURE REALI dal modello: a prova di QUALSIASI ridimensionamento ──
+        villa.updateMatrixWorld(true);
+        const fBB = new THREE.Box3().setFromObject(villa.getObjectByName('Floor_Museum') || villa);
+        const FY = fBB.max.y;                     // quota vera del pavimento del museo
+        let ceilY = FY + 4.4;                     // solaio più basso sopra il museo
+        villa.traverse((n) => {
+          if (!n.isMesh || !/^NYFP_Ceiling/.test((n.material && n.material.name) || '')) return;
+          const b = new THREE.Box3().setFromObject(n);
+          if (b.min.y > FY + 1.8 && b.min.y < ceilY) ceilY = b.min.y;
+        });
+        const exBB = new THREE.Box3();
+        exhibitSlots.forEach((p) => exBB.expandByObject(p));
+        const artCX = Math.min(Math.max((exBB.min.x + exBB.max.x) / 2, fBB.min.x + 2.2), fBB.max.x - 2.2);
+        const hBB = houseShell ? new THREE.Box3().setFromObject(houseShell) : fBB.clone();
+
+        // spawn: lato ovest del museo, sguardo verso la vetrina
+        feet.set(fBB.min.x + 1.6, FY, 0);
+        yaw = -Math.PI / 2; pitch = 0;
+        camera.position.set(feet.x, feet.y + EYE, feet.z);
+
+        // fari d'ambiente calcolati sulle misure vere (museo + ali esistenti)
+        addPt(fBB.min.x * 0.3 + fBB.max.x * 0.7, ceilY - 0.4, 0, 0xfff0d6, 1.6, 16);
+        addPt(fBB.min.x * 0.7 + fBB.max.x * 0.3, ceilY - 0.4, 0, 0xffe8c8, 1.2, 14);
+        if (hBB.min.x < fBB.min.x - 3) addPt((hBB.min.x + fBB.min.x) / 2, ceilY - 0.4, 0, 0xffe2b4, 1.3, 16);
+        if (hBB.min.z < fBB.min.z - 3) addPt(artCX - 4, ceilY - 0.4, (hBB.min.z + fBB.min.z) / 2, 0xffe2b4, 1.2, 18);
+        if (hBB.max.z > fBB.max.z + 3) addPt((fBB.min.x + fBB.max.x) / 2 - 3, ceilY - 0.6, (hBB.max.z + fBB.max.z) / 2, 0xffe2b4, 1.0, 14);
+
         // faretto automatico + pozza di luce sul pavimento davanti a ogni opera
         const poolTex = haloTexture();
         const spotFor = (mesh) => {
@@ -1639,13 +1662,19 @@
           sp.position.copy(pos).addScaledVector(nrm, 1.7); sp.position.y += 1.5;
           sp.target.position.copy(pos);
           scene.add(sp); scene.add(sp.target);
+          // FARO visibile: corpo lampada in oro puntato sull'opera
+          const fix = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.05, 0.17, 10), gold);
+          fix.position.copy(sp.position);
+          fix.lookAt(pos);
+          fix.rotateX(Math.PI / 2);
+          scene.add(fix);
           // pozza di luce calda sul pavimento sotto l'opera
           const pool = new THREE.Mesh(
             new THREE.PlaneGeometry(1.9, 1.1),
             new THREE.MeshBasicMaterial({ map: poolTex, transparent: true, opacity: 0.3, depthWrite: false, blending: THREE.AdditiveBlending })
           );
           pool.rotation.x = -Math.PI / 2;
-          pool.position.set(pos.x + nrm.x * 0.55, 0.24, pos.z + nrm.z * 0.55);
+          pool.position.set(pos.x + nrm.x * 0.55, FY + 0.02, pos.z + nrm.z * 0.55);
           scene.add(pool);
         };
 
@@ -1701,8 +1730,8 @@
 
         // ── LA VETRINA DELLA CARD — cuore della villa, al centro del museo ──
         (function cardShowcase() {
-          // vetrina AL CENTRO DEI QUADRI (le opere stanno a x 3.6..8.8 sulle tre pareti)
-          const cx = 5.9, cz = 0, fy = 0.22;   // fy = QUOTA REALE del marmo: basamento in vista, non affondato
+          // vetrina AL CENTRO DEI QUADRI, misurato dai quadri veri
+          const cx = artCX, cz = 0, fy = FY;
           // ══ VETRINA MUSEALE: plinto in marmo nero + teca di vetro con spigoli d'oro ══
           // (stesso formato riutilizzabile per il personaggio 3D nelle altre sale)
           const plinthMat = polishedFloor.clone();
@@ -1827,15 +1856,18 @@
             g.beginPath(); g.moveTo(128, y - 34); g.lineTo(160, y); g.lineTo(128, y + 34); g.lineTo(96, y); g.closePath(); g.stroke();
           }
           const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding;
-          t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 5);
+          t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.RepeatWrapping;
           t.rotation = Math.PI / 2; t.center.set(0.5, 0.5);
-          // dal colonnato (x -7.0) fino al bordo del piedistallo (x 4.75)
+          // dall'ingresso ovest del museo fino al bordo del piedistallo (misurato)
+          const rx0 = fBB.min.x + 0.9, rx1 = artCX - 1.2;
+          const rlen = Math.max(3, rx1 - rx0);
+          t.repeat.set(1, Math.max(2, Math.round(rlen / 2.4)));
           const runner = new THREE.Mesh(
-            new THREE.PlaneGeometry(11.7, 1.6),
+            new THREE.PlaneGeometry(rlen, 1.6),
             new THREE.MeshStandardMaterial({ map: t, roughness: 0.98 })
           );
           runner.rotation.x = -Math.PI / 2;
-          runner.position.set(-1.15, 0.235, 0);
+          runner.position.set((rx0 + rx1) / 2, FY + 0.015, 0);
           scene.add(runner);
         })();
 
@@ -1845,9 +1877,9 @@
           const geo = new THREE.BufferGeometry();
           const posArr = new Float32Array(N * 3);
           for (let i = 0; i < N; i++) {
-            posArr[i * 3]     = -8.0 + Math.random() * 16.5; // x nel museo grande (vetrina compresa)
-            posArr[i * 3 + 1] = 0.4 + Math.random() * 3.2;   // altezza
-            posArr[i * 3 + 2] = -5.2 + Math.random() * 10.4; // z
+            posArr[i * 3]     = fBB.min.x + 1 + Math.random() * (fBB.max.x - fBB.min.x - 2);
+            posArr[i * 3 + 1] = FY + 0.2 + Math.random() * Math.max(1.5, ceilY - FY - 1.4);
+            posArr[i * 3 + 2] = fBB.min.z + 1 + Math.random() * (fBB.max.z - fBB.min.z - 2);
           }
           geo.setAttribute('position', new THREE.BufferAttribute(posArr, 3));
           const dust = new THREE.Points(geo, new THREE.PointsMaterial({
@@ -1889,12 +1921,9 @@
 
         // ── MUSEO ICONICO: cassettoni, boiserie, intarsio d'oro, lampadario, applique ──
         (function museumDecor() {
-          villa.updateMatrixWorld(true);
-          // SOLO elementi ancorati alla geometria vera del modello di Riccardo:
-          // niente più architetture in codice (cassettoni/boiserie/intarsi) che
-          // galleggiavano dove le pareti sono cambiate.
-          // Lampadario a corona sopra la vetrina (soffitto misurato: 4.82)
-          makeChandelier(5.9, 0, 4.75);
+          // solo elementi ancorati a MISURE vere: lampadario sopra la vetrina,
+          // appeso al solaio misurato dal modello
+          makeChandelier(artCX, 0, ceilY - 0.06);
         })();
 
         // (il marmo delle ali arriva dai PAVIMENTI VERI del guscio: facce orizzontali
