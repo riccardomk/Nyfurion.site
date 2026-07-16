@@ -1414,7 +1414,7 @@
       };
       setFov();
       window.__villaSetFov = setFov;
-      feet.set(-4.2, 0, 7.6);              // DENTRO, tra le due torce dell'ingresso
+      feet.set(-4, 0.22, 0);               // DENTRO il museo, davanti al colonnato
       camera.position.set(feet.x, feet.y + EYE, feet.z);
 
       // ── CIELO: notte stellata nitida (via lattea, luna con alone) ──
@@ -1477,10 +1477,10 @@
         geo.computeVertexNormals();
         scene.add(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1 })));
 
-        // zoccolo pieno sotto villa e terrazza: nessun vuoto sotto le solette
-        const basamento = new THREE.Mesh(new THREE.BoxGeometry(25, 0.7, 35),
+        // zoccolo pieno sotto la villa v2 (impronta più grande): nessun vuoto sotto
+        const basamento = new THREE.Mesh(new THREE.BoxGeometry(29, 0.7, 34),
           new THREE.MeshStandardMaterial({ color: 0x24211d, roughness: 0.92 }));
-        basamento.position.set(-2.1, -0.65, -4.3); scene.add(basamento);
+        basamento.position.set(-4.9, -0.65, -3.0); scene.add(basamento);
 
         // ── FORESTA: alberi fotorenderizzati su pannelli incrociati (tecnica da gioco) ──
         const treePts = [];
@@ -1489,7 +1489,7 @@
           const ang = Math.random() * Math.PI * 2;
           const rr = 34 + Math.pow(Math.random(), 0.72) * 140;
           const x = CVX + Math.cos(ang) * rr, z = CVZ + Math.sin(ang) * rr;
-          if (x > -19 && x < 14 && z > -26 && z < 16) continue;   // mai dentro villa/terrazza
+          if (x > -21 && x < 14 && z > -27 && z < 17) continue;   // mai dentro la villa v2
           const h = hAt(x, z);
           if (h > 24) continue;                                    // niente bosco in alta quota
           treePts.push([x, h - 0.25, z, 0.8 + Math.random() * 0.9, Math.random() * Math.PI]);
@@ -1534,16 +1534,11 @@
       const addPt = (x, y, z, color, i2, d) => {
         const p = new THREE.PointLight(color, i2, d, 2); p.position.set(x, y, z); scene.add(p);
       };
-      addPt(-4.5, 3.4, 0, 0xffe2b4, 1.5, 16);         // lounge (caldo, ampio)
-      addPt(-7.6, 2.0, -2.1, 0xffe9c4, 0.9, 7);       // lampada 1
-      addPt(-1.6, 2.0, 2.3, 0xffe9c4, 0.9, 7);        // lampada 2
-      addPt(-8.4, 0.6, -0.4, 0xff9a3c, 0.9, 5.5);     // camino di luce
-      addPt(4.8, 3.6, 0, 0xfff0d6, 1.6, 15);          // museo centro (soffuso)
-      addPt(0.3, 3.5, 0, 0xffe2b4, 0.9, 9);           // colonnato
-      // (le luci piscina non esistono più: al suo posto c'è la Galleria Panoramica)
-      addPt(-2.1, 1.7, 7.6, 0xffb552, 1.1, 7);        // braciere sx
-      addPt(2.1, 1.7, 7.6, 0xffb552, 1.1, 7);         // braciere dx
-      addPt(0, 3.3, 6.2, 0xffe2b4, 0.9, 9);           // portale d'ingresso
+      // luci adattate al modello v2: museo grande a est, colonnato, ala ovest
+      addPt(-13, 3.8, 0, 0xffe2b4, 1.4, 16);          // ala ovest (calda, ampia)
+      addPt(-7.5, 3.8, 0, 0xffe2b4, 1.0, 10);         // colonnato
+      addPt(4.8, 4.2, 0, 0xfff0d6, 1.6, 16);          // museo est (soffuso)
+      addPt(-3, 4.2, 0, 0xffe8c8, 1.1, 12);           // museo ovest
 
       // ── Materiali del mondo Nyfurion Prime — palette "museo iconico" ──
       // intonaco fine avorio, ardesia, parquet chevron, velluto bordeaux, jacquard, oro caldo
@@ -1703,8 +1698,8 @@
 
         // ── LA VETRINA DELLA CARD — cuore della villa, al centro del museo ──
         (function cardShowcase() {
-          // x 2.4 = fuoco prospettico della sala (la panchina del modello resta libera a est)
-          const cx = 2.4, cz = 0, fy = 0.22;   // fy = QUOTA REALE del marmo: basamento in vista, non affondato
+          // vetrina AL CENTRO DEI QUADRI (le opere stanno a x 3.6..8.8 sulle tre pareti)
+          const cx = 5.9, cz = 0, fy = 0.22;   // fy = QUOTA REALE del marmo: basamento in vista, non affondato
           // ══ VETRINA MUSEALE: plinto in marmo nero + teca di vetro con spigoli d'oro ══
           // (stesso formato riutilizzabile per il personaggio 3D nelle altre sale)
           const plinthMat = polishedFloor.clone();
@@ -1829,15 +1824,15 @@
             g.beginPath(); g.moveTo(128, y - 34); g.lineTo(160, y); g.lineTo(128, y + 34); g.lineTo(96, y); g.closePath(); g.stroke();
           }
           const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding;
-          t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 2);
+          t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 5);
           t.rotation = Math.PI / 2; t.center.set(0.5, 0.5);
-          // dal colonnato fino al bordo del piedistallo (x 1.3)
+          // dal colonnato (x -7.0) fino al bordo del piedistallo (x 4.75)
           const runner = new THREE.Mesh(
-            new THREE.PlaneGeometry(4.3, 1.6),
+            new THREE.PlaneGeometry(11.7, 1.6),
             new THREE.MeshStandardMaterial({ map: t, roughness: 0.98 })
           );
           runner.rotation.x = -Math.PI / 2;
-          runner.position.set(-0.85, 0.235, 0);
+          runner.position.set(-1.15, 0.235, 0);
           scene.add(runner);
         })();
 
@@ -1847,7 +1842,7 @@
           const geo = new THREE.BufferGeometry();
           const posArr = new Float32Array(N * 3);
           for (let i = 0; i < N; i++) {
-            posArr[i * 3]     = -0.5 + Math.random() * 9.0;  // x nel museo (vetrina compresa)
+            posArr[i * 3]     = -8.0 + Math.random() * 16.5; // x nel museo grande (vetrina compresa)
             posArr[i * 3 + 1] = 0.4 + Math.random() * 3.2;   // altezza
             posArr[i * 3 + 2] = -5.2 + Math.random() * 10.4; // z
           }
@@ -1893,13 +1888,14 @@
         (function museumDecor() {
           villa.updateMatrixWorld(true);
           const FY = 0.22;                       // quota del marmo
+          // MODELLO v2: museo x -9.2..8.85, pareti z ±6.0, soffitto a 4.82, colonnato a x -7.5
           // 1) intarsio dorato nel pavimento: cornice che abbraccia la sala
           const inlay = (w, d2, x, z) => {
             const m = new THREE.Mesh(new THREE.BoxGeometry(w, 0.012, d2), gold);
             m.position.set(x, FY + 0.008, z); scene.add(m);
           };
-          inlay(11.4, 0.06, 2.65, -5.3); inlay(11.4, 0.06, 2.65, 5.3);
-          inlay(0.06, 10.66, -3.05, 0);  inlay(0.06, 10.66, 8.35, 0);
+          inlay(17.2, 0.06, -0.25, -5.4); inlay(17.2, 0.06, -0.25, 5.4);
+          inlay(0.06, 10.86, -8.85, 0);   inlay(0.06, 10.86, 8.35, 0);
 
           // 2) boiserie in noce con corrimano d'oro lungo le tre pareti espositive
           const wains = (w, d2, x, z) => {
@@ -1908,57 +1904,58 @@
             const r = new THREE.Mesh(new THREE.BoxGeometry(w === 0.05 ? 0.075 : w + 0.02, 0.045, d2 === 0.05 ? 0.075 : d2 + 0.02), gold);
             r.position.set(x, FY + 0.52, z); scene.add(r);
           };
-          wains(0.05, 11.4, 8.77, 0);            // parete est (sotto la board)
-          wains(12.3, 0.05, 2.55, -5.77);        // parete nord
-          wains(12.3, 0.05, 2.55, 5.77);         // parete sud
+          wains(0.05, 11.7, 8.77, 0);            // parete est (sotto la board)
+          wains(15.8, 0.05, 0.75, -5.92);        // parete nord
+          wains(15.8, 0.05, 0.75, 5.92);         // parete sud
 
-          // 3) soffitto a cassettoni in noce (y 3.92, sotto il solaio a 4.0)
+          // 3) soffitto a cassettoni in noce (sotto il solaio a 4.82)
           const beam = (w, d2, x, z) => {
             const b = new THREE.Mesh(new THREE.BoxGeometry(w, 0.16, d2), walnut);
-            b.position.set(x, 3.92, z); scene.add(b);
+            b.position.set(x, 4.68, z); scene.add(b);
           };
-          [-3.9, -1.95, 0, 1.95, 3.9].forEach(z => beam(12.4, 0.14, 2.55, z));
-          [-1.6, 0.45, 2.5, 4.55, 6.6].forEach(x => beam(0.14, 11.6, x, 0));
-          beam(12.4, 0.2, 2.55, -5.7); beam(12.4, 0.2, 2.55, 5.7);
-          beam(0.2, 11.6, -3.55, 0);   beam(0.2, 11.6, 8.7, 0);
+          [-3.9, -1.95, 0, 1.95, 3.9].forEach(z => beam(16.0, 0.14, 0.8, z));
+          [-5.2, -3.2, -1.2, 0.8, 2.8, 4.8, 6.8].forEach(x => beam(0.14, 11.7, x, 0));
+          beam(16.0, 0.2, 0.8, -5.85); beam(16.0, 0.2, 0.8, 5.85);
+          beam(0.2, 11.7, -7.15, 0);   beam(0.2, 11.7, 8.7, 0);
 
-          // 4) lampadario a corona sopra la vetrina (più alto: la teca respira)
-          makeChandelier(2.4, 0, 4.0);
+          // 4) lampadario a corona sopra la vetrina (al centro dei quadri)
+          makeChandelier(5.9, 0, 4.75);
 
           // 5) applique a fiamma ai lati dell'opera d'onore (parete est)
           [-1.9, 1.9].forEach((dz) => {
             const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.028, 0.16, 10), gold);
-            cup.position.set(8.72, 2.85, dz); scene.add(cup);
+            cup.position.set(8.72, 3.1, dz); scene.add(cup);
             const fl = new THREE.Mesh(new THREE.SphereGeometry(0.038, 8, 8),
               new THREE.MeshBasicMaterial({ color: 0xffc27a }));
-            fl.position.set(8.72, 2.98, dz); scene.add(fl);
+            fl.position.set(8.72, 3.23, dz); scene.add(fl);
             const pl = new THREE.PointLight(0xffc27a, 0.55, 3.5, 2);
-            pl.position.set(8.6, 3.0, dz); scene.add(pl);
+            pl.position.set(8.6, 3.25, dz); scene.add(pl);
           });
         })();
 
-        // ── LOUNGE: lo stesso Nero Marquina del museo, continuo e a specchio ──
+        // ── ALA OVEST: lo stesso Nero Marquina del museo, continuo e a specchio ──
         (function loungeDressing() {
           villa.updateMatrixWorld(true);
-          // quota reale del pavimento del lounge, misurata sul guscio
+          // quota reale del pavimento dell'ala, misurata sul guscio
           let floorY = 0.22;
           if (houseShell) {
-            const rc = new THREE.Raycaster(new THREE.Vector3(-8.3, 3, 0), new THREE.Vector3(0, -1, 0), 0, 8);
+            const rc = new THREE.Raycaster(new THREE.Vector3(-13, 3, 0), new THREE.Vector3(0, -1, 0), 0, 8);
             const h = rc.intersectObject(houseShell, false);
             if (h.length) floorY = h[0].point.y;
           }
           const lm = polishedFloor.clone();
           ['map', 'normalMap', 'roughnessMap'].forEach((k) => {
-            if (lm[k]) { lm[k] = lm[k].clone(); lm[k].repeat.set(3.6, 4.7); lm[k].needsUpdate = true; }
+            if (lm[k]) { lm[k] = lm[k].clone(); lm[k].repeat.set(4.3, 4.7); lm[k].needsUpdate = true; }
           });
-          const floor = new THREE.Mesh(new THREE.PlaneGeometry(8.9, 11.7), lm);
+          const floor = new THREE.Mesh(new THREE.PlaneGeometry(10.8, 11.7), lm);
           floor.rotation.x = -Math.PI / 2;
-          floor.position.set(-8.3, floorY + 0.012, 0);
+          floor.position.set(-13.3, floorY + 0.012, 0);
           scene.add(floor);
         })();
 
-        // ── GALLERIA PANORAMICA: open space vetrato al posto della piscina ──
+        // ── GALLERIA PANORAMICA (DISATTIVATA: l'ala nuova è nel modello di Riccardo) ──
         (function panoramaHall() {
+          return;   // la costruzione in codice lascia il posto all'ala rimodellata nel .blend
           villa.updateMatrixWorld(true);
           // quota reale del deck, misurata sul posto
           let dy = 0.2;
