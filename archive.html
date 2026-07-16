@@ -1546,8 +1546,9 @@
       const deckStone = pbr('large_floor_tiles_02', ANISO, { color: 0xb9b2a4, roughness: 0.9 }, 1.1);
       const walnut = new THREE.MeshStandardMaterial({ color: 0x2c1f15, roughness: 0.55, envMapIntensity: 0.5 });
       const MATS = {
-        // pareti scure da galleria d'arte: le opere e l'oro risaltano
-        NYFP_Plaster:    pbr('painted_plaster_wall', ANISO, { color: 0x4a423a, envMapIntensity: 0.35 }, 2.4),
+        // pareti da museo d'arte: intonaco fine avorio caldo, DoubleSide = collisioni
+        // affidabili anche se le normali del guscio guardano fuori
+        NYFP_Plaster:    pbr('painted_plaster_wall', ANISO, { color: 0xddd4c5, envMapIntensity: 0.3, side: THREE.DoubleSide }, 2.4),
         NYFP_Stone:      new THREE.MeshStandardMaterial({ color: 0x8f887c, roughness: 0.85 }),
         NYFP_StoneDark:  new THREE.MeshStandardMaterial({ color: 0x38342e, roughness: 0.78, envMapIntensity: 0.4 }),
         NYFP_WoodFloor:  pbr('herringbone_parquet', ANISO, { envMapIntensity: 0.55 }, 1.6),
@@ -1560,7 +1561,7 @@
         NYFP_Fabric:     pbr('quatrefoil_jacquard_fabric', ANISO, { roughness: 0.95, envMapIntensity: 0.25 }, 3),
         NYFP_FabricDark: pbr('velour_velvet', ANISO, { color: 0x4a1b26, roughness: 0.95, envMapIntensity: 0.2 }, 2.5),
         NYFP_Plant:      new THREE.MeshStandardMaterial({ color: 0x315f3c, roughness: 0.82 }),
-        NYFP_Ceiling:    new THREE.MeshStandardMaterial({ color: 0x14111c, roughness: 0.9, emissive: 0x241809, emissiveIntensity: 0.5 }),
+        NYFP_Ceiling:    new THREE.MeshStandardMaterial({ color: 0x14111c, roughness: 0.9, emissive: 0x241809, emissiveIntensity: 0.5, side: THREE.DoubleSide }),
         NYFP_Screen:     new THREE.MeshBasicMaterial({ map: tvTexture() }),
         NYFP_Cove:       new THREE.MeshBasicMaterial({ color: 0xffe6b0 }),
         NYFP_Flame:      new THREE.MeshBasicMaterial({ color: 0xffb84a }),
@@ -1587,7 +1588,7 @@
         let roomPlate = null, houseShell = null;
         // pavimento del museo: NERO MARQUINA lucidato a specchio, vene avorio e oro
         const polishedFloor = pbr('nyf_marble_nero', ANISO, {
-          metalness: 0.05, envMapIntensity: 1.5,
+          metalness: 0.05, envMapIntensity: 1.5, side: THREE.DoubleSide,
         }, 0.8);
         villa.traverse((n) => {
           if (!n.isMesh) return;
@@ -1604,6 +1605,7 @@
           else if (n.name === 'Floor_Museum' || n.name === 'Museum_Step') { n.material = polishedFloor; }
           else if (n.name.startsWith('Entry_Path')) { n.material = polishedFloor; }
           else if (n.name === 'Deck') { n.material = deckStone; }
+          else if (matName === 'NYFP_MarbleFloor') { n.material = polishedFloor; }
           else if (MATS[matName]) { n.material = MATS[matName]; }
           // attraversabili: piante, fiamme, acqua, vetrate + telai/mullion delle aperture,
           // conca piscina (così cammini fino al bordo), gole di luce, opere
@@ -1616,7 +1618,8 @@
           if (!ghost) colliders.push(n);
           // SOLO i veri pavimenti guidano l'altezza dello sguardo:
           // niente più saliscendi su tappeti, battiscopa, basamenti
-          if (!ghost && /^(Floor|Deck|Entry_Path|Museum_Step|Steel Stairs|Cube)/.test(n.name)) {
+          if (!ghost && (matName === 'NYFP_MarbleFloor'
+            || /^(Floor|Deck|Entry_Path|Museum_Step|Steel Stairs|Cube)/.test(n.name))) {
             walkables.push(n);
           }
         });
@@ -1887,71 +1890,15 @@
         // ── MUSEO ICONICO: cassettoni, boiserie, intarsio d'oro, lampadario, applique ──
         (function museumDecor() {
           villa.updateMatrixWorld(true);
-          const FY = 0.22;                       // quota del marmo
-          // MODELLO v2: museo x -9.2..8.85, pareti z ±6.0, soffitto a 4.82, colonnato a x -7.5
-          // 1) intarsio dorato nel pavimento: cornice che abbraccia la sala
-          const inlay = (w, d2, x, z) => {
-            const m = new THREE.Mesh(new THREE.BoxGeometry(w, 0.012, d2), gold);
-            m.position.set(x, FY + 0.008, z); scene.add(m);
-          };
-          inlay(17.2, 0.06, -0.25, -5.4); inlay(17.2, 0.06, -0.25, 5.4);
-          inlay(0.06, 10.86, -8.85, 0);   inlay(0.06, 10.86, 8.35, 0);
-
-          // 2) boiserie in noce con corrimano d'oro lungo le tre pareti espositive
-          const wains = (w, d2, x, z) => {
-            const p = new THREE.Mesh(new THREE.BoxGeometry(w, 0.5, d2), walnut);
-            p.position.set(x, FY + 0.25, z); scene.add(p);
-            const r = new THREE.Mesh(new THREE.BoxGeometry(w === 0.05 ? 0.075 : w + 0.02, 0.045, d2 === 0.05 ? 0.075 : d2 + 0.02), gold);
-            r.position.set(x, FY + 0.52, z); scene.add(r);
-          };
-          wains(0.05, 11.7, 8.77, 0);            // parete est (sotto la board)
-          wains(15.8, 0.05, 0.75, -5.92);        // parete nord
-          wains(15.8, 0.05, 0.75, 5.92);         // parete sud
-
-          // 3) soffitto a cassettoni in noce (sotto il solaio a 4.82)
-          const beam = (w, d2, x, z) => {
-            const b = new THREE.Mesh(new THREE.BoxGeometry(w, 0.16, d2), walnut);
-            b.position.set(x, 4.68, z); scene.add(b);
-          };
-          [-3.9, -1.95, 0, 1.95, 3.9].forEach(z => beam(16.0, 0.14, 0.8, z));
-          [-5.2, -3.2, -1.2, 0.8, 2.8, 4.8, 6.8].forEach(x => beam(0.14, 11.7, x, 0));
-          beam(16.0, 0.2, 0.8, -5.85); beam(16.0, 0.2, 0.8, 5.85);
-          beam(0.2, 11.7, -7.15, 0);   beam(0.2, 11.7, 8.7, 0);
-
-          // 4) lampadario a corona sopra la vetrina (al centro dei quadri)
+          // SOLO elementi ancorati alla geometria vera del modello di Riccardo:
+          // niente più architetture in codice (cassettoni/boiserie/intarsi) che
+          // galleggiavano dove le pareti sono cambiate.
+          // Lampadario a corona sopra la vetrina (soffitto misurato: 4.82)
           makeChandelier(5.9, 0, 4.75);
-
-          // 5) applique a fiamma ai lati dell'opera d'onore (parete est)
-          [-1.9, 1.9].forEach((dz) => {
-            const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.028, 0.16, 10), gold);
-            cup.position.set(8.72, 3.1, dz); scene.add(cup);
-            const fl = new THREE.Mesh(new THREE.SphereGeometry(0.038, 8, 8),
-              new THREE.MeshBasicMaterial({ color: 0xffc27a }));
-            fl.position.set(8.72, 3.23, dz); scene.add(fl);
-            const pl = new THREE.PointLight(0xffc27a, 0.55, 3.5, 2);
-            pl.position.set(8.6, 3.25, dz); scene.add(pl);
-          });
         })();
 
-        // ── ALA OVEST: lo stesso Nero Marquina del museo, continuo e a specchio ──
-        (function loungeDressing() {
-          villa.updateMatrixWorld(true);
-          // quota reale del pavimento dell'ala, misurata sul guscio
-          let floorY = 0.22;
-          if (houseShell) {
-            const rc = new THREE.Raycaster(new THREE.Vector3(-13, 3, 0), new THREE.Vector3(0, -1, 0), 0, 8);
-            const h = rc.intersectObject(houseShell, false);
-            if (h.length) floorY = h[0].point.y;
-          }
-          const lm = polishedFloor.clone();
-          ['map', 'normalMap', 'roughnessMap'].forEach((k) => {
-            if (lm[k]) { lm[k] = lm[k].clone(); lm[k].repeat.set(4.3, 4.7); lm[k].needsUpdate = true; }
-          });
-          const floor = new THREE.Mesh(new THREE.PlaneGeometry(10.8, 11.7), lm);
-          floor.rotation.x = -Math.PI / 2;
-          floor.position.set(-13.3, floorY + 0.012, 0);
-          scene.add(floor);
-        })();
+        // (il marmo delle ali arriva dai PAVIMENTI VERI del guscio: facce orizzontali
+        //  del modello -> NYFP_MarbleFloor -> Nero Marquina, niente più piani finti)
 
         // ── GALLERIA PANORAMICA (DISATTIVATA: l'ala nuova è nel modello di Riccardo) ──
         (function panoramaHall() {
