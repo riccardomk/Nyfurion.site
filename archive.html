@@ -1338,16 +1338,53 @@
     function waterTexture() {
       const c = document.createElement('canvas'); c.width = 256; c.height = 256;
       const g = c.getContext('2d');
-      g.fillStyle = '#123a44'; g.fillRect(0, 0, 256, 256);
+      g.fillStyle = '#0d2c34'; g.fillRect(0, 0, 256, 256);
       for (let i = 0; i < 260; i++) {
         const x = Math.random() * 256, y = Math.random() * 256, r = 6 + Math.random() * 26;
-        g.strokeStyle = 'rgba(140,220,235,' + (0.04 + Math.random() * 0.1) + ')';
+        g.strokeStyle = 'rgba(140,220,235,' + (0.03 + Math.random() * 0.06) + ')';
         g.lineWidth = 1 + Math.random() * 1.6;
         g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.stroke();
       }
       const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding;
       t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.RepeatWrapping;
       return t;
+    }
+
+    // ── CASCATA PROCEDURALE (GLSL): niente texture, niente giunte, acqua calcolata ──
+    function waterfallMaterial() {
+      return new THREE.ShaderMaterial({
+        transparent: true,
+        depthWrite: false,
+        uniforms: { uT: { value: 0 } },
+        vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+        fragmentShader: [
+          'varying vec2 vUv;',
+          'uniform float uT;',
+          'float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }',
+          'float noise(vec2 p){',
+          '  vec2 i = floor(p), f = fract(p);',
+          '  vec2 u = f * f * (3.0 - 2.0 * f);',
+          '  return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x),',
+          '             mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);',
+          '}',
+          'void main(){',
+          '  vec2 uv = vUv;',
+          '  float y1 = uv.y * 2.2 + uT * 1.15;',
+          '  float y2 = uv.y * 4.5 + uT * 1.9;',
+          '  float s1 = noise(vec2(uv.x * 46.0, y1));',
+          '  float s2 = noise(vec2(uv.x * 118.0 + 31.0, y2));',
+          '  float s3 = noise(vec2(uv.x * 12.0 + 77.0, uv.y * 1.2 + uT * 0.7));',
+          '  float streak = s1 * 0.55 + s2 * 0.3 + s3 * 0.15;',
+          '  streak = smoothstep(0.42, 0.78, streak);',
+          '  float edge = smoothstep(0.0, 0.05, uv.x) * smoothstep(1.0, 0.95, uv.x);',
+          '  float head = smoothstep(1.0, 0.93, uv.y) * 0.5 + 0.5;',
+          '  float foot = 1.0 + smoothstep(0.16, 0.0, uv.y) * 0.9;',
+          '  float a = streak * edge * head * 0.75;',
+          '  vec3 col = mix(vec3(0.62, 0.76, 0.82), vec3(0.94, 0.99, 1.0), streak) * foot;',
+          '  gl_FragColor = vec4(col, a);',
+          '}',
+        ].join('\n'),
+      });
     }
 
     function cascataTexture() {
@@ -1706,75 +1743,99 @@
           const pvm = new THREE.Mesh(new THREE.PlaneGeometry(2.0, 0.42), new THREE.MeshBasicMaterial({ map: pv }));
           pvm.position.set(-6.5, 3.85, -7.97); scene.add(pvm);
 
-          // ═══ CHARACTER ROOM: sala privata da collezione (11.6 x 9.6, soffitto 4.9) ═══
-          mk(11.6, 0.24, 9.6, -6.5, 0.1, -13.1, lightMarble, true, true);   // pavimento
-          mk(0.3, 4.7, 9.6, -12.3, 2.57, -13.1, P, true);                   // ovest
-          mk(0.3, 4.7, 9.6, -0.7, 2.57, -13.1, P, true);                    // est
-          mk(11.9, 4.7, 0.3, -6.5, 2.57, -17.9, P, true);                   // fondo
-          mk(11.9, 0.24, 9.9, -6.5, 5.04, -13.1, MATS.NYFP_Ceiling);        // solaio
-          // gola di luce perimetrale della character room
+          // ═══ CHARACTER ROOM: sala GRANDE da collezione (16 x 13, soffitto 5.2) ═══
+          mk(16.2, 0.24, 13.1, -6.5, 0.1, -14.85, lightMarble, true, true); // pavimento
+          mk(0.3, 5.0, 13.1, -14.75, 2.72, -14.85, P, true);                // ovest
+          mk(0.3, 5.0, 13.1, 1.75, 2.72, -14.85, P, true);                  // est
+          mk(16.5, 5.0, 0.3, -6.5, 2.72, -21.55, P, true);                  // fondo
+          // raccordi nord ai lati del varco (la sala è più larga del varco)
+          mk(6.4, 5.0, 0.3, -11.55, 2.72, -8.32, P, true);
+          mk(6.9, 5.0, 0.3, -1.85, 2.72, -8.32, P, true);
+          mk(16.5, 0.24, 13.4, -6.5, 5.34, -14.85, MATS.NYFP_Ceiling);      // solaio
+          // gola di luce perimetrale + 3 fari caldi: si DEVE vedere
           const cove2 = new THREE.MeshBasicMaterial({ color: 0xffab5e });
-          mk(11.0, 0.04, 0.04, -6.5, 4.62, -8.62, cove2);
-          mk(11.0, 0.04, 0.04, -6.5, 4.62, -17.58, cove2);
-          mk(0.04, 0.04, 8.9, -12.0, 4.62, -13.1, cove2);
-          mk(0.04, 0.04, 8.9, -1.0, 4.62, -13.1, cove2);
-          addPt(-6.5, 4.4, -11.0, 0xffd9a0, 1.2, 11);
-          addPt(-6.5, 4.4, -15.5, 0xffd9a0, 1.2, 11);
+          mk(15.4, 0.045, 0.045, -6.5, 4.9, -8.75, cove2);
+          mk(15.4, 0.045, 0.045, -6.5, 4.9, -21.1, cove2);
+          mk(0.045, 0.045, 12.2, -14.3, 4.9, -14.85, cove2);
+          mk(0.045, 0.045, 12.2, 1.3, 4.9, -14.85, cove2);
+          addPt(-6.5, 4.7, -11.0, 0xffd9a0, 1.5, 13);
+          addPt(-6.5, 4.7, -18.5, 0xffd9a0, 1.5, 13);
+          addPt(-11.5, 4.7, -14.85, 0xffe4b8, 1.1, 11);
+
+          // pannellature murali con filetti d'oro (pareti est e fondo laterali)
+          const pann = new THREE.MeshStandardMaterial({ color: 0x8a7663, roughness: 0.7, side: THREE.DoubleSide });
+          [[-11.5, -21.38, 2.6, 0], [-1.5, -21.38, 2.6, 0], [1.58, -11.5, 0, 2.6], [1.58, -18.2, 0, 2.6]].forEach(([px, pz, w, d]) => {
+            mk(w || 0.06, 3.2, d || 0.06, px, 2.0, pz, pann);
+            mk((w || 0.06) + 0.06, 0.05, (d || 0.06) + 0.06, px, 3.65, pz, gold);
+            mk((w || 0.06) + 0.06, 0.05, (d || 0.06) + 0.06, px, 0.38, pz, gold);
+          });
 
           // PARETE SCENICA sul fondo: pannello nero lucido, cornice d'oro, sigillo
           const scen = new THREE.MeshStandardMaterial({ color: 0x0c0d12, roughness: 0.24, metalness: 0.3, envMapIntensity: 1.3 });
-          mk(5.4, 3.6, 0.14, -6.5, 2.1, -17.72, scen);
-          mk(5.6, 0.1, 0.18, -6.5, 3.95, -17.72, gold);
-          mk(5.6, 0.1, 0.18, -6.5, 0.34, -17.72, gold);
-          mk(0.1, 3.7, 0.18, -9.35, 2.14, -17.72, gold);
-          mk(0.1, 3.7, 0.18, -3.65, 2.14, -17.72, gold);
-          const sig = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 1.9),
-            new THREE.MeshBasicMaterial({ map: sealTexture(), transparent: true, opacity: 0.9 }));
-          sig.position.set(-6.5, 2.45, -17.63); scene.add(sig);
+          mk(7.0, 4.2, 0.14, -6.5, 2.4, -21.36, scen);
+          mk(7.2, 0.12, 0.2, -6.5, 4.56, -21.36, gold);
+          mk(7.2, 0.12, 0.2, -6.5, 0.36, -21.36, gold);
+          mk(0.12, 4.4, 0.2, -10.1, 2.46, -21.36, gold);
+          mk(0.12, 4.4, 0.2, -2.9, 2.46, -21.36, gold);
+          const sigTex = sealTexture();
+          sigTex.flipY = true;                       // sul piano semplice va DRITTO
+          const sig = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 2.4),
+            new THREE.MeshBasicMaterial({ map: sigTex, transparent: true, opacity: 0.92 }));
+          sig.position.set(-6.5, 2.7, -21.27); scene.add(sig);
 
-          // PEDANA OTTAGONALE centrale a due gradoni + anello luminoso
+          // PEDANA OTTAGONALE monumentale + anello luminoso + intarsio a pavimento
           const chMat = polishedFloor.clone();
           ['map', 'normalMap', 'roughnessMap'].forEach((kk) => {
             if (chMat[kk]) { chMat[kk] = chMat[kk].clone(); chMat[kk].repeat.set(0.5, 0.5); chMat[kk].needsUpdate = true; }
           });
           const trav = pbr('marble_01', ANISO, { roughness: 0.5, envMapIntensity: 0.5 }, 2.6);
-          const oct1 = new THREE.Mesh(new THREE.CylinderGeometry(2.05, 2.05, 0.18, 8), chMat);
-          oct1.position.set(-6.5, 0.31, -13.4); scene.add(oct1); colliders.push(oct1);
-          const oct2 = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 0.22, 8), trav);
-          oct2.position.set(-6.5, 0.51, -13.4); scene.add(oct2); colliders.push(oct2);
-          const ringL = new THREE.Mesh(new THREE.TorusGeometry(1.72, 0.035, 10, 48),
+          const oct1 = new THREE.Mesh(new THREE.CylinderGeometry(2.6, 2.6, 0.18, 8), chMat);
+          oct1.position.set(-6.5, 0.31, -15.4); scene.add(oct1); colliders.push(oct1);
+          const oct2 = new THREE.Mesh(new THREE.CylinderGeometry(2.0, 2.0, 0.22, 8), trav);
+          oct2.position.set(-6.5, 0.51, -15.4); scene.add(oct2); colliders.push(oct2);
+          const ringL = new THREE.Mesh(new THREE.TorusGeometry(2.28, 0.04, 10, 56),
             new THREE.MeshBasicMaterial({ color: 0xffd9a0 }));
-          ringL.rotation.x = Math.PI / 2; ringL.position.set(-6.5, 0.42, -13.4); scene.add(ringL);
-          addPt(-6.5, 0.65, -13.4, 0xffd9a0, 0.9, 4);
+          ringL.rotation.x = Math.PI / 2; ringL.position.set(-6.5, 0.42, -15.4); scene.add(ringL);
+          const ringF = new THREE.Mesh(new THREE.TorusGeometry(3.4, 0.03, 8, 56), gold);
+          ringF.rotation.x = Math.PI / 2; ringF.position.set(-6.5, FY + 0.012, -15.4); scene.add(ringF);
+          addPt(-6.5, 0.7, -15.4, 0xffd9a0, 1.0, 5);
 
-          // TECA CENTRALE protagonista (il personaggio andrà qui)
+          // TECA CENTRALE protagonista (il personaggio andrà qui) — grande e sottile
           const chGlass = new THREE.MeshStandardMaterial({
-            color: 0xdcecf5, transparent: true, opacity: 0.12, roughness: 0.03,
+            color: 0xdcecf5, transparent: true, opacity: 0.09, roughness: 0.03,
             metalness: 0.08, envMapIntensity: 1.7, side: THREE.DoubleSide, depthWrite: false,
           });
-          const chCase = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.6, 1.6), chGlass);
-          chCase.position.set(-6.5, 0.62 + 1.3, -13.4); scene.add(chCase); colliders.push(chCase);
-          [[-0.8, -0.8], [-0.8, 0.8], [0.8, -0.8], [0.8, 0.8]].forEach(([ex, ez]) => {
-            mk(0.035, 2.6, 0.035, -6.5 + ex, 0.62 + 1.3, -13.4 + ez, gold);
+          const chCase = new THREE.Mesh(new THREE.BoxGeometry(2.1, 3.0, 2.1), chGlass);
+          chCase.position.set(-6.5, 0.62 + 1.5, -15.4); scene.add(chCase); colliders.push(chCase);
+          [[-1.05, -1.05], [-1.05, 1.05], [1.05, -1.05], [1.05, 1.05]].forEach(([ex, ez]) => {
+            mk(0.04, 3.0, 0.04, -6.5 + ex, 0.62 + 1.5, -15.4 + ez, gold);
           });
-          mk(1.7, 0.05, 1.7, -6.5, 3.25, -13.4, gold);                      // coperchio
-          const chSpot = new THREE.SpotLight(0xffdcae, 2.6, 9, 0.5, 0.55, 1.2);
-          chSpot.position.set(-6.5, 4.55, -13.4);
-          chSpot.target.position.set(-6.5, 1.4, -13.4);
+          mk(2.2, 0.06, 2.2, -6.5, 3.66, -15.4, gold);                      // coperchio
+          const chSpot = new THREE.SpotLight(0xffdcae, 3.0, 10, 0.5, 0.55, 1.2);
+          chSpot.position.set(-6.5, 5.1, -15.4);
+          chSpot.target.position.set(-6.5, 1.5, -15.4);
           scene.add(chSpot); scene.add(chSpot.target);
 
-          // LEGGIO museale davanti alla pedana
-          mk(0.32, 1.0, 0.1, -6.5, 0.72, -10.6, scen, true);
+          // LEGGIO dorato sottile, di lato al percorso (non blocca la vista)
+          mk(0.07, 0.9, 0.07, -9.4, 0.67, -12.4, gold, true);
           const pc = plateTexture('CHARACTER · COMING SOON');
           pc.flipY = true;
-          const leggio = new THREE.Mesh(new THREE.PlaneGeometry(1.0, 0.22), new THREE.MeshBasicMaterial({ map: pc }));
-          leggio.rotation.x = -0.5;
-          leggio.position.set(-6.5, 1.26, -10.64); scene.add(leggio);
+          const leggio = new THREE.Mesh(new THREE.PlaneGeometry(1.05, 0.24), new THREE.MeshBasicMaterial({ map: pc, side: THREE.DoubleSide }));
+          leggio.rotation.x = -0.45; leggio.rotation.y = 0.5;
+          leggio.position.set(-9.4, 1.2, -12.42); scene.add(leggio);
 
-          // verde ai lati della parete scenica
-          [[-10.9, -16.9], [-2.1, -16.9]].forEach(([px, pz]) => {
-            mk(1.2, 0.36, 0.85, px, FY + 0.18, pz, chMat, true);
-          });
+          // NICCHIA DELLA CARD 3D sulla parete ovest: fondale nero, cornice, faro
+          mk(0.14, 3.4, 3.2, -14.52, 1.95, -14.85, scen);
+          mk(0.2, 0.12, 3.3, -14.52, 3.68, -14.85, gold);
+          mk(0.2, 0.12, 3.3, -14.52, 0.32, -14.85, gold);
+          mk(0.2, 3.5, 0.12, -14.52, 2.0, -16.5, gold);
+          mk(0.2, 3.5, 0.12, -14.52, 2.0, -13.2, gold);
+          const cardSpot = new THREE.SpotLight(0xffdcae, 2.4, 9, 0.45, 0.55, 1.2);
+          cardSpot.position.set(-11.6, 4.9, -14.85);
+          cardSpot.target.position.set(-13.5, 1.2, -14.85);
+          scene.add(cardSpot); scene.add(cardSpot.target);
+
+          // (il verde della sala arriva dalle aiuole continue create in grandMuseum)
         })();
 
         // zoccolo in pietra su misura dell'impronta reale: mai vuoto sotto la villa
@@ -1877,8 +1938,8 @@
 
         // ── LA VETRINA DELLA CARD — cuore della villa, al centro del museo ──
         (function cardShowcase() {
-          // vetrina della card: lato ovest della Character Room (il centro è del personaggio)
-          const cx = -10.6, cz = -13.1, fy = FY;
+          // vetrina della card: nella NICCHIA a ovest della Character Room, col suo faro
+          const cx = -13.5, cz = -14.85, fy = FY;
           const k = 1;
           // ══ VETRINA MUSEALE: plinto in marmo nero + teca di vetro con spigoli d'oro ══
           // (stesso formato riutilizzabile per il personaggio 3D nelle altre sale)
@@ -2177,22 +2238,20 @@
           box(0.2, 0.14, 6.6, wx, FY + 0.5, czr, gold);
           box(0.2, fh - 0.5, 0.14, wx, FY + fh / 2 + 0.2, czr - 3.24, gold);
           box(0.2, fh - 0.5, 0.14, wx, FY + fh / 2 + 0.2, czr + 3.24, gold);
-          const fTex = flow(cascataTexture(), 0.9); fTex.repeat.set(3.2, 1.3);
-          const velo1 = new THREE.Mesh(new THREE.PlaneGeometry(6.0, fh - 0.35),
-            new THREE.MeshBasicMaterial({ map: fTex, color: 0xd8ecf4, transparent: true, opacity: 0.6, depthWrite: false }));
+          // velo d'acqua PROCEDURALE: shader, zero ripetizioni, movimento continuo
+          window.__villaWaterShaders = window.__villaWaterShaders || [];
+          const wfMat = waterfallMaterial();
+          window.__villaWaterShaders.push(wfMat);
+          const velo1 = new THREE.Mesh(new THREE.PlaneGeometry(6.0, fh - 0.35), wfMat);
           velo1.rotation.y = Math.PI / 2;
-          velo1.position.set(wx + 0.1, FY + 0.3 + (fh - 0.35) / 2, czr);
+          velo1.position.set(wx + 0.12, FY + 0.3 + (fh - 0.35) / 2, czr);
           scene.add(velo1);
-          const fTex2 = flow(cascataTexture(), 1.5); fTex2.repeat.set(2.1, 1.7);
-          const velo2 = new THREE.Mesh(new THREE.PlaneGeometry(6.0, fh - 0.35),
-            new THREE.MeshBasicMaterial({ map: fTex2, transparent: true, opacity: 0.38, depthWrite: false, blending: THREE.AdditiveBlending }));
-          velo2.rotation.y = Math.PI / 2;
-          velo2.position.set(wx + 0.16, FY + 0.3 + (fh - 0.35) / 2, czr);
-          scene.add(velo2);
           box(1.2, 0.4, 6.8, wx + 0.55, FY + 0.2, czr, stone, true);
+          box(1.0, 0.06, 6.55, wx + 0.55, FY + 0.36, czr,
+            new THREE.MeshStandardMaterial({ color: 0x0b1418, roughness: 0.4 }));   // fondo scuro
           const bTex = flow(waterTexture(), 0.14); bTex.repeat.set(1, 4);
           const bacino = new THREE.Mesh(new THREE.PlaneGeometry(0.95, 6.5, 2, 26),
-            new THREE.MeshStandardMaterial({ map: bTex, color: 0x8fd0d8, transparent: true, opacity: 0.88, roughness: 0.05, envMapIntensity: 1.5 }));
+            new THREE.MeshStandardMaterial({ map: bTex, color: 0x3f8494, transparent: true, opacity: 0.82, roughness: 0.05, envMapIntensity: 1.6 }));
           bacino.rotation.x = -Math.PI / 2; bacino.position.set(wx + 0.55, FY + 0.41, czr); scene.add(bacino);
           window.__villaRipple.push(bacino);
           const foamTex = flow(waterTexture(), 0.3); foamTex.repeat.set(6, 0.5);
@@ -2202,21 +2261,72 @@
           const wl = new THREE.PointLight(0x9fd8e8, 0.9, 7, 2);
           wl.position.set(wx + 1.0, FY + 1.8, czr); scene.add(wl);
 
-          // 6) VEGETAZIONE misurata: piante in scala UMANA, mai davanti a porte o quadri
-          const beds = [
-            [-10.8, fBB.min.z + 0.75], [0.8, fBB.min.z + 0.75], [10.8, fBB.min.z + 0.75],
-            [-10.8, fBB.max.z - 0.75], [0.8, fBB.max.z - 0.75], [10.8, fBB.max.z - 0.75],
-            [wx + 0.7, czr - 4.3], [wx + 0.7, czr + 4.3],
-          ];
-          beds.forEach(([px, pz]) => box(1.3, 0.36, 0.85, px, FY + 0.18, pz, darkStone, true));
+          // 6) VEGETAZIONE come nella reference: AIUOLE CONTINUE lungo i muri,
+          //    cordolo in travertino, TERRA vera, piante fitte interrate, luci radenti
+          const soil = new THREE.MeshStandardMaterial({ color: 0x231a10, roughness: 1 });
+          const bedAreas = [];
+          const plantBed = (x0, z0, x1, z1) => {
+            const wB = x1 - x0, dB = z1 - z0, cxB = (x0 + x1) / 2, czB = (z0 + z1) / 2;
+            box(wB, 0.26, 0.1, cxB, FY + 0.13, z0 + 0.05, stone, true);
+            box(wB, 0.26, 0.1, cxB, FY + 0.13, z1 - 0.05, stone, true);
+            box(0.1, 0.26, dB, x0 + 0.05, FY + 0.13, czB, stone, true);
+            box(0.1, 0.26, dB, x1 - 0.05, FY + 0.13, czB, stone, true);
+            box(wB - 0.16, 0.2, dB - 0.16, cxB, FY + 0.12, czB, soil);
+            bedAreas.push([x0 + 0.35, z0 + 0.28, x1 - 0.35, z1 - 0.28]);
+          };
+          // sala grande: fasce lungo nord (attorno al varco), sud e ai lati della cascata
+          plantBed(-12.3, fBB.min.z + 0.0 + 0.15, -8.3, fBB.min.z + 1.05);
+          plantBed(-4.7, fBB.min.z + 0.15, 12.3, fBB.min.z + 1.05);
+          plantBed(-12.3, fBB.max.z - 1.05, 12.3, fBB.max.z - 0.15);
+          plantBed(-12.3, czr - 6.9, -11.4, czr - 4.0);
+          plantBed(-12.3, czr + 4.0, -11.4, czr + 6.9);
+          // character room: fasce sul fondo e lungo le pareti
+          plantBed(-13.9, -21.3, -10.7, -20.42);
+          plantBed(-2.3, -21.3, 0.8, -20.42);
+          plantBed(0.72, -18.6, 1.55, -11.1);
+          plantBed(-14.55, -11.8, -13.72, -9.1);
+
           new THREE.GLTFLoader().load('plant-verde.glb', (g) => {
-            const src = g.scene;
-            src.traverse((o) => { if (o.isMesh && /pebbles/i.test(o.name)) o.visible = false; });
-            beds.forEach(([px, pz], i) => {
-              const p = src.clone(true);
-              const s = 1.35 + (i % 3) * 0.25;
-              p.scale.setScalar(s); p.rotation.y = i * 1.7;
-              p.position.set(px, FY + 0.26, pz); scene.add(p);
+            g.scene.updateMatrixWorld(true);
+            const meshesSrc = [];
+            g.scene.traverse((o) => { if (o.isMesh && !/pebbles|pot/i.test(o.name)) meshesSrc.push(o); });
+            // posizioni: piante fitte lungo ogni aiuola (interrate: niente vasi)
+            const mats4 = [];
+            const q4 = new THREE.Quaternion(), s4 = new THREE.Vector3(), v4 = new THREE.Vector3();
+            const up4 = new THREE.Vector3(0, 1, 0);
+            bedAreas.forEach((A) => {
+              const horiz2 = (A[2] - A[0]) >= (A[3] - A[1]);
+              const L = Math.max(A[2] - A[0], A[3] - A[1]);
+              const n3 = Math.max(2, Math.round(L / 1.15));
+              for (let ii = 0; ii <= n3; ii++) {
+                const tp = ii / n3;
+                const px = horiz2 ? A[0] + tp * (A[2] - A[0]) : (A[0] + A[2]) / 2 + (Math.random() - 0.5) * 0.25;
+                const pz = horiz2 ? (A[1] + A[3]) / 2 + (Math.random() - 0.5) * 0.25 : A[1] + tp * (A[3] - A[1]);
+                q4.setFromAxisAngle(up4, Math.random() * Math.PI * 2);
+                const sc = 1.05 + Math.random() * 0.75;
+                s4.set(sc, sc, sc);
+                mats4.push(new THREE.Matrix4().compose(v4.set(px, FY + 0.06, pz).clone(), q4.clone(), s4.clone()));
+              }
+            });
+            meshesSrc.forEach((sm) => {
+              const im = new THREE.InstancedMesh(sm.geometry, sm.material, mats4.length);
+              const bind = sm.matrixWorld.clone();
+              for (let ii = 0; ii < mats4.length; ii++) im.setMatrixAt(ii, mats4[ii].clone().multiply(bind));
+              im.instanceMatrix.needsUpdate = true;
+              scene.add(im);
+            });
+            // luci radenti nel verde (come nella foto)
+            const gm = new THREE.MeshBasicMaterial({ color: 0xffe2a8 });
+            bedAreas.forEach((A) => {
+              const horiz2 = (A[2] - A[0]) >= (A[3] - A[1]);
+              for (let gi = 0; gi < 2; gi++) {
+                const gx = horiz2 ? A[0] + (0.25 + gi * 0.5) * (A[2] - A[0]) : (A[0] + A[2]) / 2;
+                const gz = horiz2 ? (A[1] + A[3]) / 2 : A[1] + (0.25 + gi * 0.5) * (A[3] - A[1]);
+                const gl2 = new THREE.Mesh(new THREE.CircleGeometry(0.09, 10), gm);
+                gl2.rotation.x = -Math.PI / 2;
+                gl2.position.set(gx, FY + 0.24, gz);
+                scene.add(gl2);
+              }
             });
           }, undefined, () => {});
         })();
@@ -2563,6 +2673,12 @@
         showcaseCard.rotation.y += dt * 0.5;                   // la card gira in vetrina
         if (showcaseCard.userData.halo) showcaseCard.userData.halo.quaternion.copy(camera.quaternion);
       }
+      // la cascata procedurale avanza nel tempo
+      if (window.__villaWaterShaders) {
+        for (let si = 0; si < window.__villaWaterShaders.length; si++) {
+          window.__villaWaterShaders[si].uniforms.uT.value = t * 0.00062;
+        }
+      }
       // l'acqua scorre: fontana, zampillo e cascata
       if (window.__villaWaterTex) {
         for (let wi = 0; wi < window.__villaWaterTex.length; wi++) {
@@ -2629,6 +2745,7 @@
       window.__villaDust = null;
       window.__villaWaterTex = null;
       window.__villaRipple = null;
+      window.__villaWaterShaders = null;
       if (waterAudio) { try { waterAudio.ctx.close(); } catch (e) {} waterAudio = null; }
       overlay.style.display = 'none';
     }
