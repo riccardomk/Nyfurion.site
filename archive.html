@@ -1335,6 +1335,39 @@
       const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.flipY = false; return t;
     }
 
+    function waterTexture() {
+      const c = document.createElement('canvas'); c.width = 256; c.height = 256;
+      const g = c.getContext('2d');
+      g.fillStyle = '#123a44'; g.fillRect(0, 0, 256, 256);
+      for (let i = 0; i < 260; i++) {
+        const x = Math.random() * 256, y = Math.random() * 256, r = 6 + Math.random() * 26;
+        g.strokeStyle = 'rgba(140,220,235,' + (0.04 + Math.random() * 0.1) + ')';
+        g.lineWidth = 1 + Math.random() * 1.6;
+        g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.stroke();
+      }
+      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding;
+      t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.RepeatWrapping;
+      return t;
+    }
+
+    function cascataTexture() {
+      const c = document.createElement('canvas'); c.width = 128; c.height = 512;
+      const g = c.getContext('2d');
+      for (let i = 0; i < 150; i++) {
+        const x = Math.random() * 128, y = Math.random() * 512, l = 30 + Math.random() * 130;
+        const a = 0.05 + Math.random() * 0.22;
+        const grad = g.createLinearGradient(0, y, 0, y + l);
+        grad.addColorStop(0, 'rgba(235,245,252,0)');
+        grad.addColorStop(0.5, 'rgba(235,245,252,' + a + ')');
+        grad.addColorStop(1, 'rgba(235,245,252,0)');
+        g.fillStyle = grad;
+        g.fillRect(x, y, 1.6 + Math.random() * 2, l);
+      }
+      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding;
+      t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.RepeatWrapping;
+      return t;
+    }
+
     function skyTexture() {
       const c = document.createElement('canvas'); c.width = 2048; c.height = 1024;
       const g = c.getContext('2d');
@@ -1583,6 +1616,10 @@
         const polishedFloor = pbr('nyf_marble_nero', ANISO, {
           metalness: 0.05, envMapIntensity: 1.5, side: THREE.DoubleSide,
         }, 0.8);
+        // pavimento chiaro lucidato come nella reference (il nero resta per colonne/intarsi)
+        const lightMarble = pbr('marble_01', ANISO, {
+          roughness: 0.16, metalness: 0.04, envMapIntensity: 1.15, side: THREE.DoubleSide,
+        }, 0.8);
         villa.traverse((n) => {
           if (!n.isMesh) return;
           // il nome del materiale si aggancia anche se Blender ha aggiunto ".001"
@@ -1595,10 +1632,10 @@
           if (n.name.startsWith('Exhibit_')) { exhibitSlots.push(n); }
           else if (n.name.startsWith('Plaque_')) { plaqueSlots.push(n); }
           else if (n.name === 'RoomPlate') { roomPlate = n; }
-          else if (n.name === 'Floor_Museum' || n.name === 'Museum_Step') { n.material = polishedFloor; }
-          else if (n.name.startsWith('Entry_Path')) { n.material = polishedFloor; }
+          else if (n.name === 'Floor_Museum' || n.name === 'Museum_Step') { n.material = lightMarble; }
+          else if (n.name.startsWith('Entry_Path')) { n.material = lightMarble; }
           else if (n.name === 'Deck') { n.material = deckStone; }
-          else if (matName === 'NYFP_MarbleFloor') { n.material = polishedFloor; }
+          else if (matName === 'NYFP_MarbleFloor') { n.material = lightMarble; }
           else if (MATS[matName]) { n.material = MATS[matName]; }
           // attraversabili: piante, fiamme, acqua, vetrate + telai/mullion delle aperture,
           // conca piscina (così cammini fino al bordo), gole di luce, opere
@@ -1860,8 +1897,9 @@
         // targa della sala col numero del pezzo
         if (roomPlate) roomPlate.material = new THREE.MeshBasicMaterial({ map: plateTexture('VILLA PRIME · No. ' + tokenId) });
 
-        // ── Runner di velluto verso la vetrina ──
+        // ── Runner di velluto (SPENTO: nella sala-reference ci sono gli intarsi nel marmo) ──
         (function velvetRunner() {
+          return;
           const c = document.createElement('canvas'); c.width = 256; c.height = 1024;
           const g = c.getContext('2d');
           g.fillStyle = '#38111a'; g.fillRect(0, 0, 256, 1024);
@@ -1939,11 +1977,129 @@
         };
 
         // ── MUSEO ICONICO: cassettoni, boiserie, intarsio d'oro, lampadario, applique ──
-        (function museumDecor() {
-          // lampadario a corona solo se il soffitto lo consente; altrimenti
-          // un punto luce caldo da plafone sopra la vetrina
-          if (ceilY - FY > 3.3) makeChandelier(artCX, 0, ceilY - 0.06);
-          else addPt(artCX, ceilY - 0.22, 0, 0xffd9a0, 1.2, 8);
+        // ── SALA GRANDE (reference): cassettoni, colonne nere, fontana, cascata, verde ──
+        (function grandMuseum() {
+          const W = fBB.max.x - fBB.min.x, D = fBB.max.z - fBB.min.z, H = ceilY - FY;
+          const cxr = (fBB.min.x + fBB.max.x) / 2, czr = (fBB.min.z + fBB.max.z) / 2;
+          const stone = new THREE.MeshStandardMaterial({ color: 0xcfc6b6, roughness: 0.55, envMapIntensity: 0.5 });
+          const darkStone = new THREE.MeshStandardMaterial({ color: 0x25221f, roughness: 0.8 });
+          const box = (w, h, d, x, y, z, mat, solid) => {
+            const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+            m.position.set(x, y, z); scene.add(m);
+            if (solid) colliders.push(m);
+            return m;
+          };
+          window.__villaWaterTex = [];
+          const flow = (tex, dy) => { window.__villaWaterTex.push({ t: tex, dy: dy }); return tex; };
+
+          // 1) soffitto a cassettoni in noce + faretti incassati + gola di luce
+          const by = ceilY - 0.10;
+          const nx = Math.max(4, Math.round(W / 1.9)), nz = Math.max(3, Math.round(D / 1.9));
+          for (let i = 0; i <= nz; i++) box(W - 0.3, 0.16, 0.13, cxr, by, fBB.min.z + 0.15 + (D - 0.3) * i / nz, walnut);
+          for (let i = 0; i <= nx; i++) box(0.13, 0.16, D - 0.3, fBB.min.x + 0.15 + (W - 0.3) * i / nx, by, czr, walnut);
+          const spotDisc = new THREE.MeshBasicMaterial({ color: 0xffd9a2 });
+          for (let i = 0; i < nx; i++) for (let j = 0; j < nz; j++) {
+            if ((i + j) % 2) continue;
+            const disc = new THREE.Mesh(new THREE.CircleGeometry(0.055, 12), spotDisc);
+            disc.rotation.x = Math.PI / 2;
+            disc.position.set(fBB.min.x + 0.15 + (W - 0.3) * (i + 0.5) / nx, ceilY - 0.19,
+              fBB.min.z + 0.15 + (D - 0.3) * (j + 0.5) / nz);
+            scene.add(disc);
+          }
+          const coveMat = new THREE.MeshBasicMaterial({ color: 0xffc98a });
+          box(W - 0.5, 0.045, 0.045, cxr, ceilY - 0.3, fBB.min.z + 0.28, coveMat);
+          box(W - 0.5, 0.045, 0.045, cxr, ceilY - 0.3, fBB.max.z - 0.28, coveMat);
+          box(0.045, 0.045, D - 0.5, fBB.min.x + 0.28, ceilY - 0.3, czr, coveMat);
+          box(0.045, 0.045, D - 0.5, fBB.max.x - 0.28, ceilY - 0.3, czr, coveMat);
+          addPt(cxr - W * 0.22, ceilY - 0.5, 0, 0xffdcae, 1.1, 12);
+          addPt(cxr + W * 0.22, ceilY - 0.5, 0, 0xffdcae, 1.1, 12);
+
+          // 2) colonne in marmo nero venato con basi e capitelli in pietra chiara
+          const colMat = polishedFloor.clone();
+          ['map', 'normalMap', 'roughnessMap'].forEach((kk) => {
+            if (colMat[kk]) { colMat[kk] = colMat[kk].clone(); colMat[kk].repeat.set(1.1, 2.4); colMat[kk].needsUpdate = true; }
+          });
+          colMat.roughness = 0.55; colMat.envMapIntensity = 1.6;
+          const shaftH = Math.max(1.6, H - 0.86);
+          [cxr - W * 0.26, cxr, cxr + W * 0.26].forEach((px) => {
+            [-D * 0.3, D * 0.3].forEach((pz) => {
+              box(0.52, 0.2, 0.52, px, FY + 0.1, czr + pz, stone, true);
+              box(0.42, 0.16, 0.42, px, FY + 0.28, czr + pz, stone);
+              const sh = new THREE.Mesh(new THREE.CylinderGeometry(0.155, 0.17, shaftH, 18), colMat);
+              sh.position.set(px, FY + 0.36 + shaftH / 2, czr + pz); scene.add(sh); colliders.push(sh);
+              box(0.42, 0.13, 0.42, px, FY + 0.36 + shaftH + 0.065, czr + pz, stone);
+              box(0.54, 0.12, 0.54, px, FY + 0.36 + shaftH + 0.19, czr + pz, stone);
+            });
+          });
+
+          // 3) intarsi scuri nel marmo chiaro (i bordi della reference)
+          const inl = (w, d, x, z) => {
+            const m = new THREE.Mesh(new THREE.BoxGeometry(w, 0.012, d), polishedFloor);
+            m.position.set(x, FY + 0.008, z); scene.add(m);
+          };
+          inl(W - 1.6, 0.14, cxr, fBB.min.z + 0.9); inl(W - 1.6, 0.14, cxr, fBB.max.z - 0.9);
+          inl(0.14, D - 1.9, fBB.min.x + 0.9, czr); inl(0.14, D - 1.9, fBB.max.x - 0.9, czr);
+
+          // 4) FONTANA centrale con acqua vera animata
+          const fx = cxr - W * 0.1, fz = czr;
+          box(2.6, 0.14, 2.6, fx, FY + 0.07, fz, polishedFloor, true);
+          const vasca = new THREE.Mesh(new THREE.CylinderGeometry(1.28, 1.36, 0.42, 36), stone);
+          vasca.position.set(fx, FY + 0.35, fz); scene.add(vasca); colliders.push(vasca);
+          const wTex = flow(waterTexture(), 0.06); wTex.repeat.set(2, 2);
+          const acqua = new THREE.Mesh(new THREE.CircleGeometry(1.18, 36),
+            new THREE.MeshStandardMaterial({ map: wTex, transparent: true, opacity: 0.85, roughness: 0.08, metalness: 0.25, envMapIntensity: 1.4 }));
+          acqua.rotation.x = -Math.PI / 2; acqua.position.set(fx, FY + 0.5, fz); scene.add(acqua);
+          const stelo = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.16, 0.55, 14), stone);
+          stelo.position.set(fx, FY + 0.83, fz); scene.add(stelo);
+          const coppa = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.28, 0.2, 22), stone);
+          coppa.position.set(fx, FY + 1.16, fz); scene.add(coppa);
+          const cTex = flow(waterTexture(), 0.1); cTex.repeat.set(1.4, 1.4);
+          const acqua2 = new THREE.Mesh(new THREE.CircleGeometry(0.48, 24),
+            new THREE.MeshStandardMaterial({ map: cTex, transparent: true, opacity: 0.9, roughness: 0.06, envMapIntensity: 1.4 }));
+          acqua2.rotation.x = -Math.PI / 2; acqua2.position.set(fx, FY + 1.27, fz); scene.add(acqua2);
+          const zTex = flow(cascataTexture(), 0.5); zTex.repeat.set(1.6, 1);
+          const zampillo = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.1, 0.62, 12, 1, true),
+            new THREE.MeshBasicMaterial({ map: zTex, transparent: true, opacity: 0.7, depthWrite: false, side: THREE.DoubleSide }));
+          zampillo.position.set(fx, FY + 1.6, fz); scene.add(zampillo);
+          addPt(fx, FY + 1.9, fz, 0xffe6c0, 0.9, 6);
+
+          // 5) PARETE-CASCATA sul lato ovest, con vasca di raccolta
+          const wx = fBB.min.x + 0.16;
+          const fh = H - 0.55;
+          box(0.16, fh, 4.0, wx, FY + fh / 2, czr, darkStone, true);
+          const fTex = flow(cascataTexture(), 0.85); fTex.repeat.set(2.4, 1.4);
+          const falls = new THREE.Mesh(new THREE.PlaneGeometry(3.6, fh - 0.3),
+            new THREE.MeshBasicMaterial({ map: fTex, transparent: true, opacity: 0.6, depthWrite: false }));
+          falls.rotation.y = Math.PI / 2;
+          falls.position.set(wx + 0.1, FY + 0.28 + (fh - 0.3) / 2, czr);
+          scene.add(falls);
+          box(1.0, 0.34, 4.2, wx + 0.45, FY + 0.17, czr, stone, true);
+          const bTex = flow(waterTexture(), 0.12); bTex.repeat.set(1, 3);
+          const bacino = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 3.9),
+            new THREE.MeshStandardMaterial({ map: bTex, transparent: true, opacity: 0.85, roughness: 0.07, envMapIntensity: 1.3 }));
+          bacino.rotation.x = -Math.PI / 2; bacino.position.set(wx + 0.45, FY + 0.35, czr); scene.add(bacino);
+          const wl = new THREE.PointLight(0x9fd8e8, 0.7, 5, 2);
+          wl.position.set(wx + 0.8, FY + 1.4, czr); scene.add(wl);
+
+          // 6) VEGETAZIONE: fioriere in pietra scura + piante 3D vere (clonate)
+          const beds = [
+            [cxr - W * 0.26, fBB.min.z + 0.55], [cxr + W * 0.26, fBB.min.z + 0.55],
+            [cxr - W * 0.26, fBB.max.z - 0.55], [cxr + W * 0.26, fBB.max.z - 0.55],
+            [wx + 0.55, czr - 2.6], [wx + 0.55, czr + 2.6],
+          ];
+          beds.forEach(([px, pz]) => box(1.5, 0.4, 0.85, px, FY + 0.2, pz, darkStone, true));
+          new THREE.GLTFLoader().load('plant-verde.glb', (g) => {
+            const src = g.scene;
+            beds.forEach(([px, pz], i) => {
+              const p = src.clone(true);
+              const s = 1.4 + (i % 3) * 0.5;
+              p.scale.setScalar(s); p.rotation.y = i * 1.7;
+              p.position.set(px, FY + 0.26, pz); scene.add(p);
+              const p2 = src.clone(true);
+              p2.scale.setScalar(s * 0.65); p2.rotation.y = i * 2.6 + 1;
+              p2.position.set(px + 0.42, FY + 0.26, pz + 0.1); scene.add(p2);
+            });
+          }, undefined, () => {});
         })();
 
         // (il marmo delle ali arriva dai PAVIMENTI VERI del guscio: facce orizzontali
@@ -2260,6 +2416,13 @@
         showcaseCard.rotation.y += dt * 0.5;                   // la card gira in vetrina
         if (showcaseCard.userData.halo) showcaseCard.userData.halo.quaternion.copy(camera.quaternion);
       }
+      // l'acqua scorre: fontana, zampillo e cascata
+      if (window.__villaWaterTex) {
+        for (let wi = 0; wi < window.__villaWaterTex.length; wi++) {
+          const w = window.__villaWaterTex[wi];
+          w.t.offset.y -= w.dy * dt;
+        }
+      }
       // la polvere dorata sale e deriva lentamente
       if (window.__villaDust && scene) {
         const dp = window.__villaDust.geometry.attributes.position;
@@ -2298,6 +2461,7 @@
       renderer.domElement.remove(); renderer.dispose(); renderer = null;
       scene = null; exhibits = []; colliders = []; walkables = []; hovered = null; showcaseCard = null;
       window.__villaDust = null;
+      window.__villaWaterTex = null;
       overlay.style.display = 'none';
     }
   })();
