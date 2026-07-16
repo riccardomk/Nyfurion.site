@@ -1622,70 +1622,75 @@
         }, 0.8);
         villa.traverse((n) => {
           if (!n.isMesh) return;
-          // il nome del materiale si aggancia anche se Blender ha aggiunto ".001"
-          let matName = ((n.material && n.material.name) || '').replace(/\.\d{3}$/, '');
-          if (matName === 'Stainless steel') matName = 'NYFP_Metal';
-          if (n.name === 'Cube' || n.name === 'house') houseShell = n;
-          // via piscina, scaletta, divanetto e TUTTI gli alberi-cono (c'è la foresta vera fuori)
-          if (n.name.startsWith('Pool_') || n.name.startsWith('Bench') || n.name.startsWith('Steel Stairs')
-            || n.name.startsWith('Plant') || n.name.startsWith('Planter')) { n.visible = false; return; }
-          if (n.name.startsWith('Exhibit_')) { exhibitSlots.push(n); }
-          else if (n.name.startsWith('Plaque_')) { plaqueSlots.push(n); }
-          else if (n.name === 'RoomPlate') { roomPlate = n; }
-          else if (n.name === 'Floor_Museum' || n.name === 'Museum_Step') { n.material = lightMarble; }
-          else if (n.name.startsWith('Entry_Path')) { n.material = lightMarble; }
-          else if (n.name === 'Deck') { n.material = deckStone; }
-          else if (matName === 'NYFP_MarbleFloor') { n.material = lightMarble; }
-          else if (MATS[matName]) { n.material = MATS[matName]; }
-          // attraversabili: piante, fiamme, acqua, vetrate + telai/mullion delle aperture,
-          // conca piscina (così cammini fino al bordo), gole di luce, opere
-          const ghost = n.name.startsWith('Plant_') || n.name.startsWith('Flame_')
-            || n.name === 'Pool_Water' || n.name === 'Pool_Shell'
-            || matName === 'NYFP_Glass' || matName === 'NYFP_Cove'
-            || n.name.startsWith('Mullion') || n.name.includes('Frame')
-            || n.name.startsWith('Exhibit_')
-            || n.name.startsWith('Plaque_') || n.name === 'RoomPlate';
-          if (!ghost) colliders.push(n);
-          // SOLO i veri pavimenti guidano l'altezza dello sguardo:
-          // niente più saliscendi su tappeti, battiscopa, basamenti
-          if (!ghost && (matName === 'NYFP_MarbleFloor'
-            || /^(Floor|Deck|Entry_Path|Museum_Step|Steel Stairs|Cube)/.test(n.name))) {
-            walkables.push(n);
+          // DAL MODELLO PRENDIAMO SOLO LE OPERE: la sala la costruisce il sito,
+          // sempre identica e perfetta, qualunque cosa ci sia nel .blend
+          if (n.name.startsWith('ExhibitFrame_') || n.name.startsWith('PlaqueFrame_')) {
+            n.material = gold; return;
           }
+          if (n.name.startsWith('Exhibit_')) { exhibitSlots.push(n); return; }
+          if (n.name.startsWith('Plaque_')) { plaqueSlots.push(n); return; }
+          if (n.name === 'RoomPlate') { roomPlate = n; return; }
+          n.visible = false;
         });
         exhibitSlots.sort((a, b) => a.name.localeCompare(b.name));
         plaqueSlots.sort((a, b) => a.name.localeCompare(b.name));
 
-        // ── MISURE REALI dal modello: a prova di QUALSIASI rifacimento ──
+        // ── LA SALA È DEL SITO: misure FISSE, sempre giuste, per tutti i 400 ──
         villa.updateMatrixWorld(true);
-        // pavimento: Floor_Museum se esiste, altrimenti la superficie di MARMO più estesa
-        const fmMesh = villa.getObjectByName('Floor_Museum');
-        let fBB = null;
-        if (fmMesh) { fBB = new THREE.Box3().setFromObject(fmMesh); }
-        else {
-          villa.traverse((n) => {
-            if (!n.isMesh || !/^NYFP_MarbleFloor/.test((n.material && n.material.name) || '')) return;
-            const b = new THREE.Box3().setFromObject(n);
-            if (!fBB || (b.max.x - b.min.x) * (b.max.z - b.min.z) >
-                        (fBB.max.x - fBB.min.x) * (fBB.max.z - fBB.min.z)) fBB = b;
+        const fBB = new THREE.Box3(new THREE.Vector3(-8, 0, -5.5), new THREE.Vector3(8, 0.22, 5.5));
+        const FY = 0.22, ceilY = 4.62, hasBeams = false;
+        const artCX = 4.6;                        // vetrina nel cuore della zona quadri
+        const hBB = fBB.clone();
+
+        // ── I QUADRI DEL TOKEN, appesi BENE sulle mie pareti ──
+        const q0 = new THREE.Quaternion();
+        const normalOf = (mesh) => {
+          const na = mesh.geometry.getAttribute('normal');
+          const nv = na ? new THREE.Vector3(na.getX(0), na.getY(0), na.getZ(0)) : new THREE.Vector3(0, 0, 1);
+          return nv.transformDirection(mesh.matrixWorld).normalize();
+        };
+        const moveArt = (mesh, frame, tx, ty, tz, nx2, nz2) => {
+          if (!mesh) return;
+          const n0 = normalOf(mesh);
+          const nt = new THREE.Vector3(nx2, 0, nz2).normalize();
+          q0.setFromUnitVectors(n0, nt);
+          const c0 = new THREE.Box3().setFromObject(mesh).getCenter(new THREE.Vector3());
+          const off = new THREE.Vector3(tx, ty, tz).sub(c0.clone().applyQuaternion(q0));
+          [mesh, frame].forEach((o) => {
+            if (!o) return;
+            o.quaternion.premultiply(q0);
+            o.position.add(off);
+            o.updateMatrixWorld(true);
           });
-        }
-        if (!fBB) fBB = new THREE.Box3().setFromObject(villa);
-        const FY = fBB.max.y;                     // quota vera del pavimento
-        let ceilY = 1e9;                          // riferimento soffitto: solaio O travi in legno
-        let hasBeams = false;
-        villa.traverse((n) => {
-          if (!n.isMesh) return;
-          const mn2 = ((n.material && n.material.name) || '');
-          if (!/^NYFP_(Ceiling|WoodDark)/.test(mn2)) return;
-          const b = new THREE.Box3().setFromObject(n);
-          if (b.max.y > FY + 1.8 && b.max.y < ceilY) { ceilY = b.max.y; hasBeams = /WoodDark/.test(mn2); }
-        });
-        if (ceilY > FY + 8) { ceilY = FY + 3.2; hasBeams = false; }
-        const exBB = new THREE.Box3();
-        exhibitSlots.forEach((p) => exBB.expandByObject(p));
-        const artCX = Math.min(Math.max((exBB.min.x + exBB.max.x) / 2, fBB.min.x + 2.2), fBB.max.x - 2.2);
-        const hBB = houseShell ? new THREE.Box3().setFromObject(houseShell) : fBB.clone();
+        };
+        const F = (nm) => villa.getObjectByName(nm);
+        moveArt(F('Exhibit_01'), F('ExhibitFrame_01'), 7.82, 2.1, 0, -1, 0);      // parete d'onore
+        moveArt(F('Exhibit_02'), F('ExhibitFrame_02'), 7.82, 1.95, -3.2, -1, 0);
+        moveArt(F('Exhibit_03'), F('ExhibitFrame_03'), 7.82, 1.95, 3.2, -1, 0);
+        moveArt(F('Exhibit_04'), F('ExhibitFrame_04'), 2.0, 1.95, -5.32, 0, 1);   // parete nord
+        moveArt(F('Exhibit_05'), F('ExhibitFrame_05'), 5.2, 1.95, -5.32, 0, 1);
+        moveArt(F('Exhibit_06'), F('ExhibitFrame_06'), 2.0, 1.95, 5.32, 0, -1);   // parete sud
+        moveArt(F('Exhibit_07'), F('ExhibitFrame_07'), 5.2, 1.95, 5.32, 0, -1);
+        moveArt(F('Plaque_01'), F('PlaqueFrame_01'), -1.6, 1.72, 5.32, 0, -1);
+        moveArt(F('Plaque_02'), F('PlaqueFrame_02'), -1.6, 1.72, -5.32, 0, 1);
+        if (roomPlate) moveArt(roomPlate, null, 7.83, 3.62, 0, -1, 0);
+
+        // ── LA SALA: pavimento, pareti, solaio — costruiti dal sito ──
+        (function buildRoom() {
+          const mk = (w, h, d, x, y, z, mat, solid, walk) => {
+            const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+            m.position.set(x, y, z); scene.add(m);
+            if (solid) colliders.push(m);
+            if (walk) walkables.push(m);
+            return m;
+          };
+          mk(16.6, 0.24, 11.6, 0, 0.1, 0, lightMarble, true, true);        // pavimento
+          mk(0.3, 4.4, 11.6, -8.0, 2.42, 0, MATS.NYFP_Plaster, true);      // parete ovest
+          mk(0.3, 4.4, 11.6, 8.0, 2.42, 0, MATS.NYFP_Plaster, true);       // parete est
+          mk(16.6, 4.4, 0.3, 0, 2.42, -5.5, MATS.NYFP_Plaster, true);      // parete nord
+          mk(16.6, 4.4, 0.3, 0, 2.42, 5.5, MATS.NYFP_Plaster, true);       // parete sud
+          mk(16.6, 0.24, 11.6, 0, 4.74, 0, MATS.NYFP_Ceiling);             // solaio
+        })();
 
         // zoccolo in pietra su misura dell'impronta reale: mai vuoto sotto la villa
         const bas = new THREE.Mesh(
