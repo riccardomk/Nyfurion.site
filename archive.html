@@ -1477,10 +1477,7 @@
         geo.computeVertexNormals();
         scene.add(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1 })));
 
-        // zoccolo pieno sotto la villa v2 (impronta più grande): nessun vuoto sotto
-        const basamento = new THREE.Mesh(new THREE.BoxGeometry(29, 0.7, 34),
-          new THREE.MeshStandardMaterial({ color: 0x24211d, roughness: 0.92 }));
-        basamento.position.set(-4.9, -0.65, -3.0); scene.add(basamento);
+        // (lo zoccolo sotto la villa viene creato in parseVilla, sull'impronta REALE)
 
         // ── FORESTA: alberi fotorenderizzati su pannelli incrociati (tecnica da gioco) ──
         const treePts = [];
@@ -1622,20 +1619,40 @@
         exhibitSlots.sort((a, b) => a.name.localeCompare(b.name));
         plaqueSlots.sort((a, b) => a.name.localeCompare(b.name));
 
-        // ── MISURE REALI dal modello: a prova di QUALSIASI ridimensionamento ──
+        // ── MISURE REALI dal modello: a prova di QUALSIASI rifacimento ──
         villa.updateMatrixWorld(true);
-        const fBB = new THREE.Box3().setFromObject(villa.getObjectByName('Floor_Museum') || villa);
-        const FY = fBB.max.y;                     // quota vera del pavimento del museo
-        let ceilY = FY + 4.4;                     // solaio più basso sopra il museo
+        // pavimento: Floor_Museum se esiste, altrimenti la superficie di MARMO più estesa
+        const fmMesh = villa.getObjectByName('Floor_Museum');
+        let fBB = null;
+        if (fmMesh) { fBB = new THREE.Box3().setFromObject(fmMesh); }
+        else {
+          villa.traverse((n) => {
+            if (!n.isMesh || !/^NYFP_MarbleFloor/.test((n.material && n.material.name) || '')) return;
+            const b = new THREE.Box3().setFromObject(n);
+            if (!fBB || (b.max.x - b.min.x) * (b.max.z - b.min.z) >
+                        (fBB.max.x - fBB.min.x) * (fBB.max.z - fBB.min.z)) fBB = b;
+          });
+        }
+        if (!fBB) fBB = new THREE.Box3().setFromObject(villa);
+        const FY = fBB.max.y;                     // quota vera del pavimento
+        let ceilY = 1e9;                          // solaio più basso sopra il museo
         villa.traverse((n) => {
           if (!n.isMesh || !/^NYFP_Ceiling/.test((n.material && n.material.name) || '')) return;
           const b = new THREE.Box3().setFromObject(n);
-          if (b.min.y > FY + 1.8 && b.min.y < ceilY) ceilY = b.min.y;
+          if (b.max.y > FY + 1.8 && b.max.y < ceilY) ceilY = b.max.y;
         });
+        if (ceilY > FY + 8) ceilY = FY + 3.2;
         const exBB = new THREE.Box3();
         exhibitSlots.forEach((p) => exBB.expandByObject(p));
         const artCX = Math.min(Math.max((exBB.min.x + exBB.max.x) / 2, fBB.min.x + 2.2), fBB.max.x - 2.2);
         const hBB = houseShell ? new THREE.Box3().setFromObject(houseShell) : fBB.clone();
+
+        // zoccolo in pietra su misura dell'impronta reale: mai vuoto sotto la villa
+        const bas = new THREE.Mesh(
+          new THREE.BoxGeometry(hBB.max.x - hBB.min.x + 1.2, 0.9, hBB.max.z - hBB.min.z + 1.2),
+          new THREE.MeshStandardMaterial({ color: 0x24211d, roughness: 0.92 }));
+        bas.position.set((hBB.min.x + hBB.max.x) / 2, hBB.min.y - 0.42, (hBB.min.z + hBB.max.z) / 2);
+        scene.add(bas);
 
         // spawn: lato ovest del museo, sguardo verso la vetrina
         feet.set(fBB.min.x + 1.6, FY, 0);
@@ -1730,27 +1747,29 @@
 
         // ── LA VETRINA DELLA CARD — cuore della villa, al centro del museo ──
         (function cardShowcase() {
-          // vetrina AL CENTRO DEI QUADRI, misurato dai quadri veri
+          // vetrina AL CENTRO DEI QUADRI, misurato dai quadri veri.
+          // k scala le ALTEZZE sul soffitto reale (soffitti bassi = vetrina più raccolta)
           const cx = artCX, cz = 0, fy = FY;
+          const k = Math.max(0.6, Math.min(1, (ceilY - FY - 0.75) / 2.65));
           // ══ VETRINA MUSEALE: plinto in marmo nero + teca di vetro con spigoli d'oro ══
           // (stesso formato riutilizzabile per il personaggio 3D nelle altre sale)
           const plinthMat = polishedFloor.clone();
           ['map', 'normalMap', 'roughnessMap'].forEach((k) => {
             if (plinthMat[k]) { plinthMat[k] = plinthMat[k].clone(); plinthMat[k].repeat.set(0.42, 0.42); plinthMat[k].offset.set(0.22, 0.16); plinthMat[k].needsUpdate = true; }
           });
-          const plinth = new THREE.Mesh(new THREE.BoxGeometry(0.74, 0.95, 0.74), plinthMat);
-          plinth.position.set(cx, fy + 0.475, cz); scene.add(plinth); colliders.push(plinth);
+          const plinth = new THREE.Mesh(new THREE.BoxGeometry(0.74, 0.95 * k, 0.74), plinthMat);
+          plinth.position.set(cx, fy + 0.475 * k, cz); scene.add(plinth); colliders.push(plinth);
           const trim = (y, s, h) => {
             const tm = new THREE.Mesh(new THREE.BoxGeometry(s, h, s), gold);
             tm.position.set(cx, y, cz); scene.add(tm);
           };
           trim(fy + 0.02, 0.78, 0.04);                 // zoccolo d'oro
-          trim(fy + 0.945, 0.77, 0.03);                // cimasa d'oro
-          const topY = fy + 0.96;
+          trim(fy + 0.945 * k, 0.77, 0.03);            // cimasa d'oro
+          const topY = fy + 0.96 * k;
           trim(topY + 0.01, 0.7, 0.02);                // piano d'appoggio
 
           // teca di vetro
-          const GW = 0.62, GH = 1.35;
+          const GW = 0.62, GH = 1.35 * k;
           const glassMat = new THREE.MeshStandardMaterial({
             color: 0xdcecf5, transparent: true, opacity: 0.13, roughness: 0.03,
             metalness: 0.08, envMapIntensity: 1.7, side: THREE.DoubleSide, depthWrite: false,
@@ -1779,7 +1798,7 @@
           // la card ruota DENTRO la teca
           const cardY = topY + 0.02 + GH / 2;
           const cardMat = new THREE.MeshBasicMaterial({ map: cardPlaceholderTexture() });
-          showcaseCard = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.68, 0.02), [
+          showcaseCard = new THREE.Mesh(new THREE.BoxGeometry(0.44 * k, 0.68 * k, 0.02), [
             gold, gold, gold, gold, cardMat, cardMat,
           ]);
           showcaseCard.position.set(cx, cardY, cz); scene.add(showcaseCard);
@@ -1787,7 +1806,7 @@
           fetchFileUrl(tokenId, cardKey).then((u) => fetch(u)).then((r) => r.arrayBuffer()).then((buf) => {
             new THREE.GLTFLoader().parse(buf, '', (g) => {
               const real = g.scene;
-              real.scale.setScalar(8.0);                     // 8.8cm -> 70cm: dentro la teca con aria
+              real.scale.setScalar(8.0 * k);                 // 8.8cm -> ~70cm: dentro la teca con aria
               real.rotation.x = Math.PI / 2;                 // in piedi (Blender Z-up -> web Y-up)
               // resa da vetrina: foto sempre accesa, oro specchiante, corpo ricco
               real.traverse((n) => {
@@ -1921,9 +1940,10 @@
 
         // ── MUSEO ICONICO: cassettoni, boiserie, intarsio d'oro, lampadario, applique ──
         (function museumDecor() {
-          // solo elementi ancorati a MISURE vere: lampadario sopra la vetrina,
-          // appeso al solaio misurato dal modello
-          makeChandelier(artCX, 0, ceilY - 0.06);
+          // lampadario a corona solo se il soffitto lo consente; altrimenti
+          // un punto luce caldo da plafone sopra la vetrina
+          if (ceilY - FY > 3.3) makeChandelier(artCX, 0, ceilY - 0.06);
+          else addPt(artCX, ceilY - 0.22, 0, 0xffd9a0, 1.2, 8);
         })();
 
         // (il marmo delle ali arriva dai PAVIMENTI VERI del guscio: facce orizzontali
