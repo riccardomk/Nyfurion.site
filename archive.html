@@ -2102,45 +2102,28 @@
             trim(topY + 0.01, 0.7, 0.02);
           }
 
-          // teca di vetro
-          const GW = 0.62, GH = 1.35 * k;
-          const glassMat = new THREE.MeshStandardMaterial({
-            color: 0xdcecf5, transparent: true, opacity: 0.13, roughness: 0.03,
-            metalness: 0.08, envMapIntensity: 1.7, side: THREE.DoubleSide, depthWrite: false,
+          // NIENTE VETRINA: la card fluttua LIBERA a metà tra la pedana e
+          // l'anello di luce del modello, grande e imponente
+          let ringY = null;
+          villa.traverse((n) => {
+            if (!n.isMesh || !n.name.startsWith('Dais_RingLight')) return;
+            const b = new THREE.Box3().setFromObject(n);
+            const c = b.getCenter(new THREE.Vector3());
+            if (Math.hypot(c.x - cx, c.z - cz) < 1.8 && b.min.y > topY
+              && (ringY === null || b.min.y < ringY)) ringY = b.min.y;
           });
-          const teca = new THREE.Mesh(new THREE.BoxGeometry(GW, GH, GW), glassMat);
-          teca.position.set(cx, topY + 0.02 + GH / 2, cz); scene.add(teca);
-          const edge = (w, h, d, x, y, z) => {
-            const e = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), gold);
-            e.position.set(x, y, z); scene.add(e);
-          };
-          const off2 = GW / 2;
-          [[-off2, -off2], [-off2, off2], [off2, -off2], [off2, off2]].forEach(([ex, ez]) =>
-            edge(0.026, GH, 0.026, cx + ex, topY + 0.02 + GH / 2, cz + ez));
-          [topY + 0.035, topY + GH + 0.005].forEach((ey) => {
-            edge(GW + 0.05, 0.026, 0.026, cx, ey, cz - off2);
-            edge(GW + 0.05, 0.026, 0.026, cx, ey, cz + off2);
-            edge(0.026, 0.026, GW + 0.05, cx - off2, ey, cz);
-            edge(0.026, 0.026, GW + 0.05, cx + off2, ey, cz);
-          });
-          // coperchio piramidale con pomolo
-          const lid = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.47, 0.11, 4), gold);
-          lid.rotation.y = Math.PI / 4; lid.position.set(cx, topY + GH + 0.075, cz); scene.add(lid);
-          const knob = new THREE.Mesh(new THREE.SphereGeometry(0.035, 10, 10), gold);
-          knob.position.set(cx, topY + GH + 0.16, cz); scene.add(knob);
-
-          // la card ruota DENTRO la teca
-          const cardY = topY + 0.02 + GH / 2;
+          const cardY = ringY !== null ? (topY + ringY) / 2 : topY + 1.2;
           const cardMat = new THREE.MeshBasicMaterial({ map: cardPlaceholderTexture() });
-          showcaseCard = new THREE.Mesh(new THREE.BoxGeometry(0.44 * k, 0.68 * k, 0.02), [
+          showcaseCard = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.96, 0.025), [
             gold, gold, gold, gold, cardMat, cardMat,
           ]);
           showcaseCard.position.set(cx, cardY, cz); scene.add(showcaseCard);
+          showcaseCard.userData.baseY = cardY;
           const cardKey = 'token-' + String(tokenId).padStart(3, '0') + '/card-3d.glb';
           fetchFileUrl(tokenId, cardKey).then((u) => fetch(u)).then((r) => r.arrayBuffer()).then((buf) => {
             new THREE.GLTFLoader().parse(buf, '', (g) => {
               const real = g.scene;
-              real.scale.setScalar(8.0 * k);                 // 8.8cm -> ~70cm: dentro la teca con aria
+              real.scale.setScalar(11.5 * k);                // 8.8cm -> ~1m: libera e imponente
               real.rotation.x = Math.PI / 2;                 // in piedi (Blender Z-up -> web Y-up)
               // resa da vetrina: foto sempre accesa, oro specchiante, corpo ricco
               real.traverse((n) => {
@@ -2157,6 +2140,7 @@
               const grp = new THREE.Group();
               grp.add(real);
               grp.position.set(cx, cardY, cz);
+              grp.userData.baseY = cardY;
               grp.rotation.y = showcaseCard.rotation.y;
               const halo2 = showcaseCard.userData.halo;
               scene.remove(showcaseCard);
@@ -2167,7 +2151,7 @@
           }).catch(() => { /* resta il segnaposto */ });
 
           // alone dorato dietro la card (glow)
-          const halo = new THREE.Mesh(new THREE.PlaneGeometry(0.95, 1.25),
+          const halo = new THREE.Mesh(new THREE.PlaneGeometry(1.35, 1.75),
             new THREE.MeshBasicMaterial({ map: haloTexture(), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
           halo.position.set(cx, cardY, cz); scene.add(halo);
           showcaseCard.userData.halo = halo;
@@ -2850,7 +2834,11 @@
       }
 
       if (showcaseCard) {
-        showcaseCard.rotation.y += dt * 0.5;                   // la card gira in vetrina
+        showcaseCard.rotation.y += dt * 0.5;                   // la card gira, libera
+        if (showcaseCard.userData.baseY !== undefined) {       // e respira, sospesa
+          showcaseCard.position.y = showcaseCard.userData.baseY + Math.sin(t * 0.0011) * 0.05;
+          if (showcaseCard.userData.halo) showcaseCard.userData.halo.position.y = showcaseCard.position.y;
+        }
         if (showcaseCard.userData.halo) showcaseCard.userData.halo.quaternion.copy(camera.quaternion);
       }
       // la cascata procedurale avanza nel tempo
