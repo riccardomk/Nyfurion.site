@@ -1680,9 +1680,9 @@
 
         // ── LA SALA È DEL SITO: misure FISSE, sempre giuste, per tutti i 400 ──
         villa.updateMatrixWorld(true);
-        // SALA UNICA MINIMAL: 16 x 10, soffitto 4.3 — compatta, calda, curata
-        const fBB = new THREE.Box3(new THREE.Vector3(-8, 0, -5), new THREE.Vector3(8, 0.22, 5));
-        const FY = 0.22, ceilY = 4.3, hasBeams = false;
+        // SALA UNICA: 20 x 14, soffitto 4.6 — ampia ma raccolta
+        const fBB = new THREE.Box3(new THREE.Vector3(-10, 0, -7), new THREE.Vector3(10, 0.22, 7));
+        const FY = 0.22, ceilY = 4.6, hasBeams = false;
         const artCX = 0;
         const hBB = fBB.clone();
 
@@ -1695,9 +1695,11 @@
         };
         const moveArt = (mesh, frame, tx, ty, tz, nx2, nz2) => {
           if (!mesh) return;
+          // rotazione SOLO attorno all'asse verticale: un quadro può solo girare
+          // come un quadro (mai sdraiarsi o capovolgersi)
           const n0 = normalOf(mesh);
-          const nt = new THREE.Vector3(nx2, 0, nz2).normalize();
-          q0.setFromUnitVectors(n0, nt);
+          const dyaw = Math.atan2(nx2, nz2) - Math.atan2(n0.x, n0.z);
+          q0.setFromAxisAngle(new THREE.Vector3(0, 1, 0), dyaw);
           const c0 = new THREE.Box3().setFromObject(mesh).getCenter(new THREE.Vector3());
           const off = new THREE.Vector3(tx, ty, tz).sub(c0.clone().applyQuaternion(q0));
           [mesh, frame].forEach((o) => {
@@ -1709,16 +1711,16 @@
         };
         const F = (nm) => villa.getObjectByName(nm);
         // TUTTI i quadri su UN'UNICA parete (nord), in fila da galleria
-        moveArt(F('Exhibit_01'), F('ExhibitFrame_01'), 0, 2.15, -4.97, 0, 1);      // il grande al centro
-        moveArt(F('Exhibit_02'), F('ExhibitFrame_02'), -2.8, 2.0, -4.97, 0, 1);
-        moveArt(F('Exhibit_03'), F('ExhibitFrame_03'), 2.8, 2.0, -4.97, 0, 1);
-        moveArt(F('Exhibit_04'), F('ExhibitFrame_04'), -5.0, 2.0, -4.97, 0, 1);
-        moveArt(F('Exhibit_05'), F('ExhibitFrame_05'), 5.0, 2.0, -4.97, 0, 1);
-        moveArt(F('Exhibit_06'), F('ExhibitFrame_06'), -6.9, 2.0, -4.97, 0, 1);
-        moveArt(F('Exhibit_07'), F('ExhibitFrame_07'), 6.9, 2.0, -4.97, 0, 1);
-        moveArt(F('Plaque_01'), F('PlaqueFrame_01'), 7.97, 1.75, 0, -1, 0);        // targhe sui lati
-        moveArt(F('Plaque_02'), F('PlaqueFrame_02'), -7.97, 1.75, 0, 1, 0);
-        if (roomPlate) moveArt(roomPlate, null, 0, 3.62, -4.98, 0, 1);
+        moveArt(F('Exhibit_01'), F('ExhibitFrame_01'), 0, 2.25, -6.93, 0, 1);      // il grande al centro
+        moveArt(F('Exhibit_02'), F('ExhibitFrame_02'), -3.2, 2.05, -6.93, 0, 1);
+        moveArt(F('Exhibit_03'), F('ExhibitFrame_03'), 3.2, 2.05, -6.93, 0, 1);
+        moveArt(F('Exhibit_04'), F('ExhibitFrame_04'), -5.8, 2.05, -6.93, 0, 1);
+        moveArt(F('Exhibit_05'), F('ExhibitFrame_05'), 5.8, 2.05, -6.93, 0, 1);
+        moveArt(F('Exhibit_06'), F('ExhibitFrame_06'), -8.2, 2.05, -6.93, 0, 1);
+        moveArt(F('Exhibit_07'), F('ExhibitFrame_07'), 8.2, 2.05, -6.93, 0, 1);
+        moveArt(F('Plaque_01'), F('PlaqueFrame_01'), 9.94, 1.8, 0, -1, 0);         // targhe sui lati
+        moveArt(F('Plaque_02'), F('PlaqueFrame_02'), -9.94, 1.8, 0, 1, 0);
+        if (roomPlate) moveArt(roomPlate, null, 0, 3.85, -6.95, 0, 1);
 
         // ── (vecchia doppia sala: SPENTA — sotto c'è la SALA UNICA MINIMAL) ──
         (function buildRoom() {
@@ -1845,8 +1847,11 @@
           // (il verde della sala arriva dalle aiuole continue create in grandMuseum)
         })();
 
-        // ═══ SALA UNICA MINIMAL (16 x 10 x 4.3): calda, compatta, texture in scala ═══
+        // ═══ SALA UNICA (parametrica su fBB): calda, ampia, texture in scala ═══
         (function salaMinimal() {
+          try {
+          const W2 = fBB.max.x - fBB.min.x, D2 = fBB.max.z - fBB.min.z, H2 = ceilY - FY;
+          const hx = W2 / 2, hz = D2 / 2;
           // ripetizione texture SU MISURA di ogni superficie (fine delle texture stirate)
           const rep2 = (mat, rw, rh) => {
             const m2 = mat.clone();
@@ -1862,46 +1867,48 @@
             if (walk) walkables.push(m);
             return m;
           };
-          const floorM = rep2(lightMarble, 10, 6.2);
-          const wallNS = rep2(MATS.NYFP_Plaster, 7.4, 1.95);
-          const wallEW = rep2(MATS.NYFP_Plaster, 4.6, 1.95);
-          mk(16.3, 0.24, 10.3, 0, 0.1, 0, floorM, true, true);              // pavimento
-          mk(16.3, 4.2, 0.3, 0, 2.32, -5.15, wallNS, true);                 // parete quadri
-          mk(16.3, 4.2, 0.3, 0, 2.32, 5.15, wallNS, true);                  // parete sud
-          mk(0.3, 4.2, 10.3, -8.15, 2.32, 0, wallEW, true);                 // ovest
-          mk(0.3, 4.2, 10.3, 8.15, 2.32, 0, wallEW, true);                  // est
-          mk(16.3, 0.24, 10.3, 0, 4.42, 0, MATS.NYFP_Ceiling);              // solaio
+          const floorM = rep2(lightMarble, W2 / 1.6, D2 / 1.6);
+          const wallNS = rep2(MATS.NYFP_Plaster, W2 / 2.2, (H2 + 0.1) / 2.2);
+          const wallEW = rep2(MATS.NYFP_Plaster, D2 / 2.2, (H2 + 0.1) / 2.2);
+          mk(W2 + 0.3, 0.24, D2 + 0.3, 0, 0.1, 0, floorM, true, true);          // pavimento
+          mk(W2 + 0.3, H2 + 0.1, 0.3, 0, FY + H2 / 2, -(hz + 0.15), wallNS, true); // parete quadri
+          mk(W2 + 0.3, H2 + 0.1, 0.3, 0, FY + H2 / 2, hz + 0.15, wallNS, true);    // parete sud
+          mk(0.3, H2 + 0.1, D2 + 0.3, -(hx + 0.15), FY + H2 / 2, 0, wallEW, true); // ovest
+          mk(0.3, H2 + 0.1, D2 + 0.3, hx + 0.15, FY + H2 / 2, 0, wallEW, true);    // est
+          mk(W2 + 0.3, 0.24, D2 + 0.3, 0, ceilY + 0.12, 0, MATS.NYFP_Ceiling);     // solaio
 
           // cassettoni in noce + faretti caldi + gola perimetrale ambrata
-          for (let i = 0; i <= 5; i++) mk(15.7, 0.14, 0.12, 0, 4.12, -4.7 + i * 1.88, walnut);
-          for (let i = 0; i <= 8; i++) mk(0.12, 0.14, 9.7, -7.6 + i * 1.9, 4.12, 0, walnut);
+          const nBx = Math.round(D2 / 1.9), nBz = Math.round(W2 / 1.9);
+          for (let i = 0; i <= nBx; i++) mk(W2 - 0.3, 0.14, 0.12, 0, ceilY - 0.18, -hz + 0.3 + i * (D2 - 0.6) / nBx, walnut);
+          for (let i = 0; i <= nBz; i++) mk(0.12, 0.14, D2 - 0.3, -hx + 0.3 + i * (W2 - 0.6) / nBz, ceilY - 0.18, 0, walnut);
           const disc2 = new THREE.MeshBasicMaterial({ color: 0xffc27d });
-          for (let i = 0; i < 8; i++) for (let j = 0; j < 5; j++) {
+          for (let i = 0; i < nBz; i++) for (let j = 0; j < nBx; j++) {
             if ((i + j) % 2) continue;
             const dsc = new THREE.Mesh(new THREE.CircleGeometry(0.05, 12), disc2);
             dsc.rotation.x = Math.PI / 2;
-            dsc.position.set(-7.6 + (i + 0.5) * 1.9, 4.05, -4.7 + (j + 0.5) * 1.88);
+            dsc.position.set(-hx + 0.3 + (i + 0.5) * (W2 - 0.6) / nBz, ceilY - 0.25, -hz + 0.3 + (j + 0.5) * (D2 - 0.6) / nBx);
             scene.add(dsc);
           }
           const cove3 = new THREE.MeshBasicMaterial({ color: 0xffab5e });
-          mk(15.6, 0.045, 0.045, 0, 3.86, -4.85, cove3);
-          mk(15.6, 0.045, 0.045, 0, 3.86, 4.85, cove3);
-          mk(0.045, 0.045, 9.6, -7.85, 3.86, 0, cove3);
-          mk(0.045, 0.045, 9.6, 7.85, 3.86, 0, cove3);
-          addPt(0, 3.7, -2.3, 0xffd9a0, 1.5, 12);
-          addPt(0, 3.7, 2.5, 0xffdcae, 1.3, 12);
-          addPt(-6, 3.7, 0, 0xffe4b8, 0.9, 9);
-          addPt(6, 3.7, 0, 0xffe4b8, 0.9, 9);
+          mk(W2 - 0.6, 0.045, 0.045, 0, ceilY - 0.44, -(hz - 0.15), cove3);
+          mk(W2 - 0.6, 0.045, 0.045, 0, ceilY - 0.44, hz - 0.15, cove3);
+          mk(0.045, 0.045, D2 - 0.6, -(hx - 0.15), ceilY - 0.44, 0, cove3);
+          mk(0.045, 0.045, D2 - 0.6, hx - 0.15, ceilY - 0.44, 0, cove3);
+          addPt(0, ceilY - 0.6, -hz * 0.35, 0xffd9a0, 1.5, 13);
+          addPt(0, ceilY - 0.6, hz * 0.4, 0xffdcae, 1.3, 13);
+          addPt(-hx * 0.6, ceilY - 0.6, 0, 0xffe4b8, 0.9, 10);
+          addPt(hx * 0.6, ceilY - 0.6, 0, 0xffe4b8, 0.9, 10);
 
           // 4 colonne nere che incorniciano l'asse centrale
           const colM = rep2(polishedFloor, 1.1, 2.4);
           colM.roughness = 0.55; colM.envMapIntensity = 1.6;
           const trav2 = pbr('marble_01', ANISO, { roughness: 0.5, envMapIntensity: 0.5 }, 2.6);
-          [[-4.6, -2.6], [-4.6, 2.6], [4.6, -2.6], [4.6, 2.6]].forEach(([px, pz]) => {
+          const shH = H2 - 0.66;
+          [[-hx * 0.6, -hz * 0.54], [-hx * 0.6, hz * 0.54], [hx * 0.6, -hz * 0.54], [hx * 0.6, hz * 0.54]].forEach(([px, pz]) => {
             mk(0.46, 0.18, 0.46, px, FY + 0.09, pz, trav2, true);
-            const sh2 = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.155, 3.4, 18), colM);
-            sh2.position.set(px, FY + 0.18 + 1.7, pz); scene.add(sh2); colliders.push(sh2);
-            mk(0.4, 0.12, 0.4, px, FY + 3.94, pz, trav2);
+            const sh2 = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.155, shH, 18), colM);
+            sh2.position.set(px, FY + 0.18 + shH / 2, pz); scene.add(sh2); colliders.push(sh2);
+            mk(0.4, 0.12, 0.4, px, FY + 0.24 + shH, pz, trav2);
           });
 
           // PEDANA + TECA del personaggio: al centro-scena, davanti ai quadri
@@ -1938,18 +1945,20 @@
           const sgm = new THREE.Mesh(new THREE.PlaneGeometry(2.0, 2.0),
             new THREE.MeshBasicMaterial({ map: sg, transparent: true, opacity: 0.9 }));
           sgm.rotation.y = Math.PI;
-          sgm.position.set(0, 2.3, 4.97); scene.add(sgm);
+          sgm.position.set(0, 2.4, hz + 0.14 - 0.02); scene.add(sgm);
 
           // piante in vaso: poche, curate, agli angoli e ai lati dell'ingresso
           new THREE.GLTFLoader().load('plant-verde.glb', (g) => {
             g.scene.traverse((o) => { if (o.isMesh && /pebbles/i.test(o.name)) o.visible = false; });
-            [[-7.2, -4.2], [7.2, -4.2], [-7.2, 4.2], [7.2, 4.2], [-4.0, 4.4], [4.0, 4.4]].forEach(([px, pz], i) => {
+            [[-hx + 0.9, -hz + 0.9], [hx - 0.9, -hz + 0.9], [-hx + 0.9, hz - 0.9],
+             [hx - 0.9, hz - 0.9], [-4.2, hz - 0.7], [4.2, hz - 0.7]].forEach(([px, pz], i) => {
               const p = g.scene.clone(true);
               const s = 1.25 + (i % 3) * 0.2;
               p.scale.setScalar(s); p.rotation.y = i * 1.9;
               p.position.set(px, FY, pz); scene.add(p);
             });
           }, undefined, () => {});
+          } catch (e) { console.error('salaMinimal', e); }
         })();
 
         // (niente zoccolo: la sala è chiusa, fuori non esiste nulla)
