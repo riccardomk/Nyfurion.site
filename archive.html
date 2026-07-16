@@ -1691,15 +1691,11 @@
           dressPanel(southWall[0], K('ref-03') || extraImgs[1]);               // side
           dressPanel(southWall[1], K('ref-13') || null);                       // clay sculpt
         } else if (eastWall.length + northWall.length >= 5) {
-          eastWall.forEach(p => p.updateWorldMatrix(true, false));
-          eastWall.sort((a, b) => {
-            const pa = new THREE.Vector3(), pb = new THREE.Vector3();
-            a.getWorldPosition(pa); b.getWorldPosition(pb); return pa.z - pb.z;
-          });
-          eastWall.forEach((p, i) => dressPanel(p, extraImgs[i]));
-          dressPanel(northWall[0], refImg || nftImg);
-          dressPanel(northWall[1], (refImg && nftImg) ? nftImg : null);
-          southWall.forEach(p => dressPanel(p, null));
+          // la CHARACTER SHEET domina la parete d'onore, poi l'artwork ufficiale, poi le extra
+          const ordered = [refImg, nftImg].concat(extraImgs).filter(Boolean);
+          const slots = [byName['Exhibit_01'], byName['Exhibit_02'], byName['Exhibit_03'],
+            northWall[0], northWall[1], southWall[0], southWall[1]].filter(Boolean);
+          slots.forEach((p, i) => dressPanel(p, ordered[i] || null));
         } else {
           const ordered = [refImg, nftImg, ...extraImgs].filter(Boolean);
           exhibitSlots.forEach((p, i) => dressPanel(p, ordered[i]));
