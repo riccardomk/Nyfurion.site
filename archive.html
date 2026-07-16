@@ -1663,27 +1663,53 @@
         const lightMarble = pbr('nyf_marble_crema', ANISO, {
           metalness: 0.04, envMapIntensity: 1.25, side: THREE.DoubleSide,
         }, 1.5);
+        // ── IL MODELLO COMANDA: il sito veste i materiali e aggiunge solo le opere ──
+        const daisTops = [];
         villa.traverse((n) => {
           if (!n.isMesh) return;
-          // DAL MODELLO PRENDIAMO SOLO LE OPERE: la sala la costruisce il sito,
-          // sempre identica e perfetta, qualunque cosa ci sia nel .blend
-          if (n.name.startsWith('ExhibitFrame_') || n.name.startsWith('PlaqueFrame_')) {
-            n.material = gold; return;
-          }
+          let matName = ((n.material && n.material.name) || '').replace(/\.\d{3}$/, '');
           if (n.name.startsWith('Exhibit_')) { exhibitSlots.push(n); return; }
           if (n.name.startsWith('Plaque_')) { plaqueSlots.push(n); return; }
           if (n.name === 'RoomPlate') { roomPlate = n; return; }
-          n.visible = false;
+          if (matName === 'NYFP_MarbleFloor') { n.material = lightMarble; }
+          else if (matName === 'NYFP_MarbleNero') { n.material = polishedFloor; }
+          else if (matName === 'NYFP_Light') { n.material = new THREE.MeshBasicMaterial({ color: 0xffd9a0 }); }
+          else if (MATS[matName]) { n.material = MATS[matName]; }
+          if (n.name.startsWith('Dais_Step2')) daisTops.push(n);
+          const ghost = n.name.includes('Frame') || matName === 'NYFP_Light' || matName === 'NYFP_Glass';
+          if (!ghost) colliders.push(n);
+          if (!ghost && (matName === 'NYFP_MarbleFloor' || /^(Floor|Cube|Dais)/.test(n.name))) {
+            walkables.push(n);
+          }
         });
         exhibitSlots.sort((a, b) => a.name.localeCompare(b.name));
         plaqueSlots.sort((a, b) => a.name.localeCompare(b.name));
 
         // ── LA SALA È DEL SITO: misure FISSE, sempre giuste, per tutti i 400 ──
         villa.updateMatrixWorld(true);
-        // SALA UNICA: 20 x 14, soffitto 4.6 — ampia ma raccolta
-        const fBB = new THREE.Box3(new THREE.Vector3(-10, 0, -7), new THREE.Vector3(10, 0.22, 7));
-        const FY = 0.22, ceilY = 4.6, hasBeams = false;
-        const artCX = 0;
+        // MISURE dal modello di Riccardo (pavimento di marmo più esteso, solaio reale)
+        villa.updateMatrixWorld(true);
+        let fBB = null;
+        villa.traverse((n) => {
+          if (!n.isMesh || n.material !== lightMarble) return;
+          const b = new THREE.Box3().setFromObject(n);
+          if (!fBB || (b.max.x - b.min.x) * (b.max.z - b.min.z) >
+                      (fBB.max.x - fBB.min.x) * (fBB.max.z - fBB.min.z)) fBB = b;
+        });
+        if (!fBB) fBB = new THREE.Box3().setFromObject(villa);
+        const FY = fBB.max.y;
+        let ceilY = 1e9;
+        villa.traverse((n) => {
+          if (!n.isMesh) return;
+          const mn2 = ((n.material && n.material.name) || '');
+          if (n.material !== MATS.NYFP_Ceiling && !/^NYFP_WoodDark/.test(mn2)) return;
+          const b = new THREE.Box3().setFromObject(n);
+          if (b.max.y > FY + 1.6 && b.max.y < ceilY) ceilY = b.max.y;
+        });
+        if (ceilY > FY + 8) ceilY = FY + 3.0;
+        const exBB = new THREE.Box3();
+        exhibitSlots.forEach((p) => exBB.expandByObject(p));
+        const artCX = Math.min(Math.max((exBB.min.x + exBB.max.x) / 2, fBB.min.x + 1.5), fBB.max.x - 1.5);
         const hBB = fBB.clone();
 
         // ── I QUADRI DEL TOKEN, appesi BENE sulle mie pareti ──
@@ -1709,18 +1735,7 @@
             o.updateMatrixWorld(true);
           });
         };
-        const F = (nm) => villa.getObjectByName(nm);
-        // TUTTI i quadri su UN'UNICA parete (nord), in fila da galleria
-        moveArt(F('Exhibit_01'), F('ExhibitFrame_01'), 0, 2.25, -6.93, 0, 1);      // il grande al centro
-        moveArt(F('Exhibit_02'), F('ExhibitFrame_02'), -3.2, 2.05, -6.93, 0, 1);
-        moveArt(F('Exhibit_03'), F('ExhibitFrame_03'), 3.2, 2.05, -6.93, 0, 1);
-        moveArt(F('Exhibit_04'), F('ExhibitFrame_04'), -5.8, 2.05, -6.93, 0, 1);
-        moveArt(F('Exhibit_05'), F('ExhibitFrame_05'), 5.8, 2.05, -6.93, 0, 1);
-        moveArt(F('Exhibit_06'), F('ExhibitFrame_06'), -8.2, 2.05, -6.93, 0, 1);
-        moveArt(F('Exhibit_07'), F('ExhibitFrame_07'), 8.2, 2.05, -6.93, 0, 1);
-        moveArt(F('Plaque_01'), F('PlaqueFrame_01'), 9.94, 1.8, 0, -1, 0);         // targhe sui lati
-        moveArt(F('Plaque_02'), F('PlaqueFrame_02'), -9.94, 1.8, 0, 1, 0);
-        if (roomPlate) moveArt(roomPlate, null, 0, 3.85, -6.95, 0, 1);
+        // (IL MODELLO COMANDA: i quadri restano ESATTAMENTE dove li ha messi Riccardo)
 
         // ── (vecchia doppia sala: SPENTA — sotto c'è la SALA UNICA MINIMAL) ──
         (function buildRoom() {
@@ -1847,9 +1862,9 @@
           // (il verde della sala arriva dalle aiuole continue create in grandMuseum)
         })();
 
-        // ═══ SALA UNICA (parametrica su fBB): calda, ampia, texture in scala ═══
+        // ═══ SALA IN CODICE (SPENTA: il modello di Riccardo comanda) ═══
         (function salaMinimal() {
-          try {
+          try { return;
           const W2 = fBB.max.x - fBB.min.x, D2 = fBB.max.z - fBB.min.z, H2 = ceilY - FY;
           const hx = W2 / 2, hz = D2 / 2;
           // ripetizione texture SU MISURA di ogni superficie (fine delle texture stirate)
@@ -1963,10 +1978,14 @@
 
         // (niente zoccolo: la sala è chiusa, fuori non esiste nulla)
 
-        // spawn: sull'asse, davanti al sigillo, sguardo verso la parete dei quadri
-        feet.set(0, FY, fBB.max.z - 1.0);
-        yaw = 0; pitch = 0;
+        // spawn: lato ovest del pavimento, sguardo verso la parete d'onore
+        feet.set(fBB.min.x + 1.1, FY, (fBB.min.z + fBB.max.z) / 2);
+        yaw = -Math.PI / 2; pitch = 0;
         camera.position.set(feet.x, feet.y + EYE, feet.z);
+
+        // fari d'ambiente misurati sulla sala reale
+        addPt((fBB.min.x + fBB.max.x) / 2 + (fBB.max.x - fBB.min.x) * 0.2, ceilY - 0.3, (fBB.min.z + fBB.max.z) / 2, 0xffd9a0, 1.4, 12);
+        addPt((fBB.min.x + fBB.max.x) / 2 - (fBB.max.x - fBB.min.x) * 0.2, ceilY - 0.3, (fBB.min.z + fBB.max.z) / 2, 0xffdcae, 1.2, 12);
 
         // faretto automatico + pozza di luce sul pavimento davanti a ogni opera
         const poolTex = haloTexture();
@@ -2049,25 +2068,39 @@
 
         // ── LA VETRINA DELLA CARD — cuore della villa, al centro del museo ──
         (function cardShowcase() {
-          // vetrina della card: AL CENTRO della sala, tra ingresso e pedana
-          const cx = 0, cz = 2.0, fy = FY;
+          // vetrina della card: SULLA PEDANA più a sud modellata da Riccardo
+          let cx = artCX, cz = 0, fy = FY, onDais = false;
+          if (daisTops.length) {
+            let bz = -1e9, bestD = null;
+            daisTops.forEach((d) => {
+              const b = new THREE.Box3().setFromObject(d);
+              const c = b.getCenter(new THREE.Vector3());
+              if (c.z > bz) { bz = c.z; bestD = { x: c.x, z: c.z, top: b.max.y }; }
+            });
+            cx = bestD.x; cz = bestD.z; fy = bestD.top; onDais = true;
+          }
           const k = 1;
           // ══ VETRINA MUSEALE: plinto in marmo nero + teca di vetro con spigoli d'oro ══
           // (stesso formato riutilizzabile per il personaggio 3D nelle altre sale)
-          const plinthMat = polishedFloor.clone();
-          ['map', 'normalMap', 'roughnessMap'].forEach((k) => {
-            if (plinthMat[k]) { plinthMat[k] = plinthMat[k].clone(); plinthMat[k].repeat.set(0.42, 0.42); plinthMat[k].offset.set(0.22, 0.16); plinthMat[k].needsUpdate = true; }
-          });
-          const plinth = new THREE.Mesh(new THREE.BoxGeometry(0.74, 0.95 * k, 0.74), plinthMat);
-          plinth.position.set(cx, fy + 0.475 * k, cz); scene.add(plinth); colliders.push(plinth);
-          const trim = (y, s, h) => {
-            const tm = new THREE.Mesh(new THREE.BoxGeometry(s, h, s), gold);
-            tm.position.set(cx, y, cz); scene.add(tm);
-          };
-          trim(fy + 0.02, 0.78, 0.04);                 // zoccolo d'oro
-          trim(fy + 0.945 * k, 0.77, 0.03);            // cimasa d'oro
-          const topY = fy + 0.96 * k;
-          trim(topY + 0.01, 0.7, 0.02);                // piano d'appoggio
+          let topY;
+          if (onDais) {
+            topY = fy + 0.01;                          // la base è la SUA pedana
+          } else {
+            const plinthMat = polishedFloor.clone();
+            ['map', 'normalMap', 'roughnessMap'].forEach((kk) => {
+              if (plinthMat[kk]) { plinthMat[kk] = plinthMat[kk].clone(); plinthMat[kk].repeat.set(0.42, 0.42); plinthMat[kk].offset.set(0.22, 0.16); plinthMat[kk].needsUpdate = true; }
+            });
+            const plinth = new THREE.Mesh(new THREE.BoxGeometry(0.74, 0.95, 0.74), plinthMat);
+            plinth.position.set(cx, fy + 0.475, cz); scene.add(plinth); colliders.push(plinth);
+            const trim = (y, s, h) => {
+              const tm = new THREE.Mesh(new THREE.BoxGeometry(s, h, s), gold);
+              tm.position.set(cx, y, cz); scene.add(tm);
+            };
+            trim(fy + 0.02, 0.78, 0.04);
+            trim(fy + 0.945, 0.77, 0.03);
+            topY = fy + 0.96;
+            trim(topY + 0.01, 0.7, 0.02);
+          }
 
           // teca di vetro
           const GW = 0.62, GH = 1.35 * k;
@@ -2147,6 +2180,42 @@
           glowPt.position.set(cx, cardY, cz); scene.add(glowPt);       // la card irradia luce
           const casePt = new THREE.PointLight(0xffe2b0, 0.7, 2.2, 2);
           casePt.position.set(cx, topY + 0.15, cz); scene.add(casePt); // luce d'oro dal fondo teca
+        })();
+
+        // ── TECA DEL PERSONAGGIO sulla pedana dell'alcova (la più a nord) ──
+        (function characterOnDais() {
+          if (daisTops.length < 2) return;
+          let bz = 1e9, best = null;
+          daisTops.forEach((d) => {
+            const b = new THREE.Box3().setFromObject(d);
+            const c = b.getCenter(new THREE.Vector3());
+            if (c.z < bz) { bz = c.z; best = { x: c.x, z: c.z, top: b.max.y, w: Math.min(b.max.x - b.min.x, b.max.z - b.min.z) }; }
+          });
+          const side = Math.max(0.8, best.w * 0.92);
+          const CH2 = 1.9;
+          const gm2 = new THREE.MeshStandardMaterial({
+            color: 0xdcecf5, transparent: true, opacity: 0.09, roughness: 0.03,
+            metalness: 0.08, envMapIntensity: 1.7, side: THREE.DoubleSide, depthWrite: false,
+          });
+          const cc = new THREE.Mesh(new THREE.BoxGeometry(side, CH2, side), gm2);
+          cc.position.set(best.x, best.top + 0.02 + CH2 / 2, best.z); scene.add(cc); colliders.push(cc);
+          const hs = side / 2;
+          [[-hs, -hs], [-hs, hs], [hs, -hs], [hs, hs]].forEach(([ex, ez]) => {
+            const e2 = new THREE.Mesh(new THREE.BoxGeometry(0.035, CH2, 0.035), gold);
+            e2.position.set(best.x + ex, best.top + 0.02 + CH2 / 2, best.z + ez); scene.add(e2);
+          });
+          const lid2 = new THREE.Mesh(new THREE.BoxGeometry(side + 0.08, 0.05, side + 0.08), gold);
+          lid2.position.set(best.x, best.top + CH2 + 0.06, best.z); scene.add(lid2);
+          const sp2 = new THREE.SpotLight(0xffdcae, 2.6, 8, 0.5, 0.55, 1.2);
+          sp2.position.set(best.x, best.top + CH2 + 1.2, best.z);
+          sp2.target.position.set(best.x, best.top + 0.6, best.z);
+          scene.add(sp2); scene.add(sp2.target);
+          const pt2 = plateTexture('CHARACTER · COMING SOON');
+          pt2.flipY = true;
+          const pl2 = new THREE.Mesh(new THREE.PlaneGeometry(1.1, 0.24),
+            new THREE.MeshBasicMaterial({ map: pt2, side: THREE.DoubleSide }));
+          pl2.position.set(best.x, best.top + CH2 + 0.35, best.z + 0.2);
+          scene.add(pl2);
         })();
 
         // licenza e lore sulle targhe d'onore
