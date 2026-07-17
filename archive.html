@@ -1617,11 +1617,11 @@
       const MATS = {
         // pareti da museo d'arte: intonaco fine avorio caldo, DoubleSide = collisioni
         // affidabili anche se le normali del guscio guardano fuori
-        NYFP_Plaster:    pbr('painted_plaster_wall', ANISO, { color: 0x9d8a75, envMapIntensity: 0.3, side: THREE.DoubleSide }, 2.4),
+        NYFP_Plaster:    pbr('painted_plaster_wall', ANISO, { color: 0xcfc3b2, envMapIntensity: 0.3, side: THREE.DoubleSide }, 3.2),
         NYFP_Stone:      new THREE.MeshStandardMaterial({ color: 0x8f887c, roughness: 0.85 }),
         NYFP_StoneDark:  new THREE.MeshStandardMaterial({ color: 0x38342e, roughness: 0.78, envMapIntensity: 0.4 }),
         NYFP_WoodFloor:  pbr('herringbone_parquet', ANISO, { envMapIntensity: 0.55 }, 1.6),
-        NYFP_WoodDark:   pbr('dark_wood', ANISO, { roughness: 0.45, envMapIntensity: 0.7 }, 2),
+        NYFP_WoodDark:   pbr('dark_wood', ANISO, { color: 0x8f7c6c, roughness: 0.5, envMapIntensity: 0.6 }, 2),
         NYFP_Gold:       gold,
         NYFP_Metal:      new THREE.MeshStandardMaterial({ color: 0x2c2721, metalness: 0.92, roughness: 0.32, envMapIntensity: 1.2 }),
         NYFP_Glass:      new THREE.MeshStandardMaterial({ color: 0xcfe6f2, transparent: true, opacity: 0.12, roughness: 0.04, metalness: 0.1, envMapIntensity: 1.4, side: THREE.DoubleSide, depthWrite: false }),
@@ -1665,13 +1665,14 @@
         }, 1.5);
         // ── IL MODELLO COMANDA: il sito veste i materiali e aggiunge solo le opere ──
         const daisTops = [];
+        const floorMeshes = [];
         villa.traverse((n) => {
           if (!n.isMesh) return;
           let matName = ((n.material && n.material.name) || '').replace(/\.\d{3}$/, '');
           if (n.name.startsWith('Exhibit_')) { exhibitSlots.push(n); return; }
           if (n.name.startsWith('Plaque_')) { plaqueSlots.push(n); return; }
           if (n.name === 'RoomPlate') { roomPlate = n; return; }
-          if (matName === 'NYFP_MarbleFloor') { n.material = lightMarble; }
+          if (matName === 'NYFP_MarbleFloor') { n.material = polishedFloor; floorMeshes.push(n); }
           else if (matName === 'NYFP_MarbleNero') { n.material = polishedFloor; }
           else if (matName === 'NYFP_Light') { n.material = new THREE.MeshBasicMaterial({ color: 0xffd9a0 }); }
           else if (MATS[matName]) { n.material = MATS[matName]; }
@@ -1690,8 +1691,7 @@
         // MISURE dal modello di Riccardo (pavimento di marmo più esteso, solaio reale)
         villa.updateMatrixWorld(true);
         let fBB = null;
-        villa.traverse((n) => {
-          if (!n.isMesh || n.material !== lightMarble) return;
+        floorMeshes.forEach((n) => {
           const b = new THREE.Box3().setFromObject(n);
           if (!fBB || (b.max.x - b.min.x) * (b.max.z - b.min.z) >
                       (fBB.max.x - fBB.min.x) * (fBB.max.z - fBB.min.z)) fBB = b;
