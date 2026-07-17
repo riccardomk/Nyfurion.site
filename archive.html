@@ -1238,30 +1238,16 @@
       const c = document.createElement('canvas'); c.width = 1024; c.height = 224;
       const g = c.getContext('2d');
       g.clearRect(0, 0, 1024, 224);
-      const parts = String(text).split('·');
-      const main = (parts[0] || String(text)).trim();
-      const sub = parts.length > 1 ? parts.slice(1).join('·').trim() : '';
+      // UNA riga sola, GRANDE, leggibile su qualsiasi fondo
       g.textAlign = 'center';
-      g.font = '600 96px Georgia, serif';
-      g.shadowColor = 'rgba(0,0,0,0.55)'; g.shadowBlur = 7; g.shadowOffsetY = 5;
-      const tg = g.createLinearGradient(0, 26, 0, 132);
-      tg.addColorStop(0, '#f8e7ac'); tg.addColorStop(0.5, '#d9b64f'); tg.addColorStop(1, '#8f6d26');
+      g.font = '700 120px Georgia, serif';
+      g.lineWidth = 10; g.lineJoin = 'round';
+      g.strokeStyle = 'rgba(38,24,8,0.92)';
+      g.strokeText(text, 512, 152, 960);
+      const tg = g.createLinearGradient(0, 40, 0, 160);
+      tg.addColorStop(0, '#fdf0bc'); tg.addColorStop(0.5, '#e2bf58'); tg.addColorStop(1, '#96742a');
       g.fillStyle = tg;
-      g.fillText(main, 512, sub ? 116 : 142, 940);
-      g.shadowColor = 'transparent';
-      if (sub) {
-        g.font = '600 46px Georgia, serif';
-        const sg2 = g.createLinearGradient(0, 152, 0, 204);
-        sg2.addColorStop(0, '#eed592'); sg2.addColorStop(1, '#a8842f');
-        g.fillStyle = sg2;
-        g.shadowColor = 'rgba(0,0,0,0.5)'; g.shadowBlur = 5; g.shadowOffsetY = 4;
-        g.fillText(sub, 512, 198, 800);
-        g.shadowColor = 'transparent';
-        const w2 = Math.min(g.measureText(sub).width, 700);
-        g.strokeStyle = 'rgba(217,182,79,0.9)'; g.lineWidth = 3;
-        g.beginPath(); g.moveTo(512 - w2 / 2 - 160, 184); g.lineTo(512 - w2 / 2 - 34, 184); g.stroke();
-        g.beginPath(); g.moveTo(512 + w2 / 2 + 34, 184); g.lineTo(512 + w2 / 2 + 160, 184); g.stroke();
-      }
+      g.fillText(text, 512, 152, 960);
       const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.flipY = false; return t;
     }
 
@@ -2220,7 +2206,7 @@
         // targa della sala col numero del pezzo
         if (roomPlate) {
           roomPlate.material = new THREE.MeshBasicMaterial({
-            map: plateTexture('VILLA PRIME · No. ' + tokenId),
+            map: plateTexture('VILLA NYF #' + tokenId),
             transparent: true, side: THREE.DoubleSide,
           });
         }
