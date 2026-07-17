@@ -1617,8 +1617,8 @@
       const MATS = {
         // pareti da museo d'arte: intonaco fine avorio caldo, DoubleSide = collisioni
         // affidabili anche se le normali del guscio guardano fuori
-        // pareti in stucco AVORIO liscio: contrasto netto col pavimento nero
-        NYFP_Plaster:    pbr('painted_plaster_wall', ANISO, { color: 0xe8e2d6, envMapIntensity: 0.35, side: THREE.DoubleSide }, 3.2),
+        // pareti in MARMO BIANCO venato continuo (nessuna piastrella): contrasto netto
+        NYFP_Plaster:    pbr('nyf_marble_bianco', ANISO, { envMapIntensity: 0.85, side: THREE.DoubleSide }, 1.1),
         NYFP_Stone:      pbr('marble_01', ANISO, { roughness: 0.55, envMapIntensity: 0.5 }, 3),
         NYFP_StoneDark:  new THREE.MeshStandardMaterial({ color: 0x38342e, roughness: 0.78, envMapIntensity: 0.4 }),
         NYFP_WoodFloor:  pbr('herringbone_parquet', ANISO, { envMapIntensity: 0.55 }, 1.6),
@@ -1664,9 +1664,9 @@
         const lightMarble = pbr('nyf_marble_crema', ANISO, {
           metalness: 0.04, envMapIntensity: 1.25, side: THREE.DoubleSide,
         }, 1.5);
-        // fusti dei pilastri: nero venato a specchio (UV a scala mondo = zero distorsioni)
-        const colonnaNera = polishedFloor.clone();
-        colonnaNera.envMapIntensity = 1.7;
+        // fusti dei pilastri: MARMO BIANCO venato; fondamenta in nero come il pavimento
+        const colonnaBianca = MATS.NYFP_Plaster.clone();
+        colonnaBianca.envMapIntensity = 1.2;
         // ── IL MODELLO COMANDA: il sito veste i materiali e aggiunge solo le opere ──
         const daisTops = [];
         const floorMeshes = [];
@@ -1680,8 +1680,8 @@
           else if (matName === 'NYFP_MarbleNero') { n.material = polishedFloor; }
           else if (matName === 'NYFP_Light') { n.material = new THREE.MeshBasicMaterial({ color: 0xffd9a0 }); }
           else if (n.name.startsWith('ColBase')) {
-            // pilastri LEGGIBILI: fusti in nero venato lucido, finiture in ORO
-            n.material = /^NYFP_Gold/.test(matName) ? MATS.NYFP_Gold : colonnaNera;
+            // fusti in marmo BIANCO venato, fondamenta/finiture in NERO come il pavimento
+            n.material = /^NYFP_Gold/.test(matName) ? colonnaBianca : polishedFloor;
           }
           else if (MATS[matName]) { n.material = MATS[matName]; }
           if (n.name.startsWith('Dais_Step2')) daisTops.push(n);
