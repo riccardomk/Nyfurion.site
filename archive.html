@@ -1617,9 +1617,9 @@
       const MATS = {
         // pareti da museo d'arte: intonaco fine avorio caldo, DoubleSide = collisioni
         // affidabili anche se le normali del guscio guardano fuori
-        // pareti in MARMO CREMA riflettente: risaltano sul pavimento nero
-        NYFP_Plaster:    pbr('nyf_marble_crema', ANISO, { metalness: 0.03, envMapIntensity: 1.1, side: THREE.DoubleSide }, 1.4),
-        NYFP_Stone:      pbr('marble_01', ANISO, { roughness: 0.55, envMapIntensity: 0.5 }, 1.6),
+        // pareti in stucco AVORIO liscio: contrasto netto col pavimento nero
+        NYFP_Plaster:    pbr('painted_plaster_wall', ANISO, { color: 0xe8e2d6, envMapIntensity: 0.35, side: THREE.DoubleSide }, 3.2),
+        NYFP_Stone:      pbr('marble_01', ANISO, { roughness: 0.55, envMapIntensity: 0.5 }, 3),
         NYFP_StoneDark:  new THREE.MeshStandardMaterial({ color: 0x38342e, roughness: 0.78, envMapIntensity: 0.4 }),
         NYFP_WoodFloor:  pbr('herringbone_parquet', ANISO, { envMapIntensity: 0.55 }, 1.6),
         NYFP_WoodDark:   pbr('dark_wood', ANISO, { color: 0x8f7c6c, roughness: 0.5, envMapIntensity: 0.6 }, 2),
@@ -1631,7 +1631,7 @@
         NYFP_Fabric:     pbr('quatrefoil_jacquard_fabric', ANISO, { roughness: 0.95, envMapIntensity: 0.25 }, 3),
         NYFP_FabricDark: pbr('velour_velvet', ANISO, { color: 0x4a1b26, roughness: 0.95, envMapIntensity: 0.2 }, 2.5),
         NYFP_Plant:      new THREE.MeshStandardMaterial({ color: 0x315f3c, roughness: 0.82 }),
-        NYFP_Ceiling:    new THREE.MeshStandardMaterial({ color: 0x171009, roughness: 0.9, emissive: 0x2a1a09, emissiveIntensity: 0.45, side: THREE.DoubleSide }),
+        NYFP_Ceiling:    pbr('dark_wood', ANISO, { color: 0x4a3a2c, roughness: 0.8, side: THREE.DoubleSide }, 1.6),
         NYFP_Screen:     new THREE.MeshBasicMaterial({ map: tvTexture() }),
         NYFP_Cove:       new THREE.MeshBasicMaterial({ color: 0xffe6b0 }),
         NYFP_Flame:      new THREE.MeshBasicMaterial({ color: 0xffb84a }),
@@ -1680,8 +1680,8 @@
           else if (matName === 'NYFP_MarbleNero') { n.material = polishedFloor; }
           else if (matName === 'NYFP_Light') { n.material = new THREE.MeshBasicMaterial({ color: 0xffd9a0 }); }
           else if (n.name.startsWith('ColBase')) {
-            // pilastri: fusti in nero venato lucido, basi/dettagli in travertino
-            n.material = /^NYFP_Gold/.test(matName) ? colonnaNera : MATS.NYFP_Stone;
+            // pilastri LEGGIBILI: fusti in nero venato lucido, finiture in ORO
+            n.material = /^NYFP_Gold/.test(matName) ? MATS.NYFP_Gold : colonnaNera;
           }
           else if (MATS[matName]) { n.material = MATS[matName]; }
           if (n.name.startsWith('Dais_Step2')) daisTops.push(n);
@@ -2174,8 +2174,10 @@
           casePt.position.set(cx, topY + 0.15, cz); scene.add(casePt); // luce d'oro dal fondo teca
         })();
 
-        // ── TECA DEL PERSONAGGIO sulla pedana dell'alcova (la più a nord) ──
+        // ── TECA DEL PERSONAGGIO (SPENTA: la pedana resta libera, il personaggio
+        //    verrà posato direttamente quando Riccardo manda il modello) ──
         (function characterOnDais() {
+          return;
           if (daisTops.length < 2) return;
           let bz = 1e9, best = null;
           daisTops.forEach((d) => {
