@@ -1617,8 +1617,9 @@
       const MATS = {
         // pareti da museo d'arte: intonaco fine avorio caldo, DoubleSide = collisioni
         // affidabili anche se le normali del guscio guardano fuori
-        NYFP_Plaster:    pbr('painted_plaster_wall', ANISO, { color: 0xcfc3b2, envMapIntensity: 0.3, side: THREE.DoubleSide }, 3.2),
-        NYFP_Stone:      new THREE.MeshStandardMaterial({ color: 0x8f887c, roughness: 0.85 }),
+        // pareti in MARMO CREMA riflettente: risaltano sul pavimento nero
+        NYFP_Plaster:    pbr('nyf_marble_crema', ANISO, { metalness: 0.03, envMapIntensity: 1.1, side: THREE.DoubleSide }, 1.4),
+        NYFP_Stone:      pbr('marble_01', ANISO, { roughness: 0.55, envMapIntensity: 0.5 }, 1.6),
         NYFP_StoneDark:  new THREE.MeshStandardMaterial({ color: 0x38342e, roughness: 0.78, envMapIntensity: 0.4 }),
         NYFP_WoodFloor:  pbr('herringbone_parquet', ANISO, { envMapIntensity: 0.55 }, 1.6),
         NYFP_WoodDark:   pbr('dark_wood', ANISO, { color: 0x8f7c6c, roughness: 0.5, envMapIntensity: 0.6 }, 2),
@@ -1663,6 +1664,9 @@
         const lightMarble = pbr('nyf_marble_crema', ANISO, {
           metalness: 0.04, envMapIntensity: 1.25, side: THREE.DoubleSide,
         }, 1.5);
+        // fusti dei pilastri: nero venato a specchio (UV a scala mondo = zero distorsioni)
+        const colonnaNera = polishedFloor.clone();
+        colonnaNera.envMapIntensity = 1.7;
         // ── IL MODELLO COMANDA: il sito veste i materiali e aggiunge solo le opere ──
         const daisTops = [];
         const floorMeshes = [];
@@ -1675,6 +1679,10 @@
           if (matName === 'NYFP_MarbleFloor') { n.material = polishedFloor; floorMeshes.push(n); }
           else if (matName === 'NYFP_MarbleNero') { n.material = polishedFloor; }
           else if (matName === 'NYFP_Light') { n.material = new THREE.MeshBasicMaterial({ color: 0xffd9a0 }); }
+          else if (n.name.startsWith('ColBase')) {
+            // pilastri: fusti in nero venato lucido, basi/dettagli in travertino
+            n.material = /^NYFP_Gold/.test(matName) ? colonnaNera : MATS.NYFP_Stone;
+          }
           else if (MATS[matName]) { n.material = MATS[matName]; }
           if (n.name.startsWith('Dais_Step2')) daisTops.push(n);
           const ghost = n.name.includes('Frame') || matName === 'NYFP_Light' || matName === 'NYFP_Glass';
