@@ -1682,13 +1682,9 @@
           else if (n.name.startsWith('ColBase')) {
             n.material = /^NYFP_Gold/.test(matName) ? colonnaNera : polishedFloor;
           }
-          else if (matName === 'NYFP_Gold' && !n.name.includes('Frame')) {
-            // COLONNE (oro alto e snello) -> Nero Marquina come il pavimento;
-            // tutto il resto dell'oro (cornici, dettagli bassi) resta oro
-            const bC = new THREE.Box3().setFromObject(n);
-            const hC = bC.max.y - bC.min.y;
-            const fC = Math.max(bC.max.x - bC.min.x, bC.max.z - bC.min.z);
-            n.material = (hC > 1.4 && fC < 1.3) ? colonnaNera : MATS.NYFP_Gold;
+          else if (matName === 'NYFP_Gold' && !n.name.includes('Frame') && !n.name.startsWith('Skirt')) {
+            // TUTTO l'oro che non è cornice/battiscopa = COLONNE -> Nero Marquina
+            n.material = colonnaNera;
           }
           else if (MATS[matName]) { n.material = MATS[matName]; }
           if (n.name.startsWith('Dais_Step2')) daisTops.push(n);
