@@ -1631,7 +1631,7 @@
         NYFP_Fabric:     pbr('quatrefoil_jacquard_fabric', ANISO, { roughness: 0.95, envMapIntensity: 0.25 }, 3),
         NYFP_FabricDark: pbr('velour_velvet', ANISO, { color: 0x4a1b26, roughness: 0.95, envMapIntensity: 0.2 }, 2.5),
         NYFP_Plant:      new THREE.MeshStandardMaterial({ color: 0x315f3c, roughness: 0.82 }),
-        NYFP_Ceiling:    pbr('dark_wood', ANISO, { color: 0x4a3a2c, roughness: 0.8, side: THREE.DoubleSide }, 1.6),
+        NYFP_Ceiling:    pbr('nyf_marble_nero', ANISO, { metalness: 0.05, envMapIntensity: 1.2, side: THREE.DoubleSide }, 0.8),
         NYFP_Screen:     new THREE.MeshBasicMaterial({ map: tvTexture() }),
         NYFP_Cove:       new THREE.MeshBasicMaterial({ color: 0xffe6b0 }),
         NYFP_Flame:      new THREE.MeshBasicMaterial({ color: 0xffb84a }),
