@@ -2205,10 +2205,23 @@
 
         // targa della sala col numero del pezzo
         if (roomPlate) {
+          // scritta UNICA (solo faccia frontale: niente doppioni in trasparenza)
           roomPlate.material = new THREE.MeshBasicMaterial({
             map: plateTexture('VILLA NYF #' + tokenId),
-            transparent: true, side: THREE.DoubleSide,
+            transparent: true,
           });
+          // spostata sulla parete OVEST, centrata tra le due pedane
+          const cl = [];
+          daisTops.forEach((d) => {
+            const b = new THREE.Box3().setFromObject(d);
+            const c = b.getCenter(new THREE.Vector3());
+            if (!cl.some((p) => Math.hypot(p.x - c.x, p.z - c.z) < 1.2)) cl.push(c);
+          });
+          cl.sort((a, b2) => b2.z - a.z);
+          if (cl.length >= 2) {
+            const mz = (cl[0].z + cl[1].z) / 2;
+            moveArt(roomPlate, null, fBB.min.x + 0.06, 2.55, mz, 1, 0);
+          }
         }
 
         // ── Runner di velluto (SPENTO: nella sala-reference ci sono gli intarsi nel marmo) ──
