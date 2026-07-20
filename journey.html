@@ -1,0 +1,1342 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nyfurion — What You Really Own</title>
+<style>
+:root{--gold:#d2a545;--ivory:#f2eadb;--night:#03040a;--dim:#a8a49c}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--night);color:var(--ivory);
+  font-family:'Segoe UI',system-ui,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+#stage{position:fixed;inset:0;z-index:0}
+canvas{display:block}
+/* quando sei dentro la villa il canvas passa SOPRA e prende il mouse */
+#stage.grab{z-index:15;cursor:grab}
+#stage.grab canvas{cursor:grab}
+#stage.grab.dragging,#stage.grab.dragging canvas{cursor:grabbing}
+/* il testo resta leggibile ma non intercetta il mouse */
+#stage.grab ~ main{pointer-events:none}
+.veil{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse at 60% 45%,transparent 30%,#03040a55 70%,#03040ad9 100%)}
+.sideveil{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(90deg,#03040aee 0 24%,#03040a00 50%)}
+@media(max-width:820px){.sideveil{background:linear-gradient(0deg,#03040af7 0 34%,#03040a00 70%)}}
+
+#boot{position:fixed;inset:0;z-index:50;background:var(--night);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .8s}
+#boot.gone{opacity:0;pointer-events:none}
+#boot .sig{font-size:.62rem;letter-spacing:.5em;color:var(--gold);font-weight:800;text-transform:uppercase}
+#boot .bar{width:min(260px,60vw);height:1px;background:#ffffff1f;overflow:hidden}
+#boot .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#f2d58d);transition:width .3s}
+#boot .pct{font-size:.58rem;letter-spacing:.3em;color:var(--dim)}
+
+header{position:fixed;z-index:20;top:26px;left:4vw;right:4vw;display:flex;
+  justify-content:space-between;align-items:center;font-size:.62rem;font-weight:900;letter-spacing:.3em;text-transform:uppercase}
+header b{color:var(--gold)}
+.meter{width:min(200px,22vw);height:1px;background:#ffffff26}
+.meter i{display:block;height:100%;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--gold),#f2d58d)}
+.hint{position:fixed;z-index:20;bottom:26px;left:50%;transform:translateX(-50%);
+  font-size:.56rem;letter-spacing:.36em;color:#ffffff70;text-transform:uppercase;transition:opacity .5s;text-align:center}
+.hint.hide{opacity:0}
+.hint span{display:inline-block;animation:dn 2s infinite}
+@keyframes dn{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+
+/* pannello di stato della stampa */
+.printhud{position:fixed;z-index:22;right:4vw;top:50%;transform:translateY(-50%) translateX(20px);
+  width:min(300px,32vw);opacity:0;transition:opacity .6s,transform .6s;pointer-events:none;
+  border:1px solid #d2a54540;background:#03040aee;backdrop-filter:blur(4px);padding:20px 22px}
+.printhud.on{opacity:1;transform:translateY(-50%) translateX(0)}
+.printhud .ph-eye{color:var(--gold);font-size:.56rem;font-weight:900;letter-spacing:.26em;text-transform:uppercase;margin-bottom:10px}
+.printhud .ph-t{font-family:Georgia,serif;font-size:1.5rem;line-height:1.15;margin-bottom:10px;color:var(--ivory)}
+.printhud .ph-p{font-size:.86rem;line-height:1.6;color:#c3c0b9;margin:0}
+.printhud .ph-bar{height:1px;background:#ffffff1f;margin:14px 0 8px;overflow:hidden}
+.printhud .ph-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#f2d58d)}
+.printhud .ph-n{font-size:.56rem;letter-spacing:.24em;color:#8d8a84;text-transform:uppercase}
+@media(max-width:820px){.printhud{right:20px;left:20px;width:auto;top:auto;bottom:22px;transform:translateY(20px)}
+  .printhud.on{transform:translateY(0)}}
+
+#audio-btn{position:fixed;z-index:40;top:24px;left:50%;transform:translateX(-50%);
+  width:42px;height:42px;border-radius:50%;border:1px solid #d2a54566;
+  background:#03040acc;backdrop-filter:blur(6px);color:#d2a545;cursor:pointer;
+  font-size:1.05rem;display:flex;align-items:center;justify-content:center;transition:all .3s;opacity:.85}
+#audio-btn:hover{opacity:1;border-color:#d2a545;box-shadow:0 0 18px #d2a54540}
+#audio-btn.playing{color:#f2d58d}
+#audio-btn.playing #audio-ico{animation:apulse 2.4s ease-in-out infinite}
+@keyframes apulse{0%,100%{opacity:.55}50%{opacity:1}}
+@media(max-width:820px){#audio-btn{top:16px;width:38px;height:38px}}
+
+.dragtip{position:fixed;z-index:21;bottom:26px;left:50%;transform:translateX(-50%);
+  font-size:.56rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;
+  opacity:0;transition:opacity .6s;pointer-events:none;border:1px solid #d2a5454d;padding:9px 16px;background:#03040acc}
+.dragtip.on{opacity:1}
+
+main{position:relative;z-index:10}
+.act{min-height:180vh;display:flex;align-items:center;padding:14vh 6vw;pointer-events:none}
+.act .copy{width:min(410px,35vw);opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s;
+  position:relative;padding:26px 28px;border-left:1px solid #d2a54540;
+  background:linear-gradient(90deg,#03040af2 0 72%,#03040a00);
+  backdrop-filter:blur(3px)}
+.act.on .copy{opacity:1;transform:none}
+.act.center .copy{background:none;border-left:0;backdrop-filter:none;padding:0}
+.eyebrow{color:var(--gold);font-size:.6rem;font-weight:900;letter-spacing:.26em;text-transform:uppercase;display:flex;align-items:center;gap:12px}
+.eyebrow:before{content:"";width:30px;height:1px;background:var(--gold);flex:none}
+h1,h2{font-family:Georgia,'Times New Roman',serif;font-weight:400;
+  font-size:clamp(2.5rem,4.6vw,4.4rem);line-height:.99;letter-spacing:-.035em;margin:.3em 0 .45em}
+.gold{color:var(--gold);font-style:italic}
+p{color:#d2cfc8;font-size:1.02rem;line-height:1.7;max-width:41ch;margin:0 0 14px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}
+.chips span{padding:8px 11px;border:1px solid #d2a54559;background:#050a0dcc;color:#ecd8a6;
+  font-size:.53rem;letter-spacing:.13em;text-transform:uppercase}
+.deliver{margin-top:20px;border-left:1px solid #d2a54540;padding-left:16px}
+.deliver div{display:flex;gap:10px;align-items:baseline;margin-bottom:9px;font-size:.9rem;color:#c9c5bd}
+.deliver b{color:var(--gold);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;min-width:88px;flex:none}
+.act.center{justify-content:center;text-align:center}
+.act.center .copy{width:min(700px,92vw)}
+.act.center p{margin-inline:auto}
+.act.center .eyebrow{justify-content:center}
+.cta{pointer-events:auto;display:inline-block;margin-top:22px;padding:16px 26px;
+  background:linear-gradient(120deg,#8f6419,#f2d58d,#a97827);color:#070808;text-decoration:none;
+  font-size:.63rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;transition:transform .3s,box-shadow .3s}
+.cta:hover{transform:translateY(-2px);box-shadow:0 14px 40px #d2a54540}
+.cta.ghost{background:none;border:1px solid #d2a5457a;color:var(--gold);margin-left:8px}
+@media(max-width:820px){
+  header{left:20px;right:20px;top:18px} header .tag{display:none}
+  .act{min-height:160vh;align-items:flex-end;padding:12vh 22px 16vh}
+  .act .copy{width:100%} h1,h2{font-size:clamp(2.2rem,10vw,3.4rem)} p{font-size:.95rem}
+}
+</style>
+</head>
+<body>
+
+<div id="boot">
+  <div class="sig">Journey</div>
+  <div class="bar"><i id="bootbar"></i></div>
+  <div class="pct" id="bootpct">Caricamento 0%</div>
+</div>
+
+<div id="stage"></div>
+<div class="veil"></div>
+<div class="sideveil"></div>
+
+<header>
+  <span>NYFURION <b>JOURNEY</b></span>
+  <div class="meter"><i id="meter"></i></div>
+  <span class="tag">HOLDER EXPERIENCE</span>
+</header>
+
+<div class="hint" id="hint"><span>Scorri per entrare ▾</span></div>
+
+<div class="printhud" id="printhud">
+  <div class="ph-eye" id="ph-eye">Stampa in corso</div>
+  <div class="ph-t" id="ph-t">Strato dopo strato</div>
+  <p class="ph-p" id="ph-p">La card è appoggiata in piano sul letto. Cresce dal basso, senza supporti.</p>
+  <div class="ph-bar"><i id="ph-bar"></i></div>
+  <div class="ph-n" id="ph-n">88 × 56 mm · 3,65 mm</div>
+</div>
+
+<div class="printhud" id="charhud">
+  <div class="ph-eye" id="ch-eye">Scultura</div>
+  <div class="ph-t" id="ch-t">La forma</div>
+  <p class="ph-p" id="ch-p">La mesh grezza, senza colore.</p>
+  <div class="ph-n" id="ch-n">File OBJ e FBX</div>
+</div>
+
+<audio id="bg-audio" src="assets/ambient.mp3" loop preload="auto"></audio>
+<button id="audio-btn" aria-label="Audio" title="Suono"><span id="audio-ico">♫</span></button>
+
+<main>
+  <section class="act center on" data-i="0">
+    <div class="copy">
+      <div class="eyebrow">Beyond the JPEG</div>
+      <h1>Il tuo posto<br>nel <span class="gold">regno.</span></h1>
+      <p>Davanti a te c'è la soglia. Dietro, la tua sala privata, la card fisica in 3D, le reference originali di produzione e i file che nessun altro possiede del tuo frammento unico.</p>
+    </div>
+  </section>
+
+  <section class="act" data-i="1">
+    <div class="copy">
+      <div class="eyebrow">01 — La soglia</div>
+      <h2>Le porte<br>si <span class="gold">aprono.</span></h2>
+      <p>Il caveau riconosce il tuo wallet. Nessuna chiave, nessun intermediario: il possesso del token è la serratura.</p>
+      <div class="chips"><span>Wallet gated</span><span>On-chain ownership</span></div>
+    </div>
+  </section>
+
+  <section class="act" data-i="2">
+    <div class="copy">
+      <div class="eyebrow">02 — Villa Prime</div>
+      <h2>La tua sala<br>nel <span class="gold">regno.</span></h2>
+      <p>Ogni holder riceve una sala privata dove la propria collezione vive esposta. Quella che vedi qui è solo una rappresentazione schematica: la villa reale si apre soltanto dal caveau, dopo la verifica del wallet. All'interno troverai alcune reference del tuo NFT appese come quadri, la card 3D fluttuante e il modello 3D reale, come anteprima di come apparirebbe nel game.</p>
+      <div class="chips"><span>Anteprima schematica</span><span>Sala privata reale</span><span>Accesso con wallet</span></div>
+    </div>
+  </section>
+
+  <section class="act" data-i="3">
+    <div class="copy">
+      <div class="eyebrow">03 — L'artefatto · #221</div>
+      <h2>Metallo, luce,<br><span class="gold">profondità.</span></h2>
+      <p>La card non è una cornice piatta: è un modello 3D vero, texturizzato sul fronte e sul retro. Ruotala: esiste da ogni lato.</p>
+      <div class="chips"><span>Modello 3D</span><span>Texture fronte e retro</span></div>
+    </div>
+  </section>
+
+  <section class="act" data-i="4">
+    <div class="copy">
+      <div class="eyebrow">04 — Stampabile</div>
+      <h2>Dal digitale<br>alle <span class="gold">mani.</span></h2>
+      <p>Ricevi anche il file pronto per la stampa 3D. La tua card diventa un oggetto reale, sul tuo tavolo.</p>
+      <div class="chips"><span>File STL</span><span>File GLB</span><span>Pronto da stampare</span></div>
+    </div>
+  </section>
+
+  <section class="act" data-i="5">
+    <div class="copy">
+      <div class="eyebrow">05 — Il file di stampa</div>
+      <h2>Due gemelle.<br>Una <span class="gold">reale.</span></h2>
+      <p>A sinistra la card come la vedi, con le texture applicate. A destra la geometria esatta del file STL che scarichi: la stessa mesh che entra nel tuo slicer, senza sorprese.</p>
+      <div class="deliver">
+        <div><b>Misure</b><span>88 × 56 mm, spessore 3,65 mm</span></div>
+        <div><b>Mesh</b><span>2.256 triangoli, unità in millimetri</span></div>
+        <div><b>Stampa</b><span>Appoggiata in piano, zero supporti</span></div>
+        <div><b>Texture</b><span>card-front.png e card-back.png incluse</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="act" data-i="6">
+    <div class="copy">
+      <div class="eyebrow">06 — La collezione</div>
+      <h2>Ogni numero,<br>un <span class="gold">archivio.</span></h2>
+      <p>Ogni Nyfurion ha la sua card 3D e il suo file di stampa. Queste che sfilano sono card reali della collezione.</p>
+      <div class="deliver">
+        <div><b>Collezione</b><span>400 personaggi, ognuno con il proprio archivio</span></div>
+        <div><b>Ognuna</b><span>Card 3D, file STL e texture fronte e retro</span></div>
+        <div><b>Nessuna</b><span>uguale a un'altra</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="act" data-i="7">
+    <div class="copy">
+      <div class="eyebrow">07 — Il pacchetto</div>
+      <h2>Cosa ricevi<br><span class="gold">davvero.</span></h2>
+      <div class="deliver">
+        <div><b>Artwork</b><span>File originale in alta risoluzione</span></div>
+        <div><b>Card 3D</b><span>GLB con texture fronte e retro</span></div>
+        <div><b>Stampa</b><span>STL pronto per la stampante 3D</span></div>
+        <div><b>Reference</b><span>13 file di produzione del personaggio</span></div>
+        <div><b>Licenza</b><span>Diritti commerciali sul tuo frammento</span></div>
+        <div><b>Villa</b><span>Accesso alla sala privata 3D</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="act" data-i="8">
+    <div class="copy">
+      <div class="eyebrow">08 — Il personaggio 3D</div>
+      <h2>Dalla scultura<br>al <span class="gold">movimento.</span></h2>
+      <p>Ogni Nyfurion può diventare un personaggio completo: mesh scolpita, texture applicata, scheletro pronto per l'animazione. Da immagine a creatura che cammina. <span style="opacity:.6">In fase di produzione, arriva per tutti i personaggi.</span></p>
+      <div class="deliver">
+        <div><b>OBJ · FBX</b><span>La scultura, mesh chiusa e stampabile</span></div>
+        <div><b>GLB</b><span>Modello texturizzato</span></div>
+        <div><b>Rig</b><span>Scheletro e animazione base inclusi</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="act" data-i="9">
+    <div class="copy">
+      <div class="eyebrow">09 — Le reference</div>
+      <h2>Il dietro le<br><span class="gold">quinte.</span></h2>
+      <p>Ogni personaggio arriva con le sue reference originali di produzione: figura intera, dettagli, viste ravvicinate. Materiale professionale, pronto per il tuo business — merchandise, stampe, contenuti, progetti tuoi.</p>
+      <div class="deliver">
+        <div><b>12 file</b><span>Reference di produzione in alta risoluzione</span></div>
+        <div><b>Uso libero</b><span>Coperto dalla licenza commerciale</span></div>
+        <div><b>Tuo</b><span>Materiale che nessun altro possiede</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="act" data-i="10">
+    <div class="copy">
+      <div class="eyebrow">10 — La card fisica</div>
+      <h2>La card,<br>strato dopo <span class="gold">strato.</span></h2>
+      <p>La card si appoggia in piano sul letto e cresce strato dopo strato. Nessun supporto, nessuna riparazione: la mesh è chiusa. Nel pacchetto trovi tutto il necessario.</p>
+      <div class="deliver">
+        <div><b>STL</b><span>Per stamparla in casa. Esce in un solo colore</span></div>
+        <div><b>GLB</b><span>Modello con texture e UV, per la stampa a colori</span></div>
+        <div><b>PNG</b><span>Fronte e retro, per la finitura in stampa UV</span></div>
+        <div><b>Formato</b><span>88 × 56 mm, spessore 3,65 mm</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="act center" data-i="11">
+    <div class="copy">
+      <div class="eyebrow">Own the complete character</div>
+      <h2>Non guardare soltanto.<br><span class="gold">Entra nel regno.</span></h2>
+      <p>Un solo token, un archivio intero.</p>
+      <a class="cta" href="nfts.html">Scopri la collezione</a>
+      <a class="cta ghost" href="lore.html">Leggi la saga</a>
+    </div>
+  </section>
+</main>
+
+<script src="vendor-three-0.147.min.js"></script>
+<script src="vendor-GLTFLoader-0.147.js"></script>
+<script>
+(()=>{
+const $=s=>document.querySelector(s);
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const sm=x=>{x=clamp(x);return x*x*(3-2*x)};
+const lp=(a,b,t)=>a+(b-a)*t;
+
+const R=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+R.setPixelRatio(Math.min(devicePixelRatio,1.75));
+R.setSize(innerWidth,innerHeight);
+R.outputEncoding=THREE.sRGBEncoding;
+R.toneMapping=THREE.ACESFilmicToneMapping;
+R.toneMappingExposure=1.02;
+R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+R.localClippingEnabled=true;              // serve alla simulazione di stampa a strati
+$('#stage').appendChild(R.domElement);
+
+const S=new THREE.Scene();
+S.fog=new THREE.FogExp2(0x03040a,.021);
+const C=new THREE.PerspectiveCamera(50,innerWidth/innerHeight,.05,300);
+
+/* ============ CINEMATIC BACKGROUND (nebula dome) ============ */
+const skyGeo=new THREE.SphereGeometry(140,48,32);
+const skyMat=new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,uniforms:{t:{value:0}},
+ vertexShader:'varying vec3 p;void main(){p=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+ fragmentShader:`
+ varying vec3 p;uniform float t;
+ float h(vec3 v){return fract(sin(dot(v,vec3(12.9898,78.233,45.164)))*43758.5453);}
+ float n(vec3 v){vec3 i=floor(v),f=fract(v);f=f*f*(3.-2.*f);
+  return mix(mix(mix(h(i),h(i+vec3(1,0,0)),f.x),mix(h(i+vec3(0,1,0)),h(i+vec3(1,1,0)),f.x),f.y),
+             mix(mix(h(i+vec3(0,0,1)),h(i+vec3(1,0,1)),f.x),mix(h(i+vec3(0,1,1)),h(i+vec3(1,1,1)),f.x),f.y),f.z);}
+ float fbm(vec3 v){float s=0.,a=.5;for(int i=0;i<5;i++){s+=a*n(v);v*=2.03;a*=.5;}return s;}
+ void main(){
+   vec3 d=normalize(p);
+   float f=fbm(d*2.4+vec3(0.,t*.012,0.));
+   float f2=fbm(d*5.1-vec3(t*.008,0.,0.));
+   vec3 deep=vec3(.008,.012,.032);
+   vec3 blue=vec3(.03,.09,.17);
+   vec3 warm=vec3(.16,.09,.035);
+   vec3 c=deep;
+   c=mix(c,blue,smoothstep(.35,.85,f)*.85);
+   c=mix(c,warm,smoothstep(.55,.95,f2)*.35);
+   c+=pow(max(0.,d.y),3.)*vec3(.02,.03,.05);
+   c*=1.-.35*pow(max(0.,-d.y),1.4);
+   float st=step(.9985,h(floor(d*280.)));
+   c+=st*vec3(.55,.6,.7)*(.4+.6*sin(t*1.6+h(floor(d*280.))*40.));
+   gl_FragColor=vec4(c,1.);}`});
+const sky=new THREE.Mesh(skyGeo,skyMat);sky.frustumCulled=false;S.add(sky);
+
+/* floating dust */
+const dg=new THREE.BufferGeometry(),dp=new Float32Array(900*3);
+for(let i=0;i<900;i++){const r=6+Math.random()*40,a=Math.random()*Math.PI*2;
+  dp[i*3]=Math.cos(a)*r;dp[i*3+1]=(Math.random()-.4)*26;dp[i*3+2]=Math.sin(a)*r;}
+dg.setAttribute('position',new THREE.BufferAttribute(dp,3));
+const dust=new THREE.Points(dg,new THREE.PointsMaterial({color:0xd8c9a8,size:.075,transparent:true,opacity:.42,depthWrite:false}));
+S.add(dust);
+
+/* ============ LOADING ============ */
+const LM=new THREE.LoadingManager();let bootDone=false;
+LM.onProgress=(u,l,t)=>{const q=Math.round(l/t*100);$('#bootbar').style.width=q+'%';$('#bootpct').textContent='Caricamento '+q+'%';};
+LM.onLoad=()=>{if(bootDone)return;bootDone=true;$('#bootbar').style.width='100%';setTimeout(()=>$('#boot').classList.add('gone'),350);};
+setTimeout(()=>{if(!bootDone){bootDone=true;$('#boot').classList.add('gone');}},45000);
+const T=new THREE.TextureLoader(LM),GL=new THREE.GLTFLoader(LM);
+
+/* ---- materiali PBR con le TEXTURE VERE (stessa logica di archive.html) ---- */
+const ANISO=Math.min(8,R.capabilities.getMaxAnisotropy());
+function pbr(base,extra,rep){
+  const maps={};
+  ['diff','nor_gl','rough'].forEach(m=>{
+    const t=T.load('tex-'+base+'-'+m+'.jpg');
+    t.wrapS=t.wrapT=THREE.RepeatWrapping;
+    if(rep)t.repeat.set(rep,rep);
+    t.anisotropy=ANISO;
+    t.flipY=false;                 // le UV del glTF hanno la V invertita
+    maps[m]=t;
+  });
+  maps.diff.encoding=THREE.sRGBEncoding;
+  return new THREE.MeshStandardMaterial(Object.assign({
+    map:maps.diff,normalMap:maps.nor_gl,roughnessMap:maps.rough
+  },extra||{}));
+}
+const gold=new THREE.MeshStandardMaterial({color:0xd3a74c,metalness:.97,roughness:.2});
+const obsidian=new THREE.MeshStandardMaterial({color:0x06080d,metalness:.7,roughness:.25});
+const glowCy=new THREE.MeshStandardMaterial({color:0x1b4d54,emissive:0x0f4048,emissiveIntensity:1.1,metalness:.6,roughness:.25});
+const mk=(g,m,x=0,y=0,z=0)=>{const o=new THREE.Mesh(g,m);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;return o};
+
+/* ============ ACT 1 — FULL SCREEN DOORS (first person) ============ */
+const doorTex=T.load('tex-nyfurion-prime-box.png');
+doorTex.encoding=THREE.sRGBEncoding;doorTex.wrapS=doorTex.wrapT=THREE.RepeatWrapping;doorTex.repeat.set(1.1,2.2);
+const doorMat=new THREE.MeshStandardMaterial({map:doorTex,color:0x9c8f74,metalness:.75,roughness:.34});
+
+const gate=new THREE.Group();S.add(gate);
+const DW=7.4, DH=18;                          // huge doors -> fill the screen
+const doorL=mk(new THREE.BoxGeometry(DW,DH,.7),doorMat,-DW/2,0,0);
+const doorR=mk(new THREE.BoxGeometry(DW,DH,.7),doorMat, DW/2,0,0);
+doorL.geometry.translate(DW/2,0,0);  doorL.position.x=-DW;   // hinge on outer edge
+doorR.geometry.translate(-DW/2,0,0); doorR.position.x= DW;
+gate.add(doorL,doorR);
+for(const d of [doorL,doorR]){
+  const s=d===doorL?-1:1;
+  for(const y of [-6.6,-3.3,0,3.3,6.6]) d.add(mk(new THREE.BoxGeometry(DW*.86,.13,.76),gold,s*DW/2,y,.02));
+  for(const x of [.22,.78]) d.add(mk(new THREE.BoxGeometry(.13,DH*.93,.76),gold,s*DW*x,0,.02));
+  const b=mk(new THREE.CylinderGeometry(.42,.42,.16,28),glowCy,s*DW*.13,0,.42);
+  b.rotation.x=Math.PI/2;d.add(b);
+}
+/* pillars + lintel frame around the doors */
+for(const s of [-1,1]) gate.add(mk(new THREE.BoxGeometry(1.5,DH+2.4,1.5),obsidian,s*(DW+.75),0,0));
+gate.add(mk(new THREE.BoxGeometry(DW*2+4,1.4,1.6),obsidian,0,DH/2+1.1,0));
+gate.add(mk(new THREE.BoxGeometry(DW*2+4,.5,1.7),gold,0,DH/2+.3,.05));
+/* SIGILLO: rombo DAVANTI alle porte (z positivo = verso la camera) */
+const seal=mk(new THREE.OctahedronGeometry(1.05,0),gold,0,0,.6);gate.add(seal);
+const portal=mk(new THREE.PlaneGeometry(DW*2,DH),
+  new THREE.MeshBasicMaterial({color:0x63e9f2,transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide}),0,0,-.5);
+gate.add(portal);
+const godRay=new THREE.SpotLight(0xbfe8ff,0,60,.5,.85,1.2);
+godRay.position.set(0,4,-14);S.add(godRay,godRay.target);godRay.target.position.set(0,0,6);
+
+/* ============ ACT 2 — VILLA with 10 vertical cards ============ */
+const villaRoot=new THREE.Group();S.add(villaRoot);villaRoot.visible=false;
+const CARD_IDS=[221,329,95,96,100,12,20,97,98,441];
+const EXHIBITS=[   // solo gli espositori davvero allineati alle pareti della sala
+ {p:[10.46,2.70,0.53],  r:-Math.PI/2},
+ {p:[10.44,2.14,4.77],  r:-Math.PI/2},
+ {p:[10.44,2.14,-3.79], r:-Math.PI/2},
+ {p:[4.68,2.22,-6.52],  r:0},
+ {p:[8.28,2.22,-6.52],  r:0},
+ {p:[4.92,2.22,7.58],   r:Math.PI},
+ {p:[8.28,2.22,7.58],   r:Math.PI},
+ {p:[1.96,2.30,-6.54],  r:0}
+];
+let villaModel=null, VC=new THREE.Vector3(), EYE=0, CARDY=0, ROOMR=9;
+GL.load('villa-prime.glb',g=>{
+  villaModel=g.scene;
+  villaModel.traverse(o=>{
+    if(o.isMesh){
+      o.castShadow=o.receiveShadow=true;
+      /* kill the huge white plate that blocked the view */
+      if(/RoomPlate/i.test(o.name)||/RoomPlate/i.test(o.parent?.name||'')){o.visible=false;}
+      /* BLUEPRINT: niente materiali pieni, solo volume vetro appena accennato */
+      if(o.material){
+        o.material=new THREE.MeshBasicMaterial({
+          color:0x0a2a33,transparent:true,opacity:0,depthWrite:false,
+          blending:THREE.AdditiveBlending,side:THREE.DoubleSide});
+      }
+    }
+  });
+  /* vertical cards on every exhibit */
+  EXHIBITS.forEach((ex,i)=>{
+    const id=CARD_IDS[i%CARD_IDS.length];
+    const tex=T.load('assets/nft/'+id+'.jpg');
+    tex.encoding=THREE.sRGBEncoding;
+    const holder=new THREE.Group();
+    const frame=mk(new THREE.BoxGeometry(1.9,2.75,.12),gold);
+    const pic=mk(new THREE.PlaneGeometry(1.68,2.5),
+      new THREE.MeshBasicMaterial({map:tex,toneMapped:false,transparent:true,opacity:0}),0,0,.075);
+    const glow=mk(new THREE.PlaneGeometry(2.3,3.2),
+      new THREE.MeshBasicMaterial({color:0x7fe3ec,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false}),0,0,-.09);
+    frame.material=gold.clone();frame.material.transparent=true;frame.material.opacity=0;
+    holder.add(frame,pic,glow);
+    holder.position.set(ex.p[0],ex.p[1],ex.p[2]);
+    holder.rotation.y=ex.r;
+    holder.userData={pic,frame,glow,first:i===0};
+    [frame,pic,glow].forEach(m=>m.userData.isCard=true);
+    villaModel.add(holder);
+  });
+  /* wireframe azzurro sopra la geometria: e' questo che si vede davvero */
+  const wireGroup=new THREE.Group();
+  villaModel.updateWorldMatrix(true,true);
+  villaModel.traverse(o=>{
+    if(o.isMesh&&o.geometry&&!o.userData.isCard){
+      const w=new THREE.LineSegments(
+        new THREE.WireframeGeometry(o.geometry),
+        new THREE.LineBasicMaterial({color:0x6fe4f0,transparent:true,opacity:0,depthWrite:false}));
+      w.matrixAutoUpdate=false;
+      w.matrix.copy(o.matrixWorld);
+      wireGroup.add(w);
+    }
+  });
+  villaModel.add(wireGroup);
+  villaRoot.userData.wireGroup=wireGroup;
+  villaRoot.add(villaModel);
+  /* CENTRO = baricentro degli ESPOSITORI (non il bounding box, che include
+     fondamenta e sporgenze e cadrebbe fuori dalla sala) */
+  let sx=0,sz2=0;
+  EXHIBITS.forEach(e=>{sx+=e.p[0];sz2+=e.p[2];});
+  VC.set(sx/EXHIBITS.length, 0, sz2/EXHIBITS.length);
+  /* raggio = distanza media dal centro alle pareti espositive */
+  let rr=0;
+  EXHIBITS.forEach(e=>{rr+=Math.hypot(e.p[0]-VC.x, e.p[2]-VC.z);});
+  ROOMR=rr/EXHIBITS.length;
+  CARDY=2.25;        // altezza dei quadri (dai dati reali degli espositori)
+  EYE=1.55;          // occhi: pavimento reale a -1.2, quindi 1.55 = ~2.7m sopra il piano
+  /* perno di rotazione = centro reale della sala, cosi' ruotando resta in quadro */
+  villaModel.position.set(-VC.x, 0, -VC.z);
+  /* piazzo la sala DAVANTI alle porte (z negativo): il percorso resta una retta */
+  villaRoot.position.set(0, 0, -18);
+  VC.set(0,0,0);   // ora il centro coincide con l'origine di villaRoot
+},undefined,()=>{});
+
+/* ============ ACT 3/4 — CARD #221 ============ */
+const card=new THREE.Group();S.add(card);card.visible=false;
+let holo=null;
+GL.load('nyf221-card-3d.glb',g=>{
+  const m=g.scene,b=new THREE.Box3().setFromObject(m),sz=b.getSize(new THREE.Vector3()),ct=b.getCenter(new THREE.Vector3());
+  m.position.sub(ct);
+  m.scale.setScalar(4.4/Math.max(sz.x,sz.y,sz.z));
+  m.traverse(o=>{if(o.isMesh)o.castShadow=o.receiveShadow=true;});
+  card.add(m);
+  const b2=new THREE.Box3().setFromObject(m),s2=b2.getSize(new THREE.Vector3());
+  holo=new THREE.Mesh(new THREE.PlaneGeometry(s2.x*.9,s2.y*.93),
+   new THREE.ShaderMaterial({transparent:true,depthWrite:false,uniforms:{u:{value:0}},
+    vertexShader:'varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+    fragmentShader:'varying vec2 v;uniform float u;void main(){float b=smoothstep(.0,.2,.13-abs(fract(v.x+v.y*.4+u)-.5));vec3 c=mix(vec3(.12,.82,1.),vec3(1.,.62,.18),v.y);gl_FragColor=vec4(c,b*.2);}'}));
+  holo.position.z=s2.z*.5+.02;card.add(holo);
+},undefined,()=>{});
+card.scale.setScalar(.001);
+
+/* ---- CAROVANA: card reali che sfilano da destra a sinistra ---- */
+const CARAVAN_IDS=[250,206,208,116,119,233,249,290,362,147,296,289,157,293,108,232,154,258];
+/* quante ne sfilano davvero: meno card = ognuna resta in scena piu' a lungo */
+const VISIBLE_CARDS=8;
+const demoCards=[];
+CARAVAN_IDS.slice(0,VISIBLE_CARDS-1).concat([258]).forEach(id=>{
+  const g=new THREE.Group();g.visible=false;g.userData.id=id;S.add(g);demoCards.push(g);
+  GL.load('nyf'+id+'-card-3d.glb',gl=>{
+    const m=gl.scene,b=new THREE.Box3().setFromObject(m),
+          sz=b.getSize(new THREE.Vector3()),ct=b.getCenter(new THREE.Vector3());
+    m.position.sub(ct);
+    m.scale.setScalar(4.4/Math.max(sz.x,sz.y,sz.z));
+    m.traverse(o=>{if(o.isMesh){o.castShadow=o.receiveShadow=true;
+      o.material=o.material.clone();}});
+    g.add(m);
+  },undefined,()=>{});
+});
+
+/* ============ PERSONAGGIO 3D COMPLETO: scultura -> texture -> animazione ============ */
+const charGroup=new THREE.Group();S.add(charGroup);charGroup.visible=false;
+let charSculpt=null, charTex=null, charMixer=null;
+
+/* 1) versione SCULTURA: caricata col LoadingManager -> pronta prima che serva */
+GL.load('nyf267-static.glb',gl=>{
+  const m=gl.scene;
+  const b=new THREE.Box3().setFromObject(m), sz=b.getSize(new THREE.Vector3()), ct=b.getCenter(new THREE.Vector3());
+  /* modello alto ~1.70 con base a Y=0: scala fissa, spostato a SINISTRA */
+  m.scale.setScalar(0.9);
+  m.position.set(-1.9,0,0);
+  m.traverse(o=>{ if(o.isMesh){
+    o.castShadow=o.receiveShadow=true;
+    o.material=new THREE.MeshStandardMaterial({color:0xb9bec4,metalness:.05,roughness:.75,transparent:true,opacity:0});
+  }});
+  charSculpt=m; charGroup.add(m);
+},undefined,()=>{});
+
+/* 2) versione TEXTURIZZATA e ANIMATA: il rig che cammina */
+GL.load('nyf267-anim.glb',gl=>{
+  const m=gl.scene;
+  const b=new THREE.Box3().setFromObject(m), sz=b.getSize(new THREE.Vector3()), ct=b.getCenter(new THREE.Vector3());
+  /* modello alto ~1.70 con base a Y=0: scala fissa, spostato a SINISTRA */
+  m.scale.setScalar(0.9);
+  m.position.set(-1.9,0,0);
+  m.traverse(o=>{ if(o.isMesh){
+    o.castShadow=o.receiveShadow=true;
+    o.material=o.material.clone();
+    o.material.transparent=true; o.material.opacity=0;
+  }});
+  charTex=m; charGroup.add(m);
+  if(gl.animations&&gl.animations.length){
+    charMixer=new THREE.AnimationMixer(m);
+    charMixer.clipAction(gl.animations[0]).play();
+  }
+},undefined,()=>{});
+
+/* ---- SECONDO PERSONAGGIO: #263, affiancato al #267 ---- */
+let char2Sculpt=null, char2Tex=null, char2Mixer=null;
+GL.load('nyf263-static.glb',gl=>{
+  const m=gl.scene;
+  const b=new THREE.Box3().setFromObject(m), sz=b.getSize(new THREE.Vector3());
+  m.scale.setScalar(0.9);
+  m.position.set(1.9,0,0);
+  m.traverse(o=>{ if(o.isMesh){
+    o.castShadow=o.receiveShadow=true;
+    o.material=new THREE.MeshStandardMaterial({color:0xb9bec4,metalness:.05,roughness:.75,transparent:true,opacity:0});
+  }});
+  char2Sculpt=m; charGroup.add(m);
+},undefined,()=>{});
+GL.load('nyf263-anim.glb',gl=>{
+  const m=gl.scene;
+  m.scale.setScalar(0.9);
+  m.position.set(1.9,0,0);
+  m.traverse(o=>{ if(o.isMesh){
+    o.castShadow=o.receiveShadow=true;
+    o.material=o.material.clone(); o.material.transparent=true; o.material.opacity=0;
+  }});
+  char2Tex=m; charGroup.add(m);
+  if(gl.animations&&gl.animations.length){
+    char2Mixer=new THREE.AnimationMixer(m);
+    char2Mixer.clipAction(gl.animations[0]).play();
+  }
+},undefined,()=>{});
+
+/* piedistallo sotto il personaggio */
+const charBase=mk(new THREE.CylinderGeometry(.85,.98,.07,48),
+  new THREE.MeshStandardMaterial({color:0x0b1014,metalness:.55,roughness:.4,transparent:true,opacity:0}),-1.9,-.035,0);
+charGroup.add(charBase);
+/* secondo piedistallo per il #263 */
+const charBase2=charBase.clone();
+charBase2.material=charBase.material.clone();
+charBase2.position.set(1.9,-.035,0);
+charGroup.add(charBase2);
+const charRing2=mk(new THREE.TorusGeometry(.88,.018,10,80),gold.clone(),1.9,.008,0);
+charRing2.rotation.x=Math.PI/2; charRing2.material.transparent=true; charRing2.material.opacity=0;
+charGroup.add(charRing2);
+const charRing=mk(new THREE.TorusGeometry(.88,.018,10,80),gold.clone(),-1.9,.008,0);
+charRing.rotation.x=Math.PI/2; charRing.material.transparent=true; charRing.material.opacity=0;
+charGroup.add(charRing);
+
+/* ============ IL PACCHETTO: UN UNICO QUADRO con tutte le reference ============ */
+const packGroup=new THREE.Group();S.add(packGroup);packGroup.visible=false;
+let packBoard=null, packBoardRim=null;
+(function(){
+  const tex=T.load('assets/pack/pack-board.jpg');tex.encoding=THREE.sRGBEncoding;
+  /* tavola 4x3 compatta (2258x1692), 12 reference senza spazi */
+  const W=5.4, H=4.05;
+  function frame(w,h,r){const s=new THREE.Shape();
+    s.moveTo(-w/2+r,-h/2);s.lineTo(w/2-r,-h/2);s.quadraticCurveTo(w/2,-h/2,w/2,-h/2+r);
+    s.lineTo(w/2,h/2-r);s.quadraticCurveTo(w/2,h/2,w/2-r,h/2);s.lineTo(-w/2+r,h/2);
+    s.quadraticCurveTo(-w/2,h/2,-w/2,h/2-r);s.lineTo(-w/2,-h/2+r);
+    s.quadraticCurveTo(-w/2,-h/2,-w/2+r,-h/2);return s;}
+  const shell=mk(new THREE.ExtrudeGeometry(frame(W+.35,H+.35,.14),
+    {depth:.16,bevelEnabled:true,bevelSegments:3,bevelSize:.07,bevelThickness:.06}),
+    new THREE.MeshStandardMaterial({color:0x14110d,metalness:.35,roughness:.5,transparent:true,opacity:0}));
+  shell.geometry.center();
+  packBoardRim=mk(new THREE.ExtrudeGeometry(frame(W+.14,H+.14,.12),
+    {depth:.06,bevelEnabled:true,bevelSegments:2,bevelSize:.04,bevelThickness:.035}),
+    new THREE.MeshStandardMaterial({color:0xc9a24a,metalness:.92,roughness:.26,transparent:true,opacity:0}),0,0,.14);
+  packBoardRim.geometry.center();
+  const pic=mk(new THREE.PlaneGeometry(W,H),
+    new THREE.MeshBasicMaterial({map:tex,toneMapped:false,transparent:true,opacity:0}),0,0,.24);
+  packGroup.add(shell,packBoardRim,pic);
+  packGroup.userData={shell,rim:packBoardRim,pic};
+  packBoard=packGroup;
+})();
+
+/* ============ STAMPA 3D DEL PERSONAGGIO: il #267 nasce strato dopo strato ============ */
+const charPrinter=new THREE.Group();S.add(charPrinter);charPrinter.visible=false;
+const charPlane=new THREE.Plane(new THREE.Vector3(0,-1,0), 0);
+let charPrintMesh=null, charPrintWire=null, charPrintH=1.53;
+
+GL.load('nyf267-static.glb',gl=>{
+  const m=gl.scene.clone(true);
+  m.scale.setScalar(0.9);          // STESSA scala dei personaggi a figura intera
+  m.updateWorldMatrix(true,true);
+  /* misuro SOLO le mesh (lo scheletro falsava il bounding box e rendeva il modello enorme) */
+  const box=new THREE.Box3();
+  m.traverse(o=>{ if(o.isMesh&&o.geometry){
+    o.geometry.computeBoundingBox();
+    const b=o.geometry.boundingBox.clone().applyMatrix4(o.matrixWorld);
+    box.union(b);
+  }});
+  m.position.y = -box.min.y;       // base ESATTAMENTE a Y=0
+  m.updateWorldMatrix(true,true);
+  charPrintH = box.max.y - box.min.y;   // altezza VERA del corpo
+  m.traverse(o=>{ if(o.isMesh){
+    o.castShadow=o.receiveShadow=true;
+    /* materiale "in stampa": verdino da filamento, tagliato dal piano */
+    o.material=new THREE.MeshStandardMaterial({
+      color:0xa8d8dd, metalness:.1, roughness:.7,
+      transparent:true, opacity:0, side:THREE.DoubleSide,
+      clippingPlanes:[charPlane], clipShadows:true});
+  }});
+  charPrintMesh=m; charPrinter.add(m);
+},undefined,()=>{});
+
+/* piatto di stampa e telaio, stessa estetica blueprint */
+const cpBed=new THREE.LineSegments(
+  new THREE.EdgesGeometry(new THREE.BoxGeometry(1.5,.05,1.3)),
+  new THREE.LineBasicMaterial({color:0x63e7ef,transparent:true,opacity:0}));
+cpBed.position.y=-.025; charPrinter.add(cpBed);
+const cpGrid=new THREE.GridHelper(1.4,10,0x4fd6e6,0x1c5a66);
+cpGrid.material.transparent=true; cpGrid.material.opacity=0;
+charPrinter.add(cpGrid);
+const cpFrame=new THREE.LineSegments(
+  new THREE.EdgesGeometry(new THREE.BoxGeometry(1.5,1.7,1.4)),
+  new THREE.LineBasicMaterial({color:0x63e7ef,transparent:true,opacity:0}));
+cpFrame.position.y=.85; charPrinter.add(cpFrame);
+/* ugello che segue lo strato in lavorazione */
+const cpNozzle=mk(new THREE.ConeGeometry(.05,.14,16),
+  new THREE.MeshBasicMaterial({color:0xffb85c,transparent:true,opacity:0}));
+cpNozzle.rotation.x=Math.PI; charPrinter.add(cpNozzle);
+const cpLayer=mk(new THREE.BoxGeometry(1.0,.006,.9),
+  new THREE.MeshBasicMaterial({color:0x9ff4ff,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));
+charPrinter.add(cpLayer);
+charPrinter.userData={cpBed,cpGrid,cpFrame,cpNozzle,cpLayer};
+
+/* ============ SIMULAZIONE STAMPA 3D — ologramma che costruisce la #221 ============ */
+const printer=new THREE.Group();S.add(printer);printer.visible=false;
+const PRINT_H=4.4;                                   // altezza finale del pezzo in scena
+let printMesh=null, printPlane=null, nozzle=null, bedGrid=null, laserLine=null;
+
+/* piano di clipping: rivela il modello dal basso verso l'alto, strato dopo strato */
+printPlane=new THREE.Plane(new THREE.Vector3(0,-1,0), 0);
+
+fetch('nyf221-card-3d.stl').then(r=>r.arrayBuffer()).then(buf=>{
+  const dv=new DataView(buf), tri=dv.getUint32(80,true);
+  const pos=new Float32Array(tri*9), nor=new Float32Array(tri*9);
+  let o=84;
+  for(let i=0;i<tri;i++){
+    const nx=dv.getFloat32(o,true),ny=dv.getFloat32(o+4,true),nz=dv.getFloat32(o+8,true);o+=12;
+    for(let v=0;v<3;v++){
+      const k=i*9+v*3;
+      pos[k]=dv.getFloat32(o,true);pos[k+1]=dv.getFloat32(o+4,true);pos[k+2]=dv.getFloat32(o+8,true);o+=12;
+      nor[k]=nx;nor[k+1]=ny;nor[k+2]=nz;
+    }
+    o+=2;
+  }
+  const g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  g.setAttribute('normal',new THREE.BufferAttribute(nor,3));
+  g.center(); g.computeBoundingBox();
+  /* la card e' 56x88x3.65mm e si stampa APPOGGIATA IN PIANO sul letto:
+     lo spessore (3.65) diventa l'altezza -> nessun supporto, come nelle istruzioni */
+  g.rotateX(-Math.PI/2);
+  g.computeBoundingBox();
+  const s=g.boundingBox.getSize(new THREE.Vector3());
+  const k=PRINT_H/Math.max(s.x,s.z);      // scala sulla superficie, non sull'altezza
+
+  /* pezzo GREZZO come esce davvero dalla stampante: un solo colore, niente texture */
+  printMesh=new THREE.Mesh(g,new THREE.MeshStandardMaterial({
+    color:0xc9cfd4, metalness:.05, roughness:.85,
+    transparent:true, opacity:0,
+    clippingPlanes:[printPlane], clipShadows:true, side:THREE.DoubleSide}));
+  printMesh.scale.setScalar(k);
+  printer.userData.partH=s.y*k;                 // altezza reale del pezzo sul letto
+  printMesh.position.y=printer.userData.partH/2;
+  printer.add(printMesh);
+
+  /* versione TEXTURIZZATA: uso il GLB, non lo STL.
+     Lo STL non ha coordinate UV, quindi la texture non si potrebbe applicare:
+     e' proprio la differenza che stiamo spiegando. */
+  GL.load('nyf221-card-3d.glb',gl=>{
+    const m=gl.scene;
+    const bb=new THREE.Box3().setFromObject(m);
+    const sz=bb.getSize(new THREE.Vector3()), ct=bb.getCenter(new THREE.Vector3());
+    m.position.sub(ct);
+    const kg=PRINT_H/Math.max(sz.x,sz.z);
+    m.scale.setScalar(kg);
+    m.traverse(o=>{ if(o.isMesh){
+      o.castShadow=o.receiveShadow=true;
+      o.material=o.material.clone();
+      o.material.transparent=true; o.material.opacity=0;
+    }});
+    const wrap=new THREE.Group();
+    wrap.add(m);
+    wrap.position.y=printer.userData.partH/2;
+    printer.add(wrap);
+    printer.userData.printMeshTex=wrap;
+  },undefined,()=>{});
+
+  /* reticolo dello stesso modello: da' il senso del filamento */
+  const wf=new THREE.LineSegments(new THREE.WireframeGeometry(g),
+    new THREE.LineBasicMaterial({color:0x7ff0ff,transparent:true,opacity:0,
+      clippingPlanes:[printPlane]}));
+  wf.scale.setScalar(k); wf.position.y=PRINT_H/2;
+  printer.add(wf); printer.userData.wf=wf;
+}).catch(()=>{});
+
+/* ---------- STAMPANTE 3D REALE in blueprint wireframe ---------- */
+const BW=7.4, BD=6.2, BH=7.0;                       // telaio: largo, profondo, alto
+const wireMat=()=>new THREE.LineBasicMaterial({color:0x63e7ef,transparent:true,opacity:0});
+const wireParts=[];
+function frameBox(w,h,d,x,y,z){
+  const e=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(w,h,d)),wireMat());
+  e.position.set(x,y,z);printer.add(e);wireParts.push(e);return e;
+}
+/* struttura esterna */
+frameBox(BW,BH,BD,0,BH/2,0);
+/* montanti verticali agli angoli */
+for(const sx of [-1,1])for(const sz of [-1,1])
+  frameBox(.26,BH,.26,sx*(BW/2-.13),BH/2,sz*(BD/2-.13));
+/* traversa superiore (asse X) */
+frameBox(BW,.3,.34,0,BH-.35,0);
+
+/* letto di stampa riscaldato */
+const bedPlate=new THREE.LineSegments(
+  new THREE.EdgesGeometry(new THREE.BoxGeometry(BW*.78,.22,BD*.72)),wireMat());
+printer.add(bedPlate);wireParts.push(bedPlate);
+printer.userData.bedPlate=bedPlate;
+/* griglia sul letto */
+bedGrid=new THREE.GridHelper(BW*.78,16,0x4fd6e6,0x1c5a66);
+bedGrid.material.transparent=true;bedGrid.material.opacity=0;
+printer.add(bedGrid);
+
+/* portale mobile (asse Y): scorre in profondita' */
+const gantry=new THREE.Group();printer.add(gantry);
+const gRail=new THREE.LineSegments(
+  new THREE.EdgesGeometry(new THREE.BoxGeometry(BW*.94,.2,.22)),wireMat());
+gantry.add(gRail);wireParts.push(gRail);
+printer.userData.gantry=gantry;
+
+/* carrello + estrusore (asse X) */
+nozzle=new THREE.Group();gantry.add(nozzle);
+const carriage=new THREE.LineSegments(
+  new THREE.EdgesGeometry(new THREE.BoxGeometry(.7,.62,.5)),wireMat());
+carriage.position.y=-.12;nozzle.add(carriage);wireParts.push(carriage);
+/* ugello: piccolo cono pieno, e' la parte "calda" */
+const nozBody=mk(new THREE.ConeGeometry(.15,.42,18),
+  new THREE.MeshBasicMaterial({color:0xffb85c,transparent:true,opacity:0}),0,-.52,0);
+nozBody.rotation.x=Math.PI;nozzle.add(nozBody);
+const nozGlow=mk(new THREE.SphereGeometry(.13,16,16),
+  new THREE.MeshBasicMaterial({color:0xffd9a0,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false}),0,-.72,0);
+nozzle.add(nozGlow);
+printer.userData.nozBody=nozBody;printer.userData.nozGlow=nozGlow;
+
+/* bobina di filamento sul fianco */
+const spool=new THREE.LineSegments(
+  new THREE.EdgesGeometry(new THREE.CylinderGeometry(.85,.85,.34,22)),wireMat());
+spool.position.set(-BW/2-.55,BH*.72,0);spool.rotation.z=Math.PI/2;
+printer.add(spool);wireParts.push(spool);printer.userData.spool=spool;
+
+/* linea luminosa sullo strato in lavorazione */
+laserLine=mk(new THREE.BoxGeometry(BW*.5,.014,BD*.45),
+  new THREE.MeshBasicMaterial({color:0x9ff4ff,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));
+printer.add(laserLine);printer.userData.laserLine=laserLine;
+printer.userData.wireParts=wireParts;
+printer.userData.BW=BW;printer.userData.BD=BD;printer.userData.BH=BH;
+
+/* ---- CARD DI STAMPA: geometria REALE letta dallo .stl che si scarica ---- */
+const printCard=new THREE.Group();S.add(printCard);printCard.visible=false;
+fetch('nyf221-card-3d.stl').then(r=>r.arrayBuffer()).then(buf=>{
+  const dv=new DataView(buf);
+  const tri=dv.getUint32(80,true);
+  const pos=new Float32Array(tri*9), nor=new Float32Array(tri*9);
+  let o=84;
+  for(let i=0;i<tri;i++){
+    const nx=dv.getFloat32(o,true),ny=dv.getFloat32(o+4,true),nz=dv.getFloat32(o+8,true);o+=12;
+    for(let v=0;v<3;v++){
+      const k=i*9+v*3;
+      pos[k]  =dv.getFloat32(o,true);
+      pos[k+1]=dv.getFloat32(o+4,true);
+      pos[k+2]=dv.getFloat32(o+8,true);o+=12;
+      nor[k]=nx;nor[k+1]=ny;nor[k+2]=nz;
+    }
+    o+=2;
+  }
+  const g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  g.setAttribute('normal',new THREE.BufferAttribute(nor,3));
+  g.center();
+  g.computeBoundingBox();
+  const s=g.boundingBox.getSize(new THREE.Vector3());
+  const k=4.4/Math.max(s.x,s.y,s.z);
+
+  /* corpo tecnico + reticolo: e' ESATTAMENTE la mesh del file .stl */
+  const solid=new THREE.Mesh(g,new THREE.MeshStandardMaterial({
+    color:0x9aa6b2,metalness:.25,roughness:.62,flatShading:true,transparent:true,opacity:0}));
+  const wire=new THREE.LineSegments(new THREE.WireframeGeometry(g),
+    new THREE.LineBasicMaterial({color:0x63e7ef,transparent:true,opacity:0}));
+  solid.scale.setScalar(k);wire.scale.setScalar(k);
+  solid.castShadow=solid.receiveShadow=true;
+  printCard.add(solid,wire);
+  printCard.userData={solid,wire,tri};
+}).catch(()=>{});
+
+/* ============ ACT 5 — REFERENCES (vertical) ============ */
+const refFiles=[]; /* Act5 (char-refs) disattivato: il gruppo refs non viene mai reso visibile, nessuna dipendenza esterna */
+function rounded(w,h,r){const s=new THREE.Shape();
+  s.moveTo(-w/2+r,-h/2);s.lineTo(w/2-r,-h/2);s.quadraticCurveTo(w/2,-h/2,w/2,-h/2+r);
+  s.lineTo(w/2,h/2-r);s.quadraticCurveTo(w/2,h/2,w/2-r,h/2);s.lineTo(-w/2+r,h/2);
+  s.quadraticCurveTo(-w/2,h/2,-w/2,h/2-r);s.lineTo(-w/2,-h/2+r);
+  s.quadraticCurveTo(-w/2,-h/2,-w/2+r,-h/2);return s;}
+const refs=new THREE.Group();S.add(refs);refs.visible=false;
+refFiles.forEach(f=>{
+  const map=T.load(f);map.encoding=THREE.sRGBEncoding;
+  const g=new THREE.Group();
+  const shell=mk(new THREE.ExtrudeGeometry(rounded(2.9,4.3,.2),{depth:.14,bevelEnabled:true,bevelSegments:4,bevelSize:.07,bevelThickness:.06}),obsidian.clone());
+  shell.geometry.center();
+  const rim=mk(new THREE.ExtrudeGeometry(rounded(2.7,4.1,.16),{depth:.06,bevelEnabled:true,bevelSegments:3,bevelSize:.04,bevelThickness:.035}),gold.clone(),0,0,.13);
+  rim.geometry.center();
+  const pic=mk(new THREE.PlaneGeometry(2.5,3.88),new THREE.MeshBasicMaterial({map,toneMapped:false}),0,0,.225);
+  g.add(shell,rim,pic);
+  for(const [gx,gy] of [[-1.22,-1.94],[1.22,-1.94],[-1.22,1.94],[1.22,1.94]])
+    g.add(mk(new THREE.SphereGeometry(.055,14,14),new THREE.MeshBasicMaterial({color:0x6cecf4}),gx,gy,.28));
+  g.scale.setScalar(.001);refs.add(g);
+});
+
+/* ============ LIGHTS ============ */
+S.add(new THREE.HemisphereLight(0x4c6d78,0x120a05,.5));
+const key=new THREE.SpotLight(0xffd8a0,9,60,.62,.62,1);
+key.position.set(8,14,12);key.castShadow=true;key.shadow.mapSize.set(1024,1024);
+S.add(key,key.target);
+const rimL=new THREE.PointLight(0x4fe4ee,6,34);rimL.position.set(-8,3,7);S.add(rimL);
+const warmL=new THREE.PointLight(0xd89b35,4,28);warmL.position.set(9,-1,-8);S.add(warmL);
+const villaLamp=new THREE.PointLight(0xffce8a,0,30);villaLamp.position.set(2,4,0);S.add(villaLamp);
+
+/* ============ DRAG TO LOOK ============ */
+let dragX=0,dragY=0,dragXT=0,dragYT=0,down=false,lx=0,ly=0,canDrag=false;
+const el=R.domElement, stageEl=$('#stage');
+el.addEventListener('pointerdown',e=>{
+  if(!canDrag)return;
+  down=true;lx=e.clientX;ly=e.clientY;
+  stageEl.classList.add('dragging');
+  el.setPointerCapture(e.pointerId);
+  e.preventDefault();
+});
+el.addEventListener('pointermove',e=>{
+  if(!down)return;
+  dragXT-=(e.clientX-lx)*.0075;
+  dragYT=clamp(dragYT+(e.clientY-ly)*.0026,-.45,.45);
+  lx=e.clientX;ly=e.clientY;
+  e.preventDefault();
+});
+const endDrag=()=>{down=false;stageEl.classList.remove('dragging');};
+el.addEventListener('pointerup',endDrag);
+el.addEventListener('pointercancel',endDrag);
+el.addEventListener('pointerleave',endDrag);
+/* frecce da tastiera per girarsi (PC) */
+addEventListener('keydown',e=>{
+  if(!canDrag)return;
+  if(e.key==='ArrowLeft') dragXT+=.22;
+  if(e.key==='ArrowRight')dragXT-=.22;
+});
+
+/* ============ SCROLL ============ */
+let target=0,p=0,v=0,last=performance.now();
+const acts=[...document.querySelectorAll('.act')];
+function onScroll(){
+  const max=document.documentElement.scrollHeight-innerHeight;
+  target=max?scrollY/max:0;
+  $('#meter').style.transform='scaleX('+target+')';
+  const step=Math.min(acts.length-1,Math.floor(target*(acts.length-.01)));
+  acts.forEach(a=>a.classList.toggle('on',+a.dataset.i===step));
+  $('#hint').classList.toggle('hide',target>.02);
+}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* ============ FRAME ============ */
+function frame(t){
+  requestAnimationFrame(frame);
+  const dt=Math.min(.033,(t-last)/1000||.016);last=t;
+  /* molla piu morbida + attrito maggiore = niente scatti secchi */
+  v=(v+(target-p)*6.2*dt)*Math.pow(.0006,dt);p=clamp(p+v*dt);
+  skyMat.uniforms.t.value=t*.001;
+
+  /* ============================================================
+     FASI ALLINEATE AGLI ATTI DI TESTO (10 atti da 0.1 ciascuno)
+     atto 0 .00-.10 intro     | atto 5 .50-.60 file di stampa
+     atto 1 .10-.20 porte     | atto 6 .60-.70 collezione
+     atto 2 .20-.30 villa     | atto 7 .70-.80 pacchetto
+     atto 3 .30-.40 card      | atto 8 .80-.90 stampa 3D
+     atto 4 .40-.50 stampabile| atto 9 .90-1.0 finale
+     ============================================================ */
+  /* ============================================================
+     11 ATTI da 0.0909 ciascuno. Ogni fase 3D sta DENTRO il suo atto.
+     0 .000-.091 intro        6 .545-.636 collezione
+     1 .091-.182 porte        7 .636-.727 pacchetto
+     2 .182-.273 villa        8 .727-.818 personaggio 3D
+     3 .273-.364 card         9 .818-.909 stampa 3D
+     4 .364-.455 stampabile  10 .909-1.00 finale
+     5 .455-.545 file stampa
+     ============================================================ */
+  const open   =sm((p-.02)/.11);    // atto 0-1: le porte si aprono
+  const through=sm((p-.14)/.025);    //           e le attraverso
+  const inVilla=sm((p-.167)/.035);   // atto 2: blueprint villa
+  const outVilla=sm((p-.232)/.016); //         svanisce
+  const cardIn =sm((p-.25)/.035);   // atto 3: entra la card
+  const inspect=sm((p-.333)/.045);   // atto 4: ispezione ravvicinata
+  const gallery=0;                  // reference disattivate
+  const pack   =sm((p-.583)/.035);   // atto 7
+  const finale =sm((p-.917)/.04);   // atto 10
+
+  /* doors: real hinge swing, full screen */
+  doorL.rotation.y= open*1.42;
+  doorR.rotation.y=-open*1.42;
+  /* SIGILLO: come nella versione originale — si rimpicciolisce e ruota
+     mentre le porte si aprono, restando davanti a loro */
+  seal.scale.setScalar(Math.max(.001,1-open*1.05));
+  seal.rotation.z=open*Math.PI*1.4;
+  seal.rotation.y=t*.0006;
+  seal.position.set(0,0,.6);
+  portal.material.opacity=open*.30*(1-through);
+  godRay.intensity=open*26*(1-through*.6);
+  /* le porte restano FERME sulla soglia: e' la camera che le attraversa.
+     Legate allo SCROLL (non alla camera): scrollando indietro non riappaiono a schermo. */
+  gate.position.z=0;
+  gate.visible = p < .20;
+
+  /* villa — posizione e SCALA FISSE: se cambiano, il centro si sposta e la camera rimbalza */
+  villaRoot.visible=inVilla>.006&&outVilla<.995;
+  /* posizione impostata UNA volta al caricamento (sala davanti alle porte): non toccarla qui */
+  villaRoot.scale.setScalar(1);
+  const vFade=lp(0,1,inVilla)*lp(1,0,outVilla);
+  villaLamp.intensity=vFade*22;
+  /* BLUEPRINT: wireframe azzurro + volume vetro appena accennato, e ruota lentamente */
+  if(villaModel){
+    villaModel.rotation.y=t*.00013;
+    villaModel.traverse(o=>{
+      if(o.isMesh&&o.material&&!o.userData.isCard) o.material.opacity=vFade*.16;
+    });
+    const wg=villaRoot.userData.wireGroup;
+    if(wg) wg.children.forEach(w=>{ w.material.opacity=vFade*.34; });
+    villaModel.children.forEach(h=>{
+      if(!h.userData||!h.userData.pic)return;
+      const {pic,frame:fr,glow,first}=h.userData;
+      pic.material.opacity=vFade;
+      fr.material.opacity=vFade;
+      glow.material.opacity=vFade*(first?.30:.10)*(.7+.3*Math.sin(t*.0016));
+      if(first)h.scale.setScalar(lp(1,1.14,sm((p-.30)/.06)));
+    });
+  }
+  /* la villa non si visita piu': nessun trascinamento */
+  canDrag=false;
+  stageEl.classList.remove('grab');
+
+  /* ---- CARD: in piedi, ruota sul proprio asse verticale ---- */
+  card.visible=cardIn>.005;
+  const split=sm((p-.417)/.035);                // ATTO 5: entra la gemella di stampa
+  card.scale.setScalar(lp(.001,lp(.95,1.05,inspect),cardIn));
+  card.position.set(lp(1.4,0,inspect)-split*2.6, .35, lp(-2.5,1.2,inspect));
+  /* la card nel GLB e' modellata SDRAIATA (spessore su Y): +90 su X la mette
+     in piedi nel verso giusto, come la gemella di stampa */
+  card.rotation.set(Math.PI/2, 0, -t*.00042);
+  if(holo)holo.material.uniforms.u.value=t*.00019;
+
+  /* ---- CAROVANA: un fiume continuo di card che scorre da DESTRA a SINISTRA ---- */
+  /* la carovana parte DOPO che #221 e la gemella di stampa hanno avuto la scena */
+  /* parto da -1 cosi' la PRIMA card entra da destra: a inizio corteo nessuna
+     e' gia' al centro (era questo a far comparire #250 tra le protagoniste) */
+  /* ATTI 6-7 (.60 - .79): la carovana sfila dentro i suoi atti */
+  const flow=-1+clamp((p-.5)/.16)*(demoCards.length+1);
+  const GAP=7.4;                                    // distanza tra una card e l'altra
+  demoCards.forEach((d,i)=>{
+    const off=i-flow;                               // >0 = ancora a destra, <0 = gia' passata
+    /* la carovana sparisce quando entra il personaggio 3D: niente sovrapposizioni */
+    d.visible = split>.02 && Math.abs(off)<2.2 && p<.667;
+    if(!d.visible)return;
+    const near=Math.max(0,1-Math.abs(off));         // 1 = esattamente al centro
+    /* percorso curvo: entra da destra, passa davanti, esce a sinistra */
+    d.position.set(off*GAP, .3, lp(-3.4,1.6,near));
+    d.scale.setScalar(lp(.001,lp(.55,1.06,near),split));
+    /* stessa rotazione lenta e continua della #221, uguale per tutte.
+       Al centro si allinea al fronte: nessuna piroetta, nessun rimbalzo. */
+    const base=-t*.00034;                       // giro lento condiviso
+    const snap=near*near;                       // 1 solo quando e' proprio al centro
+    let ang=base%(Math.PI*2);
+    if(ang>Math.PI)ang-=Math.PI*2;
+    if(ang<-Math.PI)ang+=Math.PI*2;
+    d.rotation.set(Math.PI/2, 0, ang*(1-snap)); // -> 0 = fronte verso l'osservatore
+    d.traverse(m=>{
+      if(m.material&&'opacity' in m.material){
+        m.material.opacity=Math.min(1,split*1.6)*lp(.15,1,near);
+        m.material.transparent=near<.92;
+        m.material.depthWrite=true;
+      }
+    });
+  });
+  /* la #221 e la gemella di stampa escono a sinistra PRIMA che entri il corteo,
+     poi vengono nascoste del tutto: niente sovrapposizioni con le card che passano */
+  const shift=sm((p-.485)/.022);
+  card.position.x-=shift*13;
+  card.position.z-=shift*2;
+  if(shift>.985) card.visible=false;
+
+  /* ============ LE REFERENCE — ATTO 9 (.75-.833): UN unico quadro, arrivo cinematografico ============ */
+  packGroup.visible = p>.752 && p<.833;
+  if(packGroup.visible){
+    /* fase A (.752-.80): il quadro arriva da lontano ruotando, si allinea frontale
+       fase B (.80-.833): resta fermo e leggermente ondeggia, per lasciarlo guardare */
+    const arrive=sm((p-.752)/.045);              // arrivo
+    const settle=sm((p-.800)/.020);              // si stabilizza
+    /* parte piccolo e ruotato di taglio, arriva grande e dritto davanti a te */
+    packGroup.position.set(0, .9, lp(-9, 1.2, arrive));
+    packGroup.scale.setScalar(lp(.15, 1, arrive));
+    /* rotazione elegante: da 3/4 a frontale, poi micro-ondeggio */
+    packGroup.rotation.y = lp(-1.15, 0, arrive) + (1-settle)*0 + Math.sin(t*.0004)*.04*settle;
+    packGroup.rotation.x = lp(.35, 0, arrive) + Math.sin(t*.0005)*.02*settle;
+    const op=Math.min(1, arrive*1.4);
+    const U=packGroup.userData;
+    U.pic.material.opacity=op;
+    U.rim.material.opacity=op;
+    U.shell.material.opacity=op;
+  }
+
+  /* ============ PERSONAGGIO 3D: scultura -> texture -> animazione ============ */
+  const charIn   = sm((p-.667)/.011);      // entra in scena
+  const charTexOn= sm((p-.690)/.020);      // la texture si applica
+  const charAnim = sm((p-.718)/.016);      // poi parte l'animazione
+  /* personaggio a figura intera: solo atto 8, poi lascia spazio alle reference */
+  charGroup.visible = charIn>.004 && p<.750;
+  if(charGroup.visible){
+    charGroup.rotation.y = t*.00028;
+    if(charSculpt){
+      charSculpt.visible = charTexOn<.98;
+      charSculpt.traverse(o=>{ if(o.isMesh) o.material.opacity=charIn*(1-charTexOn); });
+    }
+    if(charTex){
+      charTex.visible = charTexOn>.02;
+      charTex.traverse(o=>{ if(o.isMesh&&o.material) o.material.opacity=charIn*charTexOn; });
+    }
+    /* --- secondo personaggio #263, stesse fasi --- */
+    if(char2Sculpt){
+      char2Sculpt.visible = charTexOn<.98;
+      char2Sculpt.traverse(o=>{ if(o.isMesh) o.material.opacity=charIn*(1-charTexOn); });
+    }
+    if(char2Tex){
+      char2Tex.visible = charTexOn>.02;
+      char2Tex.traverse(o=>{ if(o.isMesh&&o.material) o.material.opacity=charIn*charTexOn; });
+    }
+    /* i rig si muovono solo quando arriva il loro momento */
+    if(charMixer && charAnim>.02) charMixer.update(dt);
+    if(char2Mixer && charAnim>.02) char2Mixer.update(dt);
+    charBase.material.opacity=charIn*.85;
+    charBase2.material.opacity=charIn*.85;
+    const ringOp=charIn*(.4+.25*Math.sin(t*.0018));
+    charRing.material.opacity=ringOp;
+    charRing2.material.opacity=ringOp;
+
+    /* ---- pannello: spiega cosa vedi e quale file corrisponde ---- */
+    $('#charhud').classList.add('on');
+    if(charAnim>.5){
+      $('#ch-eye').textContent='Animazione';
+      $('#ch-t').textContent='Lo scheletro';
+      $('#ch-p').textContent='Il rig è incluso: il personaggio si muove già. Puoi rifinire i pesi o aggiungere ossa in Blender, gratuito, per un controllo totale.';
+      $('#ch-n').textContent='FBX e GLB con rig · animazione base';
+    } else if(charTexOn>.5){
+      $('#ch-eye').textContent='Texture';
+      $('#ch-t').textContent='Il colore';
+      $('#ch-p').textContent='Le mappe sono applicate sulle UV. Puoi ridipingerle in Blender o in Substance Painter partendo dai file forniti.';
+      $('#ch-n').textContent='GLB texturizzato · mappe separate';
+    } else {
+      $('#ch-eye').textContent='Scultura';
+      $('#ch-t').textContent='La forma';
+      $('#ch-p').textContent='La mesh grezza ad alta densità. È la base da cui parte tutto: la puoi scolpire, ridurre o stampare così com\'è.';
+      $('#ch-n').textContent='OBJ e FBX · mesh chiusa';
+    }
+  } else {
+    $('#charhud').classList.remove('on');
+  }
+
+  /* ============ SIMULAZIONE STAMPA 3D: il pezzo cresce strato dopo strato ============ */
+  /* ATTO 8 (.80 - .90): tutta la sequenza di stampa sta dentro il suo atto,
+     cosi' non si sovrappone piu' al testo finale che parte a .90 */
+  /* ---- STAMPA DEL PERSONAGGIO: DISATTIVATA (non funzionava a dovere) ---- */
+  charPrinter.visible = false;
+
+  /* ATTO 10 (.909 in poi): la stampa della CARD chiude il viaggio */
+  const printIn = sm((p-.835)/.012);         // la stampante entra in scena
+  const build   = clamp((p-.848)/.035);      // 0 -> 1 = pezzo completo
+  const texOn   = sm((p-.890)/.012);         // poi si applica la texture
+  printer.visible = printIn>.004;
+  if(printer.visible){
+    const U=printer.userData;
+    const partH = U.partH || .4;
+    const done  = build>=1;
+
+    /* il piano di taglio sale: sopra non e' ancora stampato */
+    printPlane.constant = build*partH;
+
+    /* struttura della stampante in blueprint */
+    if(U.wireParts) U.wireParts.forEach(w=>{ w.material.opacity=printIn*.55; });
+    bedGrid.material.opacity=printIn*.4;
+    if(U.bedPlate) U.bedPlate.material.opacity=printIn*.75;
+
+    /* grezzo e texturizzato occupano lo STESSO spazio: se restano entrambi
+       visibili le superfici si contendono la profondita' (z-fighting).
+       Quindi si scambiano nettamente, mai insieme. */
+    const showTex = texOn>.5;
+    if(printMesh){
+      printMesh.visible = !showTex;
+      printMesh.material.opacity = printIn;
+    }
+    if(U.wf){
+      U.wf.visible = !showTex;
+      U.wf.material.opacity = printIn*.25;
+    }
+    if(U.printMeshTex){
+      U.printMeshTex.visible = showTex;
+      U.printMeshTex.traverse(o=>{
+        if(o.isMesh&&o.material&&'opacity' in o.material){
+          o.material.opacity = printIn*sm((texOn-.5)/.5);
+        }
+      });
+    }
+
+    /* portale che scorre in profondita' + carrello che va avanti e indietro */
+    const layerY = build*partH;
+    if(U.gantry){
+      U.gantry.position.set(0, layerY+.62, done?0:Math.sin(t*.0021)*(U.BD*.3));
+    }
+    nozzle.position.x = done?0:Math.sin(t*.0067)*(U.BW*.3);
+    if(U.nozBody) U.nozBody.material.opacity=printIn*(done?0:1);
+    if(U.nozGlow) U.nozGlow.material.opacity=printIn*(done?0:.55+.35*Math.sin(t*.012));
+    if(U.spool)   U.spool.material.opacity=printIn*.5;
+    if(U.spool && !done) U.spool.rotation.x += dt*1.4;
+
+    /* alone sullo strato in lavorazione: sparisce a stampa finita,
+       cosi' non resta a tagliare il pezzo texturizzato */
+    if(U.laserLine){
+      U.laserLine.visible = !done;
+      U.laserLine.position.y=layerY;
+      U.laserLine.material.opacity=printIn*(done?0:.35+.2*Math.sin(t*.009));
+    }
+    /* anche ugello e carrello escono di scena quando la stampa e' finita */
+    if(nozzle) nozzle.visible = !done;
+    /* a stampa finita il pezzo si SOLLEVA dal letto e RUOTA su se stesso:
+       cosi' si vedono fronte e retro, entrambi texturizzati */
+    if(done && U.printMeshTex){
+      /* la card si ribalta sul retro e LI' finisce l'esperienza: nessuno scatto dopo */
+      const flip=sm((p-.905)/.075);              // ribaltamento lungo, fino a fine scroll
+      U.printMeshTex.position.y = partH/2 + flip*.35;
+      U.printMeshTex.rotation.set(flip*Math.PI, 0, 0);  // 0 = fronte, 180 = retro
+    }
+    printer.rotation.y = 0;
+
+    /* ---- pannello che spiega cosa sta succedendo, passo per passo ---- */
+    const hud=$('#printhud');
+    hud.classList.add('on');
+    $('#ph-bar').style.width=Math.round(build*100)+'%';
+    if(texOn>.5){
+      $('#ph-eye').textContent='Versione a colori';
+      $('#ph-t').textContent= (p>.905 ? 'Il retro' : 'Il fronte');
+      $('#ph-p').textContent= (p>.905
+        ? 'Sul retro il sigillo Nyfurion con il numero della card. È la seconda texture del file, applicata alla faccia posteriore.'
+        : 'Il file GLB porta con sé le immagini e le coordinate UV. Con una stampa a colori la card esce così. Continua a scorrere per vedere il retro.');
+      $('#ph-n').textContent='88 × 56 × 3,65 mm · card-front + card-back';
+    } else if(done){
+      $('#ph-eye').textContent='Stampa completata';
+      $('#ph-t').textContent='Il pezzo è pronto';
+      $('#ph-p').textContent='Con una stampante normale esce in un colore solo: è la forma esatta del file STL, senza sbavature né supporti da rimuovere.';
+      $('#ph-n').textContent='88 × 56 × 3,65 mm · 2.256 triangoli · mesh chiusa';
+    } else {
+      $('#ph-eye').textContent='Stampa in corso';
+      $('#ph-t').textContent='Strato dopo strato';
+      $('#ph-p').textContent='La card è appoggiata in piano sul letto. L\'ugello deposita il materiale e il pezzo cresce dal basso, senza supporti.';
+      $('#ph-n').textContent='88 × 56 × 3,65 mm · layer 0,12 mm';
+    }
+  } else {
+    $('#printhud').classList.remove('on');
+  }
+
+  /* ---- CARD DI STAMPA (gemella a destra): la mesh REALE dello .stl ---- */
+  /* la gemella di stampa sparisce quando parte il corteo: mai sovrapposta */
+  printCard.visible = split>.01 && shift<.985 && p<.667;
+  if(printCard.userData.solid){
+    printCard.scale.setScalar(lp(.001,1,split));
+    /* esce di scena a sinistra insieme alla #221, prima che entri il corteo */
+    printCard.position.set(2.6*split - shift*11, .35, 1.2 - shift*2);
+    /* lo STL ha lo spessore su Z: gia' in piedi. Stessa rotazione della gemella. */
+    printCard.rotation.set(0, t*.00042, 0);
+    printCard.userData.solid.material.opacity=split*.92;
+    printCard.userData.wire.material.opacity=split*.55;
+  }
+
+  /* reference disattivate: in attesa del personaggio della serie reale */
+  refs.visible=false;
+
+  dust.rotation.y=p*.5;
+
+  /* ============ CAMERA — fasi ESCLUSIVE (niente conflitti/rimbalzi) ============ */
+  const camPos=new THREE.Vector3(), lookAt=new THREE.Vector3();
+
+  /* punti fissi della villa (scala 1 -> non si muovono mai) */
+  const ctr   = VC.clone().add(villaRoot.position);
+  const eyeY  = villaRoot.position.y + EYE;
+  const cardY = villaRoot.position.y + CARDY;
+  /* punto di osservazione fuori sala: deve stare OLTRE le porte (z negativo) */
+  const outerZ= ROOMR*1.55, outerY=ROOMR*0.85;
+
+  if(p < .167){
+    /* --- ATTI 0-1: camminata dritta, attraverso le porte --- */
+    const w=p/.167;
+    const zEnd=ctr.z+outerZ;
+    camPos.set(0, lp(.9,1.4,w), lp(17, zEnd, w));
+    lookAt.set(0, lp(.8,cardY,w), lp(17,zEnd,w) - 12);
+
+  } else if(p < .25){
+    /* --- ATTO 2: BLUEPRINT villa --- */
+    camPos.set(ctr.x, ctr.y+outerY*1.05, ctr.z+outerZ*1.45);
+    lookAt.set(ctr.x, ctr.y+1.0, ctr.z);
+
+  } else if(p < .5){
+    /* --- ATTI 3-5: villa svanisce, si passa alla card --- */
+    const w=sm((p-.25)/.055);
+    const from=new THREE.Vector3(ctr.x, ctr.y+outerY*1.05, ctr.z+outerZ*1.45);
+    const to  =new THREE.Vector3(0, .55, 10.6);
+    camPos.copy(from).lerp(to,w);
+    lookAt.copy(new THREE.Vector3(ctr.x,ctr.y+.6,ctr.z)).lerp(new THREE.Vector3(0,.35,0),w);
+
+  } else if(p < .667){
+    /* --- ATTI 6-7: la carovana di card + il pacchetto reference, camera ferma --- */
+    camPos.set(0, .55, 10.6);
+    lookAt.set(0, .35, 0);
+
+  } else if(p < .75){
+    /* --- ATTO 8: due personaggi 3D a figura intera --- */
+    const w=sm((p-.667)/.018);
+    camPos.set(0, lp(.55,1.0,w), lp(10.6,5.4,w));
+    lookAt.set(0, lp(.35,.78,w), 0);
+
+  } else if(p < .833){
+    /* --- ATTO 9: il quadro unico (5.4x4.05). Su schermi verticali (telefono)
+       la camera arretra cosi' la board intera resta in quadro --- */
+    const w=sm((p-.75)/.014);
+    const portrait=innerHeight/innerWidth;                 // >1 su telefono
+    const far=lp(7.6, 12.5, clamp((portrait-0.75)/0.9));   // piu' stretto = piu' lontano
+    camPos.set(0, lp(1.0,.9,w), lp(5.4,far,w));
+    lookAt.set(0, lp(.78,.9,w), 0);
+
+  } else {
+    /* --- ATTI 10-11: stampa della CARD, poi la card si ribalta sul retro
+       e la camera resta FERMA lassu' fino a fine scroll: nessuno scatto --- */
+    const w=sm((p-.835)/.014);                 // entro sulla stampa
+    const z=sm((p-.895)/.020);                 // salgo sopra per vedere la card distesa
+    camPos.set(lp(0,4.6,w)*(1-z), lp(.55,4.4,w)+z*3.4, lp(3.4,9.4,w)-z*5.6);
+    lookAt.set(0, lp(.35,2.4,w)*(1-z), 0);
+  }
+
+  C.position.copy(camPos); C.lookAt(lookAt);
+  key.target.position.copy(lookAt);
+
+  R.render(S,C);
+}
+requestAnimationFrame(frame);
+addEventListener('resize',()=>{C.aspect=innerWidth/innerHeight;C.updateProjectionMatrix();R.setSize(innerWidth,innerHeight);});
+})();
+
+/* ============ AUDIO DI SOTTOFONDO (file MP3, volume basso) ============ */
+(()=>{
+  const audio=document.getElementById('bg-audio');
+  const btn=document.getElementById('audio-btn');
+  const ico=document.getElementById('audio-ico');
+  const VOL=0.18;                       // volume basso, di sottofondo
+  let playing=false, fade=null;
+  audio.volume=0;
+
+  function fadeTo(target,ms){
+    clearInterval(fade);
+    const step=(target-audio.volume)/(ms/50);
+    fade=setInterval(()=>{
+      let v=audio.volume+step;
+      if((step>0&&v>=target)||(step<0&&v<=target)){ v=target; clearInterval(fade); }
+      audio.volume=Math.max(0,Math.min(1,v));
+      if(v<=0 && target===0) audio.pause();
+    },50);
+  }
+  function play(){
+    audio.play().then(()=>{ fadeTo(VOL,1800); playing=true;
+      btn.classList.add('playing'); ico.textContent='♪'; }).catch(()=>{});
+  }
+  function pause(){ fadeTo(0,900); playing=false; btn.classList.remove('playing'); ico.textContent='♫'; }
+  btn.addEventListener('click',()=>{ playing?pause():play(); });
+})();
+
+</script>
+</body>
+</html>
