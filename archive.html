@@ -1183,11 +1183,13 @@
     let showcaseChar = null;               // personaggio sulla pedana gemella (ruota lentamente)
     let thirdPerson = true;                // vista di default: 3a persona col personaggio visibile
     let playerChar = null, playerMixer = null, playerIdleAction = null, playerWalkAction = null, walkWeight = 0;
-    const PLAYER_CHAR_ROT_OFFSET = 0;      // correzione se il modello riggato guarda dal lato sbagliato
+    const PLAYER_CHAR_ROT_OFFSET = Math.PI;  // di spalle: fronte del rig opposto alla convenzione camera
     const rayH = new THREE.Raycaster();
     const rayV = new THREE.Raycaster();
+    const rayCam = new THREE.Raycaster();  // anti-clip: tira la camera in 3a persona prima di un muro
     const DOWN = new THREE.Vector3(0, -1, 0);
     const _tmp = new THREE.Vector3();
+    const _tmpDir = new THREE.Vector3();
 
     const IS_TOUCH = window.matchMedia('(pointer: coarse)').matches;
     const HINT_FREE = IS_TOUCH
@@ -2994,14 +2996,22 @@
       }
 
       if (thirdPerson) {
-        // camera in orbita PURA dietro al personaggio, stesso yaw/pitch dello sguardo:
-        // il bersaglio dell'orbita e' sempre il personaggio, mai angoli degeneri
+        // camera in orbita PURA attorno al personaggio, stesso yaw/pitch dello sguardo:
+        // vettore unitario, cosi' la stessa direzione serve sia per il raggio anti-muro
+        // che per il posizionamento — nessun angolo degenere, nessuna incoerenza
         const dist = 3.9;
         const lookY = feet.y + EYE * 0.9;
-        const camX = feet.x + Math.sin(yaw) * Math.cos(pitch) * dist;
-        const camZ = feet.z + Math.cos(yaw) * Math.cos(pitch) * dist;
-        const camY = lookY - Math.sin(pitch) * dist;
-        camera.position.set(camX, camY, camZ);
+        const dirX = Math.sin(yaw) * Math.cos(pitch);
+        const dirZ = Math.cos(yaw) * Math.cos(pitch);
+        const dirY = -Math.sin(pitch);
+        let actualDist = dist;
+        if (colliders.length) {
+          rayCam.set(_tmp.set(feet.x, lookY, feet.z), _tmpDir.set(dirX, dirY, dirZ));
+          rayCam.far = dist;
+          const hits = rayCam.intersectObjects(colliders, false);
+          if (hits.length) actualDist = Math.max(0.5, hits[0].distance - 0.3);
+        }
+        camera.position.set(feet.x + dirX * actualDist, lookY + dirY * actualDist, feet.z + dirZ * actualDist);
         camera.lookAt(feet.x, lookY, feet.z);
       } else {
         // NESSUNA oscillazione: camera perfettamente stabile, da gioco competitivo
