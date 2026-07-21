@@ -2156,10 +2156,10 @@
           casePt.position.set(cx, topY + 0.15, cz); scene.add(casePt); // luce d'oro dal fondo teca
         })();
 
-        // ── TECA DEL PERSONAGGIO (SPENTA: la pedana resta libera, il personaggio
-        //    verrà posato direttamente quando Riccardo manda il modello) ──
+        // ── TECA DEL PERSONAGGIO — pedana opposta alla card, stessa vetrina museale.
+        //    Se il token ha un token-XXX/model.glb su R2 lo mostra; altrimenti resta
+        //    il cartello "COMING SOON" (nessuna modifica per gli altri token). ──
         (function characterOnDais() {
-          return;
           if (daisTops.length < 2) return;
           let bz = 1e9, best = null;
           daisTops.forEach((d) => {
@@ -2192,6 +2192,29 @@
             new THREE.MeshBasicMaterial({ map: pt2, side: THREE.DoubleSide }));
           pl2.position.set(best.x, best.top + CH2 + 0.35, best.z + 0.2);
           scene.add(pl2);
+
+          // modello reale del personaggio, se questo token ne ha uno caricato
+          const modelKey = 'token-' + String(tokenId).padStart(3, '0') + '/model.glb';
+          fetchFileUrl(tokenId, modelKey).then((u) => fetch(u)).then((r) => r.arrayBuffer()).then((buf) => {
+            new THREE.GLTFLoader().parse(buf, '', (g) => {
+              const real = g.scene;
+              const box = new THREE.Box3();
+              real.traverse((n) => {
+                if (!n.isMesh || !n.geometry) return;
+                n.geometry.computeBoundingBox();
+                box.union(n.geometry.boundingBox.clone().applyMatrix4(n.matrixWorld));
+              });
+              const rawH = box.max.y - box.min.y;
+              const targetH = Math.min(CH2 - 0.15, 1.78);      // stessa altezza umana, margine nella teca
+              const s = rawH > 0 ? targetH / rawH : 1;
+              const grp = new THREE.Group();
+              grp.add(real);
+              grp.scale.setScalar(s);
+              grp.position.set(best.x, best.top + 0.02 - box.min.y * s, best.z);
+              scene.add(grp);
+              scene.remove(pl2);       // via il cartello "coming soon"
+            }, () => {});
+          }).catch(() => { /* nessun modello per questo token: resta il cartello */ });
         })();
 
         // licenza e lore sulle targhe d'onore
