@@ -2156,41 +2156,41 @@
           casePt.position.set(cx, topY + 0.15, cz); scene.add(casePt); // luce d'oro dal fondo teca
         })();
 
-        // ── TECA DEL PERSONAGGIO — pedana opposta alla card, stessa vetrina museale.
-        //    Se il token ha un token-XXX/model.glb su R2 lo mostra; altrimenti resta
-        //    il cartello "COMING SOON" (nessuna modifica per gli altri token). ──
+        // ── IL PERSONAGGIO — sulla pedana GEMELLA di quella della card (la più
+        //    vicina, non la più lontana nell'intera villa), a cielo aperto senza
+        //    teca. Se il token ha un token-XXX/model.glb su R2 lo mostra; altrimenti
+        //    resta il cartello "COMING SOON" (nessuna modifica per gli altri token). ──
         (function characterOnDais() {
           if (daisTops.length < 2) return;
-          let bz = 1e9, best = null;
+          // la pedana della card: la stessa logica di cardShowcase (la piu' a sud)
+          let cardDais = null, bz = -1e9;
           daisTops.forEach((d) => {
             const b = new THREE.Box3().setFromObject(d);
             const c = b.getCenter(new THREE.Vector3());
-            if (c.z < bz) { bz = c.z; best = { x: c.x, z: c.z, top: b.max.y, w: Math.min(b.max.x - b.min.x, b.max.z - b.min.z) }; }
+            if (c.z > bz) { bz = c.z; cardDais = { x: c.x, z: c.z }; }
           });
-          const side = Math.max(0.8, best.w * 0.92);
-          const CH2 = 1.9;
-          const gm2 = new THREE.MeshStandardMaterial({
-            color: 0xdcecf5, transparent: true, opacity: 0.09, roughness: 0.03,
-            metalness: 0.08, envMapIntensity: 1.7, side: THREE.DoubleSide, depthWrite: false,
+          // la pedana LIBERA piu' vicina a quella della card (non la piu' lontana in assoluto)
+          let best = null, bd = 1e9;
+          daisTops.forEach((d) => {
+            const b = new THREE.Box3().setFromObject(d);
+            const c = b.getCenter(new THREE.Vector3());
+            const dist = Math.hypot(c.x - cardDais.x, c.z - cardDais.z);
+            if (dist < 0.05) return; // e' la pedana della card stessa, salta
+            if (dist < bd) { bd = dist; best = { x: c.x, z: c.z, top: b.max.y }; }
           });
-          const cc = new THREE.Mesh(new THREE.BoxGeometry(side, CH2, side), gm2);
-          cc.position.set(best.x, best.top + 0.02 + CH2 / 2, best.z); scene.add(cc); colliders.push(cc);
-          const hs = side / 2;
-          [[-hs, -hs], [-hs, hs], [hs, -hs], [hs, hs]].forEach(([ex, ez]) => {
-            const e2 = new THREE.Mesh(new THREE.BoxGeometry(0.035, CH2, 0.035), gold);
-            e2.position.set(best.x + ex, best.top + 0.02 + CH2 / 2, best.z + ez); scene.add(e2);
-          });
-          const lid2 = new THREE.Mesh(new THREE.BoxGeometry(side + 0.08, 0.05, side + 0.08), gold);
-          lid2.position.set(best.x, best.top + CH2 + 0.06, best.z); scene.add(lid2);
-          const sp2 = new THREE.SpotLight(0xffdcae, 2.6, 8, 0.5, 0.55, 1.2);
-          sp2.position.set(best.x, best.top + CH2 + 1.2, best.z);
-          sp2.target.position.set(best.x, best.top + 0.6, best.z);
+          if (!best) return;
+          // guarda verso la card
+          const facing = Math.atan2(cardDais.x - best.x, cardDais.z - best.z);
+
+          const sp2 = new THREE.SpotLight(0xffdcae, 2.8, 9, 0.55, 0.5, 1.2);
+          sp2.position.set(best.x, best.top + 3.2, best.z);
+          sp2.target.position.set(best.x, best.top + 0.9, best.z);
           scene.add(sp2); scene.add(sp2.target);
           const pt2 = plateTexture('CHARACTER · COMING SOON');
           pt2.flipY = true;
           const pl2 = new THREE.Mesh(new THREE.PlaneGeometry(1.1, 0.24),
             new THREE.MeshBasicMaterial({ map: pt2, side: THREE.DoubleSide }));
-          pl2.position.set(best.x, best.top + CH2 + 0.35, best.z + 0.2);
+          pl2.position.set(best.x, best.top + 2.1, best.z + 0.2);
           scene.add(pl2);
 
           // modello reale del personaggio, se questo token ne ha uno caricato
@@ -2205,11 +2205,12 @@
                 box.union(n.geometry.boundingBox.clone().applyMatrix4(n.matrixWorld));
               });
               const rawH = box.max.y - box.min.y;
-              const targetH = Math.min(CH2 - 0.15, 1.78);      // stessa altezza umana, margine nella teca
+              const targetH = 1.95;                    // presenza forte accanto alla card, niente teca a limitarlo
               const s = rawH > 0 ? targetH / rawH : 1;
               const grp = new THREE.Group();
               grp.add(real);
               grp.scale.setScalar(s);
+              grp.rotation.y = facing;
               grp.position.set(best.x, best.top + 0.02 - box.min.y * s, best.z);
               scene.add(grp);
               scene.remove(pl2);       // via il cartello "coming soon"
