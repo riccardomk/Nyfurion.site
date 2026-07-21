@@ -2788,7 +2788,11 @@
       if (!renderer) return;
       keys[e.code] = true;
       if (e.code.startsWith('Arrow')) e.preventDefault();
-      if (e.code === 'KeyV') thirdPerson = !thirdPerson;
+      if (e.code === 'KeyV') {
+        thirdPerson = !thirdPerson;
+        hintEl.textContent = thirdPerson ? 'VISTA: 3ª PERSONA' : 'VISTA: 1ª PERSONA';
+        setTimeout(() => { hintEl.textContent = isLocked() ? HINT_LOCKED : HINT_FREE; }, 1200);
+      }
     }
     function onKeyUp(e) { keys[e.code] = false; }
 
