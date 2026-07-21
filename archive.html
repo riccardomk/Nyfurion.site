@@ -1180,6 +1180,7 @@
     const PLAYER_R = 0.34;                 // raggio del corpo per le collisioni
     const feet = new THREE.Vector3();      // posizione a terra del giocatore (fonte di verità)
     let showcaseCard = null;               // card in vetrina (ruota lentamente)
+    let showcaseChar = null;               // personaggio sulla pedana gemella (ruota lentamente)
     const rayH = new THREE.Raycaster();
     const rayV = new THREE.Raycaster();
     const DOWN = new THREE.Vector3(0, -1, 0);
@@ -2205,14 +2206,15 @@
                 box.union(n.geometry.boundingBox.clone().applyMatrix4(n.matrixWorld));
               });
               const rawH = box.max.y - box.min.y;
-              const targetH = 1.95;                    // presenza forte accanto alla card, niente teca a limitarlo
+              const targetH = 2.3;                     // grande, imponente, ben visibile accanto alla card
               const s = rawH > 0 ? targetH / rawH : 1;
               const grp = new THREE.Group();
               grp.add(real);
               grp.scale.setScalar(s);
-              grp.rotation.y = facing;
+              grp.rotation.y = facing + Math.PI / 2;   // il mesh ha il fronte ruotato di 90 gradi
               grp.position.set(best.x, best.top + 0.02 - box.min.y * s, best.z);
               scene.add(grp);
+              showcaseChar = grp;      // gira lentamente come la card, nel loop principale
               scene.remove(pl2);       // via il cartello "coming soon"
             }, () => {});
           }).catch(() => { /* nessun modello per questo token: resta il cartello */ });
@@ -2865,6 +2867,10 @@
           // 1.5cm di zona morta: le micro-quote non muovono MAI la camera
           if (Math.abs(dyv) > 0.015) feet.y += dyv * Math.min(1, dt * 7);
         }
+      }
+
+      if (showcaseChar) {
+        showcaseChar.rotation.y += dt * 0.5;                   // il personaggio gira, come la card
       }
 
       if (showcaseCard) {
