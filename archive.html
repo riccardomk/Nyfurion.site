@@ -2994,14 +2994,15 @@
       }
 
       if (thirdPerson) {
-        // camera in orbita dietro al personaggio: stessa logica di sguardo (yaw/pitch),
-        // nessuna oscillazione, nessuna modifica al movimento/collisioni di feet
-        const dist = 3.4, height = 1.55;
+        // camera in orbita PURA dietro al personaggio, stesso yaw/pitch dello sguardo:
+        // il bersaglio dell'orbita e' sempre il personaggio, mai angoli degeneri
+        const dist = 3.9;
+        const lookY = feet.y + EYE * 0.9;
         const camX = feet.x + Math.sin(yaw) * Math.cos(pitch) * dist;
         const camZ = feet.z + Math.cos(yaw) * Math.cos(pitch) * dist;
-        const camY = feet.y + height + Math.sin(-pitch) * dist * 0.55;
+        const camY = lookY - Math.sin(pitch) * dist;
         camera.position.set(camX, camY, camZ);
-        camera.lookAt(feet.x, feet.y + EYE * 0.92, feet.z);
+        camera.lookAt(feet.x, lookY, feet.z);
       } else {
         // NESSUNA oscillazione: camera perfettamente stabile, da gioco competitivo
         camera.position.set(feet.x, feet.y + EYE, feet.z);
