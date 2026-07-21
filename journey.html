@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -286,19 +286,14 @@ p{color:#d2cfc8;font-size:1.02rem;line-height:1.7;max-width:41ch;margin:0 0 14px
 <script src="vendor-three-0.147.min.js"></script>
 <script src="vendor-GLTFLoader-0.147.js"></script>
 <script>
-/* ============ JOURNEY i18n — traduzione AUTOMATICA in base alla zona: default EN, IT solo per utenti italiani (lingua o fuso orario). Nessun bottone. ============ */
-window.JLANG = (function(){
-  try{
-    var forced = (location.search.match(/[?&]lang=(it|en)/i)||[])[1];
-    if(forced) return forced.toLowerCase();
-    var langs = navigator.languages || [navigator.language || navigator.userLanguage || 'en'];
-    for(var i=0;i<langs.length;i++){ if((langs[i]||'').toLowerCase().indexOf('it')===0) return 'it'; }
-    var tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '');
-    if(tz === 'Europe/Rome') return 'it';
-  }catch(e){}
-  return 'en';
-})();
-document.documentElement.lang = window.JLANG;
+/* ============ JOURNEY i18n — la lingua ORIGINALE/sorgente della pagina è sempre INGLESE, fissa, mai riscritta da JS.
+   La traduzione per zona/lingua del visitatore la fa il traduttore nativo del browser (Edge/Chrome la propone
+   automaticamente quando la lingua del sistema è diversa da quella dichiarata dalla pagina) — nessun bottone,
+   nessun dizionario che sovrascrive il DOM. window.JLANG resta 'en' cosi' JDICT (usato solo per gli HUD dinamici
+   di stampa/personaggio, che si aggiornano via JS e quindi non farebbero rilevare la lingua al browser) resta
+   coerente con l'inglese sorgente. ============ */
+window.JLANG = 'en';
+document.documentElement.lang = 'en';
 window.JDICT = {
  en:{
   loading:`Loading `, hint:`Scroll to enter ▾`, audio:`Sound`,
