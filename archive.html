@@ -3008,14 +3008,17 @@
       }
 
       if (thirdPerson) {
-        // camera in orbita PURA attorno al personaggio, stesso yaw/pitch dello sguardo:
-        // vettore unitario, cosi' la stessa direzione serve sia per il raggio anti-muro
-        // che per il posizionamento — nessun angolo degenere, nessuna incoerenza
+        // camera in orbita attorno al personaggio. L'escursione verticale e' SMORZATA
+        // e limitata: un'orbita sferica piena spinge la camera troppo in alto quando
+        // guardi in basso, e in stanze con soffitti/travi bassi il raggio anti-muro
+        // la tira vicinissima al personaggio, facendolo sparire.
         const dist = 3.9;
         const lookY = feet.y + EYE * 0.9;
-        const dirX = Math.sin(yaw) * Math.cos(pitch);
-        const dirZ = Math.cos(yaw) * Math.cos(pitch);
-        const dirY = -Math.sin(pitch);
+        const rawX = Math.sin(yaw) * Math.cos(pitch);
+        const rawZ = Math.cos(yaw) * Math.cos(pitch);
+        const rawY = Math.max(-0.28, Math.min(0.34, -Math.sin(pitch) * 0.6));
+        const dirLen = Math.hypot(rawX, rawY, rawZ) || 1;
+        const dirX = rawX / dirLen, dirY = rawY / dirLen, dirZ = rawZ / dirLen; // vettore unitario coerente
         let actualDist = dist;
         if (colliders.length) {
           rayCam.set(_tmp.set(feet.x, lookY, feet.z), _tmpDir.set(dirX, dirY, dirZ));
