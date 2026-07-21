@@ -1181,6 +1181,9 @@
     const feet = new THREE.Vector3();      // posizione a terra del giocatore (fonte di verità)
     let showcaseCard = null;               // card in vetrina (ruota lentamente)
     let showcaseChar = null;               // personaggio sulla pedana gemella (ruota lentamente)
+    let thirdPerson = true;                // vista di default: 3a persona col personaggio visibile
+    let playerChar = null, playerMixer = null, playerIdleAction = null, playerWalkAction = null, walkWeight = 0;
+    const PLAYER_CHAR_ROT_OFFSET = 0;      // correzione se il modello riggato guarda dal lato sbagliato
     const rayH = new THREE.Raycaster();
     const rayV = new THREE.Raycaster();
     const DOWN = new THREE.Vector3(0, -1, 0);
@@ -1190,7 +1193,7 @@
     const HINT_FREE = IS_TOUCH
       ? 'Trascina per guardare · tocca un’opera per scaricarla'
       : 'Click nella villa per i comandi · WASD muoviti · il museo è oltre il colonnato, a destra';
-    const HINT_LOCKED = 'WASD muoviti · Shift corri · mouse guarda · click su un’opera per scaricarla · ESC libera il mouse';
+    const HINT_LOCKED = 'WASD muoviti · Shift corri · mouse guarda · V cambia vista · click su un’opera per scaricarla · ESC libera il mouse';
 
     roomBtn.addEventListener('click', () => {
       const archive = window.__vaultArchive;
@@ -1431,7 +1434,9 @@
       hintEl.textContent = 'Apertura della Villa Prime…';
       yaw = 0; pitch = 0; exhibits = []; colliders = []; walkables = []; hovered = null;
       vel.x = 0; vel.z = 0; lastFrameT = 0;
-      showcaseCard = null;
+      showcaseCard = null; showcaseChar = null;
+      playerChar = null; playerMixer = null; playerIdleAction = null; playerWalkAction = null; walkWeight = 0;
+      thirdPerson = true;
       for (const k in keys) delete keys[k];
 
       renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -2220,6 +2225,48 @@
           }).catch(() => { /* nessun modello per questo token: resta il cartello */ });
         })();
 
+        // ── PERSONAGGIO GIOCABILE — se il token ha un token-XXX/ref-rig-anim.glb
+        //    su R2, diventa l'avatar che il possessore controlla con WASD (3a/1a persona,
+        //    tasto V per cambiare). Non esiste ancora per la maggior parte dei token:
+        //    in quel caso restiamo semplicemente in prima persona come prima. ──
+        (function playerCharacter() {
+          const rigKey = 'token-' + String(tokenId).padStart(3, '0') + '/ref-rig-anim.glb';
+          fetchFileUrl(tokenId, rigKey).then((u) => fetch(u)).then((r) => r.arrayBuffer()).then((buf) => {
+            new THREE.GLTFLoader().parse(buf, '', (g) => {
+              const real = g.scene;
+              const box = new THREE.Box3();
+              real.traverse((n) => {
+                if (!n.isMesh || !n.geometry) return;
+                n.geometry.computeBoundingBox();
+                box.union(n.geometry.boundingBox.clone().applyMatrix4(n.matrixWorld));
+              });
+              const rawH = box.max.y - box.min.y;
+              const targetH = 1.8;                     // altezza umana, coerente con EYE
+              const s = rawH > 0 ? targetH / rawH : 1;
+              const grp = new THREE.Group();
+              grp.add(real);
+              grp.scale.setScalar(s);
+              grp.position.set(feet.x, feet.y - box.min.y * s, feet.z);
+              grp.visible = thirdPerson;
+              scene.add(grp);
+              playerChar = grp;
+
+              if (g.animations && g.animations.length) {
+                playerMixer = new THREE.AnimationMixer(real);
+                const idleClip = g.animations.find((a) => a.name === 'idle') || g.animations[0];
+                const walkClip = g.animations.find((a) => a.name === 'walking') || g.animations[1];
+                playerIdleAction = playerMixer.clipAction(idleClip);
+                playerIdleAction.play();
+                if (walkClip) {
+                  playerWalkAction = playerMixer.clipAction(walkClip);
+                  playerWalkAction.play();
+                  playerWalkAction.setEffectiveWeight(0);
+                }
+              }
+            }, () => {});
+          }).catch(() => { /* nessun personaggio riggato per questo token: solo 1a persona */ });
+        })();
+
         // licenza e lore sulle targhe d'onore
         plaqueSlots.forEach((p, i) => {
           const f = docs[i];
@@ -2741,6 +2788,7 @@
       if (!renderer) return;
       keys[e.code] = true;
       if (e.code.startsWith('Arrow')) e.preventDefault();
+      if (e.code === 'KeyV') thirdPerson = !thirdPerson;
     }
     function onKeyUp(e) { keys[e.code] = false; }
 
@@ -2925,11 +2973,38 @@
         dp.needsUpdate = true;
       }
 
-      // NESSUNA oscillazione: camera perfettamente stabile, da gioco competitivo
-      camera.position.set(feet.x, feet.y + EYE, feet.z);
-      camera.rotation.y = yaw;
-      camera.rotation.x = pitch;
-      camera.rotation.z = 0;
+      // il personaggio giocabile segue i piedi, gira verso dove guardi, cammina/riposa
+      if (playerChar) {
+        playerChar.position.x = feet.x;
+        playerChar.position.z = feet.z;
+        playerChar.rotation.y = yaw + PLAYER_CHAR_ROT_OFFSET;
+        playerChar.visible = thirdPerson;
+      }
+      if (playerMixer) {
+        const moving = (f !== 0 || s !== 0);
+        const targetW = moving ? 1 : 0;
+        walkWeight += (targetW - walkWeight) * Math.min(1, dt * 8);
+        if (playerWalkAction) playerWalkAction.setEffectiveWeight(walkWeight);
+        if (playerIdleAction) playerIdleAction.setEffectiveWeight(1 - walkWeight);
+        playerMixer.update(dt);
+      }
+
+      if (thirdPerson) {
+        // camera in orbita dietro al personaggio: stessa logica di sguardo (yaw/pitch),
+        // nessuna oscillazione, nessuna modifica al movimento/collisioni di feet
+        const dist = 3.4, height = 1.55;
+        const camX = feet.x + Math.sin(yaw) * Math.cos(pitch) * dist;
+        const camZ = feet.z + Math.cos(yaw) * Math.cos(pitch) * dist;
+        const camY = feet.y + height + Math.sin(-pitch) * dist * 0.55;
+        camera.position.set(camX, camY, camZ);
+        camera.lookAt(feet.x, feet.y + EYE * 0.92, feet.z);
+      } else {
+        // NESSUNA oscillazione: camera perfettamente stabile, da gioco competitivo
+        camera.position.set(feet.x, feet.y + EYE, feet.z);
+        camera.rotation.y = yaw;
+        camera.rotation.x = pitch;
+        camera.rotation.z = 0;
+      }
 
       if (isLocked()) setHover(pickCenter());
       renderer.render(scene, camera);
