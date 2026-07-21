@@ -1183,6 +1183,7 @@
     let showcaseChar = null;               // personaggio sulla pedana gemella (ruota lentamente)
     let thirdPerson = true;                // vista di default: 3a persona col personaggio visibile
     let playerChar = null, playerMixer = null, playerIdleAction = null, playerWalkAction = null, walkWeight = 0;
+    let charFacing = 0;                    // direzione del personaggio: SOLO dal movimento (WASD), mai dal mouse/camera
     const PLAYER_CHAR_ROT_OFFSET = Math.PI;  // di spalle: fronte del rig opposto alla convenzione camera
     const rayH = new THREE.Raycaster();
     const rayV = new THREE.Raycaster();
@@ -1438,6 +1439,7 @@
       vel.x = 0; vel.z = 0; lastFrameT = 0;
       showcaseCard = null; showcaseChar = null;
       playerChar = null; playerMixer = null; playerIdleAction = null; playerWalkAction = null; walkWeight = 0;
+      charFacing = 0;
       thirdPerson = true;
       for (const k in keys) delete keys[k];
 
@@ -2248,7 +2250,8 @@
               const grp = new THREE.Group();
               grp.add(real);
               grp.scale.setScalar(s);
-              grp.position.set(feet.x, feet.y - box.min.y * s, feet.z);
+              grp.userData.footOffset = box.min.y * s;   // per riagganciare i piedi al pavimento reale ogni frame
+              grp.position.set(feet.x, feet.y - grp.userData.footOffset, feet.z);
               grp.visible = thirdPerson;
               scene.add(grp);
               playerChar = grp;
@@ -2979,15 +2982,24 @@
         dp.needsUpdate = true;
       }
 
-      // il personaggio giocabile segue i piedi, gira verso dove guardi, cammina/riposa
+      // il personaggio giocabile: segue i piedi (anche in verticale, sul pavimento vero),
+      // gira SOLO quando cammina davvero (mai per il solo movimento del mouse), cammina/riposa
+      const moving = (f !== 0 || s !== 0);
       if (playerChar) {
         playerChar.position.x = feet.x;
         playerChar.position.z = feet.z;
-        playerChar.rotation.y = yaw + PLAYER_CHAR_ROT_OFFSET;
+        playerChar.position.y = feet.y - (playerChar.userData.footOffset || 0);
+        if (moving && (Math.abs(vel.x) > 0.05 || Math.abs(vel.z) > 0.05)) {
+          const targetFacing = Math.atan2(-vel.x, -vel.z);
+          let diff = targetFacing - charFacing;
+          while (diff > Math.PI) diff -= Math.PI * 2;
+          while (diff < -Math.PI) diff += Math.PI * 2;
+          charFacing += diff * Math.min(1, dt * 10);
+        }
+        playerChar.rotation.y = charFacing + PLAYER_CHAR_ROT_OFFSET;
         playerChar.visible = thirdPerson;
       }
       if (playerMixer) {
-        const moving = (f !== 0 || s !== 0);
         const targetW = moving ? 1 : 0;
         walkWeight += (targetW - walkWeight) * Math.min(1, dt * 8);
         if (playerWalkAction) playerWalkAction.setEffectiveWeight(walkWeight);
