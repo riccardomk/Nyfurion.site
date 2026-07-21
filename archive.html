@@ -1171,7 +1171,7 @@
     const roomBtn  = document.getElementById('btn-room');
 
     let renderer = null, scene, camera, raf = null;
-    let exhibits = [], colliders = [], walkables = [], hovered = null;
+    let exhibits = [], colliders = [], walkables = [], camColliders = [], hovered = null;
     let yaw = 0, pitch = 0, dragging = false, lastX = 0, lastY = 0, downX = 0, downY = 0;
     let lastFrameT = 0;
     const keys = {};
@@ -1435,7 +1435,7 @@
       overlay.style.display = 'block';
       tokenEl.textContent = '#' + tokenId;
       hintEl.textContent = 'Apertura della Villa Prime…';
-      yaw = 0; pitch = 0; exhibits = []; colliders = []; walkables = []; hovered = null;
+      yaw = 0; pitch = 0; exhibits = []; colliders = []; walkables = []; camColliders = []; hovered = null;
       vel.x = 0; vel.z = 0; lastFrameT = 0;
       showcaseCard = null; showcaseChar = null;
       playerChar = null; playerMixer = null; playerIdleAction = null; playerWalkAction = null; walkWeight = 0;
@@ -2714,6 +2714,11 @@
 
         // (nessuna barriera: terrazza e galleria sono liberamente calpestabili)
 
+        // colliders SOLO verticali (muri, colonne) per la camera in 3a persona:
+        // il pavimento e le pedane sono troppo vicini in verticale e facevano
+        // scattare il tiro-in-avanti anti-muro anche solo inclinando lo sguardo
+        camColliders = colliders.filter((c) => !walkables.includes(c));
+
         scene.add(villa);
         hintEl.textContent = HINT_FREE;
       };
@@ -3020,11 +3025,11 @@
         const dirLen = Math.hypot(rawX, rawY, rawZ) || 1;
         const dirX = rawX / dirLen, dirY = rawY / dirLen, dirZ = rawZ / dirLen; // vettore unitario coerente
         let actualDist = dist;
-        if (colliders.length) {
+        if (camColliders.length) {
           rayCam.set(_tmp.set(feet.x, lookY, feet.z), _tmpDir.set(dirX, dirY, dirZ));
           rayCam.far = dist;
-          const hits = rayCam.intersectObjects(colliders, false);
-          if (hits.length) actualDist = Math.max(1.5, hits[0].distance - 0.3);
+          const hits = rayCam.intersectObjects(camColliders, false);
+          if (hits.length) actualDist = Math.min(actualDist, Math.max(0.6, hits[0].distance - 0.25));
         }
         camera.position.set(feet.x + dirX * actualDist, lookY + dirY * actualDist, feet.z + dirZ * actualDist);
         camera.lookAt(feet.x, lookY, feet.z);
@@ -3054,7 +3059,7 @@
       document.removeEventListener('keyup', onKeyUp);
       window.removeEventListener('resize', onResize);
       renderer.domElement.remove(); renderer.dispose(); renderer = null;
-      scene = null; exhibits = []; colliders = []; walkables = []; hovered = null; showcaseCard = null;
+      scene = null; exhibits = []; colliders = []; walkables = []; camColliders = []; hovered = null; showcaseCard = null;
       window.__villaDust = null;
       window.__villaWaterTex = null;
       window.__villaRipple = null;
