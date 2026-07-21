@@ -3024,7 +3024,7 @@
           rayCam.set(_tmp.set(feet.x, lookY, feet.z), _tmpDir.set(dirX, dirY, dirZ));
           rayCam.far = dist;
           const hits = rayCam.intersectObjects(colliders, false);
-          if (hits.length) actualDist = Math.max(0.5, hits[0].distance - 0.3);
+          if (hits.length) actualDist = Math.max(1.5, hits[0].distance - 0.3);
         }
         camera.position.set(feet.x + dirX * actualDist, lookY + dirY * actualDist, feet.z + dirZ * actualDist);
         camera.lookAt(feet.x, lookY, feet.z);
