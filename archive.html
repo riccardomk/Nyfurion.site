@@ -3015,11 +3015,16 @@
       }
 
       if (thirdPerson) {
-        // camera in orbita attorno al personaggio. L'escursione verticale e' SMORZATA
-        // e limitata: un'orbita sferica piena spinge la camera troppo in alto quando
-        // guardi in basso, e in stanze con soffitti/travi bassi il raggio anti-muro
-        // la tira vicinissima al personaggio, facendolo sparire.
-        const dist = 3.9;
+        // camera in orbita attorno al personaggio. La distanza si ADATTA al FOV
+        // verticale REALE della camera in questo momento: il FOV orizzontale e'
+        // fisso a 70 gradi (vedi setFov), quindi su schermi larghi/fullscreen il
+        // FOV verticale si restringe parecchio — con un FOV stretto (tipo teleobiettivo)
+        // serve PIU' distanza per inquadrare tutto il personaggio, non meno.
+        // Una distanza fissa andava bene solo per l'aspect ratio con cui era stata
+        // provata: ecco perche' spariva solo a schermo intero.
+        const halfVFOV = camera.fov * Math.PI / 360;
+        const H_REQ = 1.55;  // meta' altezza da tenere sempre visibile attorno al personaggio
+        const dist = Math.max(2.4, Math.min(6.5, H_REQ / Math.tan(halfVFOV)));
         const lookY = feet.y + EYE * 0.9;
         const rawX = Math.sin(yaw) * Math.cos(pitch);
         const rawZ = Math.cos(yaw) * Math.cos(pitch);
