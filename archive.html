@@ -3055,6 +3055,20 @@
         }
         camera.position.set(feet.x + dirX * actualDist, lookY + dirY * actualDist, feet.z + dirZ * actualDist);
         camera.lookAt(feet.x, lookY, feet.z);
+
+        // PANNELLO DEBUG TEMPORANEO: numeri reali invece di teorie
+        if (!window.__dbgEl) {
+          window.__dbgEl = document.createElement('div');
+          window.__dbgEl.style.cssText = 'position:fixed;top:70px;left:10px;z-index:99999;background:rgba(0,0,0,.75);color:#0f0;font:12px monospace;padding:8px 10px;border-radius:6px;white-space:pre;pointer-events:none;';
+          document.body.appendChild(window.__dbgEl);
+        }
+        window.__dbgEl.textContent =
+          'schermo: ' + window.innerWidth + 'x' + window.innerHeight + ' (aspect ' + (window.innerWidth/window.innerHeight).toFixed(2) + ')\n' +
+          'camera.fov: ' + camera.fov.toFixed(1) + '  camera.aspect: ' + camera.aspect.toFixed(2) + '\n' +
+          'dist calcolata: ' + dist.toFixed(2) + '  actualDist: ' + actualDist.toFixed(2) + '\n' +
+          'playerChar esiste: ' + !!playerChar + '  visible: ' + (playerChar ? playerChar.visible : '-') + '\n' +
+          'camPos: ' + camera.position.x.toFixed(2) + ',' + camera.position.y.toFixed(2) + ',' + camera.position.z.toFixed(2) + '\n' +
+          'feet: ' + feet.x.toFixed(2) + ',' + feet.y.toFixed(2) + ',' + feet.z.toFixed(2);
       } else {
         // NESSUNA oscillazione: camera perfettamente stabile, da gioco competitivo
         camera.position.set(feet.x, feet.y + EYE, feet.z);
@@ -3069,6 +3083,7 @@
 
     function closeRoom() {
       if (!renderer) return;
+      if (window.__dbgEl) { window.__dbgEl.remove(); window.__dbgEl = null; }
       if (document.pointerLockElement) document.exitPointerLock();
       cancelAnimationFrame(raf); raf = null;
       renderer.domElement.removeEventListener('click', onCanvasClick);
