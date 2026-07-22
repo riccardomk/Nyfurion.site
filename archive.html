@@ -2746,6 +2746,8 @@
       document.addEventListener('keydown', onKeyDown);
       document.addEventListener('keyup', onKeyUp);
       window.addEventListener('resize', onResize);
+      document.addEventListener('fullscreenchange', onResize);
+      setTimeout(onResize, 150);  // alcuni cambi a schermo intero non aggiornano subito innerWidth/innerHeight
       animate(0);
     }
 
@@ -3021,7 +3023,7 @@
         const lookY = feet.y + EYE * 0.9;
         const rawX = Math.sin(yaw) * Math.cos(pitch);
         const rawZ = Math.cos(yaw) * Math.cos(pitch);
-        const rawY = Math.max(-0.28, Math.min(0.34, -Math.sin(pitch) * 0.6));
+        const rawY = Math.max(-0.18, Math.min(0.22, -Math.sin(pitch) * 0.45));
         const dirLen = Math.hypot(rawX, rawY, rawZ) || 1;
         const dirX = rawX / dirLen, dirY = rawY / dirLen, dirZ = rawZ / dirLen; // vettore unitario coerente
         let actualDist = dist;
@@ -3073,6 +3075,7 @@
       document.removeEventListener('keydown', onKeyDown);
       document.removeEventListener('keyup', onKeyUp);
       window.removeEventListener('resize', onResize);
+      document.removeEventListener('fullscreenchange', onResize);
       renderer.domElement.remove(); renderer.dispose(); renderer = null;
       scene = null; exhibits = []; colliders = []; walkables = []; camColliders = []; hovered = null; showcaseCard = null;
       window.__villaDust = null;
