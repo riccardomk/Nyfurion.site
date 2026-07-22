@@ -3026,10 +3026,25 @@
         const dirX = rawX / dirLen, dirY = rawY / dirLen, dirZ = rawZ / dirLen; // vettore unitario coerente
         let actualDist = dist;
         if (camColliders.length) {
-          rayCam.set(_tmp.set(feet.x, lookY, feet.z), _tmpDir.set(dirX, dirY, dirZ));
-          rayCam.far = dist;
-          const hits = rayCam.intersectObjects(camColliders, false);
-          if (hits.length) actualDist = Math.min(actualDist, Math.max(0.6, hits[0].distance - 0.25));
+          // un solo raggio sottile puo' "scivolare" accanto a un pilastro/spigolo senza
+          // vederlo: controlliamo un piccolo fascio di 5 raggi (centro + 4 laterali),
+          // come se la camera avesse un minimo di volume, e prendiamo il piu' vicino
+          const rightX = -dirZ, rightZ = dirX;              // perpendicolare orizzontale (dir x su-mondo)
+          let upX = -dirX * dirY, upY = dirX * dirX + dirZ * dirZ, upZ = -dirZ * dirY;  // right x dir
+          const upLen = Math.hypot(upX, upY, upZ) || 1;
+          upX /= upLen; upY /= upLen; upZ /= upLen;
+          const r = 0.32;
+          const offsets = [
+            [0, 0, 0],
+            [rightX * r, 0, rightZ * r], [-rightX * r, 0, -rightZ * r],
+            [upX * r, upY * r, upZ * r], [-upX * r, -upY * r, -upZ * r],
+          ];
+          for (const [ox, oy, oz] of offsets) {
+            rayCam.set(_tmp.set(feet.x + ox, lookY + oy, feet.z + oz), _tmpDir.set(dirX, dirY, dirZ));
+            rayCam.far = dist;
+            const hits = rayCam.intersectObjects(camColliders, false);
+            if (hits.length) actualDist = Math.min(actualDist, Math.max(0.6, hits[0].distance - 0.25));
+          }
         }
         camera.position.set(feet.x + dirX * actualDist, lookY + dirY * actualDist, feet.z + dirZ * actualDist);
         camera.lookAt(feet.x, lookY, feet.z);
