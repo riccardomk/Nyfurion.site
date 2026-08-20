@@ -1,12 +1,12 @@
 {
-  "versionCode": 7,
-  "versionName": "1.2.4",
+  "versionCode": 8,
+  "versionName": "1.2.5",
   "apkUrl": "https://nyfurion.com/downloads/nyfurion-latest.apk",
-  "sizeBytes": 28681929,
-  "publishedAt": "2026-08-20T10:15:02.916Z",
+  "sizeBytes": 28682277,
+  "publishedAt": "2026-08-20T13:23:32.797Z",
   "mandatory": false,
   "notes": {
-    "en": "Update screen straight from the notification, and the official booklet inside the app.",
-    "it": "Schermata di aggiornamento direttamente dalla notifica, e il libretto ufficiale dentro l app."
+    "en": "Official shop, in-app update and the game booklet.",
+    "it": "Shop ufficiale, aggiornamento dall app e libretto di gioco."
   }
 }
