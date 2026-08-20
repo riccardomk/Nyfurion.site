@@ -1,6 +1,1 @@
-# L'indirizzo ufficiale dell'APK resta su nyfurion.com; il file vive su
-# Firebase Hosting, che non ha il limite di 25 MiB di Cloudflare Pages.
-#
-# Non e' un dettaglio estetico: le app gia' installate accettano un
-# aggiornamento solo se l'indirizzo annunciato e' del dominio nyfurion.com.
-/downloads/nyfurion-latest.apk  https://nyfurion-app.web.app/nyfurion-latest-debug.bin  302
+/downloads/nyfurion-latest.apk https://nyfurion-app.web.app/nyfurion-latest-debug.bin 302
