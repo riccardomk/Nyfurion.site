@@ -168,6 +168,18 @@
       .app-id{gap:14px}
       .app-mark{width:64px;height:64px;flex-basis:64px;border-radius:15px}
     }
+  
+    .devices{display:flex;gap:6px;margin:18px 0 2px;flex-wrap:wrap}
+    .device{
+      flex:1 1 auto;padding:9px 12px;border-radius:9px;cursor:pointer;
+      font:inherit;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+      color:#8d8778;background:rgba(255,255,255,.03);
+      border:1px solid rgba(200,191,168,.16);
+    }
+    .device[aria-selected="true"]{
+      color:#14110a;border-color:transparent;
+      background:linear-gradient(180deg,#e2c877,#c8a94e);
+    }
   </style>
 </head>
 <body>
@@ -227,23 +239,41 @@
         </div>
       </div>
 
-      <!-- IPHONE -->
+      <!-- OGNI ALTRO DISPOSITIVO -->
       <div class="card">
-        <span class="badge" data-i18n="iosBadge">iPhone &amp; iPad</span>
-        <h2 data-i18n="iosTitle">Web app</h2>
-        <div class="sub" data-i18n="iosSub">Nothing to download</div>
-        <p data-i18n="iosText">On iPhone the app is added straight from Safari. Once on the Home screen it behaves like any other app: full screen, offline, and it updates on its own.</p>
+        <span class="badge" data-i18n="webBadge">iPhone &middot; iPad &middot; Computer</span>
+        <h2 data-i18n="webTitle">Web app</h2>
+        <div class="sub" data-i18n="webSub">Nothing to download</div>
+        <p data-i18n="webText">The same app, installed straight from the browser. Once it is on your Home screen or desktop it behaves like any other app: its own window, full screen, works offline and updates on its own.</p>
 
-        <a class="btn ghost" href="https://nyfurion-app.web.app" data-i18n="iosBtn">Open the web app</a>
-        <div class="meta" data-i18n="iosMeta">Safari &middot; iOS 16.4 or later for notifications</div>
+        <a class="btn ghost" href="https://nyfurion-app.web.app" data-i18n="webBtn">Open the web app</a>
+        <div class="meta" data-i18n="webMeta">Free &middot; no store, no account needed to open it</div>
 
-        <div class="steps">
-          <div class="step"><span data-i18n="i1">Open the web app in <b>Safari</b>.</span></div>
+        <div class="devices" role="tablist">
+          <button type="button" class="device" data-dev="ios" role="tab" data-i18n="devIos">iPhone / iPad</button>
+          <button type="button" class="device" data-dev="pc" role="tab" data-i18n="devPc">Computer</button>
+          <button type="button" class="device" data-dev="android" role="tab" data-i18n="devAndroid">Android</button>
+        </div>
+
+        <div class="steps" data-steps="ios">
+          <div class="step"><span data-i18n="i1">Open the web app in <b>Safari</b> &mdash; on iPhone it only works from Safari.</span></div>
           <div class="step"><span data-i18n="i2">Tap Share, then <b>Add to Home Screen</b>.</span></div>
           <div class="step"><span data-i18n="i3">Open it from the new icon and sign in.</span></div>
         </div>
 
-        <div class="note" data-i18n="iosNote">Notifications on iPhone only work once the app is on the Home screen. Opened as a normal web page, Apple does not allow them.</div>
+        <div class="steps" data-steps="pc" hidden>
+          <div class="step"><span data-i18n="p1">Open the web app in <b>Chrome</b> or <b>Edge</b>.</span></div>
+          <div class="step"><span data-i18n="p2">Click the <b>install icon</b> in the address bar, on the right. If you cannot see it: menu &#9662; then <b>Install</b>.</span></div>
+          <div class="step"><span data-i18n="p3">It opens in its own window and stays in your programs, like any other app.</span></div>
+        </div>
+
+        <div class="steps" data-steps="android" hidden>
+          <div class="step"><span data-i18n="n1">If you have Android, take the app above: it is the full version.</span></div>
+          <div class="step"><span data-i18n="n2">You prefer no download? Open the web app in <b>Chrome</b>, menu &#8942; then <b>Install app</b>.</span></div>
+          <div class="step"><span data-i18n="n3">Open it from the new icon and sign in.</span></div>
+        </div>
+
+        <div class="note" data-i18n="webNote">On iPhone, notifications only work once the app is on the Home screen, with iOS 16.4 or later. Opened as an ordinary web page, Apple does not allow them.</div>
       </div>
 
     </div>
@@ -287,13 +317,20 @@
       a1:'Apri il file scaricato.',
       a2:'Android chieder&agrave; di consentire l&rsquo;installazione da questa origine: accetta, succede una volta sola.',
       a3:'Apri l&rsquo;app e accedi per ricevere le notifiche.',
-      iosBadge:'iPhone e iPad', iosTitle:'Web app', iosSub:'Niente da scaricare',
-      iosText:'Su iPhone l&rsquo;app si aggiunge direttamente da Safari. Una volta sulla schermata Home si comporta come le altre: a tutto schermo, senza rete, e si aggiorna da sola.',
-      iosBtn:'Apri la web app', iosMeta:'Safari &middot; iOS 16.4 o successivo per le notifiche',
-      i1:'Apri la web app con <b>Safari</b>.',
+      webBadge:'iPhone &middot; iPad &middot; Computer', webTitle:'Web app', webSub:'Niente da scaricare',
+      webText:'La stessa app, installata direttamente dal browser. Una volta sulla schermata Home o sul desktop si comporta come le altre: finestra sua, a tutto schermo, funziona senza rete e si aggiorna da sola.',
+      webBtn:'Apri la web app', webMeta:'Gratis &middot; nessuno store, nessun account per aprirla',
+      devIos:'iPhone / iPad', devPc:'Computer', devAndroid:'Android',
+      i1:'Apri la web app con <b>Safari</b> &mdash; su iPhone funziona solo da Safari.',
       i2:'Tocca Condividi, poi <b>Aggiungi a schermata Home</b>.',
       i3:'Aprila dalla nuova icona e accedi.',
-      iosNote:'Su iPhone le notifiche funzionano solo dopo aver aggiunto l&rsquo;app alla schermata Home. Aperta come pagina normale, Apple non le permette.',
+      p1:'Apri la web app con <b>Chrome</b> o <b>Edge</b>.',
+      p2:'Clicca l&rsquo;<b>icona di installazione</b> nella barra degli indirizzi, a destra. Se non la vedi: men&ugrave; &#9662; poi <b>Installa</b>.',
+      p3:'Si apre in una finestra sua e resta fra i tuoi programmi, come le altre app.',
+      n1:'Se hai Android prendi l&rsquo;app qui sopra: &egrave; la versione completa.',
+      n2:'Preferisci non scaricare niente? Apri la web app con <b>Chrome</b>, men&ugrave; &#8942; poi <b>Installa app</b>.',
+      n3:'Aprila dalla nuova icona e accedi.',
+      webNote:'Su iPhone le notifiche funzionano solo dopo aver aggiunto l&rsquo;app alla schermata Home, con iOS 16.4 o successivo. Aperta come pagina normale, Apple non le permette.',
       whatTitle:'Cosa c&rsquo;&egrave; dentro',
       f1l:'Dispacci', f1v:'In tempo reale',
       f2l:'Carte', f2v:'Tutte e 160',
@@ -311,5 +348,28 @@
     }
   </script>
   <script src="nav.js" defer></script>
+  <script>
+    /* Le istruzioni giuste per il dispositivo di chi guarda.
+       Chi arriva da un iPhone non deve leggersi i passi del computer per
+       trovare i suoi: si apre gia' aperto sulla scheda che gli serve. */
+    (function () {
+      const bottoni = document.querySelectorAll('.device');
+      const gruppi = document.querySelectorAll('[data-steps]');
+      if (!bottoni.length) return;
+
+      function mostra(dev) {
+        bottoni.forEach((b) => b.setAttribute('aria-selected', String(b.dataset.dev === dev)));
+        gruppi.forEach((g) => { g.hidden = g.dataset.steps !== dev; });
+      }
+
+      const ua = navigator.userAgent;
+      // Gli iPad recenti si presentano come Mac: si riconoscono dal tocco.
+      const iOS = /iPad|iPhone|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+      mostra(iOS ? 'ios' : /Android/.test(ua) ? 'android' : 'pc');
+
+      bottoni.forEach((b) => b.addEventListener('click', () => mostra(b.dataset.dev)));
+    })();
+  </script>
+
 </body>
 </html>
