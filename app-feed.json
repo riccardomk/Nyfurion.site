@@ -5,25 +5,30 @@
   "game": {
     "kicker": {
       "en": "Card game",
-      "it": "Gioco di carte"
+      "it": "Gioco di carte",
+      "de": "Kartenspiel"
     },
     "title": "Nyfurion Card Game",
     "status": {
       "en": "Collection closed · in production",
-      "it": "Collezione chiusa · in produzione"
+      "it": "Collezione chiusa · in produzione",
+      "de": "Sammlung abgeschlossen · in Produktion"
     },
     "intro": [
       {
         "en": "A collectible card game built on a single statistic. Every Entity carries one number, MT, from 1 to 10: in a duel the higher one always wins, with no charts and no exceptions.",
-        "it": "Un gioco di carte collezionabili costruito su una sola statistica. Ogni Entità ha un numero, l’MT, da 1 a 10: nel duello vince sempre il più alto, senza tabelle e senza eccezioni."
+        "it": "Un gioco di carte collezionabili costruito su una sola statistica. Ogni Entità ha un numero, l’MT, da 1 a 10: nel duello vince sempre il più alto, senza tabelle e senza eccezioni.",
+        "de": "Ein Sammelkartenspiel, gebaut auf einer einzigen Kennzahl. Jede Entität trägt eine Zahl, MT, von 1 bis 10: Im Duell gewinnt immer die höhere, ohne Tabellen und ohne Ausnahmen."
       },
       {
         "en": "The rules take five minutes to explain. The depth comes from face-down Relics and from Destiny, the defence you play once in the whole game.",
-        "it": "Le regole si spiegano in cinque minuti. La profondità arriva dalle Reliquie coperte e dal Destino, la difesa che si gioca una volta sola in tutta la partita."
+        "it": "Le regole si spiegano in cinque minuti. La profondità arriva dalle Reliquie coperte e dal Destino, la difesa che si gioca una volta sola in tutta la partita.",
+        "de": "Die Regeln sind in fünf Minuten erklärt. Die Tiefe kommt von den verdeckten Relikten und vom Schicksal, der Verteidigung, die man im ganzen Spiel nur einmal ausspielt."
       },
       {
         "en": "The first collection is closed: 160 cards, four ready-to-play decks of 40, 160 original artworks.",
-        "it": "La prima collezione è chiusa: 160 carte, quattro mazzi da 40 pronti al gioco, 160 illustrazioni originali."
+        "it": "La prima collezione è chiusa: 160 carte, quattro mazzi da 40 pronti al gioco, 160 illustrazioni originali.",
+        "de": "Die erste Sammlung ist abgeschlossen: 160 Karten, vier spielfertige Decks zu 40, 160 originale Illustrationen."
       }
     ],
     "phases": [
@@ -31,11 +36,13 @@
         "id": "regole",
         "label": {
           "en": "The rules",
-          "it": "Le regole del gioco"
+          "it": "Le regole del gioco",
+          "de": "Die Regeln"
         },
         "note": {
           "en": "One number, one way to win",
-          "it": "Un solo numero, un solo modo di vincere"
+          "it": "Un solo numero, un solo modo di vincere",
+          "de": "Eine Zahl, ein Weg zum Sieg"
         },
         "state": "done"
       },
@@ -43,11 +50,13 @@
         "id": "carte",
         "label": {
           "en": "The 160 cards",
-          "it": "Le 160 carte"
+          "it": "Le 160 carte",
+          "de": "Die 160 Karten"
         },
         "note": {
           "en": "Drawn, numbered, illustrated",
-          "it": "Disegnate, numerate, illustrate"
+          "it": "Disegnate, numerate, illustrate",
+          "de": "Gezeichnet, nummeriert, illustriert"
         },
         "state": "done"
       },
@@ -55,11 +64,13 @@
         "id": "mazzi",
         "label": {
           "en": "The four decks",
-          "it": "I quattro mazzi"
+          "it": "I quattro mazzi",
+          "de": "Die vier Decks"
         },
         "note": {
           "en": "40 cards each, ready to play",
-          "it": "40 carte ciascuno, pronti al gioco"
+          "it": "40 carte ciascuno, pronti al gioco",
+          "de": "Je 40 Karten, sofort spielbereit"
         },
         "state": "done"
       },
@@ -67,11 +78,13 @@
         "id": "regolamento",
         "label": {
           "en": "Rulebook and booklet",
-          "it": "Regolamento e libretto"
+          "it": "Regolamento e libretto",
+          "de": "Regelwerk und Heft"
         },
         "note": {
           "en": "The complete rules, in the box",
-          "it": "Le regole complete, nella scatola"
+          "it": "Le regole complete, nella scatola",
+          "de": "Die vollständigen Regeln, in der Box"
         },
         "state": "done"
       },
@@ -79,11 +92,13 @@
         "id": "produzione",
         "label": {
           "en": "Production",
-          "it": "Produzione"
+          "it": "Produzione",
+          "de": "Produktion"
         },
         "note": {
           "en": "The series is taking physical shape",
-          "it": "La serie sta prendendo forma fisica"
+          "it": "La serie sta prendendo forma fisica",
+          "de": "Die Serie nimmt physische Gestalt an"
         },
         "state": "active"
       },
@@ -91,11 +106,13 @@
         "id": "uscita",
         "label": {
           "en": "Release",
-          "it": "Uscita"
+          "it": "Uscita",
+          "de": "Veröffentlichung"
         },
         "note": {
           "en": "The announcement lands here first",
-          "it": "L’annuncio arriva qui per primo"
+          "it": "L’annuncio arriva qui per primo",
+          "de": "Die Ankündigung erscheint zuerst hier"
         },
         "state": "todo"
       }
@@ -104,24 +121,28 @@
       {
         "label": {
           "en": "Cards",
-          "it": "Carte"
+          "it": "Carte",
+          "de": "Karten"
         },
         "value": "160"
       },
       {
         "label": {
           "en": "Decks",
-          "it": "Mazzi"
+          "it": "Mazzi",
+          "de": "Decks"
         },
         "value": {
           "en": "4 of 40 cards",
-          "it": "4 da 40 carte"
+          "it": "4 da 40 carte",
+          "de": "4 zu je 40 Karten"
         }
       },
       {
         "label": {
           "en": "Size",
-          "it": "Formato"
+          "it": "Formato",
+          "de": "Format"
         },
         "value": "63 × 88 mm"
       }
@@ -129,8 +150,9 @@
     "links": [
       {
         "label": {
-          "en": "See the official cards",
-          "it": "Guarda le carte ufficiali"
+          "en": "Open the NFT collection",
+          "it": "Apri la collezione NFT",
+          "de": "Die NFT-Sammlung öffnen"
         },
         "url": "https://nyfurion.com/nfts.html"
       }
@@ -142,18 +164,21 @@
       "name": "Nyfurion Card Game",
       "claim": {
         "en": "160 cards, four decks, one universe",
-        "it": "160 carte, quattro mazzi, un universo"
+        "it": "160 carte, quattro mazzi, un universo",
+        "de": "160 Karten, vier Decks, ein Universum"
       },
       "state": "pronto",
       "status": {
         "en": "In production",
-        "it": "In produzione"
+        "it": "In produzione",
+        "de": "In Produktion"
       },
       "progress": 90,
       "link": {
         "label": {
           "en": "Open",
-          "it": "Apri la scheda"
+          "it": "Apri la scheda",
+          "de": "Öffnen"
         },
         "url": "app://gioco"
       }
@@ -162,22 +187,26 @@
       "id": "libro",
       "name": {
         "en": "The Rebirth of King Ash",
-        "it": "La rinascita del re Ash"
+        "it": "La rinascita del re Ash",
+        "de": "Die Wiedergeburt von König Ash"
       },
       "claim": {
         "en": "The first book of the universe, readable online",
-        "it": "Il primo libro dell’universo, leggibile online"
+        "it": "Il primo libro dell’universo, leggibile online",
+        "de": "Das erste Buch des Universums, online lesbar"
       },
       "state": "attivo",
       "status": {
         "en": "Out",
-        "it": "Uscito"
+        "it": "Uscito",
+        "de": "Erschienen"
       },
       "progress": 100,
       "link": {
         "label": {
           "en": "Read the story",
-          "it": "Leggi la storia"
+          "it": "Leggi la storia",
+          "de": "Die Geschichte lesen"
         },
         "url": "https://nyfurion.com/lore.html"
       }
@@ -187,18 +216,21 @@
       "name": "Nyfurion X Reborn",
       "claim": {
         "en": "The Fragments of the Realm, on Ethereum",
-        "it": "I frammenti del Regno su Ethereum"
+        "it": "I frammenti del Regno su Ethereum",
+        "de": "Die Fragmente des Reichs, auf Ethereum"
       },
       "state": "attivo",
       "status": {
         "en": "Published",
-        "it": "Pubblicata"
+        "it": "Pubblicata",
+        "de": "Veröffentlicht"
       },
       "progress": 100,
       "link": {
         "label": {
           "en": "View on OpenSea",
-          "it": "Guarda su OpenSea"
+          "it": "Guarda su OpenSea",
+          "de": "Auf OpenSea ansehen"
         },
         "url": "https://opensea.io/collection/nyfurionxreborn"
       }
@@ -208,17 +240,20 @@
       "name": "nyfurion.com",
       "claim": {
         "en": "Lore, characters, license and archive",
-        "it": "Lore, personaggi, licenza e archivio"
+        "it": "Lore, personaggi, licenza e archivio",
+        "de": "Lore, Charaktere, Lizenz und Archiv"
       },
       "state": "attivo",
       "status": {
         "en": "Online",
-        "it": "Online"
+        "it": "Online",
+        "de": "Online"
       },
       "link": {
         "label": {
           "en": "Open the site",
-          "it": "Apri il sito"
+          "it": "Apri il sito",
+          "de": "Die Website öffnen"
         },
         "url": "https://nyfurion.com"
       }
@@ -232,36 +267,43 @@
       "category": "gioco",
       "tag": {
         "en": "Done",
-        "it": "Fatto"
+        "it": "Fatto",
+        "de": "Fertig"
       },
       "pinned": true,
       "title": {
         "en": "The 160 cards are finished",
-        "it": "Le 160 carte sono finite"
+        "it": "Le 160 carte sono finite",
+        "de": "Die 160 Karten sind fertig"
       },
       "summary": {
         "en": "The first collection is closed: four decks of 40, numbered XRB-001 → 160, with no gaps.",
-        "it": "La prima collezione è chiusa: quattro mazzi da 40, numerazione XRB-001 → 160, nessun buco."
+        "it": "La prima collezione è chiusa: quattro mazzi da 40, numerazione XRB-001 → 160, nessun buco.",
+        "de": "Die erste Sammlung ist abgeschlossen: vier Decks zu 40, nummeriert XRB-001 → 160, ohne Lücken."
       },
       "body": [
         {
           "en": "Every card is drawn, numbered, illustrated and written. The four decks share the same structure: 28 Entities and 12 Relics, the same pyramid of values. No deck starts ahead.",
-          "it": "Ogni carta è disegnata, numerata, illustrata e scritta. I quattro mazzi hanno la stessa struttura: 28 Entità e 12 Reliquie, la stessa piramide di valori. Nessun mazzo parte avvantaggiato."
+          "it": "Ogni carta è disegnata, numerata, illustrata e scritta. I quattro mazzi hanno la stessa struttura: 28 Entità e 12 Reliquie, la stessa piramide di valori. Nessun mazzo parte avvantaggiato.",
+          "de": "Jede Karte ist gezeichnet, nummeriert, illustriert und geschrieben. Die vier Decks teilen denselben Aufbau: 28 Entitäten und 12 Relikte, dieselbe Wertepyramide. Kein Deck startet im Vorteil."
         },
         {
           "en": "The complete rules come in the box, in the booklet.",
-          "it": "Le regole complete arrivano nella scatola, nel libretto."
+          "it": "Le regole complete arrivano nella scatola, nel libretto.",
+          "de": "Die vollständigen Regeln liegen der Box bei, im Heft."
         },
         {
           "en": "From here on nothing gets rewritten: things get added.",
-          "it": "Da qui in avanti non si riscrive: si aggiunge."
+          "it": "Da qui in avanti non si riscrive: si aggiunge.",
+          "de": "Ab hier wird nichts mehr umgeschrieben: es kommt nur hinzu."
         }
       ],
       "links": [
         {
           "label": {
             "en": "Open the game",
-            "it": "Apri la scheda del gioco"
+            "it": "Apri la scheda del gioco",
+            "de": "Das Spiel öffnen"
           },
           "url": "app://gioco"
         }
@@ -274,39 +316,47 @@
       "category": "gioco",
       "tag": {
         "en": "Coming",
-        "it": "In arrivo"
+        "it": "In arrivo",
+        "de": "Bald"
       },
       "title": {
         "en": "The series arrives as four starter decks",
-        "it": "La serie esce in quattro mazzi starter"
+        "it": "La serie esce in quattro mazzi starter",
+        "de": "Die Serie erscheint als vier Starter-Decks"
       },
       "summary": {
         "en": "Dark Power of Evil, Young Boys of Peace, Keepers of Balance, Ancients of Nyfurion: forty cards each, ready to play.",
-        "it": "Dark Power of Evil, Young Boys of Peace, Keepers of Balance, Ancients of Nyfurion: quaranta carte ciascuno, pronti da giocare."
+        "it": "Dark Power of Evil, Young Boys of Peace, Keepers of Balance, Ancients of Nyfurion: quaranta carte ciascuno, pronti da giocare.",
+        "de": "Dark Power of Evil, Young Boys of Peace, Keepers of Balance, Ancients of Nyfurion: je vierzig Karten, sofort spielbereit."
       },
       "body": [
         {
           "en": "Every deck is complete and plays straight out of the box: nothing to build, nothing else to buy to start. Forty cards, twenty-eight Entities and twelve Relics.",
-          "it": "Ogni mazzo è completo e si gioca appena aperto: non serve costruirlo, non serve comprarne altri per iniziare. Quaranta carte, ventotto Entità e dodici Reliquie."
+          "it": "Ogni mazzo è completo e si gioca appena aperto: non serve costruirlo, non serve comprarne altri per iniziare. Quaranta carte, ventotto Entità e dodici Reliquie.",
+          "de": "Jedes Deck ist vollständig und wird direkt aus der Box gespielt: nichts zu bauen, nichts dazuzukaufen, um anzufangen. Vierzig Karten, achtundzwanzig Entitäten und zwölf Relikte."
         },
         {
           "en": "The four decks share the same structure of values, so none of them starts ahead. What changes is how they win: one takes, one endures, one holds the balance, one lets nothing go.",
-          "it": "I quattro mazzi hanno la stessa struttura di valori, quindi nessuno parte avvantaggiato. Quello che cambia è come vincono: uno toglie, uno resiste, uno tiene l’equilibrio, uno non lascia andare niente."
+          "it": "I quattro mazzi hanno la stessa struttura di valori, quindi nessuno parte avvantaggiato. Quello che cambia è come vincono: uno toglie, uno resiste, uno tiene l’equilibrio, uno non lascia andare niente.",
+          "de": "Die vier Decks teilen denselben Aufbau der Werte, keines startet also im Vorteil. Was sich unterscheidet, ist die Art zu gewinnen: eines nimmt, eines hält stand, eines wahrt das Gleichgewicht, eines gibt nichts her."
         },
         {
           "en": "The cards use the standard collectible size, so the sleeves and deck boxes you already own will fit.",
-          "it": "Le carte hanno il formato standard dei giochi di carte collezionabili, quindi bustine e portamazzo che già conosci vanno bene."
+          "it": "Le carte hanno il formato standard dei giochi di carte collezionabili, quindi bustine e portamazzo che già conosci vanno bene.",
+          "de": "Die Karten haben das übliche Sammelkartenformat, deine vorhandenen Hüllen und Deckboxen passen also."
         },
         {
           "en": "The release date lands here, the day there is one.",
-          "it": "La data di uscita la trovi qui, il giorno che c’è."
+          "it": "La data di uscita la trovi qui, il giorno che c’è.",
+          "de": "Das Erscheinungsdatum steht hier, an dem Tag, an dem es eines gibt."
         }
       ],
       "links": [
         {
           "label": {
             "en": "Open the game",
-            "it": "Apri la scheda del gioco"
+            "it": "Apri la scheda del gioco",
+            "de": "Das Spiel öffnen"
           },
           "url": "app://gioco"
         }
@@ -319,24 +369,29 @@
       "category": "annuncio",
       "tag": {
         "en": "New",
-        "it": "Nuovo"
+        "it": "Nuovo",
+        "de": "Neu"
       },
       "title": {
         "en": "The Realm lands on your phone",
-        "it": "Il Regno entra nel tuo telefono"
+        "it": "Il Regno entra nel tuo telefono",
+        "de": "Das Reich kommt auf dein Telefon"
       },
       "summary": {
         "en": "This is the official Nyfurion X Reborn app: announcements arrive here first, in real time.",
-        "it": "Questa è l’app ufficiale di Nyfurion X Reborn: gli annunci arrivano qui per primi, in tempo reale."
+        "it": "Questa è l’app ufficiale di Nyfurion X Reborn: gli annunci arrivano qui per primi, in tempo reale.",
+        "de": "Das ist die offizielle Nyfurion-X-Reborn-App: Ankündigungen erscheinen hier zuerst, in Echtzeit."
       },
       "body": [
         {
           "en": "No algorithm in between, no posts that disappear. What happens in the Realm appears here the moment it happens.",
-          "it": "Niente algoritmo in mezzo, niente post che spariscono. Quello che succede nel Regno compare qui appena succede."
+          "it": "Niente algoritmo in mezzo, niente post che spariscono. Quello che succede nel Regno compare qui appena succede.",
+          "de": "Kein Algorithmus dazwischen, keine Beiträge, die verschwinden. Was im Reich geschieht, erscheint hier in dem Moment, in dem es geschieht."
         },
         {
           "en": "Pull down to refresh at any time. The latest dispatches stay saved on your phone, so you can read them again without a connection.",
-          "it": "Trascina in giù per aggiornare in qualsiasi momento. L’ultima versione dei dispacci resta salvata sul telefono, così puoi rileggerla anche senza connessione."
+          "it": "Trascina in giù per aggiornare in qualsiasi momento. L’ultima versione dei dispacci resta salvata sul telefono, così puoi rileggerla anche senza connessione.",
+          "de": "Zum Aktualisieren jederzeit nach unten ziehen. Die letzten Depeschen bleiben auf dem Telefon gespeichert, du kannst sie also auch ohne Verbindung noch einmal lesen."
         }
       ]
     },
@@ -347,27 +402,32 @@
       "category": "nft",
       "title": {
         "en": "Commercial license v3.1: what you really own",
-        "it": "Licenza commerciale v3.1: cosa possiedi davvero"
+        "it": "Licenza commerciale v3.1: cosa possiedi davvero",
+        "de": "Kommerzielle Lizenz v3.1: was dir wirklich gehört"
       },
       "summary": {
         "en": "Full commercial rights over your character, written down and published on the site.",
-        "it": "Diritti commerciali completi sul tuo personaggio, scritti nero su bianco e pubblicati sul sito."
+        "it": "Diritti commerciali completi sul tuo personaggio, scritti nero su bianco e pubblicati sul sito.",
+        "de": "Volle kommerzielle Rechte an deinem Charakter, schriftlich festgehalten und auf der Website veröffentlicht."
       },
       "body": [
         {
           "en": "The license is public, bilingual and downloadable. It defines what you may do with the character you hold, and what stays with the Creator.",
-          "it": "La licenza è pubblica, bilingue e scaricabile. Definisce cosa puoi fare con il personaggio che detieni, e cosa resta al Creatore."
+          "it": "La licenza è pubblica, bilingue e scaricabile. Definisce cosa puoi fare con il personaggio che detieni, e cosa resta al Creatore.",
+          "de": "Die Lizenz ist öffentlich, zweisprachig und herunterladbar. Sie legt fest, was du mit dem Charakter tun darfst, den du besitzt, und was beim Urheber bleibt."
         },
         {
           "en": "No promise of profit: only rights over the work, stated in a verifiable way.",
-          "it": "Nessuna promessa di guadagno: solo diritti sull’opera, dichiarati in modo verificabile."
+          "it": "Nessuna promessa di guadagno: solo diritti sull’opera, dichiarati in modo verificabile.",
+          "de": "Kein Gewinnversprechen: nur Rechte am Werk, nachprüfbar formuliert."
         }
       ],
       "links": [
         {
           "label": {
             "en": "Read the license",
-            "it": "Leggi la licenza"
+            "it": "Leggi la licenza",
+            "de": "Die Lizenz lesen"
           },
           "url": "https://nyfurion.com/license"
         }
@@ -380,27 +440,32 @@
       "category": "nft",
       "title": {
         "en": "Nyfurion X Reborn: the Fragments are safe",
-        "it": "Nyfurion X Reborn: i frammenti sono al sicuro"
+        "it": "Nyfurion X Reborn: i frammenti sono al sicuro",
+        "de": "Nyfurion X Reborn: die Fragmente sind sicher"
       },
       "summary": {
         "en": "Metadata and images served from our own infrastructure, with no dependency on third-party gateways.",
-        "it": "Metadati e immagini serviti da infrastruttura propria, senza dipendere da gateway di terzi."
+        "it": "Metadati e immagini serviti da infrastruttura propria, senza dipendere da gateway di terzi.",
+        "de": "Metadaten und Bilder von unserer eigenen Infrastruktur ausgeliefert, ohne Abhängigkeit von fremden Gateways."
       },
       "body": [
         {
           "en": "Every Fragment is reachable and verifiable. The archive sits on infrastructure we control directly, not on services that can shut down overnight.",
-          "it": "Ogni frammento è raggiungibile e verificabile. L’archivio sta su infrastruttura controllata direttamente, non su servizi che possono chiudere da un giorno all’altro."
+          "it": "Ogni frammento è raggiungibile e verificabile. L’archivio sta su infrastruttura controllata direttamente, non su servizi che possono chiudere da un giorno all’altro.",
+          "de": "Jedes Fragment ist erreichbar und überprüfbar. Das Archiv liegt auf einer Infrastruktur, die wir direkt kontrollieren, nicht auf Diensten, die über Nacht abgeschaltet werden können."
         },
         {
           "en": "What you bought stays what you bought.",
-          "it": "Quello che hai comprato resta quello che hai comprato."
+          "it": "Quello che hai comprato resta quello che hai comprato.",
+          "de": "Was du gekauft hast, bleibt, was du gekauft hast."
         }
       ],
       "links": [
         {
           "label": {
             "en": "See the collection",
-            "it": "Vedi la collezione"
+            "it": "Vedi la collezione",
+            "de": "Die Sammlung ansehen"
           },
           "url": "https://opensea.io/collection/nyfurionxreborn"
         }
@@ -413,27 +478,32 @@
       "category": "lore",
       "title": {
         "en": "Rey has not chosen yet",
-        "it": "Rey non ha ancora scelto"
+        "it": "Rey non ha ancora scelto",
+        "de": "Rey hat noch nicht gewählt"
       },
       "summary": {
         "en": "The Queen stands in the middle. The Realm waits, and we are her conscience.",
-        "it": "La Regina resta in mezzo. Il Regno aspetta, e la sua coscienza siamo noi."
+        "it": "La Regina resta in mezzo. Il Regno aspetta, e la sua coscienza siamo noi.",
+        "de": "Die Königin steht in der Mitte. Das Reich wartet, und wir sind ihr Gewissen."
       },
       "body": [
         {
           "en": "King Ash left the throne to Tyri, passing over the firstborn. Nyv claimed nothing: he founded his own dark empire and rules it. The Shadow Predators are simply waiting for the two of them to wear each other down.",
-          "it": "Re Ash ha lasciato il trono a Tyri scavalcando il primogenito. Nyv non ha reclamato nulla: ha fondato il proprio impero oscuro e ne è il re. Gli Shadow Predators aspettano solo che i due si logorino."
+          "it": "Re Ash ha lasciato il trono a Tyri scavalcando il primogenito. Nyv non ha reclamato nulla: ha fondato il proprio impero oscuro e ne è il re. Gli Shadow Predators aspettano solo che i due si logorino.",
+          "de": "König Ash überließ den Thron Tyri und überging den Erstgeborenen. Nyv forderte nichts: Er gründete sein eigenes dunkles Imperium und herrscht darüber. Die Schattenjäger warten schlicht darauf, dass die beiden einander aufreiben."
         },
         {
           "en": "Rey holds the primordial power and no banner. Until she chooses, the portal stays contested — and the choice will be yours too.",
-          "it": "Rey ha il potere primordiale e nessuna parte. Finché non sceglie, il portale resta conteso — e la scelta sarà anche tua."
+          "it": "Rey ha il potere primordiale e nessuna parte. Finché non sceglie, il portale resta conteso — e la scelta sarà anche tua.",
+          "de": "Rey trägt die ursprüngliche Macht und kein Banner. Bis sie wählt, bleibt das Portal umkämpft — und die Wahl wird auch deine sein."
         }
       ],
       "links": [
         {
           "label": {
             "en": "Enter the lore",
-            "it": "Entra nella lore"
+            "it": "Entra nella lore",
+            "de": "In die Lore eintreten"
           },
           "url": "https://nyfurion.com/lore.html"
         }
