@@ -1,0 +1,443 @@
+{
+  "version": 3,
+  "updatedAt": "2026-08-18T09:00:00Z",
+  "notice": null,
+  "game": {
+    "kicker": {
+      "en": "Card game",
+      "it": "Gioco di carte"
+    },
+    "title": "Nyfurion Card Game",
+    "status": {
+      "en": "Collection closed · in production",
+      "it": "Collezione chiusa · in produzione"
+    },
+    "intro": [
+      {
+        "en": "A collectible card game built on a single statistic. Every Entity carries one number, MT, from 1 to 10: in a duel the higher one always wins, with no charts and no exceptions.",
+        "it": "Un gioco di carte collezionabili costruito su una sola statistica. Ogni Entità ha un numero, l’MT, da 1 a 10: nel duello vince sempre il più alto, senza tabelle e senza eccezioni."
+      },
+      {
+        "en": "The rules take five minutes to explain. The depth comes from face-down Relics and from Destiny, the defence you play once in the whole game.",
+        "it": "Le regole si spiegano in cinque minuti. La profondità arriva dalle Reliquie coperte e dal Destino, la difesa che si gioca una volta sola in tutta la partita."
+      },
+      {
+        "en": "The first collection is closed: 160 cards, four ready-to-play decks of 40, 160 original artworks.",
+        "it": "La prima collezione è chiusa: 160 carte, quattro mazzi da 40 pronti al gioco, 160 illustrazioni originali."
+      }
+    ],
+    "phases": [
+      {
+        "id": "regole",
+        "label": {
+          "en": "The rules",
+          "it": "Le regole del gioco"
+        },
+        "note": {
+          "en": "One number, one way to win",
+          "it": "Un solo numero, un solo modo di vincere"
+        },
+        "state": "done"
+      },
+      {
+        "id": "carte",
+        "label": {
+          "en": "The 160 cards",
+          "it": "Le 160 carte"
+        },
+        "note": {
+          "en": "Drawn, numbered, illustrated",
+          "it": "Disegnate, numerate, illustrate"
+        },
+        "state": "done"
+      },
+      {
+        "id": "mazzi",
+        "label": {
+          "en": "The four decks",
+          "it": "I quattro mazzi"
+        },
+        "note": {
+          "en": "40 cards each, ready to play",
+          "it": "40 carte ciascuno, pronti al gioco"
+        },
+        "state": "done"
+      },
+      {
+        "id": "regolamento",
+        "label": {
+          "en": "Rulebook and booklet",
+          "it": "Regolamento e libretto"
+        },
+        "note": {
+          "en": "The complete rules, in the box",
+          "it": "Le regole complete, nella scatola"
+        },
+        "state": "done"
+      },
+      {
+        "id": "produzione",
+        "label": {
+          "en": "Production",
+          "it": "Produzione"
+        },
+        "note": {
+          "en": "The series is taking physical shape",
+          "it": "La serie sta prendendo forma fisica"
+        },
+        "state": "active"
+      },
+      {
+        "id": "uscita",
+        "label": {
+          "en": "Release",
+          "it": "Uscita"
+        },
+        "note": {
+          "en": "The announcement lands here first",
+          "it": "L’annuncio arriva qui per primo"
+        },
+        "state": "todo"
+      }
+    ],
+    "facts": [
+      {
+        "label": {
+          "en": "Cards",
+          "it": "Carte"
+        },
+        "value": "160"
+      },
+      {
+        "label": {
+          "en": "Decks",
+          "it": "Mazzi"
+        },
+        "value": {
+          "en": "4 of 40 cards",
+          "it": "4 da 40 carte"
+        }
+      },
+      {
+        "label": {
+          "en": "Size",
+          "it": "Formato"
+        },
+        "value": "63 × 88 mm"
+      }
+    ],
+    "links": [
+      {
+        "label": {
+          "en": "See the official cards",
+          "it": "Guarda le carte ufficiali"
+        },
+        "url": "https://nyfurion.com/nfts.html"
+      }
+    ]
+  },
+  "projects": [
+    {
+      "id": "card-game",
+      "name": "Nyfurion Card Game",
+      "claim": {
+        "en": "160 cards, four decks, one universe",
+        "it": "160 carte, quattro mazzi, un universo"
+      },
+      "state": "pronto",
+      "status": {
+        "en": "In production",
+        "it": "In produzione"
+      },
+      "progress": 90,
+      "link": {
+        "label": {
+          "en": "Open",
+          "it": "Apri la scheda"
+        },
+        "url": "app://gioco"
+      }
+    },
+    {
+      "id": "libro",
+      "name": {
+        "en": "The Rebirth of King Ash",
+        "it": "La rinascita del re Ash"
+      },
+      "claim": {
+        "en": "The first book of the universe, readable online",
+        "it": "Il primo libro dell’universo, leggibile online"
+      },
+      "state": "attivo",
+      "status": {
+        "en": "Out",
+        "it": "Uscito"
+      },
+      "progress": 100,
+      "link": {
+        "label": {
+          "en": "Read the story",
+          "it": "Leggi la storia"
+        },
+        "url": "https://nyfurion.com/lore.html"
+      }
+    },
+    {
+      "id": "collezione",
+      "name": "Nyfurion X Reborn",
+      "claim": {
+        "en": "The Fragments of the Realm, on Ethereum",
+        "it": "I frammenti del Regno su Ethereum"
+      },
+      "state": "attivo",
+      "status": {
+        "en": "Published",
+        "it": "Pubblicata"
+      },
+      "progress": 100,
+      "link": {
+        "label": {
+          "en": "View on OpenSea",
+          "it": "Guarda su OpenSea"
+        },
+        "url": "https://opensea.io/collection/nyfurionxreborn"
+      }
+    },
+    {
+      "id": "sito",
+      "name": "nyfurion.com",
+      "claim": {
+        "en": "Lore, characters, license and archive",
+        "it": "Lore, personaggi, licenza e archivio"
+      },
+      "state": "attivo",
+      "status": {
+        "en": "Online",
+        "it": "Online"
+      },
+      "link": {
+        "label": {
+          "en": "Open the site",
+          "it": "Apri il sito"
+        },
+        "url": "https://nyfurion.com"
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "carte-collezione-chiusa",
+      "image": "/carte/f/041.webp",
+      "date": "2026-08-18T09:00:00Z",
+      "category": "gioco",
+      "tag": {
+        "en": "Done",
+        "it": "Fatto"
+      },
+      "pinned": true,
+      "title": {
+        "en": "The 160 cards are finished",
+        "it": "Le 160 carte sono finite"
+      },
+      "summary": {
+        "en": "The first collection is closed: four decks of 40, numbered XRB-001 → 160, with no gaps.",
+        "it": "La prima collezione è chiusa: quattro mazzi da 40, numerazione XRB-001 → 160, nessun buco."
+      },
+      "body": [
+        {
+          "en": "Every card is drawn, numbered, illustrated and written. The four decks share the same structure: 28 Entities and 12 Relics, the same pyramid of values. No deck starts ahead.",
+          "it": "Ogni carta è disegnata, numerata, illustrata e scritta. I quattro mazzi hanno la stessa struttura: 28 Entità e 12 Reliquie, la stessa piramide di valori. Nessun mazzo parte avvantaggiato."
+        },
+        {
+          "en": "The complete rules come in the box, in the booklet.",
+          "it": "Le regole complete arrivano nella scatola, nel libretto."
+        },
+        {
+          "en": "From here on nothing gets rewritten: things get added.",
+          "it": "Da qui in avanti non si riscrive: si aggiunge."
+        }
+      ],
+      "links": [
+        {
+          "label": {
+            "en": "Open the game",
+            "it": "Apri la scheda del gioco"
+          },
+          "url": "app://gioco"
+        }
+      ]
+    },
+    {
+      "id": "mazzi-in-arrivo",
+      "image": "/starter/KOB.webp",
+      "date": "2026-08-18T08:00:00Z",
+      "category": "gioco",
+      "tag": {
+        "en": "Coming",
+        "it": "In arrivo"
+      },
+      "title": {
+        "en": "The series arrives as four starter decks",
+        "it": "La serie esce in quattro mazzi starter"
+      },
+      "summary": {
+        "en": "Dark Power of Evil, Young Boys of Peace, Keepers of Balance, Ancients of Nyfurion: forty cards each, ready to play.",
+        "it": "Dark Power of Evil, Young Boys of Peace, Keepers of Balance, Ancients of Nyfurion: quaranta carte ciascuno, pronti da giocare."
+      },
+      "body": [
+        {
+          "en": "Every deck is complete and plays straight out of the box: nothing to build, nothing else to buy to start. Forty cards, twenty-eight Entities and twelve Relics.",
+          "it": "Ogni mazzo è completo e si gioca appena aperto: non serve costruirlo, non serve comprarne altri per iniziare. Quaranta carte, ventotto Entità e dodici Reliquie."
+        },
+        {
+          "en": "The four decks share the same structure of values, so none of them starts ahead. What changes is how they win: one takes, one endures, one holds the balance, one lets nothing go.",
+          "it": "I quattro mazzi hanno la stessa struttura di valori, quindi nessuno parte avvantaggiato. Quello che cambia è come vincono: uno toglie, uno resiste, uno tiene l’equilibrio, uno non lascia andare niente."
+        },
+        {
+          "en": "The cards use the standard collectible size, so the sleeves and deck boxes you already own will fit.",
+          "it": "Le carte hanno il formato standard dei giochi di carte collezionabili, quindi bustine e portamazzo che già conosci vanno bene."
+        },
+        {
+          "en": "The release date lands here, the day there is one.",
+          "it": "La data di uscita la trovi qui, il giorno che c’è."
+        }
+      ],
+      "links": [
+        {
+          "label": {
+            "en": "Open the game",
+            "it": "Apri la scheda del gioco"
+          },
+          "url": "app://gioco"
+        }
+      ]
+    },
+    {
+      "id": "app-apertura",
+      "image": "/carte/f/121.webp",
+      "date": "2026-08-16T08:00:00Z",
+      "category": "annuncio",
+      "tag": {
+        "en": "New",
+        "it": "Nuovo"
+      },
+      "title": {
+        "en": "The Realm lands on your phone",
+        "it": "Il Regno entra nel tuo telefono"
+      },
+      "summary": {
+        "en": "This is the official Nyfurion X Reborn app: announcements arrive here first, in real time.",
+        "it": "Questa è l’app ufficiale di Nyfurion X Reborn: gli annunci arrivano qui per primi, in tempo reale."
+      },
+      "body": [
+        {
+          "en": "No algorithm in between, no posts that disappear. What happens in the Realm appears here the moment it happens.",
+          "it": "Niente algoritmo in mezzo, niente post che spariscono. Quello che succede nel Regno compare qui appena succede."
+        },
+        {
+          "en": "Pull down to refresh at any time. The latest dispatches stay saved on your phone, so you can read them again without a connection.",
+          "it": "Trascina in giù per aggiornare in qualsiasi momento. L’ultima versione dei dispacci resta salvata sul telefono, così puoi rileggerla anche senza connessione."
+        }
+      ]
+    },
+    {
+      "id": "licenza-v31",
+      "image": "/doc/licenza.webp",
+      "date": "2026-07-10T12:00:00Z",
+      "category": "nft",
+      "title": {
+        "en": "Commercial license v3.1: what you really own",
+        "it": "Licenza commerciale v3.1: cosa possiedi davvero"
+      },
+      "summary": {
+        "en": "Full commercial rights over your character, written down and published on the site.",
+        "it": "Diritti commerciali completi sul tuo personaggio, scritti nero su bianco e pubblicati sul sito."
+      },
+      "body": [
+        {
+          "en": "The license is public, bilingual and downloadable. It defines what you may do with the character you hold, and what stays with the Creator.",
+          "it": "La licenza è pubblica, bilingue e scaricabile. Definisce cosa puoi fare con il personaggio che detieni, e cosa resta al Creatore."
+        },
+        {
+          "en": "No promise of profit: only rights over the work, stated in a verifiable way.",
+          "it": "Nessuna promessa di guadagno: solo diritti sull’opera, dichiarati in modo verificabile."
+        }
+      ],
+      "links": [
+        {
+          "label": {
+            "en": "Read the license",
+            "it": "Leggi la licenza"
+          },
+          "url": "https://nyfurion.com/license"
+        }
+      ]
+    },
+    {
+      "id": "collezione-onchain",
+      "image": "/carte/f/003.webp",
+      "date": "2026-07-09T12:00:00Z",
+      "category": "nft",
+      "title": {
+        "en": "Nyfurion X Reborn: the Fragments are safe",
+        "it": "Nyfurion X Reborn: i frammenti sono al sicuro"
+      },
+      "summary": {
+        "en": "Metadata and images served from our own infrastructure, with no dependency on third-party gateways.",
+        "it": "Metadati e immagini serviti da infrastruttura propria, senza dipendere da gateway di terzi."
+      },
+      "body": [
+        {
+          "en": "Every Fragment is reachable and verifiable. The archive sits on infrastructure we control directly, not on services that can shut down overnight.",
+          "it": "Ogni frammento è raggiungibile e verificabile. L’archivio sta su infrastruttura controllata direttamente, non su servizi che possono chiudere da un giorno all’altro."
+        },
+        {
+          "en": "What you bought stays what you bought.",
+          "it": "Quello che hai comprato resta quello che hai comprato."
+        }
+      ],
+      "links": [
+        {
+          "label": {
+            "en": "See the collection",
+            "it": "Vedi la collezione"
+          },
+          "url": "https://opensea.io/collection/nyfurionxreborn"
+        }
+      ]
+    },
+    {
+      "id": "rey-scelta",
+      "image": "/doc/rey.webp",
+      "date": "2026-07-08T12:00:00Z",
+      "category": "lore",
+      "title": {
+        "en": "Rey has not chosen yet",
+        "it": "Rey non ha ancora scelto"
+      },
+      "summary": {
+        "en": "The Queen stands in the middle. The Realm waits, and we are her conscience.",
+        "it": "La Regina resta in mezzo. Il Regno aspetta, e la sua coscienza siamo noi."
+      },
+      "body": [
+        {
+          "en": "King Ash left the throne to Tyri, passing over the firstborn. Nyv claimed nothing: he founded his own dark empire and rules it. The Shadow Predators are simply waiting for the two of them to wear each other down.",
+          "it": "Re Ash ha lasciato il trono a Tyri scavalcando il primogenito. Nyv non ha reclamato nulla: ha fondato il proprio impero oscuro e ne è il re. Gli Shadow Predators aspettano solo che i due si logorino."
+        },
+        {
+          "en": "Rey holds the primordial power and no banner. Until she chooses, the portal stays contested — and the choice will be yours too.",
+          "it": "Rey ha il potere primordiale e nessuna parte. Finché non sceglie, il portale resta conteso — e la scelta sarà anche tua."
+        }
+      ],
+      "links": [
+        {
+          "label": {
+            "en": "Enter the lore",
+            "it": "Entra nella lore"
+          },
+          "url": "https://nyfurion.com/lore.html"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "versionCode": 6,
+  "versionName": "1.2.3",
+  "apkUrl": "https://nyfurion.com/downloads/nyfurion-latest.apk",
+  "sizeBytes": 28681933,
+  "publishedAt": "2026-08-20T09:52:54.737Z",
+  "mandatory": false,
+  "notes": {
+    "en": "Official game booklet, in-app update and live notifications.",
+    "it": "Libretto ufficiale del gioco, aggiornamento dall'app e notifiche in tempo reale."
+  }
+}
