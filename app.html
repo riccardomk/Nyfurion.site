@@ -6,9 +6,12 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png" />
+    <link rel="apple-touch-icon" href="favicon-180.png" />
   <title>Nyfurion &mdash; App</title>
   <meta name="description" content="The official Nyfurion X Reborn app: dispatches from the Realm, the card game, the collection. Android and iPhone.">
-  <link rel="icon" type="image/png" href="https://ipfs.io/ipfs/bafkreif52w6ucsqdbbwstt22fellwobdnnztceenycprkurkr4bo3q3lcq" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
@@ -153,6 +156,18 @@
     }
 
     @media (max-width:560px) { .wrap { padding:104px 18px 70px; } }
+  
+    .app-id{display:flex;align-items:center;gap:18px;margin-bottom:6px}
+    .app-id h1{margin:0}
+    .app-mark{
+      width:84px;height:84px;flex:0 0 84px;border-radius:19px;
+      border:1px solid rgba(200,191,168,.22);
+      box-shadow:0 10px 30px rgba(0,0,0,.55);
+    }
+    @media (max-width:560px){
+      .app-id{gap:14px}
+      .app-mark{width:64px;height:64px;flex-basis:64px;border-radius:15px}
+    }
   </style>
 </head>
 <body>
@@ -170,6 +185,7 @@
         <a href="archive.html">Holder</a>
         <a href="app.html" class="active">App</a>
         <a href="contacts.html">Contact</a>
+        <a href="app.html">App</a>
         <span class="nav-sep"></span>
         <a href="index.html#choose" class="nav-cta">Choose Your Side</a>
       </div>
@@ -178,8 +194,13 @@
   </nav>
 
   <main class="wrap">
-    <div class="eyebrow" data-i18n="eyebrow">Nyfurion &middot; Official app</div>
-    <h1 data-i18n="title">The Realm, in your pocket.</h1>
+    <div class="app-id">
+      <img class="app-mark" src="favicon-512.png" alt="Nyfurion" width="512" height="512">
+      <div>
+        <div class="eyebrow" data-i18n="eyebrow">Nyfurion &middot; Official app</div>
+        <h1 data-i18n="title">The Realm, in your pocket.</h1>
+      </div>
+    </div>
     <p class="lead" data-i18n="lead">Dispatches the moment they happen, all 160 cards, the rules, the books and the collection. It works offline and it is free.</p>
     <div class="rule"></div>
 
