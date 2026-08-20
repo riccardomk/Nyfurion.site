@@ -12,3 +12,12 @@ cloudflare-worker/.wrangler/
 # La villa è servita solo dal caveau privato (R2 via /api/villa), mai pubblica
 villa-prime.glb
 test-runner.html
+
+# L'APK non sta nel repository: Cloudflare Pages rifiuta i file oltre
+# 25 MiB, e ogni versione aggiungerebbe 27 MB permanenti alla storia.
+# Vive su R2, servito da cdn.nyfurion.com.
+downloads/*.apk
+
+# Le dipendenze si reinstallano: non vanno versionate.
+node_modules/
+**/node_modules/
