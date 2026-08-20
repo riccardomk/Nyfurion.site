@@ -1,13 +1,13 @@
 {
-  "versionCode": 9,
-  "versionName": "1.3.0",
+  "versionCode": 10,
+  "versionName": "1.3.1",
   "apkUrl": "https://nyfurion.com/downloads/nyfurion-latest.apk",
-  "sizeBytes": 28685885,
-  "publishedAt": "2026-08-20T14:01:13.418Z",
+  "sizeBytes": 28877717,
+  "publishedAt": "2026-08-20T14:19:24.140Z",
   "mandatory": false,
   "notes": {
-    "en": "German language, Google-only sign-in and the official shop.",
-    "it": "Lingua tedesca, accesso solo con Google e shop ufficiale.",
-    "de": "Deutsche Sprache, Anmeldung nur mit Google und offizieller Shop."
+    "en": "Fixes the black screen when switching to German. Shop now in Settings.",
+    "it": "Risolve lo schermo nero passando al tedesco. Lo shop ora è nelle Impostazioni.",
+    "de": "Behebt den schwarzen Bildschirm beim Wechsel auf Deutsch. Shop jetzt in den Einstellungen."
   }
 }
