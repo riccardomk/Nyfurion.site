@@ -1,12 +1,13 @@
 {
-  "versionCode": 8,
-  "versionName": "1.2.5",
-  "apkUrl": "https://nyfurion-app.web.app/nyfurion-latest-debug.bin",
-  "sizeBytes": 28682277,
-  "publishedAt": "2026-08-20T13:23:32.797Z",
+  "versionCode": 9,
+  "versionName": "1.3.0",
+  "apkUrl": "https://nyfurion.com/downloads/nyfurion-latest.apk",
+  "sizeBytes": 28685885,
+  "publishedAt": "2026-08-20T14:01:13.418Z",
   "mandatory": false,
   "notes": {
-    "en": "Official shop, in-app update and the game booklet.",
-    "it": "Shop ufficiale, aggiornamento dall app e libretto di gioco."
+    "en": "German language, Google-only sign-in and the official shop.",
+    "it": "Lingua tedesca, accesso solo con Google e shop ufficiale.",
+    "de": "Deutsche Sprache, Anmeldung nur mit Google und offizieller Shop."
   }
 }
