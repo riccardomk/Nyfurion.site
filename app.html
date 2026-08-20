@@ -246,8 +246,8 @@
         <div class="sub" data-i18n="webSub">Nothing to download</div>
         <p data-i18n="webText">The same app, installed straight from the browser. Once it is on your Home screen or desktop it behaves like any other app: its own window, full screen, works offline and updates on its own.</p>
 
-        <a class="btn ghost" href="https://nyfurion-app.web.app" data-i18n="webBtn">Open the web app</a>
-        <div class="meta" data-i18n="webMeta">Free &middot; no store, no account needed to open it</div>
+        <a class="btn ghost" id="webBtn" href="/webapp/?installa=1" data-i18n="webBtn">Install on this device</a>
+        <div class="meta" data-i18n="webMeta">Free &middot; no store &middot; it takes a few seconds</div>
 
         <div class="devices" role="tablist">
           <button type="button" class="device" data-dev="ios" role="tab" data-i18n="devIos">iPhone / iPad</button>
@@ -256,21 +256,21 @@
         </div>
 
         <div class="steps" data-steps="ios">
-          <div class="step"><span data-i18n="i1">Open the web app in <b>Safari</b> &mdash; on iPhone it only works from Safari.</span></div>
-          <div class="step"><span data-i18n="i2">Tap Share, then <b>Add to Home Screen</b>.</span></div>
-          <div class="step"><span data-i18n="i3">Open it from the new icon and sign in.</span></div>
+          <div class="step"><span data-i18n="i1">Press the button above. On iPhone this page must be open in <b>Safari</b>.</span></div>
+          <div class="step"><span data-i18n="i2">Tap Share at the bottom, then <b>Add to Home Screen</b>.</span></div>
+          <div class="step"><span data-i18n="i3">The icon lands on your Home screen. Open it from there and sign in.</span></div>
         </div>
 
         <div class="steps" data-steps="pc" hidden>
-          <div class="step"><span data-i18n="p1">Open the web app in <b>Chrome</b> or <b>Edge</b>.</span></div>
-          <div class="step"><span data-i18n="p2">Click the <b>install icon</b> in the address bar, on the right. If you cannot see it: menu &#9662; then <b>Install</b>.</span></div>
-          <div class="step"><span data-i18n="p3">It opens in its own window and stays in your programs, like any other app.</span></div>
+          <div class="step"><span data-i18n="p1">Press the button above, in <b>Chrome</b> or <b>Edge</b>.</span></div>
+          <div class="step"><span data-i18n="p2">The browser asks to confirm: accept.</span></div>
+          <div class="step"><span data-i18n="p3">The Nyfurion icon lands on your desktop and the app opens in its own window.</span></div>
         </div>
 
         <div class="steps" data-steps="android" hidden>
-          <div class="step"><span data-i18n="n1">If you have Android, take the app above: it is the full version.</span></div>
-          <div class="step"><span data-i18n="n2">You prefer no download? Open the web app in <b>Chrome</b>, menu &#8942; then <b>Install app</b>.</span></div>
-          <div class="step"><span data-i18n="n3">Open it from the new icon and sign in.</span></div>
+          <div class="step"><span data-i18n="n1">On Android take the app above: it is the full version, with notifications.</span></div>
+          <div class="step"><span data-i18n="n2">You prefer no download? Press the button above in <b>Chrome</b>.</span></div>
+          <div class="step"><span data-i18n="n3">The icon lands on your Home screen, like any other app.</span></div>
         </div>
 
         <div class="note" data-i18n="webNote">On iPhone, notifications only work once the app is on the Home screen, with iOS 16.4 or later. Opened as an ordinary web page, Apple does not allow them.</div>
@@ -319,17 +319,17 @@
       a3:'Apri l&rsquo;app e accedi per ricevere le notifiche.',
       webBadge:'iPhone &middot; iPad &middot; Computer', webTitle:'Web app', webSub:'Niente da scaricare',
       webText:'La stessa app, installata direttamente dal browser. Una volta sulla schermata Home o sul desktop si comporta come le altre: finestra sua, a tutto schermo, funziona senza rete e si aggiorna da sola.',
-      webBtn:'Apri la web app', webMeta:'Gratis &middot; nessuno store, nessun account per aprirla',
+      webBtn:'Installa su questo dispositivo', webMeta:'Gratis &middot; nessuno store &middot; ci vogliono pochi secondi',
       devIos:'iPhone / iPad', devPc:'Computer', devAndroid:'Android',
-      i1:'Apri la web app con <b>Safari</b> &mdash; su iPhone funziona solo da Safari.',
-      i2:'Tocca Condividi, poi <b>Aggiungi a schermata Home</b>.',
-      i3:'Aprila dalla nuova icona e accedi.',
-      p1:'Apri la web app con <b>Chrome</b> o <b>Edge</b>.',
-      p2:'Clicca l&rsquo;<b>icona di installazione</b> nella barra degli indirizzi, a destra. Se non la vedi: men&ugrave; &#9662; poi <b>Installa</b>.',
-      p3:'Si apre in una finestra sua e resta fra i tuoi programmi, come le altre app.',
-      n1:'Se hai Android prendi l&rsquo;app qui sopra: &egrave; la versione completa.',
-      n2:'Preferisci non scaricare niente? Apri la web app con <b>Chrome</b>, men&ugrave; &#8942; poi <b>Installa app</b>.',
-      n3:'Aprila dalla nuova icona e accedi.',
+      i1:'Premi il pulsante qui sopra. Su iPhone questa pagina dev&rsquo;essere aperta con <b>Safari</b>.',
+      i2:'Tocca Condividi in basso, poi <b>Aggiungi a schermata Home</b>.',
+      i3:'L&rsquo;icona finisce sulla schermata Home. Aprila da l&igrave; e accedi.',
+      p1:'Premi il pulsante qui sopra, con <b>Chrome</b> o <b>Edge</b>.',
+      p2:'Il browser chiede conferma: accetta.',
+      p3:'L&rsquo;icona di Nyfurion arriva sul desktop e l&rsquo;app si apre in una finestra sua.',
+      n1:'Su Android prendi l&rsquo;app qui sopra: &egrave; la versione completa, con le notifiche.',
+      n2:'Preferisci non scaricare niente? Premi il pulsante qui sopra con <b>Chrome</b>.',
+      n3:'L&rsquo;icona finisce sulla schermata Home, come le altre app.',
       webNote:'Su iPhone le notifiche funzionano solo dopo aver aggiunto l&rsquo;app alla schermata Home, con iOS 16.4 o successivo. Aperta come pagina normale, Apple non le permette.',
       whatTitle:'Cosa c&rsquo;&egrave; dentro',
       f1l:'Dispacci', f1v:'In tempo reale',
