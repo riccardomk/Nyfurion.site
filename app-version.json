@@ -1,13 +1,13 @@
 {
-  "versionCode": 13,
-  "versionName": "1.4.0",
+  "versionCode": 14,
+  "versionName": "1.4.1",
   "apkUrl": "https://nyfurion.com/downloads/nyfurion-latest.apk",
-  "sizeBytes": 28709407,
-  "publishedAt": "2026-08-21T09:40:53.803Z",
+  "sizeBytes": 28709927,
+  "publishedAt": "2026-08-21T10:01:15.416Z",
   "mandatory": false,
   "notes": {
-    "en": "Unboxing, inventory and your own deck.",
-    "it": "Unboxing, inventario e il tuo mazzo.",
-    "de": "Unboxing, Inventar und dein eigenes Deck."
+    "en": "Card view and deck fixed on phones.",
+    "it": "Scheda carta e deck sistemati da telefono.",
+    "de": "Kartenansicht und Deck am Telefon korrigiert."
   }
 }
