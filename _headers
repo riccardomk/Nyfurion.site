@@ -29,3 +29,19 @@
   Content-Type: application/vnd.android.package-archive
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=300
+
+# Il service worker e la pagina dell'app non si mettono MAI da parte: sono
+# i due file che dicono al browser quale versione usare. Con una scadenza
+# lunga, dopo una pubblicazione l'app resta vecchia per ore — e se la cache
+# si rinnova da sola, resta vecchia per sempre.
+/webapp/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/webapp/
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/webapp/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/webapp/manifest.webmanifest
+  Cache-Control: no-cache, must-revalidate
