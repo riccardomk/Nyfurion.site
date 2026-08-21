@@ -10,6 +10,23 @@
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png" />
     <link rel="apple-touch-icon" href="favicon-180.png" />
+  <script>
+    /* Chi apre l'APP installata deve trovare l'app, mai il sito.
+       Dopo l'accesso Google il giro di ritorno puo' lasciare la finestra
+       sulla radice del dominio: da li' si vedrebbe questa pagina dentro
+       la finestra dell'app. Se siamo in modalita' app, si va dritti
+       all'applicazione. */
+    (function () {
+      try {
+        var inApp =
+          window.matchMedia('(display-mode: standalone)').matches ||
+          window.navigator.standalone === true;
+        if (inApp) window.location.replace('/webapp/');
+      } catch (e) {
+        /* browser normale: resta il sito, com'e' giusto */
+      }
+    })();
+  </script>
     <title>NYFURION X REBORN, OFFICIAL COLLECTION</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preconnect" href="https://fonts.googleapis.com">

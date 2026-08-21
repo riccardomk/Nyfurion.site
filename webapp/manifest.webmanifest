@@ -4,7 +4,7 @@
   "description": "The official Nyfurion X Reborn app: dispatches from the Realm, the card game and the collection, in real time.",
   "id": "/webapp/",
   "start_url": "/webapp/",
-  "scope": "/webapp/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#080809",
