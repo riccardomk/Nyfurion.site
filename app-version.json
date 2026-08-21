@@ -1,9 +1,9 @@
 {
-  "versionCode": 12,
+  "versionCode": 13,
   "versionName": "1.4.0",
   "apkUrl": "https://nyfurion.com/downloads/nyfurion-latest.apk",
   "sizeBytes": 28709407,
-  "publishedAt": "2026-08-21T09:32:11.504Z",
+  "publishedAt": "2026-08-21T09:40:53.803Z",
   "mandatory": false,
   "notes": {
     "en": "Unboxing, inventory and your own deck.",
