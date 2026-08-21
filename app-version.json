@@ -1,13 +1,13 @@
 {
   "versionCode": 12,
-  "versionName": "1.3.3",
+  "versionName": "1.4.0",
   "apkUrl": "https://nyfurion.com/downloads/nyfurion-latest.apk",
-  "sizeBytes": 28908435,
-  "publishedAt": "2026-08-20T15:26:00.720Z",
+  "sizeBytes": 28709407,
+  "publishedAt": "2026-08-21T09:32:11.504Z",
   "mandatory": false,
   "notes": {
-    "en": "Sign-in fixed: Google access no longer fails on computers and web.",
-    "it": "Accesso sistemato: il login Google non fallisce piu su computer e web.",
-    "de": "Anmeldung korrigiert: Der Google-Login schlagt auf Computer und Web nicht mehr fehl."
+    "en": "Unboxing, inventory and your own deck.",
+    "it": "Unboxing, inventario e il tuo mazzo.",
+    "de": "Unboxing, Inventar und dein eigenes Deck."
   }
 }

@@ -16,19 +16,19 @@
     },
     "intro": [
       {
-        "en": "A collectible card game built on a single statistic. Every Entity carries one number, MT, from 1 to 10: in a duel the higher one always wins, with no charts and no exceptions.",
-        "it": "Un gioco di carte collezionabili costruito su una sola statistica. Ogni Entità ha un numero, l’MT, da 1 a 10: nel duello vince sempre il più alto, senza tabelle e senza eccezioni.",
-        "de": "Ein Sammelkartenspiel, gebaut auf einer einzigen Kennzahl. Jede Entität trägt eine Zahl, MT, von 1 bis 10: Im Duell gewinnt immer die höhere, ohne Tabellen und ohne Ausnahmen."
+        "en": "A collectible card game built on a single number. Every Entity carries its MT, from 1 to 10: in a duel the higher one wins. That is the whole rule.",
+        "it": "Un gioco di carte collezionabili costruito su un solo numero. Ogni Entità porta il suo MT, da 1 a 10: nel duello vince il più alto. La regola è tutta qui.",
+        "de": "Ein Sammelkartenspiel, gebaut auf einer einzigen Zahl. Jede Entität trägt ihren MT, von 1 bis 10: Im Duell gewinnt der höhere. Das ist die ganze Regel."
       },
       {
-        "en": "The rules take five minutes to explain. The depth comes from face-down Relics and from Destiny, the defence you play once in the whole game.",
-        "it": "Le regole si spiegano in cinque minuti. La profondità arriva dalle Reliquie coperte e dal Destino, la difesa che si gioca una volta sola in tutta la partita.",
-        "de": "Die Regeln sind in fünf Minuten erklärt. Die Tiefe kommt von den verdeckten Relikten und vom Schicksal, der Verteidigung, die man im ganzen Spiel nur einmal ausspielt."
+        "en": "Five minutes to learn. The depth comes from face-down Relics and from Destiny, the defence you keep for one single moment in the whole match.",
+        "it": "Cinque minuti per impararlo. La profondità arriva dalle Reliquie coperte e dal Destino, la difesa che tieni da parte per un solo momento in tutta la partita.",
+        "de": "Fünf Minuten zum Lernen. Die Tiefe kommt von den verdeckten Relikten und vom Schicksal, der Verteidigung, die du dir für einen einzigen Moment der ganzen Partie aufhebst."
       },
       {
-        "en": "The first collection is closed: 160 cards, four ready-to-play decks of 40, 160 original artworks.",
-        "it": "La prima collezione è chiusa: 160 carte, quattro mazzi da 40 pronti al gioco, 160 illustrazioni originali.",
-        "de": "Die erste Sammlung ist abgeschlossen: 160 Karten, vier spielfertige Decks zu 40, 160 originale Illustrationen."
+        "en": "The first collection is complete: 160 cards, four decks of 40, ready to play.",
+        "it": "La prima collezione è completa: 160 carte, quattro mazzi da 40, pronti al gioco.",
+        "de": "Die erste Sammlung ist vollständig: 160 Karten, vier Decks zu 40, spielbereit."
       }
     ],
     "phases": [
@@ -54,9 +54,9 @@
           "de": "Die 160 Karten"
         },
         "note": {
-          "en": "Drawn, numbered, illustrated",
-          "it": "Disegnate, numerate, illustrate",
-          "de": "Gezeichnet, nummeriert, illustriert"
+          "en": "Numbered, finished, ready",
+          "it": "Numerate, finite, pronte",
+          "de": "Nummeriert, fertig, bereit"
         },
         "state": "done"
       },
@@ -261,6 +261,154 @@
   ],
   "items": [
     {
+      "id": "spacchettamento-live",
+      "image": "/bustine/DPOE.webp",
+      "date": "2026-08-21T10:00:00Z",
+      "category": "gioco",
+      "tag": {
+        "en": "Live",
+        "it": "Live",
+        "de": "Live"
+      },
+      "pinned": true,
+      "title": {
+        "en": "Unboxing is live in the app",
+        "it": "Lo spacchettamento è live nell'app",
+        "de": "Das Unboxing ist in der App live"
+      },
+      "summary": {
+        "en": "Open a virtual pack, keep the cards in your profile and build your own deck. The first three open right away.",
+        "it": "Apri una bustina virtuale, tieni le carte nel tuo profilo e costruisci il tuo mazzo. Le prime tre si aprono subito.",
+        "de": "Öffne ein virtuelles Pack, behalte die Karten in deinem Profil und bau dir dein eigenes Deck. Die ersten drei öffnen sich sofort."
+      },
+      "body": [
+        {
+          "en": "Seven cards a pack, drawn on the spot from all four decks. They arrive one at a time, and the next one waits for you to tap: the pause between two cards is the whole point of opening.",
+          "it": "Sette carte a bustina, pescate sul momento da tutti e quattro i mazzi. Arrivano una alla volta, e la successiva aspetta che tocchi: la pausa fra due carte è tutto il senso dell'aprire.",
+          "de": "Sieben Karten pro Pack, im Moment aus allen vier Decks gezogen. Sie kommen einzeln, und die nächste wartet auf deine Berührung: Die Pause zwischen zwei Karten ist der ganze Sinn des Öffnens."
+        },
+        {
+          "en": "The first three packs open right away, one after the other. From the fourth on, two a day.",
+          "it": "Le prime tre bustine si aprono subito, una dietro l'altra. Dalla quarta in poi, due al giorno.",
+          "de": "Die ersten drei Packs öffnen sich sofort, eines nach dem anderen. Ab dem vierten: zwei pro Tag."
+        },
+        {
+          "en": "What comes out stays in your profile, and from there you build a deck of your own: 40 cards, 28 Entities and 12 Relics, up to three copies of the same card. The same rules as the printed decks, so the day the box is in your hands you already know how to fill it.",
+          "it": "Quello che esce resta nel tuo profilo, e da lì costruisci un mazzo tuo: 40 carte, 28 Entità e 12 Reliquie, fino a tre copie della stessa carta. Le stesse regole dei mazzi stampati, così il giorno in cui avrai la scatola in mano saprai già come riempirla.",
+          "de": "Was herauskommt, bleibt in deinem Profil, und daraus baust du dir ein eigenes Deck: 40 Karten, 28 Entitäten und 12 Relikte, bis zu drei Kopien derselben Karte. Dieselben Regeln wie bei den gedruckten Decks, damit du an dem Tag, an dem du die Box in Händen hältst, schon weißt, wie man sie füllt."
+        },
+        {
+          "en": "These cards are virtual: they live in your profile, for the pleasure of collecting them. Play happens with the printed cards, the ones in the box.",
+          "it": "Queste carte sono virtuali: vivono nel tuo profilo, per il gusto di collezionarle. Il gioco si fa con le carte stampate, quelle della scatola.",
+          "de": "Diese Karten sind virtuell: Sie leben in deinem Profil, zum Vergnügen des Sammelns. Gespielt wird mit den gedruckten Karten, denen aus der Box."
+        }
+      ],
+      "links": [
+        {
+          "label": {
+            "en": "Open the game",
+            "it": "Apri la scheda del gioco",
+            "de": "Das Spiel öffnen"
+          },
+          "url": "app://gioco"
+        }
+      ]
+    },
+    {
+      "id": "come-comprare-un-frammento",
+      "image": "/icon-512.png",
+      "date": "2026-08-21T09:00:00Z",
+      "category": "nft",
+      "tag": {
+        "en": "Guide",
+        "it": "Guida",
+        "de": "Anleitung"
+      },
+      "pinned": true,
+      "title": {
+        "en": "How to buy a Fragment, step by step",
+        "it": "Come comprare un Frammento, passo per passo",
+        "de": "Wie du ein Fragment kaufst, Schritt für Schritt"
+      },
+      "summary": {
+        "en": "Your first Fragment in six steps, with the safety part first: the wallet is the key to everything you own.",
+        "it": "Il tuo primo Frammento in sei passi, con la sicurezza prima di tutto: il portafoglio è la chiave di tutto quello che possiedi.",
+        "de": "Dein erstes Fragment in sechs Schritten, mit der Sicherheit zuerst: Die Wallet ist der Schlüssel zu allem, was dir gehört."
+      },
+      "body": [
+        {
+          "en": "Start from safety, because everything else rests on it. A wallet is protected by a recovery phrase of twelve or twenty-four words: whoever holds those words holds everything inside. Write them on paper, keep the paper somewhere only you reach, and treat every request for them as an attempt to take what is yours. Nyfurion asks for them at no point, ever.",
+          "it": "Parti dalla sicurezza, perché tutto il resto poggia lì. Un portafoglio è protetto da una frase di recupero di dodici o ventiquattro parole: chi ha quelle parole ha tutto quello che c'è dentro. Scrivile su carta, tieni la carta dove arrivi solo tu, e considera ogni richiesta di quelle parole un tentativo di prenderti quello che è tuo. Nyfurion non te le chiede in nessun momento.",
+          "de": "Beginne bei der Sicherheit, denn alles andere ruht darauf. Eine Wallet wird durch eine Wiederherstellungsphrase aus zwölf oder vierundzwanzig Wörtern geschützt: Wer diese Wörter hat, hat alles darin. Schreibe sie auf Papier, bewahre das Papier dort auf, wo nur du hinkommst, und behandle jede Frage danach als Versuch, dir zu nehmen, was dir gehört. Nyfurion fragt zu keinem Zeitpunkt danach."
+        },
+        {
+          "en": "For anything you intend to keep, a hardware wallet is the safest choice: a small physical device, Ledger or Trezor, that keeps the keys offline and asks you to confirm every operation by pressing a button on the device itself. Buy it only from the maker's own site, and set it up yourself, from scratch: a device that arrives with the words already written is a device someone else can open.",
+          "it": "Per tutto quello che intendi tenere, un portafoglio hardware è la scelta più sicura: un piccolo apparecchio fisico, Ledger o Trezor, che tiene le chiavi fuori da internet e ti fa confermare ogni operazione premendo un tasto sull'apparecchio stesso. Compralo solo dal sito del produttore, e configuralo tu, da zero: un apparecchio che arriva con le parole già scritte è un apparecchio che qualcun altro può aprire.",
+          "de": "Für alles, was du behalten willst, ist eine Hardware-Wallet die sicherste Wahl: ein kleines physisches Gerät, Ledger oder Trezor, das die Schlüssel offline hält und dich jede Aktion mit einem Knopfdruck am Gerät selbst bestätigen lässt. Kaufe es ausschließlich auf der Seite des Herstellers und richte es selbst ein, von Grund auf: Ein Gerät, das mit bereits notierten Wörtern ankommt, ist ein Gerät, das jemand anderes öffnen kann."
+        },
+        {
+          "en": "1. Install a wallet. MetaMask and Rainbow are the two most common, free, and available for phone and computer. Follow the setup to the end and store the recovery phrase as described above. If you own a hardware wallet, connect it now: from here on the wallet becomes the signature and the device holds the keys.",
+          "it": "1. Installa un portafoglio. MetaMask e Rainbow sono i due più diffusi, gratuiti, per telefono e computer. Segui la configurazione fino in fondo e conserva la frase di recupero come sopra. Se hai un portafoglio hardware, collegalo adesso: da qui in poi il portafoglio fa da firma e le chiavi restano nell'apparecchio.",
+          "de": "1. Installiere eine Wallet. MetaMask und Rainbow sind die beiden verbreitetsten, kostenlos, für Telefon und Computer. Führe die Einrichtung bis zum Ende durch und bewahre die Wiederherstellungsphrase wie oben beschrieben auf. Wenn du eine Hardware-Wallet besitzt, verbinde sie jetzt: Ab hier dient die Wallet als Unterschrift und die Schlüssel bleiben im Gerät."
+        },
+        {
+          "en": "2. Put some ETH in it. Ethereum is the currency the Realm runs on. You buy it on an exchange — Coinbase, Kraken and Binance are the usual ones — with a card or a bank transfer, then send it to the address of your wallet. Send a small amount first and wait for it to arrive: seeing the first transfer land tells you the address is right.",
+          "it": "2. Mettici dentro degli ETH. Ethereum è la moneta su cui gira il Regno. Si compra su un exchange — Coinbase, Kraken e Binance sono i soliti — con carta o bonifico, poi si manda all'indirizzo del tuo portafoglio. Manda prima una cifra piccola e aspetta che arrivi: vedere atterrare il primo invio ti conferma che l'indirizzo è giusto.",
+          "de": "2. Lade ETH darauf. Ethereum ist die Währung, auf der das Reich läuft. Du kaufst sie an einer Börse — Coinbase, Kraken und Binance sind die üblichen — per Karte oder Überweisung und schickst sie dann an die Adresse deiner Wallet. Schicke zuerst einen kleinen Betrag und warte, bis er ankommt: Der erste eingetroffene Transfer bestätigt dir, dass die Adresse stimmt."
+        },
+        {
+          "en": "3. Open the official collection. Use the link at the bottom of this dispatch, or the Collection section of this app: both lead to the same verified contract address. Compare that address with the one shown on OpenSea before anything else — it is the single check that tells a real Fragment from a copy.",
+          "it": "3. Apri la collezione ufficiale. Usa il collegamento in fondo a questo dispaccio, oppure la sezione Collezione di questa app: portano allo stesso indirizzo di contratto verificato. Confronta quell'indirizzo con quello mostrato su OpenSea prima di ogni altra cosa: è l'unico controllo che distingue un Frammento vero da una copia.",
+          "de": "3. Öffne die offizielle Sammlung. Nutze den Link am Ende dieser Depesche oder den Bereich Sammlung in dieser App: Beide führen zur selben verifizierten Vertragsadresse. Vergleiche diese Adresse zuerst mit der, die auf OpenSea angezeigt wird — das ist die eine Prüfung, die ein echtes Fragment von einer Kopie unterscheidet."
+        },
+        {
+          "en": "4. Connect the wallet. On OpenSea press Connect and choose the wallet you installed. Connecting shows the site your public address and lets you sign: your funds stay where they are, and every purchase asks for your confirmation.",
+          "it": "4. Collega il portafoglio. Su OpenSea premi Connect e scegli il portafoglio che hai installato. Collegarlo mostra al sito il tuo indirizzo pubblico e ti permette di firmare: i tuoi fondi restano dove sono, e ogni acquisto ti chiede conferma.",
+          "de": "4. Verbinde die Wallet. Drücke auf OpenSea Connect und wähle die Wallet, die du installiert hast. Das Verbinden zeigt der Seite deine öffentliche Adresse und erlaubt dir zu signieren: Deine Mittel bleiben, wo sie sind, und jeder Kauf fragt dich um Bestätigung."
+        },
+        {
+          "en": "5. Choose your Fragment and buy it. Pick the character you want, press Buy now, and read the window your wallet opens: it shows the price plus the network fee, the small amount Ethereum charges to write the transfer. Confirm, and within a few minutes the Fragment appears in your wallet.",
+          "it": "5. Scegli il tuo Frammento e compralo. Prendi il personaggio che vuoi, premi Buy now e leggi la finestra che apre il portafoglio: mostra il prezzo più la commissione di rete, la piccola cifra che Ethereum chiede per scrivere il passaggio. Conferma, e nel giro di qualche minuto il Frammento compare nel tuo portafoglio.",
+          "de": "5. Wähle dein Fragment und kaufe es. Nimm die Figur, die du willst, drücke Buy now und lies das Fenster, das deine Wallet öffnet: Es zeigt den Preis plus die Netzwerkgebühr, den kleinen Betrag, den Ethereum für die Eintragung des Übergangs verlangt. Bestätige, und innerhalb weniger Minuten erscheint das Fragment in deiner Wallet."
+        },
+        {
+          "en": "6. Check it and enjoy it. The Fragment is now yours on the blockchain, under your address, and the commercial licence that comes with it is written and public.",
+          "it": "6. Verificalo e godilo. Il Frammento adesso è tuo sulla blockchain, sotto il tuo indirizzo, e la licenza commerciale che porta con sé è scritta e pubblica.",
+          "de": "6. Prüfe es und genieße es. Das Fragment gehört nun dir auf der Blockchain, unter deiner Adresse, und die kommerzielle Lizenz, die dazugehört, ist schriftlich und öffentlich."
+        },
+        {
+          "en": "From that moment the Holder Lounge opens to you, on nyfurion.com. You enter by connecting the same wallet and signing a message that costs 0 ETH: the signature proves the Fragment is yours, and it leaves everything exactly where it is.",
+          "it": "Da quel momento ti si apre la Holder Lounge, su nyfurion.com. Si entra collegando lo stesso portafoglio e firmando un messaggio che costa 0 ETH: la firma dimostra che il Frammento è tuo, e lascia tutto esattamente dov'è.",
+          "de": "Von diesem Moment an öffnet sich dir die Holder Lounge auf nyfurion.com. Du betrittst sie, indem du dieselbe Wallet verbindest und eine Nachricht signierst, die 0 ETH kostet: Die Signatur belegt, dass das Fragment dir gehört, und lässt alles genau dort, wo es ist."
+        },
+        {
+          "en": "Inside you find the references and the images of your character, together with the official files. Several characters already carry their 3D model, in GLB and STL; the others are being added one by one, until the whole collection is there.",
+          "it": "Dentro trovi le reference e le immagini del tuo personaggio, insieme ai file ufficiali. Diversi personaggi hanno già il loro modello 3D, in GLB e STL; gli altri si aggiungono uno alla volta, fino ad averli tutti.",
+          "de": "Darin findest du die Referenzen und die Bilder deiner Figur, zusammen mit den offiziellen Dateien. Mehrere Figuren tragen bereits ihr 3D-Modell in GLB und STL; die übrigen kommen nach und nach dazu, bis die ganze Sammlung da ist."
+        },
+        {
+          "en": "Among those files there is a textured version that doubles as your official card pass, ready for the events to come.",
+          "it": "Tra quei file c'è una versione texturizzata che vale anche come card pass ufficiale, pronta per gli eventi che verranno.",
+          "de": "Unter diesen Dateien liegt eine texturierte Fassung, die zugleich als offizieller Card Pass dient, bereit für die kommenden Events."
+        },
+        {
+          "en": "One last habit worth keeping: every purchase happens on the blockchain, outside this app, and stays under your own responsibility. Take your time on each confirmation window and read it before pressing. The people who move calmly are the ones who keep what they buy.",
+          "it": "Un'ultima abitudine che vale la pena tenere: ogni acquisto avviene sulla blockchain, fuori da questa app, e resta sotto la tua responsabilità. Prenditi il tuo tempo su ogni finestra di conferma e leggila prima di premere. Chi si muove con calma è chi tiene quello che compra.",
+          "de": "Eine letzte Gewohnheit, die sich lohnt: Jeder Kauf findet auf der Blockchain statt, außerhalb dieser App, und bleibt in deiner eigenen Verantwortung. Nimm dir bei jedem Bestätigungsfenster Zeit und lies es, bevor du drückst. Wer sich in Ruhe bewegt, behält, was er kauft."
+        }
+      ],
+      "links": [
+        {
+          "label": {
+            "en": "Open the collection",
+            "it": "Apri la collezione",
+            "de": "Die Sammlung öffnen"
+          },
+          "url": "app://collezione"
+        }
+      ]
+    },
+    {
       "id": "carte-collezione-chiusa",
       "image": "/carte/f/041.webp",
       "date": "2026-08-18T09:00:00Z",
@@ -277,25 +425,20 @@
         "de": "Die 160 Karten sind fertig"
       },
       "summary": {
-        "en": "The first collection is closed: four decks of 40, numbered XRB-001 → 160, with no gaps.",
-        "it": "La prima collezione è chiusa: quattro mazzi da 40, numerazione XRB-001 → 160, nessun buco.",
-        "de": "Die erste Sammlung ist abgeschlossen: vier Decks zu 40, nummeriert XRB-001 → 160, ohne Lücken."
+        "en": "The first collection is complete: four decks of 40, numbered XRB-001 to XRB-160.",
+        "it": "La prima collezione è completa: quattro mazzi da 40, numerati da XRB-001 a XRB-160.",
+        "de": "Die erste Sammlung ist vollständig: vier Decks zu 40, nummeriert von XRB-001 bis XRB-160."
       },
       "body": [
         {
-          "en": "Every card is drawn, numbered, illustrated and written. The four decks share the same structure: 28 Entities and 12 Relics, the same pyramid of values. No deck starts ahead.",
-          "it": "Ogni carta è disegnata, numerata, illustrata e scritta. I quattro mazzi hanno la stessa struttura: 28 Entità e 12 Reliquie, la stessa piramide di valori. Nessun mazzo parte avvantaggiato.",
-          "de": "Jede Karte ist gezeichnet, nummeriert, illustriert und geschrieben. Die vier Decks teilen denselben Aufbau: 28 Entitäten und 12 Relikte, dieselbe Wertepyramide. Kein Deck startet im Vorteil."
+          "en": "Every card is finished: its number, its image, its symbols and its effect text. The four decks share the same structure: 28 Entities and 12 Relics.",
+          "it": "Ogni carta è finita: il suo numero, la sua immagine, i suoi simboli e il testo dell'effetto. I quattro mazzi condividono la stessa struttura: 28 Entità e 12 Reliquie.",
+          "de": "Jede Karte ist fertig: ihre Nummer, ihr Bild, ihre Symbole und ihr Effekttext. Die vier Decks teilen denselben Aufbau: 28 Entitäten und 12 Relikte."
         },
         {
           "en": "The complete rules come in the box, in the booklet.",
-          "it": "Le regole complete arrivano nella scatola, nel libretto.",
+          "it": "Le regole complete sono nella scatola, nel libretto.",
           "de": "Die vollständigen Regeln liegen der Box bei, im Heft."
-        },
-        {
-          "en": "From here on nothing gets rewritten: things get added.",
-          "it": "Da qui in avanti non si riscrive: si aggiunge.",
-          "de": "Ab hier wird nichts mehr umgeschrieben: es kommt nur hinzu."
         }
       ],
       "links": [
@@ -320,35 +463,35 @@
         "de": "Bald"
       },
       "title": {
-        "en": "The series arrives as four starter decks",
-        "it": "La serie esce in quattro mazzi starter",
-        "de": "Die Serie erscheint als vier Starter-Decks"
+        "en": "The series is complete: four starter decks",
+        "it": "La serie è completa: quattro mazzi iniziali",
+        "de": "Die Serie ist fertig: vier Starter-Decks"
       },
       "summary": {
         "en": "Dark Power of Evil, Young Boys of Peace, Keepers of Balance, Ancients of Nyfurion: forty cards each, ready to play.",
-        "it": "Dark Power of Evil, Young Boys of Peace, Keepers of Balance, Ancients of Nyfurion: quaranta carte ciascuno, pronti da giocare.",
-        "de": "Dark Power of Evil, Young Boys of Peace, Keepers of Balance, Ancients of Nyfurion: je vierzig Karten, sofort spielbereit."
+        "it": "Dark Power of Evil, Young Boys of Peace, Keepers of Balance, Ancients of Nyfurion: quaranta carte ciascuno, pronti al gioco.",
+        "de": "Dark Power of Evil, Young Boys of Peace, Keepers of Balance, Ancients of Nyfurion: je vierzig Karten, spielbereit."
       },
       "body": [
         {
-          "en": "Every deck is complete and plays straight out of the box: nothing to build, nothing else to buy to start. Forty cards, twenty-eight Entities and twelve Relics.",
-          "it": "Ogni mazzo è completo e si gioca appena aperto: non serve costruirlo, non serve comprarne altri per iniziare. Quaranta carte, ventotto Entità e dodici Reliquie.",
-          "de": "Jedes Deck ist vollständig und wird direkt aus der Box gespielt: nichts zu bauen, nichts dazuzukaufen, um anzufangen. Vierzig Karten, achtundzwanzig Entitäten und zwölf Relikte."
+          "en": "XRB stands for X Reborn, the name of the series: every card carries it in its number. The four decks run from XRB-001 to XRB-160, forty cards each.",
+          "it": "XRB sta per X Reborn, il nome della serie: ogni carta lo porta nel suo numero. I quattro mazzi vanno da XRB-001 a XRB-160, quaranta carte ciascuno.",
+          "de": "XRB steht für X Reborn, den Namen der Serie: Jede Karte trägt es in ihrer Nummer. Die vier Decks laufen von XRB-001 bis XRB-160, je vierzig Karten."
         },
         {
-          "en": "The four decks share the same structure of values, so none of them starts ahead. What changes is how they win: one takes, one endures, one holds the balance, one lets nothing go.",
-          "it": "I quattro mazzi hanno la stessa struttura di valori, quindi nessuno parte avvantaggiato. Quello che cambia è come vincono: uno toglie, uno resiste, uno tiene l’equilibrio, uno non lascia andare niente.",
-          "de": "Die vier Decks teilen denselben Aufbau der Werte, keines startet also im Vorteil. Was sich unterscheidet, ist die Art zu gewinnen: eines nimmt, eines hält stand, eines wahrt das Gleichgewicht, eines gibt nichts her."
+          "en": "The first release adds up to 30 limited special cards, from XRB-161 to XRB-190.",
+          "it": "La prima uscita aggiunge fino a 30 special limitate, da XRB-161 a XRB-190.",
+          "de": "Die erste Ausgabe fügt bis zu 30 limitierte Specials hinzu, von XRB-161 bis XRB-190."
         },
         {
-          "en": "The cards use the standard collectible size, so the sleeves and deck boxes you already own will fit.",
-          "it": "Le carte hanno il formato standard dei giochi di carte collezionabili, quindi bustine e portamazzo che già conosci vanno bene.",
-          "de": "Die Karten haben das übliche Sammelkartenformat, deine vorhandenen Hüllen und Deckboxen passen also."
+          "en": "The cards use the standard collectible size, 63 × 88 mm.",
+          "it": "Le carte usano la dimensione standard dei collezionabili, 63 × 88 mm.",
+          "de": "Die Karten haben das Standard-Sammelkartenformat, 63 × 88 mm."
         },
         {
-          "en": "The release date lands here, the day there is one.",
-          "it": "La data di uscita la trovi qui, il giorno che c’è.",
-          "de": "Das Erscheinungsdatum steht hier, an dem Tag, an dem es eines gibt."
+          "en": "The release date appears here first, the moment it is set.",
+          "it": "La data di uscita compare prima di tutto qui, nel momento in cui c'è.",
+          "de": "Das Erscheinungsdatum erscheint zuerst hier, sobald es feststeht."
         }
       ],
       "links": [
@@ -360,7 +503,8 @@
           },
           "url": "app://gioco"
         }
-      ]
+      ],
+      "pinned": false
     },
     {
       "id": "app-apertura",
@@ -373,27 +517,28 @@
         "de": "Neu"
       },
       "title": {
-        "en": "The Realm lands on your phone",
-        "it": "Il Regno entra nel tuo telefono",
-        "de": "Das Reich kommt auf dein Telefon"
+        "en": "The Realm lands on your phone and your computer",
+        "it": "Il Regno arriva sul telefono e sul computer",
+        "de": "Das Reich kommt auf dein Telefon und deinen Computer"
       },
       "summary": {
         "en": "This is the official Nyfurion X Reborn app: announcements arrive here first, in real time.",
-        "it": "Questa è l’app ufficiale di Nyfurion X Reborn: gli annunci arrivano qui per primi, in tempo reale.",
-        "de": "Das ist die offizielle Nyfurion-X-Reborn-App: Ankündigungen erscheinen hier zuerst, in Echtzeit."
+        "it": "Questa è l'app ufficiale di Nyfurion X Reborn: gli annunci arrivano prima di tutto qui, in tempo reale.",
+        "de": "Das ist die offizielle Nyfurion-X-Reborn-App: Ankündigungen kommen zuerst hier an, in Echtzeit."
       },
       "body": [
         {
-          "en": "No algorithm in between, no posts that disappear. What happens in the Realm appears here the moment it happens.",
-          "it": "Niente algoritmo in mezzo, niente post che spariscono. Quello che succede nel Regno compare qui appena succede.",
-          "de": "Kein Algorithmus dazwischen, keine Beiträge, die verschwinden. Was im Reich geschieht, erscheint hier in dem Moment, in dem es geschieht."
+          "en": "What happens in the Realm appears here the moment it happens, on your phone and on your computer, around the clock.",
+          "it": "Quello che accade nel Regno compare qui nel momento in cui accade, sul telefono e sul computer, 24 ore su 24.",
+          "de": "Was im Reich geschieht, erscheint hier in dem Moment, in dem es geschieht, auf dem Telefon und auf dem Computer, rund um die Uhr."
         },
         {
-          "en": "Pull down to refresh at any time. The latest dispatches stay saved on your phone, so you can read them again without a connection.",
-          "it": "Trascina in giù per aggiornare in qualsiasi momento. L’ultima versione dei dispacci resta salvata sul telefono, così puoi rileggerla anche senza connessione.",
-          "de": "Zum Aktualisieren jederzeit nach unten ziehen. Die letzten Depeschen bleiben auf dem Telefon gespeichert, du kannst sie also auch ohne Verbindung noch einmal lesen."
+          "en": "Pull down to refresh whenever you like. The latest dispatches stay saved on your device, ready to read again at any time.",
+          "it": "Tira verso il basso per aggiornare quando vuoi. Gli ultimi dispacci restano salvati sul dispositivo, pronti da rileggere in qualsiasi momento.",
+          "de": "Zieh nach unten, um zu aktualisieren, wann immer du willst. Die letzten Depeschen bleiben auf dem Gerät gespeichert und sind jederzeit wieder lesbar."
         }
-      ]
+      ],
+      "pinned": false
     },
     {
       "id": "licenza-v31",
@@ -406,19 +551,14 @@
         "de": "Kommerzielle Lizenz v3.1: was dir wirklich gehört"
       },
       "summary": {
-        "en": "Full commercial rights over your character, written down and published on the site.",
-        "it": "Diritti commerciali completi sul tuo personaggio, scritti nero su bianco e pubblicati sul sito.",
-        "de": "Volle kommerzielle Rechte an deinem Charakter, schriftlich festgehalten und auf der Website veröffentlicht."
+        "en": "Full commercial rights over your character, written down and public on the site.",
+        "it": "Diritti commerciali pieni sul tuo personaggio, messi per iscritto e pubblici sul sito.",
+        "de": "Volle kommerzielle Rechte an deinem Charakter, schriftlich festgehalten und öffentlich auf der Website."
       },
       "body": [
         {
-          "en": "The license is public, bilingual and downloadable. It defines what you may do with the character you hold, and what stays with the Creator.",
-          "it": "La licenza è pubblica, bilingue e scaricabile. Definisce cosa puoi fare con il personaggio che detieni, e cosa resta al Creatore.",
-          "de": "Die Lizenz ist öffentlich, zweisprachig und herunterladbar. Sie legt fest, was du mit dem Charakter tun darfst, den du besitzt, und was beim Urheber bleibt."
-        },
-        {
           "en": "No promise of profit: only rights over the work, stated in a verifiable way.",
-          "it": "Nessuna promessa di guadagno: solo diritti sull’opera, dichiarati in modo verificabile.",
+          "it": "Nessuna promessa di profitto: solo diritti sull'opera, espressi in modo verificabile.",
           "de": "Kein Gewinnversprechen: nur Rechte am Werk, nachprüfbar formuliert."
         }
       ],
@@ -431,7 +571,8 @@
           },
           "url": "https://nyfurion.com/license"
         }
-      ]
+      ],
+      "pinned": false
     },
     {
       "id": "collezione-onchain",
@@ -444,15 +585,25 @@
         "de": "Nyfurion X Reborn: die Fragmente sind sicher"
       },
       "summary": {
-        "en": "Metadata and images served from our own infrastructure, with no dependency on third-party gateways.",
-        "it": "Metadati e immagini serviti da infrastruttura propria, senza dipendere da gateway di terzi.",
-        "de": "Metadaten und Bilder von unserer eigenen Infrastruktur ausgeliefert, ohne Abhängigkeit von fremden Gateways."
+        "en": "Metadata and images stay reachable and verifiable, served through established public infrastructure.",
+        "it": "Metadati e immagini restano raggiungibili e verificabili, serviti da infrastrutture pubbliche consolidate.",
+        "de": "Metadaten und Bilder bleiben erreichbar und überprüfbar, ausgeliefert über etablierte öffentliche Infrastruktur."
       },
       "body": [
         {
-          "en": "Every Fragment is reachable and verifiable. The archive sits on infrastructure we control directly, not on services that can shut down overnight.",
-          "it": "Ogni frammento è raggiungibile e verificabile. L’archivio sta su infrastruttura controllata direttamente, non su servizi che possono chiudere da un giorno all’altro.",
-          "de": "Jedes Fragment ist erreichbar und überprüfbar. Das Archiv liegt auf einer Infrastruktur, die wir direkt kontrollieren, nicht auf Diensten, die über Nacht abgeschaltet werden können."
+          "en": "A Fragment is not a picture on a server that someone can switch off. It is an entry written into a smart contract on Ethereum: a public register that no one can edit afterwards, not even us. Anyone, at any hour, can read that register and see that the piece is yours.",
+          "it": "Un Frammento è ben più di un'immagine su un server che qualcuno può spegnere. È una riga scritta dentro uno smart contract su Ethereum: un registro pubblico che nessuno può modificare dopo, noi compresi. Chiunque, a qualsiasi ora, può leggere quel registro e vedere che il pezzo è tuo.",
+          "de": "Ein Fragment ist weit mehr als ein Bild auf einem Server, den jemand abschalten kann. Es ist ein Eintrag in einem Smart Contract auf Ethereum: ein öffentliches Register, das danach niemand mehr ändern kann, wir eingeschlossen. Jeder kann dieses Register jederzeit lesen und sehen, dass das Stück dir gehört."
+        },
+        {
+          "en": "The images and the data live on IPFS, where every file is called by its own content: change one pixel and the name changes with it. That is why a Fragment stays exactly the Fragment you bought, today and in ten years.",
+          "it": "Le immagini e i dati vivono su IPFS, dove ogni file viene chiamato con il proprio contenuto: cambia un pixel e cambia il nome insieme a lui. È per questo che un Frammento resta esattamente il Frammento che hai comprato, oggi e fra dieci anni.",
+          "de": "Die Bilder und Daten liegen auf IPFS, wo jede Datei über ihren eigenen Inhalt benannt wird: Ändere ein Pixel, und der Name ändert sich mit. Deshalb bleibt ein Fragment genau das Fragment, das du gekauft hast — heute und in zehn Jahren."
+        },
+        {
+          "en": "Two independent systems, both public, both checkable by you in a minute. Your ownership rests on mathematics and on an open register, and it keeps standing on its own.",
+          "it": "Due sistemi indipendenti, entrambi pubblici, entrambi verificabili da te in un minuto. La tua proprietà poggia sulla matematica e su un registro aperto, e sta in piedi da sola.",
+          "de": "Zwei unabhängige Systeme, beide öffentlich, beide von dir in einer Minute überprüfbar. Dein Eigentum ruht auf Mathematik und auf einem offenen Register und steht von allein."
         },
         {
           "en": "What you bought stays what you bought.",
@@ -469,7 +620,8 @@
           },
           "url": "https://opensea.io/collection/nyfurionxreborn"
         }
-      ]
+      ],
+      "pinned": false
     },
     {
       "id": "rey-scelta",
@@ -488,9 +640,9 @@
       },
       "body": [
         {
-          "en": "King Ash left the throne to Tyri, passing over the firstborn. Nyv claimed nothing: he founded his own dark empire and rules it. The Shadow Predators are simply waiting for the two of them to wear each other down.",
-          "it": "Re Ash ha lasciato il trono a Tyri scavalcando il primogenito. Nyv non ha reclamato nulla: ha fondato il proprio impero oscuro e ne è il re. Gli Shadow Predators aspettano solo che i due si logorino.",
-          "de": "König Ash überließ den Thron Tyri und überging den Erstgeborenen. Nyv forderte nichts: Er gründete sein eigenes dunkles Imperium und herrscht darüber. Die Schattenjäger warten schlicht darauf, dass die beiden einander aufreiben."
+          "en": "King Ash chose Tyri as his heir, and Nyv felt betrayed by his own father. From that wound he raised a dark empire of his own, built to annihilate the Realm. The Shadow Predators wait for the two of them to wear each other down.",
+          "it": "Re Ash scelse Tyri come erede, e Nyv si sentì tradito da suo padre. Da quella ferita ha alzato un impero oscuro tutto suo, costruito per annientare il Regno. I Predatori dell'Ombra aspettano che i due si consumino a vicenda.",
+          "de": "König Ash wählte Tyri zum Erben, und Nyv fühlte sich von seinem eigenen Vater verraten. Aus dieser Wunde errichtete er ein eigenes dunkles Imperium, gebaut, um das Reich zu vernichten. Die Schattenjäger warten darauf, dass die beiden einander aufreiben."
         },
         {
           "en": "Rey holds the primordial power and no banner. Until she chooses, the portal stays contested — and the choice will be yours too.",
@@ -507,7 +659,8 @@
           },
           "url": "https://nyfurion.com/lore.html"
         }
-      ]
+      ],
+      "pinned": false
     }
   ]
 }
