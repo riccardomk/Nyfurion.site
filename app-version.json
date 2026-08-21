@@ -1,13 +1,13 @@
 {
-  "versionCode": 16,
-  "versionName": "1.5.0",
+  "versionCode": 17,
+  "versionName": "1.5.1",
   "apkUrl": "https://nyfurion.com/downloads/nyfurion-latest.apk",
-  "sizeBytes": 28717259,
-  "publishedAt": "2026-08-21T15:04:57.386Z",
+  "sizeBytes": 28745214,
+  "publishedAt": "2026-08-21T15:25:06.776Z",
   "mandatory": false,
   "notes": {
-    "en": "Your packs, cards and decks now follow your account.",
-    "it": "Bustine, carte e mazzi seguono il tuo account.",
-    "de": "Packs, Karten und Decks folgen jetzt deinem Konto."
+    "en": "Nothing gets lost between devices, and a reminder when a pack is ready.",
+    "it": "Niente si perde fra dispositivi, e un avviso quando una bustina e' pronta.",
+    "de": "Zwischen Geraeten geht nichts verloren, plus Erinnerung, wenn ein Pack bereit ist."
   }
 }
