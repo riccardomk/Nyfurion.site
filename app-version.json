@@ -1,13 +1,13 @@
 {
-  "versionCode": 14,
-  "versionName": "1.4.1",
-  "apkUrl": "https://nyfurion.com/downloads/nyfurion-latest.apk",
-  "sizeBytes": 28709927,
-  "publishedAt": "2026-08-21T10:01:15.416Z",
+  "versionCode": 15,
+  "versionName": "1.4.2",
+  "apkUrl": "https://nyfurion-app.web.app/nyfurion-latest-debug.bin",
+  "sizeBytes": 28717881,
+  "publishedAt": "2026-08-21T10:33:34.977Z",
   "mandatory": false,
   "notes": {
-    "en": "Card view and deck fixed on phones.",
-    "it": "Scheda carta e deck sistemati da telefono.",
-    "de": "Kartenansicht und Deck am Telefon korrigiert."
+    "en": "Deck sharing and a cleaner deck screen.",
+    "it": "Deck condivisi e schermata del deck piu' pulita.",
+    "de": "Geteilte Decks und eine aufgeräumte Deck-Ansicht."
   }
 }

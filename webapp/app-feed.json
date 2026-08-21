@@ -315,6 +315,75 @@
       ]
     },
     {
+      "id": "come-funziona-unboxing-deck",
+      "image": "/carte/f/041.webp",
+      "date": "2026-08-21T12:00:00Z",
+      "category": "gioco",
+      "tag": {
+        "en": "Guide",
+        "it": "Guida",
+        "de": "Anleitung"
+      },
+      "pinned": true,
+      "title": {
+        "en": "Unboxing and deck: where they are and how they work",
+        "it": "Unboxing e deck: dove sono e come funzionano",
+        "de": "Unboxing und Deck: wo sie sind und wie sie funktionieren"
+      },
+      "summary": {
+        "en": "Everything starts from one button, on the game card in the GAME tab.",
+        "it": "Parte tutto da un pulsante, sulla scheda del gioco nella sezione GIOCO.",
+        "de": "Alles beginnt mit einer Taste, auf der Spielkarte im Bereich SPIEL."
+      },
+      "body": [
+        {
+          "en": "Open the GAME tab from the bar at the bottom. At the top you find the card game panel, with the four cards fanned out: right under it there is the button that says Unboxing Pack. Everything lives behind that one button.",
+          "it": "Apri la sezione GIOCO dalla barra in basso. In cima trovi la scheda del gioco di carte, con le quattro carte a ventaglio: subito sotto c'è il pulsante Unboxing Pack. Tutto vive dietro quel pulsante.",
+          "de": "Öffne den Bereich SPIEL in der Leiste unten. Oben findest du die Karte des Kartenspiels mit den vier aufgefächerten Karten: direkt darunter steht die Taste Unboxing Pack. Alles lebt hinter dieser einen Taste."
+        },
+        {
+          "en": "1. Open a pack. Four packs are waiting: tap one and it tears open. Seven cards arrive one at a time, drawn on the spot from all four decks, and the next one waits for you to tap. Rare and uncommon cards arrive with a light of their own, so you know what you got before you read a word.",
+          "it": "1. Apri una bustina. Quattro bustine ti aspettano: ne tocchi una e si strappa. Sette carte arrivano una alla volta, pescate sul momento da tutti e quattro i mazzi, e la successiva aspetta che tocchi. Le rare e le non comuni arrivano con una luce tutta loro, così sai cosa ti è uscito prima di leggere una parola.",
+          "de": "1. Öffne ein Pack. Vier Packs warten: Tippe auf eines, und es reißt auf. Sieben Karten kommen einzeln, im Moment aus allen vier Decks gezogen, und die nächste wartet auf deine Berührung. Seltene und ungewöhnliche Karten kommen mit eigenem Licht, sodass du weißt, was du hast, bevor du ein Wort liest."
+        },
+        {
+          "en": "The first three packs open right away, one after the other. From the fourth on, two a day.",
+          "it": "Le prime tre bustine si aprono subito, una dietro l'altra. Dalla quarta in poi, due al giorno.",
+          "de": "Die ersten drei Packs öffnen sich sofort, eines nach dem anderen. Ab dem vierten: zwei pro Tag."
+        },
+        {
+          "en": "2. Your cards stay. Everything that comes out lands in your inventory, in the same section, with the number of copies marked on each card. Tap a card to read its effect in full: that is how you decide what deserves a place.",
+          "it": "2. Le tue carte restano. Tutto quello che esce finisce nel tuo inventario, nella stessa sezione, con il numero di copie segnato sulla carta. Tocca una carta per leggerne l'effetto per intero: è così che decidi cosa merita un posto.",
+          "de": "2. Deine Karten bleiben. Alles, was herauskommt, landet in deinem Inventar, im selben Bereich, mit der Anzahl der Kopien auf der Karte vermerkt. Tippe auf eine Karte, um ihre Wirkung ganz zu lesen: So entscheidest du, was einen Platz verdient."
+        },
+        {
+          "en": "3. Build the deck. Press Build your deck, give it a name, then add cards with + and take them out with −. The counters at the top stay with you the whole time: 40 cards, 28 Entities, 12 Relics, and up to three copies of the same card. They turn gold when the shape is right.",
+          "it": "3. Costruisci il mazzo. Premi Costruisci il tuo mazzo, dagli un nome, poi aggiungi le carte con + e toglile con −. I contatori in alto ti accompagnano per tutto il tempo: 40 carte, 28 Entità, 12 Reliquie, e fino a tre copie della stessa carta. Diventano dorati quando la forma è giusta.",
+          "de": "3. Bau das Deck. Drücke Bau dein Deck, gib ihm einen Namen, füge dann Karten mit + hinzu und nimm sie mit − heraus. Die Zähler oben begleiten dich die ganze Zeit: 40 Karten, 28 Entitäten, 12 Relikte und bis zu drei Kopien derselben Karte. Sie werden golden, wenn die Form stimmt."
+        },
+        {
+          "en": "4. Share it, if you want. One deck each goes on the shelf, and there you see what everyone else built. You see the strategy and never the person: no names, no emails, only the cards and the choices behind them. Change your deck whenever you like and share it again: the new one takes the place of the old.",
+          "it": "4. Condividilo, se vuoi. Un mazzo a testa va in vetrina, e lì vedi cosa hanno costruito gli altri. Si vede la strategia e mai la persona: nessun nome, nessuna email, solo le carte e le scelte dietro di esse. Cambia il tuo mazzo quando vuoi e ricondividilo: il nuovo prende il posto del vecchio.",
+          "de": "4. Teile es, wenn du willst. Ein Deck pro Person kommt in die Vitrine, und dort siehst du, was die anderen gebaut haben. Man sieht die Strategie und nie die Person: keine Namen, keine E-Mails, nur die Karten und die Entscheidungen dahinter. Ändere dein Deck, wann du willst, und teile es erneut: Das neue nimmt den Platz des alten ein."
+        },
+        {
+          "en": "These cards are virtual: they live in your profile, for the pleasure of collecting them and for learning the shape of a deck. Play happens with the printed cards, the ones in the box.",
+          "it": "Queste carte sono virtuali: vivono nel tuo profilo, per il gusto di collezionarle e per imparare la forma di un mazzo. Il gioco si fa con le carte stampate, quelle della scatola.",
+          "de": "Diese Karten sind virtuell: Sie leben in deinem Profil, zum Vergnügen des Sammelns und um die Form eines Decks zu lernen. Gespielt wird mit den gedruckten Karten, denen aus der Box."
+        }
+      ],
+      "links": [
+        {
+          "label": {
+            "en": "Open the game",
+            "it": "Apri la scheda del gioco",
+            "de": "Das Spiel öffnen"
+          },
+          "url": "app://gioco"
+        }
+      ]
+    },
+    {
       "id": "come-comprare-un-frammento",
       "image": "/icon-512.png",
       "date": "2026-08-21T09:00:00Z",
