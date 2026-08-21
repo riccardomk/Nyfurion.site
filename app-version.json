@@ -1,13 +1,13 @@
 {
-  "versionCode": 15,
-  "versionName": "1.4.2",
-  "apkUrl": "https://nyfurion-app.web.app/nyfurion-latest-debug.bin",
-  "sizeBytes": 28717881,
-  "publishedAt": "2026-08-21T10:33:34.977Z",
+  "versionCode": 16,
+  "versionName": "1.5.0",
+  "apkUrl": "https://nyfurion.com/downloads/nyfurion-latest.apk",
+  "sizeBytes": 28717259,
+  "publishedAt": "2026-08-21T15:04:57.386Z",
   "mandatory": false,
   "notes": {
-    "en": "Deck sharing and a cleaner deck screen.",
-    "it": "Deck condivisi e schermata del deck piu' pulita.",
-    "de": "Geteilte Decks und eine aufgeräumte Deck-Ansicht."
+    "en": "Your packs, cards and decks now follow your account.",
+    "it": "Bustine, carte e mazzi seguono il tuo account.",
+    "de": "Packs, Karten und Decks folgen jetzt deinem Konto."
   }
 }
