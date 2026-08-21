@@ -375,7 +375,13 @@
           if (apk) apk.click();
           return;
         }
-        window.location.href = '/webapp/?installa=1';
+        /* L'app si installa dal dominio di Firebase, non da qui.
+           Motivo: l'accesso Google torna su quel dominio, e Chrome non
+           lascia leggere i dati salvati da un dominio dentro un altro.
+           Installandola da li', app e accesso stanno nello stesso posto e
+           il login entra sempre. Torna su nyfurion.com il giorno in cui
+           l'URI di ritorno del sito sara' autorizzato in Google Cloud. */
+        window.location.href = 'https://nyfurion-app.firebaseapp.com/?installa=1';
       }));
     })();
   </script>
