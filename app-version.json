@@ -1,13 +1,13 @@
 {
-  "versionCode": 18,
-  "versionName": "1.5.2",
+  "versionCode": 19,
+  "versionName": "1.5.3",
   "apkUrl": "https://nyfurion.com/downloads/nyfurion-latest.apk",
-  "sizeBytes": 28745190,
-  "publishedAt": "2026-08-21T15:42:43.147Z",
+  "sizeBytes": 28745250,
+  "publishedAt": "2026-08-21T15:56:51.673Z",
   "mandatory": false,
   "notes": {
-    "en": "A member counted once, not once per device.",
-    "it": "Un iscritto contato una volta, non una per dispositivo.",
-    "de": "Ein Mitglied einmal gezaehlt, nicht einmal pro Geraet."
+    "en": "The installed app now updates itself.",
+    "it": "L'app installata adesso si aggiorna da sola.",
+    "de": "Die installierte App aktualisiert sich jetzt selbst."
   }
 }
