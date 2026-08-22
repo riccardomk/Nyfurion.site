@@ -1,13 +1,13 @@
 {
-  "versionCode": 22,
-  "versionName": "1.5.6",
+  "versionCode": 23,
+  "versionName": "1.5.7",
   "apkUrl": "https://nyfurion.com/downloads/nyfurion-latest.apk",
-  "sizeBytes": 28745538,
-  "publishedAt": "2026-08-22T07:37:35.885Z",
+  "sizeBytes": 28745778,
+  "publishedAt": "2026-08-22T10:12:07.910Z",
   "mandatory": false,
   "notes": {
-    "en": "Step-by-step install on iPhone.",
-    "it": "Installazione su iPhone spiegata passo per passo.",
-    "de": "Installation auf dem iPhone Schritt fuer Schritt."
+    "en": "The rulebook says who opens the attacks.",
+    "it": "Il regolamento dice chi apre gli attacchi.",
+    "de": "Das Regelwerk sagt, wer die Angriffe eroeffnet."
   }
 }
