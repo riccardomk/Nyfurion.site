@@ -1,13 +1,13 @@
 {
-  "versionCode": 20,
-  "versionName": "1.5.4",
+  "versionCode": 21,
+  "versionName": "1.5.5",
   "apkUrl": "https://nyfurion.com/downloads/nyfurion-latest.apk",
-  "sizeBytes": 28745358,
-  "publishedAt": "2026-08-21T16:24:28.312Z",
+  "sizeBytes": 28745410,
+  "publishedAt": "2026-08-22T07:30:37.878Z",
   "mandatory": false,
   "notes": {
-    "en": "One email, one profile, on every device.",
-    "it": "Una email, un profilo, su ogni dispositivo.",
-    "de": "Eine E-Mail, ein Profil, auf jedem Geraet."
+    "en": "Clearer install steps on iPhone.",
+    "it": "Istruzioni piu' chiare per installarla su iPhone.",
+    "de": "Klarere Installationsschritte auf dem iPhone."
   }
 }
