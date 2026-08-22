@@ -1,13 +1,13 @@
 {
-  "versionCode": 24,
-  "versionName": "1.5.8",
+  "versionCode": 25,
+  "versionName": "1.5.9",
   "apkUrl": "https://nyfurion.com/downloads/nyfurion-latest.apk",
-  "sizeBytes": 28781570,
-  "publishedAt": "2026-08-22T10:49:26.881Z",
+  "sizeBytes": 28612394,
+  "publishedAt": "2026-08-22T11:19:52.272Z",
   "mandatory": false,
   "notes": {
-    "en": "HOXY corrected to MT 9.",
-    "it": "HOXY corretta a MT 9.",
-    "de": "HOXY auf MT 9 korrigiert."
+    "en": "The booklet says who opens the attacks.",
+    "it": "Il libretto dice chi apre gli attacchi.",
+    "de": "Das Heft sagt, wer die Angriffe eroeffnet."
   }
 }
