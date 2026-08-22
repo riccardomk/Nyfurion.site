@@ -1,13 +1,13 @@
 {
-  "versionCode": 21,
-  "versionName": "1.5.5",
+  "versionCode": 22,
+  "versionName": "1.5.6",
   "apkUrl": "https://nyfurion.com/downloads/nyfurion-latest.apk",
-  "sizeBytes": 28745410,
-  "publishedAt": "2026-08-22T07:30:37.878Z",
+  "sizeBytes": 28745538,
+  "publishedAt": "2026-08-22T07:37:35.885Z",
   "mandatory": false,
   "notes": {
-    "en": "Clearer install steps on iPhone.",
-    "it": "Istruzioni piu' chiare per installarla su iPhone.",
-    "de": "Klarere Installationsschritte auf dem iPhone."
+    "en": "Step-by-step install on iPhone.",
+    "it": "Installazione su iPhone spiegata passo per passo.",
+    "de": "Installation auf dem iPhone Schritt fuer Schritt."
   }
 }

@@ -11,7 +11,7 @@
  * l'utente non se ne accorge. Meglio lenti che bloccati.
  */
 
-const VERSIONE = 'nyf-1.5.5-mt4274an';
+const VERSIONE = 'nyf-1.5.6-mt42fyzv';
 const GUSCIO = `${VERSIONE}-guscio`;
 const ROBA = `${VERSIONE}-roba`;
 
