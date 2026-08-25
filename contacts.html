@@ -27,7 +27,7 @@
       --line-hi:rgba(255,255,255,0.18);
     }
     * { margin:0; padding:0; box-sizing:border-box; }
-    html { scroll-behavior:smooth; min-height:100%; }
+    html { scroll-behavior:smooth; min-height:100%; overflow-x:hidden; }
     body {
       background:var(--matte-black); color:var(--ivory);
       font-family:'Space Grotesk', sans-serif;
@@ -76,7 +76,7 @@
     .intro { position:relative; }
     .intro::before {
       content:""; position:absolute; z-index:-1; pointer-events:none;
-      inset:-3.5rem -5rem -3.5rem -6rem;
+      inset:-3rem -1.5rem;
       background:radial-gradient(ellipse 76% 74% at 36% 50%, rgba(8,8,9,0.74), rgba(8,8,9,0.34) 56%, transparent 78%);
     }
     .intro .eyebrow {
@@ -259,6 +259,13 @@
         padding:calc(6.4rem + env(safe-area-inset-top)) clamp(1.1rem,4vw,1.6rem) 2rem;
       }
       .intro { text-align:center; }
+      /* Il testo qui e' centrato, quindi anche il suo alone: e resta stretto,
+         perche' un alone piu' largo dello schermo faceva scorrere la pagina
+         di lato e mandava il pannello fuori dal telefono. */
+      .intro::before {
+        inset:-2rem -0.75rem;
+        background:radial-gradient(ellipse 88% 76% at 50% 50%, rgba(8,8,9,0.74), rgba(8,8,9,0.34) 58%, transparent 80%);
+      }
       .intro .eyebrow { margin-bottom:0.95rem; letter-spacing:0.28em; }
       .intro h1 { max-width:14ch; margin:0 auto 1rem; }
       .intro .lead { max-width:40ch; margin:0 auto 1.6rem; }
@@ -275,14 +282,26 @@
       .tile-ic em { display:none; }
       .tile-body { flex:1; }
       .primary-mail { font-size:1.42rem; }
-      .chain-row code { font-size:0.62rem; }
+
+      /* Il contratto, su telefono, si legge per intero.
+         Affiancati non ci stavano: l'indirizzo finiva nei puntini e le due
+         etichette si spezzavano in colonnine strette. Qui ognuno prende la
+         sua riga e l'indirizzo va a capo per davvero. */
+      .chain-head { flex-direction:column; align-items:flex-start; gap:0.5rem; }
+      .chain-row { flex-wrap:wrap; gap:0.75rem; }
+      .chain-row code {
+        flex:1 1 100%;
+        white-space:normal; overflow:visible; text-overflow:clip;
+        overflow-wrap:anywhere; font-size:0.72rem; line-height:1.6;
+      }
+      .copy-btn { width:100%; min-height:42px; }
+      .foot .foot-line a { white-space:nowrap; }
     }
 
     @media (max-width:360px){
       .wrap { padding-left:0.85rem; padding-right:0.85rem; }
       .panel { padding:1.05rem 0.95rem 1rem; }
-      .chain-row { flex-wrap:wrap; }
-      .copy-btn { width:100%; }
+      .chain-row code { font-size:0.68rem; }
     }
   </style>
 </head>
