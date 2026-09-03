@@ -1,13 +1,13 @@
 {
-  "versionCode": 25,
-  "versionName": "1.5.9",
-  "apkUrl": "https://nyfurion.com/downloads/nyfurion-latest.apk",
-  "sizeBytes": 28612394,
-  "publishedAt": "2026-08-22T11:19:52.272Z",
+  "versionCode": 26,
+  "versionName": "1.6.0",
+  "apkUrl": "https://nyfurion-app.web.app/nyfurion-latest-debug.bin",
+  "sizeBytes": 31475790,
+  "publishedAt": "2026-09-03T12:03:21.695Z",
   "mandatory": false,
   "notes": {
-    "en": "The booklet says who opens the attacks.",
-    "it": "Il libretto dice chi apre gli attacchi.",
-    "de": "Das Heft sagt, wer die Angriffe eroeffnet."
+    "it": "Le 160 carte sono state rifatte: nuovo stemma del casato, numero di collezione e testi ridisegnati.",
+    "en": "All 160 cards redrawn: new house emblem, collector number and cleaner card text.",
+    "de": "Alle 160 Karten neu gestaltet: neues Hauswappen, Sammelnummer und klarerer Kartentext."
   }
 }
