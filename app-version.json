@@ -1,13 +1,13 @@
 {
-  "versionCode": 27,
-  "versionName": "1.6.1",
+  "versionCode": 28,
+  "versionName": "1.6.2",
   "apkUrl": "https://nyfurion-app.web.app/nyfurion-latest-debug.bin",
-  "sizeBytes": 31670775,
-  "publishedAt": "2026-09-05T10:47:18.458Z",
+  "sizeBytes": 31529954,
+  "publishedAt": "2026-09-06T11:31:23.239Z",
   "mandatory": false,
   "notes": {
-    "it": "Le 160 carte sono state ridisegnate: nuovi colori, testi allineati e crediti aggiornati.",
-    "en": "All 160 cards redesigned: new colors, aligned text and updated credits.",
-    "de": "Alle 160 Karten neu gestaltet: neue Farben, ausgerichteter Text und aktualisierte Credits."
+    "it": "Le carte sono state aggiornate con la grafica nuova: colori rivisti, barra piu' chiara e testi piu' leggibili.",
+    "en": "Cards updated with the new artwork: revised colors, lighter title bar and more readable text.",
+    "de": "Karten mit neuem Design: ueberarbeitete Farben, hellere Titelleiste und besser lesbare Texte."
   }
 }
