@@ -1,13 +1,13 @@
 {
-  "versionCode": 28,
-  "versionName": "1.6.2",
+  "versionCode": 29,
+  "versionName": "1.6.3",
   "apkUrl": "https://nyfurion-app.web.app/nyfurion-latest-debug.bin",
-  "sizeBytes": 31529954,
-  "publishedAt": "2026-09-06T11:31:23.239Z",
+  "sizeBytes": 31529942,
+  "publishedAt": "2026-09-06T11:58:27.840Z",
   "mandatory": false,
   "notes": {
-    "it": "Le carte sono state aggiornate con la grafica nuova: colori rivisti, barra piu' chiara e testi piu' leggibili.",
-    "en": "Cards updated with the new artwork: revised colors, lighter title bar and more readable text.",
-    "de": "Karten mit neuem Design: ueberarbeitete Farben, hellere Titelleiste und besser lesbare Texte."
+    "it": "Carte con la grafica nuova e testi allineati alle carte stampate: corrette le regole di LYBRARY e KESH.",
+    "en": "New card artwork and texts matching the printed cards: LYBRARY and KESH rules corrected.",
+    "de": "Neues Kartendesign und Texte passend zu den gedruckten Karten: Regeln von LYBRARY und KESH korrigiert."
   }
 }
