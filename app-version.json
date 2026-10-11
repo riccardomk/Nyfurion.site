@@ -1,13 +1,13 @@
 {
-  "versionCode": 31,
-  "versionName": "1.6.5",
+  "versionCode": 32,
+  "versionName": "1.6.6",
   "apkUrl": "https://nyfurion-app.web.app/nyfurion-latest-debug.bin",
-  "sizeBytes": 34466394,
-  "publishedAt": "2026-10-11T17:35:01.000Z",
+  "sizeBytes": 34811934,
+  "publishedAt": "2026-10-11T19:09:18.000Z",
   "mandatory": false,
   "notes": {
-    "it": "Le 160 carte aggiornate con la grafica e i nuovi effetti, anche in italiano e tedesco.",
-    "en": "All 160 cards updated with the new artwork and effects.",
-    "de": "Alle 160 Karten mit neuem Design und neuen Effekten aktualisiert, auch auf Italienisch und Deutsch."
+    "it": "Carte allineate alle regole nuove: Risorse e scontro su tutte le carte, e la carta XRB-071 ora si chiama BREAKING POINT.",
+    "en": "Cards aligned with the new rules: Resources and clash on every card, and card XRB-071 is now BREAKING POINT.",
+    "de": "Karten an die neuen Regeln angepasst: Ressourcen und Kampf auf allen Karten, und Karte XRB-071 heißt jetzt BREAKING POINT."
   }
 }
