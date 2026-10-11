@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "updatedAt": "2026-08-18T09:00:00Z",
+  "updatedAt": "2026-10-11T16:10:29Z",
   "notice": null,
   "game": {
     "kicker": {
@@ -16,9 +16,9 @@
     },
     "intro": [
       {
-        "en": "A collectible card game built on a single number. Every Entity carries its MT, from 1 to 10: in a duel the higher one wins. That is the whole rule.",
-        "it": "Un gioco di carte collezionabili costruito su un solo numero. Ogni Entità porta il suo MT, da 1 a 10: nel duello vince il più alto. La regola è tutta qui.",
-        "de": "Ein Sammelkartenspiel, gebaut auf einer einzigen Zahl. Jede Entität trägt ihren MT, von 1 bis 10: Im Duell gewinnt der höhere. Das ist die ganze Regel."
+        "en": "A collectible card game built on a single number. Every Entity carries its MT, from 0 to 10: in a clash the higher one wins. That is the whole rule.",
+        "it": "Un gioco di carte collezionabili costruito su un solo numero. Ogni Entità porta il suo MT, da 0 a 10: nello scontro vince il più alto. La regola è tutta qui.",
+        "de": "Ein Sammelkartenspiel, gebaut auf einer einzigen Zahl. Jede Entität trägt ihren MT, von 0 bis 10: Im Kampf gewinnt der höhere. Das ist die ganze Regel."
       },
       {
         "en": "Five minutes to learn. The depth comes from face-down Relics and from Destiny, the defence you keep for one single moment in the whole match.",
@@ -260,6 +260,88 @@
     }
   ],
   "items": [
+    {
+      "id": "regolamento-aggiornato-ottobre-2026",
+      "image": "https://nyfurion.com/downloads/regolamento-2026-10.webp",
+      "date": "2026-10-11T16:10:29Z",
+      "category": "gioco",
+      "tag": {
+        "en": "Updated",
+        "it": "Aggiornato",
+        "de": "Aktualisiert"
+      },
+      "pinned": true,
+      "title": {
+        "en": "The rulebook has been updated",
+        "it": "Il regolamento è aggiornato",
+        "de": "Das Regelwerk ist aktualisiert"
+      },
+      "summary": {
+        "en": "A new booklet, rewritten from scratch: clearer rules, a new look and a few important changes.",
+        "it": "Un libretto nuovo, riscritto da capo: regole più chiare, una grafica nuova e alcune novità importanti.",
+        "de": "Ein neues Heft, von Grund auf neu geschrieben: klarere Regeln, ein neues Design und einige wichtige Änderungen."
+      },
+      "body": [
+        {
+          "en": "After drawing, you can deploy, place Relics and attack in any order, even alternating them: for example, you attack, deploy a new Entity and attack again.",
+          "it": "Dopo aver pescato puoi schierare, posare Reliquie e attaccare nell'ordine che preferisci, anche alternando le azioni: per esempio attacchi, schieri una nuova Entità e attacchi di nuovo.",
+          "de": "Nach dem Ziehen kannst du in beliebiger Reihenfolge Entitäten ausspielen, Relikte legen und angreifen, auch abwechselnd: Du greifst zum Beispiel an, spielst eine neue Entität aus und greifst erneut an."
+        },
+        {
+          "en": "Attacks begin when each player has at least 2 Entities on the field, and the first attack belongs to the player who started second.",
+          "it": "Si attacca quando ogni giocatore ha almeno 2 Entità in campo, e il primo attacco spetta a chi ha iniziato per secondo.",
+          "de": "Angriffe sind möglich, sobald jeder Spieler mindestens 2 Entitäten im Feld hat; der erste Angriff gehört dem Spieler, der als Zweiter begonnen hat."
+        },
+        {
+          "en": "In a clash the higher MT always wins, from 0 to 10. With equal MT the clash is void: both Entities leave the field and nobody takes damage.",
+          "it": "Nello scontro vince sempre l'MT più alto, da 0 a 10. Con MT uguale lo scontro è nullo: escono entrambe le Entità e nessuno subisce danni.",
+          "de": "Im Kampf gewinnt immer der höhere MT, von 0 bis 10. Bei gleichem MT endet der Kampf ohne Sieger: Beide Entitäten verlassen das Feld und niemand nimmt Schaden."
+        },
+        {
+          "en": "There is no longer a hand size limit, and Relics can be used at any moment of the game.",
+          "it": "Non c'è più un limite di carte in mano, e le Reliquie si possono usare in qualsiasi momento della partita.",
+          "de": "Es gibt kein Handkartenlimit mehr, und Relikte können zu jedem Zeitpunkt der Partie eingesetzt werden."
+        },
+        {
+          "en": "Cards that leave the field go to the Resources, from where effects can bring them back into play. Cards removed from the game go to the Seal and can no longer be used.",
+          "it": "Le carte che escono dal campo vanno nelle Risorse, da cui gli effetti possono riportarle in gioco. Quelle rimosse dal gioco finiscono nel Sigillo e non si usano più.",
+          "de": "Karten, die das Feld verlassen, kommen in die Ressourcen, aus denen Effekte sie zurück ins Spiel holen können. Aus dem Spiel entfernte Karten kommen ins Siegel und können nicht mehr verwendet werden."
+        },
+        {
+          "en": "Destiny: your Entities are placed on the field face down and your opponent picks one blindly. The attacker can no longer back out.",
+          "it": "Il Destino: le tue Entità vengono messe in campo coperte e l'avversario ne sceglie una alla cieca. Chi attacca non può più tirarsi indietro.",
+          "de": "Das Schicksal: Deine Entitäten werden verdeckt ins Feld gelegt, und dein Gegner wählt blind eine davon aus. Der Angreifer kann nicht mehr zurückziehen."
+        },
+        {
+          "en": "Copies: no more than 2 identical copies of the same card and no more than 3 pairs in a deck. The official maximum for each card is in the updated list on nyfurion.com.",
+          "it": "Copie: al massimo 2 copie identiche della stessa carta e massimo 3 coppie nel mazzo. Il massimo ufficiale per ogni carta è nella lista aggiornata su nyfurion.com.",
+          "de": "Kopien: höchstens 2 identische Kopien derselben Karte und höchstens 3 Paare im Deck. Das offizielle Maximum für jede Karte steht in der aktualisierten Liste auf nyfurion.com."
+        },
+        {
+          "en": "The complete booklet, in English and in Italian, is available below.",
+          "it": "Il libretto completo, in italiano e in inglese, si apre qui sotto.",
+          "de": "Das vollständige Heft gibt es unten auf Englisch und Italienisch."
+        }
+      ],
+      "links": [
+        {
+          "label": {
+            "en": "Rulebook in English (PDF)",
+            "it": "Libretto in inglese (PDF)",
+            "de": "Regelheft auf Englisch (PDF)"
+          },
+          "url": "https://nyfurion.com/downloads/nyfurion-rulebook-en.pdf"
+        },
+        {
+          "label": {
+            "en": "Rulebook in Italian (PDF)",
+            "it": "Libretto in italiano (PDF)",
+            "de": "Regelheft auf Italienisch (PDF)"
+          },
+          "url": "https://nyfurion.com/downloads/nyfurion-regolamento-it.pdf"
+        }
+      ]
+    },
     {
       "id": "spacchettamento-live",
       "image": "/bustine/DPOE.webp",
