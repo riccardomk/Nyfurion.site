@@ -1,13 +1,13 @@
 {
-  "versionCode": 30,
-  "versionName": "1.6.4",
+  "versionCode": 31,
+  "versionName": "1.6.5",
   "apkUrl": "https://nyfurion-app.web.app/nyfurion-latest-debug.bin",
-  "sizeBytes": 32452474,
-  "publishedAt": "2026-10-11T16:56:33.754Z",
+  "sizeBytes": 34466394,
+  "publishedAt": "2026-10-11T17:35:01.000Z",
   "mandatory": false,
   "notes": {
-    "it": "Regolamento e libretto aggiornati alle nuove regole, con 12 pagine. L'aggiornamento dell'app ora si scarica senza bloccarsi.",
-    "en": "Rules and booklet updated to the new rulebook, with 12 pages. App updates now download without freezing.",
-    "de": "Regeln und Heft an das neue Regelwerk angepasst, mit 12 Seiten. App-Updates werden jetzt ohne Hänger heruntergeladen."
+    "it": "Le 160 carte aggiornate con la grafica e i nuovi effetti, anche in italiano e tedesco.",
+    "en": "All 160 cards updated with the new artwork and effects.",
+    "de": "Alle 160 Karten mit neuem Design und neuen Effekten aktualisiert, auch auf Italienisch und Deutsch."
   }
 }
