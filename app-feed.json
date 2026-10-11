@@ -318,27 +318,19 @@
           "de": "Kopien: höchstens 2 identische Kopien derselben Karte und höchstens 3 Paare im Deck. Das offizielle Maximum für jede Karte steht in der aktualisierten Liste auf nyfurion.com."
         },
         {
-          "en": "The complete booklet, in English and in Italian, is available below.",
-          "it": "Il libretto completo, in italiano e in inglese, si apre qui sotto.",
-          "de": "Das vollständige Heft gibt es unten auf Englisch und Italienisch."
+          "en": "You can browse the complete booklet inside the app, in the Game tab.",
+          "it": "Il libretto completo si sfoglia dentro l'app, nella scheda Gioco.",
+          "de": "Das vollständige Heft kannst du in der App im Bereich Spiel durchblättern."
         }
       ],
       "links": [
         {
           "label": {
-            "en": "Rulebook in English (PDF)",
-            "it": "Libretto in inglese (PDF)",
-            "de": "Regelheft auf Englisch (PDF)"
+            "en": "Open the booklet in the app",
+            "it": "Apri il libretto nell'app",
+            "de": "Heft in der App öffnen"
           },
-          "url": "https://nyfurion.com/downloads/nyfurion-rulebook-en.pdf"
-        },
-        {
-          "label": {
-            "en": "Rulebook in Italian (PDF)",
-            "it": "Libretto in italiano (PDF)",
-            "de": "Regelheft auf Italienisch (PDF)"
-          },
-          "url": "https://nyfurion.com/downloads/nyfurion-regolamento-it.pdf"
+          "url": "app://gioco"
         }
       ]
     },
