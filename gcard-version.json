@@ -1,6 +1,8 @@
 {
-  "versionCode": 38,
-  "versionName": "1.7.1",
-  "versionCodeMinimo": 37,
-  "playStore": "https://play.google.com/store/apps/details?id=com.nyfurion.gcard"
+  "versionCode": 39,
+  "versionName": "1.8.0",
+  "versionCodeMinimo": 39,
+  "soloBrowser": true,
+  "playStore": "https://play.google.com/store/apps/details?id=com.nyfurion.gcard",
+  "browser": "https://nyfurion.com/clash"
 }
