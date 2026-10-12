@@ -1,5 +1,6 @@
 {
-  "versionCode": 37,
-  "versionName": "1.7.0",
+  "versionCode": 38,
+  "versionName": "1.7.1",
+  "versionCodeMinimo": 37,
   "playStore": "https://play.google.com/store/apps/details?id=com.nyfurion.gcard"
 }
