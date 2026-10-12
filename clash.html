@@ -134,6 +134,28 @@
     .fact b { display:block; font-size:.6rem; letter-spacing:.16em; text-transform:uppercase; color:var(--dim); font-weight:600; }
     .fact span { display:block; margin-top:4px; font-size:1rem; font-weight:700; }
 
+    /* il libretto delle regole, da sfogliare */
+    .rules-lead { color:var(--dim); font-size:.9rem; line-height:1.6; margin-top:14px; max-width:60ch; }
+    .libro {
+      display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; margin-top:18px;
+      padding:4px 2px 14px; -webkit-overflow-scrolling:touch; scrollbar-width:thin;
+    }
+    .libro a {
+      flex:0 0 min(78%, 320px); scroll-snap-align:center; border-radius:6px; overflow:hidden;
+      box-shadow:0 10px 26px rgba(0,0,0,.55), 0 0 0 1px rgba(201,162,39,.2);
+    }
+    .libro img { display:block; width:100%; height:auto; aspect-ratio:1100/1550; background:#0e0b08; }
+    .libro-nav { display:flex; align-items:center; justify-content:center; gap:18px; margin-top:6px; }
+    .libro-nav button {
+      width:40px; height:40px; border-radius:50%; cursor:pointer; font:inherit; font-size:1.1rem;
+      color:var(--gold-soft); background:rgba(255,255,255,.03); border:1px solid rgba(201,162,39,.3);
+    }
+    .libro-nav span { font-size:.74rem; letter-spacing:.2em; color:var(--dim); min-width:64px; text-align:center; }
+    .libro-pdf { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; }
+    .libro-pdf .btn { margin-top:10px; font-size:.72rem; }
+    .copy { margin-top:18px; font-size:.74rem; color:var(--dim); line-height:1.6; }
+    @media (max-width:560px) { .libro-pdf { grid-template-columns:1fr; } }
+
     footer { margin-top:60px; padding-top:22px; border-top:1px solid var(--line); color:var(--dim); font-size:.76rem; line-height:1.6; }
 
     @media (max-width:560px) {
@@ -223,10 +245,39 @@
       <div class="fact"><b data-i18n="f4l">Price</b><span data-i18n="f4v">Free</span></div>
     </div>
 
+    <div class="section-title" id="regole" data-i18n="rulesTitle">How to play</div>
+    <p class="rules-lead" data-i18n="rulesLead">The official Nyfurion rulebook, page by page: the same one you find inside the game. Swipe to turn the pages, tap a page to open it full size.</p>
+    <div class="libro" id="libro">
+      <a href="assets/libretto/en/01.webp" target="_blank" rel="noopener"><img src="assets/libretto/en/01.webp" alt="Rulebook, page 1" loading="eager" width="1100" height="1550"></a>
+      <a href="assets/libretto/en/02.webp" target="_blank" rel="noopener"><img src="assets/libretto/en/02.webp" alt="Rulebook, page 2" loading="eager" width="1100" height="1550"></a>
+      <a href="assets/libretto/en/03.webp" target="_blank" rel="noopener"><img src="assets/libretto/en/03.webp" alt="Rulebook, page 3" loading="lazy" width="1100" height="1550"></a>
+      <a href="assets/libretto/en/04.webp" target="_blank" rel="noopener"><img src="assets/libretto/en/04.webp" alt="Rulebook, page 4" loading="lazy" width="1100" height="1550"></a>
+      <a href="assets/libretto/en/05.webp" target="_blank" rel="noopener"><img src="assets/libretto/en/05.webp" alt="Rulebook, page 5" loading="lazy" width="1100" height="1550"></a>
+      <a href="assets/libretto/en/06.webp" target="_blank" rel="noopener"><img src="assets/libretto/en/06.webp" alt="Rulebook, page 6" loading="lazy" width="1100" height="1550"></a>
+      <a href="assets/libretto/en/07.webp" target="_blank" rel="noopener"><img src="assets/libretto/en/07.webp" alt="Rulebook, page 7" loading="lazy" width="1100" height="1550"></a>
+      <a href="assets/libretto/en/08.webp" target="_blank" rel="noopener"><img src="assets/libretto/en/08.webp" alt="Rulebook, page 8" loading="lazy" width="1100" height="1550"></a>
+      <a href="assets/libretto/en/09.webp" target="_blank" rel="noopener"><img src="assets/libretto/en/09.webp" alt="Rulebook, page 9" loading="lazy" width="1100" height="1550"></a>
+      <a href="assets/libretto/en/10.webp" target="_blank" rel="noopener"><img src="assets/libretto/en/10.webp" alt="Rulebook, page 10" loading="lazy" width="1100" height="1550"></a>
+      <a href="assets/libretto/en/11.webp" target="_blank" rel="noopener"><img src="assets/libretto/en/11.webp" alt="Rulebook, page 11" loading="lazy" width="1100" height="1550"></a>
+      <a href="assets/libretto/en/12.webp" target="_blank" rel="noopener"><img src="assets/libretto/en/12.webp" alt="Rulebook, page 12" loading="lazy" width="1100" height="1550"></a>
+    </div>
+    <div class="libro-nav">
+      <button type="button" id="libro-prima" aria-label="Previous page">&lsaquo;</button>
+      <span id="libro-n">1 / 12</span>
+      <button type="button" id="libro-dopo" aria-label="Next page">&rsaquo;</button>
+    </div>
+    <div class="libro-pdf">
+      <a class="btn ghost" href="downloads/Nyfurion-Rules-EN.pdf" download data-i18n="pdfEn">Rulebook &middot; English (PDF)</a>
+      <a class="btn ghost" href="downloads/Nyfurion-Regole-IT.pdf" download data-i18n="pdfIt">Regolamento &middot; Italiano (PDF)</a>
+    </div>
+    <p class="copy" data-i18n="rulesCopy">&copy; 2026 NYFURION X REBORN &mdash; Riccardo Duca. All rights reserved. The rules, cards, names, texts and images of Nyfurion are protected by copyright (Italian Law 633/1941): no reproduction, even partial, without written permission.</p>
+
     <footer>
       <span data-i18n="foot">Nyfurion Clash asks for no payment and contains no advertising. Sign-in is with Google and creates a free profile.</span>
       <br><br>
       <a href="privacy-app.html" style="color:var(--gold-soft)" data-i18n="footPrivacy">Privacy notice</a>
+      <br><br>
+      <span data-i18n="footCopy">&copy; 2026 NYFURION X REBORN &mdash; Riccardo Duca. All rights reserved.</span>
     </footer>
   </main>
 
@@ -257,7 +308,11 @@
       f3l:'Scontri', f3v:'Online, 1 contro 1',
       f4l:'Prezzo', f4v:'Gratis',
       foot:'Nyfurion Clash non chiede pagamenti e non contiene pubblicit&agrave;. L&rsquo;accesso avviene con Google e crea un profilo gratuito.',
-      footPrivacy:'Informativa privacy'
+      footPrivacy:'Informativa privacy',
+      rulesTitle:'Come si gioca',
+      rulesLead:'Il libretto ufficiale delle regole di Nyfurion, pagina per pagina: lo stesso che trovi dentro il gioco. Scorri per girare le pagine, tocca una pagina per aprirla grande.',
+      rulesCopy:'&copy; 2026 NYFURION X REBORN &mdash; Riccardo Duca. Tutti i diritti riservati. Regole, carte, nomi, testi e immagini di Nyfurion sono protetti dal diritto d&rsquo;autore (L. 633/1941): vietata la riproduzione, anche parziale, senza autorizzazione scritta.',
+      footCopy:'&copy; 2026 NYFURION X REBORN &mdash; Riccardo Duca. Tutti i diritti riservati.'
     };
     if ((navigator.language||'en').toLowerCase().startsWith('it')) {
       document.documentElement.lang = 'it';
@@ -265,7 +320,28 @@
         const k = el.getAttribute('data-i18n');
         if (IT[k]) el.innerHTML = IT[k];
       });
+      // Il libretto in italiano, e il PDF italiano per primo.
+      document.querySelectorAll('#libro a').forEach((a) => {
+        a.href = a.getAttribute('href').replace('/en/', '/it/');
+        const img = a.querySelector('img');
+        img.src = img.getAttribute('src').replace('/en/', '/it/');
+        img.alt = img.alt.replace('Rulebook, page', 'Regolamento, pagina');
+      });
+      const pdf = document.querySelector('.libro-pdf');
+      pdf.insertBefore(pdf.lastElementChild, pdf.firstElementChild);
     }
+
+    /* Il libretto: frecce e numero di pagina. */
+    (function () {
+      const libro = document.getElementById('libro');
+      const n = document.getElementById('libro-n');
+      const pagine = libro.querySelectorAll('a');
+      const passo = () => pagine[0].getBoundingClientRect().width + 14;
+      const adesso = () => Math.min(pagine.length, Math.round(libro.scrollLeft / passo()) + 1);
+      libro.addEventListener('scroll', () => { n.textContent = adesso() + ' / ' + pagine.length; }, { passive: true });
+      document.getElementById('libro-prima').addEventListener('click', () => libro.scrollBy({ left: -passo(), behavior: 'smooth' }));
+      document.getElementById('libro-dopo').addEventListener('click', () => libro.scrollBy({ left: passo(), behavior: 'smooth' }));
+    })();
 
     /* Il dispositivo giusto si sceglie da solo: si vedono i passaggi per quello. */
     (function () {
