@@ -196,12 +196,27 @@
         <h1>Nyfurion Clash</h1>
       </div>
     </div>
-    <p class="lead" data-i18n="lead">The Nyfurion card game: 160 cards, four houses, clashes against real players. It installs straight from the browser on iPhone, Android and computer: this is the only version, always up to date and the same for every player.</p>
+    <p class="lead" data-i18n="lead">The Nyfurion card game: 160 cards, four houses, clashes against real players. Download the Android app, or install it straight from the browser on iPhone, Android and computer: same version for everyone, always up to date.</p>
     <div class="rule"></div>
+
+    <div class="card" id="android">
+      <span class="badge" data-i18n="apkBadge">Android</span>
+      <h2 data-i18n="apkTitle">Download the Android app</h2>
+      <div class="sub" data-i18n="apkSub">APK &middot; direct download &middot; updates itself</div>
+      <p data-i18n="apkText">The full app for Android phones and tablets. Every time you open it, it checks for a new version: if there is one, it asks you to update and downloads it for you.</p>
+      <a class="btn" id="apkBtn" href="https://github.com/riccardomk/Nyfurion.site/releases/latest/download/Nyfurion-Clash.apk" data-i18n="apkBtn">Download for Android</a>
+      <div class="meta"><span data-i18n="apkMeta">Free &middot; sign-in with Google</span> <span id="apkVer"></span></div>
+      <div class="steps">
+        <div class="step"><span data-i18n="a1">Press <b>Download for Android</b>.</span></div>
+        <div class="step"><span data-i18n="a2">Open the downloaded file (from the notifications or the <b>Downloads</b> folder) and tap <b>Install</b>. If Android asks, allow installs from this source.</span></div>
+        <div class="step"><span data-i18n="a3">Open Nyfurion Clash and sign in with Google: your profile, credits and cards are all there.</span></div>
+      </div>
+      <div class="note" data-i18n="apkNote">Already have the app from the Play Store? Uninstall it first, then install this one: your Google account keeps your profile, credits and cards.</div>
+    </div>
 
     <div class="card">
       <span class="badge" data-i18n="badge">iPhone &middot; Android &middot; Computer</span>
-      <h2 data-i18n="cardTitle">Install Nyfurion Clash</h2>
+      <h2 data-i18n="cardTitle">Web app: install from the browser</h2>
       <div class="sub" data-i18n="cardSub">Nothing to download from a store</div>
       <p data-i18n="cardText">Once it is on your Home screen it opens full screen with its own icon, like any other app. Same cards, same rules, same account: sign in with Google and your collection follows you.</p>
 
@@ -234,7 +249,6 @@
       </div>
 
       <div class="note" data-i18n="note">On iPhone the game must be added to the Home screen from the Share menu: Apple asks for that step, in every browser.</div>
-      <div class="note" data-i18n="notePlay">Playing with the app from the Play Store? The game now lives here. Install it from the browser and sign in with the same Google account: your profile, credits and cards are all there. Then you can uninstall the old app.</div>
     </div>
 
     <div class="section-title" data-i18n="whatTitle">What is inside</div>
@@ -284,9 +298,16 @@
   <script>
     const IT = {
       eyebrow:'Nyfurion &middot; Gioco di carte',
-      lead:'Il gioco di carte di Nyfurion: 160 carte, quattro casati, scontri contro giocatori veri. Si installa direttamente dal browser su iPhone, Android e computer: &egrave; l&rsquo;unica versione, sempre aggiornata e uguale per tutti.',
+      lead:'Il gioco di carte di Nyfurion: 160 carte, quattro casati, scontri contro giocatori veri. Scarica l&rsquo;app per Android, oppure installalo direttamente dal browser su iPhone, Android e computer: stessa versione per tutti, sempre aggiornata.',
+      apkBadge:'Android', apkTitle:'Scarica l&rsquo;app per Android', apkSub:'APK &middot; download diretto &middot; si aggiorna da sola',
+      apkText:'L&rsquo;app completa per telefoni e tablet Android. Ogni volta che la apri controlla se c&rsquo;&egrave; una versione nuova: se c&rsquo;&egrave;, ti chiede di aggiornare e la scarica per te.',
+      apkBtn:'Scarica per Android', apkMeta:'Gratis &middot; accesso con Google',
+      a1:'Premi <b>Scarica per Android</b>.',
+      a2:'Apri il file scaricato (dalle notifiche o dalla cartella <b>Download</b>) e tocca <b>Installa</b>. Se Android lo chiede, consenti l&rsquo;installazione da questa fonte.',
+      a3:'Apri Nyfurion Clash e accedi con Google: profilo, crediti e carte sono tutti l&igrave;.',
+      apkNote:'Hai gi&agrave; l&rsquo;app del Play Store? Prima disinstallala, poi installa questa: il tuo account Google tiene profilo, crediti e carte.',
       badge:'iPhone &middot; Android &middot; Computer',
-      cardTitle:'Installa Nyfurion Clash', cardSub:'Niente da scaricare da uno store',
+      cardTitle:'Web app: installala dal browser', cardSub:'Niente da scaricare da uno store',
       cardText:'Una volta sulla schermata Home si apre a tutto schermo con la sua icona, come le altre app. Stesse carte, stesse regole, stesso account: accedi con Google e la tua collezione ti segue.',
       devIos:'iPhone / iPad', devAndroid:'Android', devPc:'Computer',
       btnInstall:'Installa Nyfurion Clash', btnPlay:'Gioca subito dal browser',
@@ -301,7 +322,6 @@
       p1:'Premi <b>Installa Nyfurion Clash</b> con <b>Chrome</b> o <b>Edge</b>.',
       p2:'Conferma <b>Installa</b>: il gioco si apre in una finestra sua e l&rsquo;icona arriva sul desktop.',
       note:'Su iPhone il gioco va aggiunto alla schermata Home dal menu Condividi: quel passaggio lo chiede Apple, in qualsiasi browser.',
-      notePlay:'Giochi con l&rsquo;app del Play Store? Da adesso il gioco vive qui. Installalo dal browser ed entra con lo stesso account Google: profilo, crediti e carte sono tutti l&igrave;. Poi puoi disinstallare la vecchia app.',
       whatTitle:'Cosa c&rsquo;&egrave; dentro',
       f1l:'Carte', f1v:'Tutte e 160',
       f2l:'Casati', f2v:'DPOE &middot; YBOP &middot; KOB &middot; AON',
@@ -330,6 +350,17 @@
       const pdf = document.querySelector('.libro-pdf');
       pdf.insertBefore(pdf.lastElementChild, pdf.firstElementChild);
     }
+
+    /* L'app Android: versione e peso veri, dal file che legge anche l'app per aggiornarsi. */
+    fetch('https://nyfurion-gcard.firebaseapp.com/versione-apk.json?t=' + Date.now(), { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!d) return;
+        if (d.apkUrl) document.getElementById('apkBtn').href = d.apkUrl;
+        const v = [d.versionName ? 'v' + d.versionName : '', d.sizeBytes ? Math.round(d.sizeBytes / 1048576) + ' MB' : ''].filter(Boolean).join(' &middot; ');
+        if (v) document.getElementById('apkVer').innerHTML = '&middot; ' + v;
+      })
+      .catch(() => {});
 
     /* Il libretto: frecce e numero di pagina. */
     (function () {
