@@ -362,6 +362,14 @@
       })
       .catch(() => {});
 
+    /* Chi arriva dall'avviso "Aggiorna" dell'app Android (#android) deve solo scaricare l'APK. Un tester ha toccato
+       "Installa Nyfurion Clash" pensando di aggiornare e si e' trovato una seconda app, la web app (30/10/2026). */
+    if (location.hash === '#android') {
+      const web = document.getElementById('installa');
+      const box = web && web.closest('.card');
+      if (box) box.style.display = 'none';
+    }
+
     /* Il libretto: frecce e numero di pagina. */
     (function () {
       const libro = document.getElementById('libro');
