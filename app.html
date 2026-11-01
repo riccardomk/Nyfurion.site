@@ -6,185 +6,342 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="favicon.ico" sizes="any" />
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
-    <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png" />
-    <link rel="apple-touch-icon" href="favicon-180.png" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png" />
+  <link rel="apple-touch-icon" href="favicon-180.png" />
   <title>Nyfurion &mdash; App</title>
-  <meta name="description" content="The official Nyfurion X Reborn app: dispatches from the Realm, the card game, the collection. Android and iPhone.">
+  <meta name="description" content="The two Nyfurion apps: Nyfurion Clash, the card game, and Nyfurion, the official app with dispatches, the 160 cards and the books. Free on Android, iPhone and computer.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="nav.css">
   <style>
     :root {
-      --matte-black: #080809;
-      --deep-black: #0D0D0E;
-      --accent-red: #E30B17;
-      --gold: #C9A227;
-      --gold-soft: #D9B45C;
-      --ivory: #ECE6D8;
-      --dim: #8A8378;
-      --line: rgba(255,255,255,.08);
+      --matte-black:#080809;
+      --accent-red:#E30B17;
+      --accent-cyan:#00E5FF;
+      --gold:#d9b45c;
+      --ivory:#ECE6D8;
+      --dim:#9a927f;
+      --faint:#6b6456;
+      --line:rgba(255,255,255,0.09);
+      --line-hi:rgba(255,255,255,0.2);
+      --gutter:clamp(1rem,5vw,4.5rem);
+      --ease:cubic-bezier(0.16,1,0.3,1);
     }
     * { margin:0; padding:0; box-sizing:border-box; }
-    html { scroll-behavior:smooth; min-height:100%; }
+    html { scroll-behavior:smooth; overflow-x:hidden; }
     body {
       background:var(--matte-black); color:var(--ivory);
       font-family:'Space Grotesk', sans-serif;
-      min-height:100vh; min-height:100dvh; overflow-x:hidden;
-      -webkit-font-smoothing:antialiased;
+      overflow-x:hidden; -webkit-font-smoothing:antialiased;
     }
     a, button { touch-action:manipulation; }
     a { color:inherit; text-decoration:none; }
+    button { font-family:inherit; }
+    [hidden] { display:none !important; }
 
-    .ambient { position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
-    .ambient::before {
-      content:""; position:absolute; inset:-6%;
-      background:linear-gradient(rgba(8,8,9,.92), rgba(8,8,9,.97));
-      background-size:cover; background-position:center 12%;
-      
-      transform:scale(1.06);
+    /* ============ il telefono: cornice disegnata, dentro una schermata vera ============ */
+    .phone {
+      position:relative; width:var(--w, 260px); aspect-ratio:var(--ar, 390 / 844);
+      padding:9px; border-radius:42px;
+      background:linear-gradient(150deg, #34343a 0%, #121215 38%, #0b0b0d 70%, #26262b 100%);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.10),
+        0 50px 90px -40px rgba(0,0,0,0.95),
+        0 0 80px -20px var(--glow, rgba(0,229,255,0.35));
     }
-    .ambient::after {
-      content:""; position:absolute; inset:0;
-      background:radial-gradient(120% 80% at 50% 0%, rgba(227,11,23,.14), transparent 62%);
+    .phone::before {
+      content:""; position:absolute; z-index:2; top:17px; left:50%; transform:translateX(-50%);
+      width:30%; height:20px; border-radius:20px; background:#050506;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,0.05);
     }
+    .phone img { display:block; width:100%; height:100%; object-fit:cover; object-position:top; border-radius:33px; background:#0b0b0d; }
 
-    .wrap {
-      position:relative; z-index:1;
-      max-width:1080px; margin:0 auto;
-      padding:120px 22px 90px;
+    /* ============ 1. APERTURA ============ */
+    .hero {
+      position:relative; isolation:isolate; overflow:hidden;
+      min-height:100vh; min-height:100svh;
+      display:flex; align-items:center;
+      padding:calc(7rem + env(safe-area-inset-top)) var(--gutter) 5.5rem;
     }
-
-    .eyebrow {
-      display:inline-flex; align-items:center; gap:9px;
-      font-size:.62rem; letter-spacing:.32em; text-transform:uppercase;
-      color:var(--gold-soft); font-weight:700;
+    .hero::before {
+      content:""; position:absolute; inset:0; z-index:-2; pointer-events:none;
+      background:
+        radial-gradient(ellipse 40% 55% at 72% 46%, rgba(0,229,255,0.13), transparent 70%),
+        radial-gradient(ellipse 34% 50% at 88% 30%, rgba(217,180,92,0.12), transparent 70%),
+        radial-gradient(ellipse 50% 60% at 6% 96%, rgba(227,11,23,0.20), transparent 70%);
     }
-    .eyebrow::before {
-      content:""; width:5px; height:5px; transform:rotate(45deg);
-      background:var(--gold); box-shadow:0 0 8px rgba(201,162,39,.7);
+    .hero::after {
+      content:""; position:absolute; inset:0; z-index:-1; pointer-events:none; opacity:0.16;
+      background:url('assets/contact/play-wall.jpg') center / cover no-repeat;
+      -webkit-mask:radial-gradient(ellipse 60% 70% at 72% 50%, #000 0%, transparent 75%);
+              mask:radial-gradient(ellipse 60% 70% at 72% 50%, #000 0%, transparent 75%);
     }
-
-    h1 {
-      font-size:clamp(2.1rem, 6vw, 3.4rem); line-height:1.05;
-      letter-spacing:-.02em; margin:14px 0 0; font-weight:700;
-      background:linear-gradient(180deg,#fffdf7,#c8bfa8);
-      -webkit-background-clip:text; background-clip:text; color:transparent;
+    .hero-in {
+      position:relative; width:100%; max-width:1320px; margin:0 auto;
+      display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); align-items:center; gap:clamp(1.5rem,4vw,4rem);
     }
-    .lead { color:var(--dim); font-size:1.02rem; max-width:52ch; margin:16px 0 0; line-height:1.6; }
-
-    .rule { height:1px; margin:34px 0 0;
-      background:linear-gradient(90deg, var(--gold), rgba(201,162,39,.14) 42%, transparent 78%); }
-
-    /* ---------- le due piattaforme ---------- */
-    .platforms { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:18px; margin-top:36px; }
-
-    .card {
-      position:relative; padding:26px 24px 24px;
-      border:1px solid var(--line); border-radius:16px;
-      background:linear-gradient(180deg, rgba(255,255,255,.035), transparent 34%), #111113;
-      box-shadow:0 14px 34px -22px #000;
+    .kicker {
+      display:flex; align-items:center; gap:0.8rem; margin-bottom:clamp(1.1rem,3vh,1.8rem);
+      font-size:0.66rem; font-weight:700; letter-spacing:0.36em; text-transform:uppercase; color:#d9d1c1;
     }
-    .card::before {
-      content:""; position:absolute; left:16px; right:16px; top:0; height:1px;
-      background:linear-gradient(90deg, transparent, rgba(217,180,92,.34), transparent);
+    .kicker::before { content:""; width:44px; height:1px; background:var(--accent-red); flex:0 0 auto; }
+    .big { line-height:0.88; margin-bottom:clamp(1.4rem,3.5vh,2.2rem); text-shadow:0 6px 40px rgba(0,0,0,0.6); }
+    .big-a {
+      display:block; font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:500;
+      font-size:clamp(3.4rem,7.4vw,7.6rem); color:#e9dfca; margin-left:-0.03em;
     }
-    .card h2 { font-size:1.28rem; font-weight:700; letter-spacing:-.01em; }
-    .card .sub { color:var(--dim); font-size:.82rem; margin-top:4px; letter-spacing:.04em; }
-    .card p { color:#cfc8bc; font-size:.9rem; line-height:1.6; margin-top:14px; }
-
-    .badge {
-      display:inline-block; font-size:.56rem; letter-spacing:.18em; font-weight:700;
-      text-transform:uppercase; padding:4px 9px; border-radius:999px;
-      color:var(--gold-soft); border:1px solid rgba(201,162,39,.4);
-      background:rgba(201,162,39,.09); margin-bottom:12px;
+    .big-b {
+      display:block; font-weight:700; text-transform:uppercase; white-space:nowrap;
+      font-size:clamp(3rem,6.6vw,7rem); letter-spacing:-0.05em; color:#fff; margin-left:-0.05em;
     }
+    .big-b i { font-style:normal; color:var(--accent-red); }
+    .hero-lead {
+      max-width:38ch; font-family:'Cormorant Garamond', serif; font-size:clamp(1.2rem,1.6vw,1.45rem);
+      line-height:1.55; color:#cfc6b4; margin-bottom:clamp(1.5rem,3.5vh,2.2rem);
+    }
+    .hero-lead b { color:#fff; font-weight:600; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:0.7rem; }
+    .hero-small { margin-top:1.2rem; font-size:0.62rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--faint); }
 
     .btn {
-      display:inline-flex; align-items:center; justify-content:center; gap:9px;
-      width:100%; margin-top:18px; padding:15px 18px; border-radius:12px;
-      font-weight:700; font-size:.82rem; letter-spacing:.14em; text-transform:uppercase;
-      background:linear-gradient(180deg,#d9b45c,#b8912f); color:#141007;
-      border:none; cursor:pointer; transition:transform .14s, filter .14s;
+      display:inline-flex; align-items:center; justify-content:center; gap:0.6rem; cursor:pointer;
+      min-height:48px; padding:0 1.45rem; border-radius:999px;
+      font-size:0.66rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase;
+      border:1px solid var(--line-hi); background:rgba(8,8,9,0.45); color:#eee6d6;
+      backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+      transition:background 0.35s ease, border-color 0.35s ease, color 0.35s ease, transform 0.35s var(--ease), box-shadow 0.35s ease;
     }
-    .btn:hover { filter:brightness(1.06); }
-    .btn:active { transform:scale(.985); }
-    .btn.ghost { background:transparent; color:var(--ivory); border:1px solid var(--line); }
+    .btn:hover { border-color:#fff; color:#fff; transform:translateY(-2px); }
+    .btn svg { width:14px; height:14px; flex:0 0 auto; transition:transform 0.35s var(--ease); }
+    .btn:hover svg { transform:translateX(3px); }
+    .btn-cyan { background:var(--accent-cyan); border-color:var(--accent-cyan); color:#041014; box-shadow:0 12px 34px -10px rgba(0,229,255,0.6); }
+    .btn-cyan:hover { background:#5ff0ff; border-color:#5ff0ff; color:#041014; }
+    .btn-gold { background:linear-gradient(180deg,#e7cf86,#c9a24e); border-color:#d9b45c; color:#16120a; box-shadow:0 12px 34px -12px rgba(217,180,92,0.6); }
+    .btn-gold:hover { background:linear-gradient(180deg,#f1dc9a,#d6b05a); border-color:#f1dc9a; color:#16120a; }
 
-    .meta { margin-top:12px; font-size:.72rem; color:var(--dim); letter-spacing:.04em; text-align:center; }
+    /* i due telefoni dell'apertura */
+    .stage { position:relative; height:clamp(460px,72vh,700px); }
+    .stage .phone { position:absolute; }
+    .stage .ph-back {
+      --w:clamp(190px,17vw,262px); --glow:rgba(217,180,92,0.35);
+      right:4%; top:2%; transform:rotate(8deg);
+      animation:galleggia 9s ease-in-out infinite alternate;
+    }
+    .stage .ph-front {
+      --w:clamp(210px,19vw,290px); --ar:390 / 742; --glow:rgba(0,229,255,0.42);
+      left:8%; bottom:2%; transform:rotate(-7deg);
+      animation:galleggia2 8s ease-in-out infinite alternate;
+    }
+    @keyframes galleggia { from { transform:rotate(8deg) translateY(0); } to { transform:rotate(7deg) translateY(-14px); } }
+    @keyframes galleggia2 { from { transform:rotate(-7deg) translateY(0); } to { transform:rotate(-6deg) translateY(-18px); } }
+    .stage .chip {
+      position:absolute; z-index:3; display:inline-flex; align-items:center; gap:0.55rem;
+      padding:0.55rem 0.9rem; border-radius:999px; white-space:nowrap;
+      font-size:0.58rem; font-weight:700; letter-spacing:0.24em; text-transform:uppercase;
+      background:rgba(8,8,9,0.72); border:1px solid var(--line-hi);
+      backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    }
+    .stage .chip img { width:22px; height:22px; border-radius:6px; }
+    .stage .chip-clash { left:10%; bottom:-6%; color:var(--accent-cyan); border-color:rgba(0,229,255,0.45); }
+    .stage .chip-app { left:30%; top:4%; color:var(--gold); border-color:rgba(217,180,92,0.45); }
 
-    /* ---------- passaggi ---------- */
-    .steps { counter-reset:s; margin-top:16px; }
-    .step { display:flex; gap:12px; margin-top:12px; }
+    /* ============ striscia che scorre ============ */
+    .marquee {
+      position:relative; overflow:hidden; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+      background:#0b0b0d; padding:1.05rem 0;
+      -webkit-mask:linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+              mask:linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    }
+    .mq-track { display:flex; width:max-content; animation:scorri 46s linear infinite; }
+    .mq-track span {
+      display:inline-flex; align-items:center; gap:2.2rem; padding-right:2.2rem; white-space:nowrap;
+      font-family:'Cormorant Garamond', serif; font-style:italic; font-size:clamp(1.3rem,2.4vw,2rem); color:#bfb6a3;
+    }
+    .mq-track span b { font-style:normal; font-size:0.9rem; color:var(--accent-red); }
+    @keyframes scorri { to { transform:translateX(-50%); } }
+
+    /* ============ sezioni ============ */
+    .sec { position:relative; padding:clamp(4.5rem,10vh,7.5rem) var(--gutter); }
+    .sec-in { max-width:1320px; margin:0 auto; }
+    .sec-head {
+      display:grid; grid-template-columns:auto 1fr; align-items:end; column-gap:clamp(1rem,3vw,2.4rem);
+      margin-bottom:clamp(2rem,5vh,3.2rem);
+    }
+    .sec-num {
+      grid-row:span 2; font-size:clamp(3.4rem,8vw,7rem); font-weight:700; line-height:0.8; letter-spacing:-0.06em;
+      color:transparent; -webkit-text-stroke:1px rgba(236,230,216,0.28);
+    }
+    .sec-head h2 {
+      font-family:'Cormorant Garamond', serif; font-weight:600; font-size:clamp(2.4rem,5vw,4.4rem);
+      line-height:0.95; color:#fff;
+    }
+    .sec-head p { margin-top:0.7rem; max-width:56ch; font-size:0.95rem; line-height:1.6; color:var(--dim); }
+
+    /* scheda d'identita' di un'app */
+    .app-id { display:flex; align-items:center; gap:1rem; margin-bottom:1.4rem; }
+    .app-id img { width:64px; height:64px; border-radius:16px; box-shadow:0 10px 30px -10px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.08); }
+    .app-id b { display:block; font-size:1.25rem; color:#fff; }
+    .app-id span { display:block; margin-top:0.25rem; font-size:0.6rem; font-weight:700; letter-spacing:0.28em; text-transform:uppercase; color:var(--tint, var(--accent-cyan)); }
+    .copy-lead { font-family:'Cormorant Garamond', serif; font-size:clamp(1.25rem,1.8vw,1.6rem); line-height:1.5; color:#e4dccb; max-width:40ch; }
+    .stats { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:0.6rem; margin:1.8rem 0; }
+    .stat { border:1px solid var(--line); border-radius:14px; padding:0.95rem 0.9rem; background:rgba(255,255,255,0.02); min-width:0; }
+    .stat b { display:block; font-size:clamp(1.3rem,2vw,1.8rem); font-weight:700; color:#fff; letter-spacing:-0.02em; line-height:1; }
+    .stat span { display:block; margin-top:0.45rem; font-size:0.56rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--dim); }
+    .row-btn { display:flex; flex-wrap:wrap; gap:0.6rem; }
+    .small-note { margin-top:1rem; font-size:0.82rem; line-height:1.6; color:var(--dim); max-width:52ch; }
+    .small-note a { color:#e6decd; border-bottom:1px solid rgba(255,255,255,0.3); }
+
+    /* ============ 2. NYFURION CLASH ============ */
+    .clash-sec::before {
+      content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+      background:radial-gradient(ellipse 45% 55% at 26% 55%, rgba(0,229,255,0.10), transparent 70%);
+    }
+    .clash-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(2rem,5vw,5rem); align-items:center; }
+    .clash-stage {
+      position:relative; isolation:isolate; height:clamp(520px,62vw,700px); border-radius:28px; overflow:hidden;
+      border:1px solid var(--line); background:#070708;
+    }
+    .clash-stage::before {
+      content:""; position:absolute; inset:0; z-index:-2;
+      background:url('assets/contact/play-wall.jpg') center / cover no-repeat;
+      filter:brightness(0.42) saturate(0.95); transform:scale(1.08);
+    }
+    .clash-stage::after {
+      content:""; position:absolute; inset:0; z-index:-1;
+      background:radial-gradient(ellipse 60% 55% at 50% 50%, rgba(7,7,8,0.25), rgba(7,7,8,0.88) 85%);
+    }
+    .clash-stage .phone { --w:clamp(220px,20vw,300px); --ar:390 / 742; --glow:rgba(0,229,255,0.5); position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:3; }
+    .fan-card {
+      position:absolute; z-index:2; left:50%; top:50%; width:clamp(120px,11vw,170px); aspect-ratio:560 / 782;
+      border-radius:10px; overflow:hidden; box-shadow:0 30px 60px -20px rgba(0,0,0,0.95), 0 0 0 1px rgba(255,255,255,0.1);
+      transition:transform 0.8s var(--ease);
+    }
+    .fan-card img { width:100%; height:100%; object-fit:cover; display:block; }
+    .fan-card.f1 { transform:translate(-128%, -62%) rotate(-16deg); }
+    .fan-card.f2 { transform:translate(30%, -78%) rotate(12deg); }
+    .fan-card.f3 { transform:translate(22%, 4%) rotate(19deg); }
+    .clash-stage:hover .fan-card.f1 { transform:translate(-142%, -66%) rotate(-20deg); }
+    .clash-stage:hover .fan-card.f2 { transform:translate(44%, -84%) rotate(15deg); }
+    .clash-stage:hover .fan-card.f3 { transform:translate(36%, 8%) rotate(23deg); }
+    .live-tag {
+      position:absolute; z-index:4; left:1.1rem; top:1.1rem; display:inline-flex; align-items:center; gap:0.5rem;
+      padding:0.45rem 0.8rem; border-radius:999px; font-size:0.58rem; font-weight:700; letter-spacing:0.26em; text-transform:uppercase;
+      color:var(--accent-cyan); background:rgba(8,8,9,0.6); border:1px solid rgba(0,229,255,0.45);
+    }
+    .live-tag i { width:7px; height:7px; border-radius:50%; background:var(--accent-cyan); box-shadow:0 0 12px var(--accent-cyan); animation:pulsa 1.8s ease-in-out infinite; }
+    @keyframes pulsa { 50% { opacity:0.35; } }
+
+    /* ============ 3. L'APP NYFURION ============ */
+    .intime-sec { --tint:var(--gold); }
+    .intime-sec::before {
+      content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+      background:radial-gradient(ellipse 60% 45% at 50% 30%, rgba(217,180,92,0.08), transparent 70%);
+    }
+    .intime-top { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:2rem; align-items:end; margin-bottom:clamp(2rem,5vh,3rem); }
+    .gallery {
+      display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:clamp(0.8rem,2vw,1.6rem); align-items:start;
+      padding:0.5rem 0 1rem;
+    }
+    .shot { display:flex; flex-direction:column; align-items:center; gap:1.1rem; min-width:0; }
+    .shot:nth-child(even) { margin-top:clamp(1.5rem,4vw,3.5rem); }
+    .shot .phone { --w:100%; --glow:rgba(217,180,92,0.28); max-width:270px; transition:transform 0.7s var(--ease); }
+    .shot:hover .phone { transform:translateY(-8px); }
+    .shot figcaption { text-align:center; }
+    .shot figcaption b { display:block; font-size:0.62rem; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); }
+    .shot figcaption span { display:block; margin-top:0.4rem; font-family:'Cormorant Garamond', serif; font-size:1.15rem; color:#e4dccb; line-height:1.3; }
+
+    /* le due vie per installarla */
+    .install { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:clamp(0.8rem,1.6vw,1.3rem); margin-top:clamp(2.5rem,6vh,4rem); }
+    .box {
+      position:relative; overflow:hidden; min-width:0; border-radius:20px; padding:clamp(1.3rem,2.6vw,2.2rem);
+      background:linear-gradient(160deg, rgba(20,20,23,0.95), rgba(9,9,10,0.98)); border:1px solid var(--line);
+    }
+    .box-badge { display:inline-block; font-size:0.58rem; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); margin-bottom:1rem; }
+    .box h3 { font-family:'Cormorant Garamond', serif; font-weight:600; font-size:clamp(1.8rem,2.8vw,2.5rem); line-height:1; color:#fff; }
+    .box .sub { margin-top:0.45rem; font-size:0.7rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--dim); }
+    .box p { margin-top:1rem; font-size:0.92rem; line-height:1.65; color:#cfc7b6; }
+    .box .btn { margin-top:1.3rem; }
+    .box .meta { margin-top:0.7rem; font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--faint); }
+    .devices { display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1.3rem; }
+    .device {
+      cursor:pointer; min-height:44px; padding:0 1.1rem; border-radius:999px;
+      font-size:0.62rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase;
+      background:transparent; color:#e6decd; border:1px solid var(--line-hi);
+      transition:background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+    .device:hover { border-color:var(--gold); color:#fff; }
+    .device[aria-selected="true"] { background:var(--gold); border-color:var(--gold); color:#16120a; }
+    .steps { margin-top:1.3rem; counter-reset:passo; display:grid; gap:0.6rem; }
+    .step { counter-increment:passo; display:grid; grid-template-columns:28px 1fr; gap:0.8rem; align-items:start; font-size:0.88rem; line-height:1.6; color:#cfc7b6; }
     .step::before {
-      counter-increment:s; content:counter(s);
-      flex:0 0 24px; height:24px; border-radius:50%;
-      display:grid; place-items:center;
-      font-size:.68rem; font-weight:700; color:var(--gold-soft);
-      border:1px solid rgba(201,162,39,.36); background:rgba(201,162,39,.08);
+      content:counter(passo); display:grid; place-items:center; width:28px; height:28px; border-radius:50%;
+      font-size:0.72rem; font-weight:700; color:var(--gold); border:1px solid rgba(217,180,92,0.45);
     }
-    .step span { font-size:.86rem; color:#cfc8bc; line-height:1.5; padding-top:2px; }
+    .step b { color:#fff; }
+    .note { margin-top:1.2rem; padding:0.9rem 1rem; border-radius:12px; font-size:0.82rem; line-height:1.6; color:var(--dim); background:rgba(0,0,0,0.35); border:1px solid var(--line); }
 
-    .note {
-      margin-top:20px; padding:13px 15px; border-radius:11px;
-      border-left:2px solid var(--gold); background:rgba(255,255,255,.03);
-      font-size:.82rem; color:var(--dim); line-height:1.55;
+    .facts { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:0.6rem; margin-top:clamp(1.5rem,4vh,2.4rem); }
+    .fact { border-top:1px solid rgba(217,180,92,0.4); padding-top:0.9rem; min-width:0; }
+    .fact b { display:block; font-family:'Cormorant Garamond', serif; font-size:1.35rem; color:#fff; }
+    .fact span { display:block; margin-top:0.3rem; font-size:0.6rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--dim); }
+
+    /* ============ chiusura ============ */
+    .fineprint { max-width:1320px; margin:0 auto; padding:0 var(--gutter) 3rem; font-size:0.8rem; line-height:1.7; color:var(--faint); }
+    .fineprint a { color:var(--gold); }
+    .foot {
+      border-top:1px solid var(--line); padding:2.4rem var(--gutter) calc(2.4rem + env(safe-area-inset-bottom));
+      display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1rem;
+      font-size:0.6rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--faint);
     }
+    .foot a { color:var(--dim); transition:color 0.3s ease; }
+    .foot a:hover { color:var(--accent-red); }
+    .foot .creator { color:#ffd75a; }
 
-    .section-title {
-      margin-top:54px; font-size:.62rem; letter-spacing:.3em; text-transform:uppercase;
-      color:var(--gold-soft); font-weight:700;
-      display:flex; align-items:center; gap:10px;
+    .js .rv { opacity:0; transform:translateY(28px); transition:opacity 0.9s ease, transform 1.1s var(--ease); transition-delay:var(--d, 0s); }
+    .js .rv.on { opacity:1; transform:none; }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width:1000px) {
+      .hero-in { grid-template-columns:1fr; }
+      .stage { height:clamp(420px,95vw,600px); max-width:620px; width:100%; margin:0 auto; }
+      .stage .ph-back { --w:clamp(170px,34vw,250px); right:10%; }
+      .stage .ph-front { --w:clamp(185px,37vw,270px); left:10%; }
+      .clash-grid { grid-template-columns:1fr; }
+      .clash-stage { height:clamp(480px,110vw,680px); }
+      .clash-stage .phone { --w:clamp(200px,44vw,290px); }
+      .fan-card { width:clamp(105px,23vw,160px); }
+      .gallery { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; gap:1rem; padding:0.5rem 0.2rem 1.4rem; margin:0 calc(var(--gutter) * -1); padding-left:var(--gutter); padding-right:var(--gutter); scrollbar-width:none; }
+      .gallery::-webkit-scrollbar { display:none; }
+      .shot { flex:0 0 auto; width:min(62vw,250px); scroll-snap-align:center; }
+      .shot:nth-child(even) { margin-top:0; }
+      .install { grid-template-columns:1fr; }
+      .intime-top { grid-template-columns:1fr; }
     }
-    .section-title::after { content:""; flex:1; height:1px; background:linear-gradient(90deg, rgba(201,162,39,.3), transparent); }
-
-    .facts { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-top:16px; }
-    .fact { padding:14px 16px; border:1px solid var(--line); border-radius:12px; background:#111113; }
-    .fact b { display:block; font-size:.6rem; letter-spacing:.16em; text-transform:uppercase; color:var(--dim); font-weight:600; }
-    .fact span { display:block; margin-top:4px; font-size:1rem; font-weight:700; }
-
-    footer { margin-top:60px; padding-top:22px; border-top:1px solid var(--line); color:var(--dim); font-size:.76rem; line-height:1.6; }
-
-
-    .hero-shot { margin:30px 0 0; }
-    .hero-shot img {
-      display:block; width:100%; height:auto; border-radius:16px;
-      border:1px solid var(--line);
-      box-shadow:0 30px 70px -34px #000;
+    @media (max-width:640px) {
+      .hero { padding-bottom:3.5rem; }
+      .big-a { font-size:clamp(3rem,15vw,4.4rem); }
+      .big-b { font-size:clamp(2.6rem,13.5vw,4rem); }
+      .hero-lead { font-size:1.12rem; }
+      .hero-actions { display:grid; grid-template-columns:1fr; }
+      .stage .chip { font-size:0.52rem; letter-spacing:0.18em; }
+      .sec-head { grid-template-columns:1fr; }
+      .sec-num { grid-row:auto; font-size:3.2rem; margin-bottom:0.6rem; }
+      .stats { grid-template-columns:repeat(2, minmax(0,1fr)); }
+      .row-btn { display:grid; grid-template-columns:1fr; }
+      .facts { grid-template-columns:repeat(2, minmax(0,1fr)); row-gap:1.2rem; }
+      .devices { display:grid; grid-template-columns:1fr; }
+      .foot { flex-direction:column; text-align:center; }
     }
-
-    @media (max-width:560px) { .wrap { padding:104px 18px 70px; } }
-  
-    .app-id{display:flex;align-items:center;gap:18px;margin-bottom:6px}
-    .app-id h1{margin:0}
-    .app-mark{
-      width:84px;height:84px;flex:0 0 84px;border-radius:19px;
-      border:1px solid rgba(200,191,168,.22);
-      box-shadow:0 10px 30px rgba(0,0,0,.55);
-    }
-    @media (max-width:560px){
-      .app-id{gap:14px}
-      .app-mark{width:64px;height:64px;flex-basis:64px;border-radius:15px}
-    }
-  
-    .devices{display:flex;gap:6px;margin:18px 0 2px;flex-wrap:wrap}
-    .device{
-      flex:1 1 auto;padding:9px 12px;border-radius:9px;cursor:pointer;
-      font:inherit;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
-      color:#8d8778;background:rgba(255,255,255,.03);
-      border:1px solid rgba(200,191,168,.16);
-    }
-    .device[aria-selected="true"]{
-      color:#14110a;border-color:transparent;
-      background:linear-gradient(180deg,#e2c877,#c8a94e);
+    @media (prefers-reduced-motion:reduce) {
+      .stage .ph-back, .stage .ph-front, .mq-track, .live-tag i { animation:none; }
+      .js .rv { opacity:1; transform:none; }
     }
   </style>
 </head>
 <body>
-  <div class="ambient" aria-hidden="true"></div>
-
   <nav id="topnav">
     <div class="nav-scroll" id="navScroll">
       <div class="nav-track">
@@ -195,10 +352,9 @@
         <a href="nfts.html">NFTs</a>
         <a href="journey.html">Journey</a>
         <a href="archive.html">Holder</a>
+        <a href="contacts.html">Contact</a>
         <a href="app.html" class="active">App</a>
         <a href="clash.html">Nyfurion Clash</a>
-        <a href="contacts.html">Contact</a>
-        <a href="app.html">App</a>
         <span class="nav-sep"></span>
         <a href="index.html#choose" class="nav-cta">Choose Your Side</a>
       </div>
@@ -206,157 +362,282 @@
     <div class="nav-prog" id="navProg" aria-hidden="true"></div>
   </nav>
 
-  <main class="wrap">
-    <div class="app-id">
-      <img class="app-mark" src="favicon-512.png" alt="Nyfurion" width="512" height="512">
+  <!-- 1. APERTURA: le due app, in mano -->
+  <header class="hero">
+    <div class="hero-in">
       <div>
-        <div class="eyebrow" data-i18n="eyebrow">Nyfurion &middot; Official app</div>
-        <h1 data-i18n="title">The Realm, in your pocket.</h1>
+        <p class="kicker" data-i18n="kicker">App &middot; Nyfurion</p>
+        <h1 class="big">
+          <span class="big-a" data-i18n="bigA">Two apps.</span>
+          <span class="big-b"><span data-i18n="bigB">One Realm</span><i>.</i></span>
+        </h1>
+        <p class="hero-lead" data-i18n="lead"><b>Nyfurion Clash</b>, the card game. <b>Nyfurion</b>, the official app with the dispatches, the 160 cards and the books. Both free.</p>
+        <div class="hero-actions">
+          <a class="btn btn-cyan" href="#clash"><span data-i18n="goClash">Play Nyfurion Clash</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-gold" href="#intime"><span data-i18n="goApp">Get the Nyfurion app</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <p class="hero-small">Android &middot; iPhone &middot; <span data-i18n="computer">Computer</span></p>
+      </div>
+      <div class="stage" aria-hidden="true">
+        <div class="phone ph-back"><img src="assets/app/intime-home.jpg" alt="" width="780" height="1688"></div>
+        <div class="phone ph-front"><img src="assets/app/clash-table.jpg" alt="" width="780" height="1484"></div>
+        <span class="chip chip-app"><img src="favicon-192.png" alt="">Nyfurion</span>
+        <span class="chip chip-clash"><img src="clash-icona.png" alt="">Nyfurion Clash</span>
       </div>
     </div>
-    <p class="lead" data-i18n="lead">Dispatches the moment they happen, all 160 cards, the rules, the books and the collection. It works offline and it is free.</p>
-    <div class="rule"></div>
+  </header>
 
-    <figure class="hero-shot">
-      <img src="assets/app-hero.jpg" alt="Nyfurion app" loading="eager" width="1600" height="1100">
-    </figure>
+  <div class="marquee" aria-hidden="true">
+    <div class="mq-track">
+      <span>Nyfurion Clash <b>&#10022;</b> 160 cards <b>&#10022;</b> 1 vs 1 online <b>&#10022;</b> In Time <b>&#10022;</b> The Realm <b>&#10022;</b> Free <b>&#10022;</b></span>
+      <span>Nyfurion Clash <b>&#10022;</b> 160 cards <b>&#10022;</b> 1 vs 1 online <b>&#10022;</b> In Time <b>&#10022;</b> The Realm <b>&#10022;</b> Free <b>&#10022;</b></span>
+    </div>
+  </div>
 
-    <div class="platforms">
-
-      <!-- ANDROID -->
-      <div class="card">
-        <span class="badge" data-i18n="androidBadge">Android</span>
-        <h2 data-i18n="androidTitle">Android app</h2>
-        <div class="sub"><span id="verName">1.2.2</span> &middot; <span id="verSize">27 MB</span></div>
-        <p data-i18n="androidText">Install it once. From then on the app tells you when a new version is out and updates itself, straight from here.</p>
-
-        <a class="btn" id="apkBtn" href="https://nyfurion.com/downloads/nyfurion-latest.apk" data-i18n="androidBtn">Download for Android</a>
-        <div class="meta" data-i18n="androidMeta">Direct download &middot; no store required</div>
-
-        <div class="steps">
-          <div class="step"><span data-i18n="a1">Open the downloaded file.</span></div>
-          <div class="step"><span data-i18n="a2">Android will ask to allow installs from this source: accept, it happens only once.</span></div>
-          <div class="step"><span data-i18n="a3">Open the app and sign in to receive notifications.</span></div>
+  <!-- 2. NYFURION CLASH: il gioco di carte -->
+  <section class="sec clash-sec" id="clash">
+    <div class="sec-in">
+      <div class="sec-head rv">
+        <span class="sec-num">01</span>
+        <h2>Nyfurion Clash.</h2>
+        <p data-i18n="clashHead">The card game of the Realm. This is the real game board, as you see it on your phone.</p>
+      </div>
+      <div class="clash-grid">
+        <div class="clash-stage rv">
+          <span class="live-tag"><i></i><span data-i18n="liveTag">In game</span></span>
+          <span class="fan-card f1"><img src="assets/app/card-001.webp" alt="Nyv" loading="lazy" width="560" height="782"></span>
+          <span class="fan-card f2"><img src="assets/app/card-002.webp" alt="Zeld" loading="lazy" width="560" height="782"></span>
+          <span class="fan-card f3"><img src="assets/app/card-003.webp" alt="Vaelthor" loading="lazy" width="560" height="782"></span>
+          <div class="phone"><img src="assets/app/clash-table.jpg" alt="Nyfurion Clash: the game board" loading="lazy" width="780" height="1484"></div>
+        </div>
+        <div class="rv" style="--d:0.1s">
+          <div class="app-id">
+            <img src="clash-icona.png" alt="" width="512" height="512">
+            <div><b>Nyfurion Clash</b><span data-i18n="clashKind">Card game &middot; Free</span></div>
+          </div>
+          <p class="copy-lead" data-i18n="clashLead">160 cards, four houses, clashes against real players. Build your deck and take the board.</p>
+          <div class="stats">
+            <div class="stat"><b>160</b><span data-i18n="sCards">Cards</span></div>
+            <div class="stat"><b>4</b><span data-i18n="sHouses">Houses</span></div>
+            <div class="stat"><b>1 vs 1</b><span data-i18n="sOnline">Online</span></div>
+            <div class="stat"><b data-i18n="sFreeV">Free</b><span data-i18n="sFree">To play</span></div>
+          </div>
+          <div class="row-btn">
+            <a class="btn btn-cyan" href="https://nyfurion-gcard.firebaseapp.com/" target="_blank" rel="noopener"><span data-i18n="clashPlay">Play in the browser</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+            <a class="btn" id="clashApk" href="https://github.com/riccardomk/Nyfurion.site/releases/latest/download/Nyfurion-Clash.apk"><span data-i18n="clashApk">Download for Android</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M6 11l6 6 6-6M5 20h14"/></svg></a>
+            <a class="btn" href="clash.html"><span data-i18n="clashMore">Install &amp; rules</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+          <p class="small-note"><span data-i18n="clashNote">On iPhone and computer it installs straight from the browser: the steps and the rulebook are on the</span> <a href="clash.html" data-i18n="clashNoteLink">Nyfurion Clash page</a>. <span id="clashVer"></span></p>
         </div>
       </div>
+    </div>
+  </section>
 
-      <!-- OGNI ALTRO DISPOSITIVO -->
-      <div class="card">
-        <span class="badge" data-i18n="webBadge">iPhone &middot; iPad &middot; Computer</span>
-        <h2 data-i18n="webTitle">Web app</h2>
-        <div class="sub" data-i18n="webSub">Nothing to download</div>
-        <p data-i18n="webText">The same app, installed straight from the browser. Once it is on your Home screen or desktop it behaves like any other app: its own window, full screen, works offline and updates on its own.</p>
-
-        <div class="devices">
-          <button type="button" class="device" data-dev="pc" data-i18n="devPc">Install on computer</button>
-          <button type="button" class="device" data-dev="ios" data-i18n="devIos">Install on iPhone / iPad</button>
-          <button type="button" class="device" data-dev="android" data-i18n="devAndroid">Download for Android</button>
-        </div>
-        <div class="meta" data-i18n="webMeta">Press your device: the installation starts from there</div>
-
-        <div class="steps" data-steps="ios">
-          <div class="step"><span data-i18n="i1">Open this page in <b>Safari</b> or <b>Chrome</b> and press the button above. The app opens full screen.</span></div>
-          <div class="step"><span data-i18n="i2">Tap the <b>Share</b> icon &mdash; a square with an arrow pointing up. In Safari it sits in the bar at the bottom; in Chrome, tap the <b>&#8942;</b> menu first, then <b>Share</b>.</span></div>
-          <div class="step"><span data-i18n="i3"><b>Scroll the list down</b> to <b>Add to Home Screen</b>. It sits below the sharing options, and this is the step everyone misses. Then tap <b>Add</b>, top right.</span></div>
-          <div class="step"><span data-i18n="i4">The NYF icon appears among your apps. Open it from there and sign in with Google.</span></div>
-        </div>
-
-        <div class="steps" data-steps="pc" hidden>
-          <div class="step"><span data-i18n="p1">Press the button above, in <b>Chrome</b> or <b>Edge</b>.</span></div>
-          <div class="step"><span data-i18n="p2">The browser asks to confirm: accept.</span></div>
-          <div class="step"><span data-i18n="p3">The Nyfurion icon lands on your desktop and the app opens in its own window.</span></div>
-        </div>
-
-        <div class="steps" data-steps="android" hidden>
-          <div class="step"><span data-i18n="n1">On Android take the app above: it is the full version, with notifications.</span></div>
-          <div class="step"><span data-i18n="n2">You prefer no download? Press the button above in <b>Chrome</b>.</span></div>
-          <div class="step"><span data-i18n="n3">The icon lands on your Home screen, like any other app.</span></div>
-        </div>
-
-        <div class="note" data-i18n="webNote">On iPhone the app must be added to the Home screen from the Share menu: Apple asks for that step, in every browser. Notifications work from there, with iOS 16.4 or later.</div>
+  <!-- 3. L'APP NYFURION: dispacci, carte, libri -->
+  <section class="sec intime-sec" id="intime">
+    <div class="sec-in">
+      <div class="sec-head rv">
+        <span class="sec-num">02</span>
+        <h2 data-i18n="appHead">The Realm, in your pocket.</h2>
+        <p data-i18n="appLead">Dispatches the moment they happen, all 160 cards, the rules, the books and the collection. It works offline and it is free.</p>
       </div>
 
-    </div>
+      <div class="app-id rv" style="--tint:var(--gold)">
+        <img src="favicon-192.png" alt="" width="192" height="192">
+        <div><b>Nyfurion</b><span data-i18n="appKind">Official app &middot; Free</span></div>
+      </div>
 
-    <!-- NYF DUEL: il gioco di carte, giocabile anche dal browser -->
-    <div class="card" style="margin-top:18px">
-      <span class="badge" data-i18n="duelBadge">Card game</span>
-      <h2>Nyfurion Clash</h2>
-      <p data-i18n="duelText">The Nyfurion card game: 160 cards and clashes against real players. Install it from the browser on iPhone, Android and computer.</p>
-      <a class="btn" href="clash.html" data-i18n="duelBtn">Play Nyfurion Clash</a>
-    </div>
+      <div class="gallery">
+        <figure class="shot rv">
+          <div class="phone"><img src="assets/app/intime-home.jpg" alt="In Time: dispatches from the Realm" loading="lazy" width="780" height="1688"></div>
+          <figcaption><b>In Time</b><span data-i18n="cap1">Dispatches, live</span></figcaption>
+        </figure>
+        <figure class="shot rv" style="--d:0.08s">
+          <div class="phone"><img src="assets/app/intime-cards.jpg" alt="The 160 cards" loading="lazy" width="780" height="1688"></div>
+          <figcaption><b data-i18n="cap2t">Cards</b><span data-i18n="cap2">All 160, as printed</span></figcaption>
+        </figure>
+        <figure class="shot rv" style="--d:0.16s">
+          <div class="phone"><img src="assets/app/intime-realm.jpg" alt="The Realm" loading="lazy" width="780" height="1688"></div>
+          <figcaption><b data-i18n="cap3t">Realm</b><span data-i18n="cap3">The story and the three sides</span></figcaption>
+        </figure>
+        <figure class="shot rv" style="--d:0.24s">
+          <div class="phone"><img src="assets/app/intime-game.jpg" alt="The card game, explained" loading="lazy" width="780" height="1688"></div>
+          <figcaption><b data-i18n="cap4t">Game</b><span data-i18n="cap4">The card game, explained</span></figcaption>
+        </figure>
+      </div>
 
-    <div class="section-title" data-i18n="whatTitle">What is inside</div>
-    <div class="facts">
-      <div class="fact"><b data-i18n="f1l">Dispatches</b><span data-i18n="f1v">In real time</span></div>
-      <div class="fact"><b data-i18n="f2l">Cards</b><span data-i18n="f2v">All 160</span></div>
-      <div class="fact"><b data-i18n="f3l">Rules</b><span data-i18n="f3v">Booklet included</span></div>
-      <div class="fact"><b data-i18n="f4l">Book</b><span data-i18n="f4v">Read in the app</span></div>
-    </div>
+      <div class="facts rv">
+        <div class="fact"><b data-i18n="f1l">Dispatches</b><span data-i18n="f1v">In real time</span></div>
+        <div class="fact"><b data-i18n="f2l">Cards</b><span data-i18n="f2v">All 160</span></div>
+        <div class="fact"><b data-i18n="f3l">Rules</b><span data-i18n="f3v">Booklet included</span></div>
+        <div class="fact"><b data-i18n="f4l">Book</b><span data-i18n="f4v">Read in the app</span></div>
+      </div>
 
-    <footer>
-      <span data-i18n="foot">The app asks for no payment and contains no advertising. Sign-in is with Google and creates a free profile; email updates are a separate, optional choice.</span>
-      <br><br>
-      <a href="privacy-policy.html" style="color:var(--gold-soft)" data-i18n="footPrivacy">Privacy notice</a>
-    </footer>
-  </main>
+      <div class="install">
+        <!-- ANDROID -->
+        <div class="box rv">
+          <span class="box-badge">Android</span>
+          <h3 data-i18n="androidTitle">Android app</h3>
+          <div class="sub"><span id="verName">1.2.2</span> &middot; <span id="verSize">27 MB</span></div>
+          <p data-i18n="androidText">Install it once. From then on the app tells you when a new version is out and updates itself, straight from here.</p>
+          <a class="btn btn-gold" id="apkBtn" href="https://nyfurion.com/downloads/nyfurion-latest.apk"><span data-i18n="androidBtn">Download for Android</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M6 11l6 6 6-6M5 20h14"/></svg></a>
+          <div class="meta" data-i18n="androidMeta">Direct download &middot; no store required</div>
+          <div class="steps">
+            <div class="step"><span data-i18n="a1">Open the downloaded file.</span></div>
+            <div class="step"><span data-i18n="a2">Android will ask to allow installs from this source: accept, it happens only once.</span></div>
+            <div class="step"><span data-i18n="a3">Open the app and sign in to receive notifications.</span></div>
+          </div>
+        </div>
+
+        <!-- OGNI ALTRO DISPOSITIVO -->
+        <div class="box rv" style="--d:0.1s">
+          <span class="box-badge" data-i18n="webBadge">iPhone &middot; iPad &middot; Computer</span>
+          <h3 data-i18n="webTitle">Web app</h3>
+          <div class="sub" data-i18n="webSub">Nothing to download</div>
+          <p data-i18n="webText">The same app, installed straight from the browser. Once it is on your Home screen or desktop it behaves like any other app: its own window, full screen, works offline and updates on its own.</p>
+          <div class="devices">
+            <button type="button" class="device" data-dev="pc" data-i18n="devPc">Install on computer</button>
+            <button type="button" class="device" data-dev="ios" data-i18n="devIos">Install on iPhone / iPad</button>
+            <button type="button" class="device" data-dev="android" data-i18n="devAndroid">Download for Android</button>
+          </div>
+          <div class="meta" data-i18n="webMeta">Press your device: the installation starts from there</div>
+
+          <div class="steps" data-steps="ios">
+            <div class="step"><span data-i18n="i1">Open this page in <b>Safari</b> or <b>Chrome</b> and press the button above. The app opens full screen.</span></div>
+            <div class="step"><span data-i18n="i2">Tap the <b>Share</b> icon &mdash; a square with an arrow pointing up. In Safari it sits in the bar at the bottom; in Chrome, tap the <b>&#8942;</b> menu first, then <b>Share</b>.</span></div>
+            <div class="step"><span data-i18n="i3"><b>Scroll the list down</b> to <b>Add to Home Screen</b>. It sits below the sharing options, and this is the step everyone misses. Then tap <b>Add</b>, top right.</span></div>
+            <div class="step"><span data-i18n="i4">The NYF icon appears among your apps. Open it from there and sign in with Google.</span></div>
+          </div>
+          <div class="steps" data-steps="pc" hidden>
+            <div class="step"><span data-i18n="p1">Press the button above, in <b>Chrome</b> or <b>Edge</b>.</span></div>
+            <div class="step"><span data-i18n="p2">The browser asks to confirm: accept.</span></div>
+            <div class="step"><span data-i18n="p3">The Nyfurion icon lands on your desktop and the app opens in its own window.</span></div>
+          </div>
+          <div class="steps" data-steps="android" hidden>
+            <div class="step"><span data-i18n="n1">On Android take the app above: it is the full version, with notifications.</span></div>
+            <div class="step"><span data-i18n="n2">You prefer no download? Press the button above in <b>Chrome</b>.</span></div>
+            <div class="step"><span data-i18n="n3">The icon lands on your Home screen, like any other app.</span></div>
+          </div>
+          <div class="note" data-i18n="webNote">On iPhone the app must be added to the Home screen from the Share menu: Apple asks for that step, in every browser. Notifications work from there, with iOS 16.4 or later.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p class="fineprint">
+    <span data-i18n="foot">The app asks for no payment and contains no advertising. Sign-in is with Google and creates a free profile; email updates are a separate, optional choice.</span>
+    <a href="privacy-policy.html" data-i18n="footPrivacy">Privacy notice</a>
+  </p>
+
+  <footer class="foot">
+    <span>&copy; 2026 Nyfurion X Reborn</span>
+    <span><a class="creator" href="portfolio/" target="_blank" rel="noopener">Riccardo Duca &middot; Portfolio</a></span>
+    <a href="index.html" data-i18n="home">Return Home</a>
+  </footer>
 
   <script>
-    // Peso e versione presi dal file vero: la pagina non puo' mentire
-    // su quale versione sta distribuendo.
+    document.documentElement.classList.add('js');
+    var isIT = (navigator.language || 'en').toLowerCase().indexOf('it') === 0;
+
+    // App Nyfurion: peso e versione presi dal file vero, la pagina non puo' mentire su quale versione distribuisce.
     fetch('app-version.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(r => r.ok ? r.json() : null)
-      .then(d => {
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
         if (!d) return;
         if (d.versionName) document.getElementById('verName').textContent = d.versionName;
-        if (d.sizeBytes) document.getElementById('verSize').textContent =
-          (d.sizeBytes / 1048576).toFixed(0) + ' MB';
+        if (d.sizeBytes) document.getElementById('verSize').textContent = (d.sizeBytes / 1048576).toFixed(0) + ' MB';
         if (d.apkUrl) document.getElementById('apkBtn').href = d.apkUrl;
       })
-      .catch(() => {});
+      .catch(function () {});
 
-    const IT = {
-      eyebrow:'Nyfurion &middot; App ufficiale',
-      title:'Il Regno, in tasca.',
-      lead:'I dispacci nel momento in cui succedono, tutte e 160 le carte, le regole, i libri e la collezione. Funziona anche senza rete ed &egrave; gratis.',
-      androidBadge:'Android', androidTitle:'App Android',
-      androidText:'Si installa una volta sola. Da l&igrave; in poi &egrave; l&rsquo;app stessa ad avvisarti quando esce una versione nuova, e si aggiorna da sola.',
-      androidBtn:'Scarica per Android', androidMeta:'Download diretto &middot; nessuno store necessario',
-      a1:'Apri il file scaricato.',
-      a2:'Android chieder&agrave; di consentire l&rsquo;installazione da questa origine: accetta, succede una volta sola.',
-      a3:'Apri l&rsquo;app e accedi per ricevere le notifiche.',
-      webBadge:'iPhone &middot; iPad &middot; Computer', webTitle:'Web app', webSub:'Niente da scaricare',
-      webText:'La stessa app, installata direttamente dal browser. Una volta sulla schermata Home o sul desktop si comporta come le altre: finestra sua, a tutto schermo, funziona senza rete e si aggiorna da sola.',
-      webMeta:'Premi il tuo dispositivo: l&rsquo;installazione parte da l&igrave;',
-      devIos:'Installa su iPhone / iPad', devPc:'Installa sul computer', devAndroid:'Scarica per Android',
-      i1:'Apri questa pagina con <b>Safari</b> o <b>Chrome</b> e premi il pulsante qui sopra. L&rsquo;app si apre a tutto schermo.',
-      i2:'Tocca l&rsquo;icona <b>Condividi</b>: un quadrato con la freccia verso l&rsquo;alto. Su Safari sta nella barra in basso; su Chrome tocca prima il men&ugrave; <b>&#8942;</b> e poi <b>Condividi</b>.',
-      i3:'<b>Scorri l&rsquo;elenco verso il basso</b> fino a <b>Aggiungi a schermata Home</b>. Sta sotto le voci di condivisione, ed &egrave; il passaggio in cui si arrendono tutti. Poi tocca <b>Aggiungi</b>, in alto a destra.',
-      i4:'L&rsquo;icona NYF compare fra le tue app. Aprila da l&igrave; e accedi con Google.',
-      p1:'Premi il pulsante qui sopra, con <b>Chrome</b> o <b>Edge</b>.',
-      p2:'Il browser chiede conferma: accetta.',
-      p3:'L&rsquo;icona di Nyfurion arriva sul desktop e l&rsquo;app si apre in una finestra sua.',
-      n1:'Su Android prendi l&rsquo;app qui sopra: &egrave; la versione completa, con le notifiche.',
-      n2:'Preferisci non scaricare niente? Premi il pulsante qui sopra con <b>Chrome</b>.',
-      n3:'L&rsquo;icona finisce sulla schermata Home, come le altre app.',
-      webNote:'Su iPhone l&rsquo;app va aggiunta alla schermata Home dal menu Condividi: quel passaggio lo chiede Apple, in qualsiasi browser. Da l&igrave; funzionano anche le notifiche, con iOS 16.4 o successivo.',
-      duelBadge:'Gioco di carte',
-      duelText:'Il gioco di carte di Nyfurion: 160 carte e scontri contro giocatori veri. Si installa dal browser su iPhone, Android e computer.',
-      duelBtn:'Gioca a Nyfurion Clash',
-      whatTitle:'Cosa c&rsquo;&egrave; dentro',
-      f1l:'Dispacci', f1v:'In tempo reale',
-      f2l:'Carte', f2v:'Tutte e 160',
-      f3l:'Regole', f3v:'Libretto incluso',
-      f4l:'Libro', f4v:'Si legge nell&rsquo;app',
-      foot:'L&rsquo;app non chiede pagamenti e non contiene pubblicit&agrave;. L&rsquo;accesso avviene con Google e crea un profilo gratuito; gli aggiornamenti via email sono una scelta separata e facoltativa.',
-      footPrivacy:'Informativa privacy'
+    // Nyfurion Clash: lo stesso file che legge l'app Android per aggiornarsi.
+    fetch('https://nyfurion-gcard.firebaseapp.com/versione-apk.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d) return;
+        if (d.apkUrl) document.getElementById('clashApk').href = d.apkUrl;
+        var v = [d.versionName ? 'Android v' + d.versionName : '', d.sizeBytes ? Math.round(d.sizeBytes / 1048576) + ' MB' : ''].filter(Boolean).join(' &middot; ');
+        if (v) document.getElementById('clashVer').innerHTML = v;
+      })
+      .catch(function () {});
+
+    var IT = {
+      kicker: 'App &middot; Nyfurion',
+      bigA: 'Due app.',
+      bigB: 'Un Regno',
+      lead: '<b>Nyfurion Clash</b>, il gioco di carte. <b>Nyfurion</b>, l&rsquo;app ufficiale con i dispacci, le 160 carte e i libri. Tutte e due gratis.',
+      goClash: 'Gioca a Nyfurion Clash',
+      goApp: 'Scarica l&rsquo;app Nyfurion',
+      computer: 'Computer',
+      clashHead: 'Il gioco di carte del Regno. Questo &egrave; il tavolo vero del gioco, come lo vedi sul telefono.',
+      liveTag: 'In partita',
+      clashKind: 'Gioco di carte &middot; Gratis',
+      clashLead: '160 carte, quattro casate, scontri contro giocatori veri. Costruisci il tuo mazzo e prenditi il tavolo.',
+      sCards: 'Carte', sHouses: 'Casate', sOnline: 'Online', sFreeV: 'Gratis', sFree: 'Per giocare',
+      clashPlay: 'Gioca dal browser',
+      clashApk: 'Scarica per Android',
+      clashMore: 'Installa e regole',
+      clashNote: 'Su iPhone e computer si installa direttamente dal browser: i passaggi e il libretto delle regole sono nella',
+      clashNoteLink: 'pagina di Nyfurion Clash',
+      appHead: 'Il Regno, in tasca.',
+      appLead: 'I dispacci nel momento in cui succedono, tutte e 160 le carte, le regole, i libri e la collezione. Funziona anche senza rete ed &egrave; gratis.',
+      appKind: 'App ufficiale &middot; Gratis',
+      cap1: 'I dispacci, dal vivo',
+      cap2t: 'Carte', cap2: 'Tutte e 160, come stampate',
+      cap3t: 'Regno', cap3: 'La storia e le tre parti',
+      cap4t: 'Gioco', cap4: 'Il gioco di carte, spiegato',
+      f1l: 'Dispacci', f1v: 'In tempo reale',
+      f2l: 'Carte', f2v: 'Tutte e 160',
+      f3l: 'Regole', f3v: 'Libretto incluso',
+      f4l: 'Libro', f4v: 'Si legge nell&rsquo;app',
+      androidTitle: 'App Android',
+      androidText: 'Si installa una volta sola. Da l&igrave; in poi &egrave; l&rsquo;app stessa ad avvisarti quando esce una versione nuova, e si aggiorna da sola.',
+      androidBtn: 'Scarica per Android', androidMeta: 'Download diretto &middot; nessuno store necessario',
+      a1: 'Apri il file scaricato.',
+      a2: 'Android chieder&agrave; di consentire l&rsquo;installazione da questa origine: accetta, succede una volta sola.',
+      a3: 'Apri l&rsquo;app e accedi per ricevere le notifiche.',
+      webBadge: 'iPhone &middot; iPad &middot; Computer', webTitle: 'Web app', webSub: 'Niente da scaricare',
+      webText: 'La stessa app, installata direttamente dal browser. Una volta sulla schermata Home o sul desktop si comporta come le altre: finestra sua, a tutto schermo, funziona senza rete e si aggiorna da sola.',
+      webMeta: 'Premi il tuo dispositivo: l&rsquo;installazione parte da l&igrave;',
+      devIos: 'Installa su iPhone / iPad', devPc: 'Installa sul computer', devAndroid: 'Scarica per Android',
+      i1: 'Apri questa pagina con <b>Safari</b> o <b>Chrome</b> e premi il pulsante qui sopra. L&rsquo;app si apre a tutto schermo.',
+      i2: 'Tocca l&rsquo;icona <b>Condividi</b>: un quadrato con la freccia verso l&rsquo;alto. Su Safari sta nella barra in basso; su Chrome tocca prima il men&ugrave; <b>&#8942;</b> e poi <b>Condividi</b>.',
+      i3: '<b>Scorri l&rsquo;elenco verso il basso</b> fino a <b>Aggiungi a schermata Home</b>. Sta sotto le voci di condivisione, ed &egrave; il passaggio in cui si arrendono tutti. Poi tocca <b>Aggiungi</b>, in alto a destra.',
+      i4: 'L&rsquo;icona NYF compare fra le tue app. Aprila da l&igrave; e accedi con Google.',
+      p1: 'Premi il pulsante qui sopra, con <b>Chrome</b> o <b>Edge</b>.',
+      p2: 'Il browser chiede conferma: accetta.',
+      p3: 'L&rsquo;icona di Nyfurion arriva sul desktop e l&rsquo;app si apre in una finestra sua.',
+      n1: 'Su Android prendi l&rsquo;app qui sopra: &egrave; la versione completa, con le notifiche.',
+      n2: 'Preferisci non scaricare niente? Premi il pulsante qui sopra con <b>Chrome</b>.',
+      n3: 'L&rsquo;icona finisce sulla schermata Home, come le altre app.',
+      webNote: 'Su iPhone l&rsquo;app va aggiunta alla schermata Home dal menu Condividi: quel passaggio lo chiede Apple, in qualsiasi browser. Da l&igrave; funzionano anche le notifiche, con iOS 16.4 o successivo.',
+      foot: 'L&rsquo;app non chiede pagamenti e non contiene pubblicit&agrave;. L&rsquo;accesso avviene con Google e crea un profilo gratuito; gli aggiornamenti via email sono una scelta separata e facoltativa.',
+      footPrivacy: 'Informativa privacy',
+      home: 'Torna alla Home'
     };
-    if ((navigator.language||'en').toLowerCase().startsWith('it')) {
+    if (isIT) {
       document.documentElement.lang = 'it';
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const k = el.getAttribute('data-i18n');
+      document.querySelectorAll('[data-i18n]').forEach(function (el) {
+        var k = el.getAttribute('data-i18n');
         if (IT[k]) el.innerHTML = IT[k];
       });
+    }
+
+    // i blocchi compaiono mentre scorri
+    var rv = document.querySelectorAll('.rv');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (voci) {
+        voci.forEach(function (v) { if (v.isIntersecting) { v.target.classList.add('on'); io.unobserve(v.target); } });
+      }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+      rv.forEach(function (el) { io.observe(el); });
+    } else {
+      rv.forEach(function (el) { el.classList.add('on'); });
     }
   </script>
   <script src="nav.js" defer></script>
@@ -399,6 +680,5 @@
       }));
     })();
   </script>
-
 </body>
 </html>
