@@ -137,6 +137,16 @@
             font-size: clamp(1.5rem, 3.2vw, 2.6rem); color: #f4efe6; text-shadow: 0 4px 30px rgba(0,0,0,0.9); margin-bottom: 0.6rem;
         }
         .doors-head p { font-size: clamp(0.9rem, 1.4vw, 1.05rem); color: #d6cfc2; text-shadow: 0 2px 18px rgba(0,0,0,0.95); }
+        .doors-head .doors-title {
+            font-family: 'Space Grotesk', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; line-height: 0.95;
+            font-size: clamp(2rem, 4vw, 3.8rem); color: #f4efe6; text-shadow: 0 10px 50px rgba(0,0,0,0.85), 0 0 2px rgba(0,0,0,0.5);
+            margin-bottom: 0.75rem; animation: titleFadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .doors-head .doors-sub {
+            font-size: clamp(0.66rem, 1.2vw, 0.86rem); font-weight: 500; letter-spacing: 0.4em; text-transform: uppercase;
+            color: #ff5a52; text-shadow: 0 2px 18px rgba(0,0,0,0.95); margin-bottom: 0.85rem;
+        }
+        .doors-head #hero-tagline { font-size: clamp(0.95rem, 1.45vw, 1.12rem); letter-spacing: 0.02em; color: #e2dacb; }
         .tri { display: flex; width: 100%; height: 100%; }
         .tri-col {
             position: relative; flex: 1 1 0; overflow: hidden; text-decoration: none; color: #fff;
@@ -177,7 +187,7 @@
         .creator-line a { color: var(--accent-cyan); text-decoration: none; border-bottom: 1px solid rgba(0,229,255,0.35); margin-left: 0.5rem; }
         @media (max-width: 768px) {
             .horizontal-landing > #doors.page-panel { display: flex; flex-direction: column; overflow-y: auto; }
-            .doors-head { position: relative; top: auto; left: auto; transform: none; width: auto; padding: 7.4rem 1.4rem 1.2rem; }
+            .doors-head { position: relative; top: auto; left: auto; transform: none; width: auto; padding: 8.4rem 1.4rem 1.2rem; }
             .tri { flex-direction: column; height: auto; flex: 1 0 auto; }
             .tri-col { flex: 0 0 auto; min-height: 31vh; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
             .tri:hover .tri-col, .tri .tri-col:hover { flex-grow: 0; }
@@ -1446,39 +1456,12 @@
 
     
     <main class="horizontal-landing" id="horizontal-landing" aria-label="Nyfurion landing pages">
-    <!-- Hero Container -->
-    <div class="hero-container page-panel" id="home">
-        <!-- Cinematic full-screen background video -->
-        <video class="hero-video" autoplay muted loop playsinline preload="auto"
-               poster="assets/video/intro-frame.png">
-            <source src="assets/video/hero-bg.mp4" type="video/mp4">
-        </video>
-        <div class="hero-scrim" aria-hidden="true"></div>
-        <canvas id="hero-embers" aria-hidden="true"></canvas>
-
-        <div class="main-title">
-            <h1>NYFURION<br>X REBORN</h1>
-            <div class="subtitle">A Dark Fantasy Saga</div>
-        </div>
-
-        <p class="hero-tagline" id="hero-tagline">
-            Three siblings. One throne. A kingdom set to burn.
-        </p>
-
-        <div class="hero-cta-row">
-            <a href="lore.html" class="btn-primary" id="cta-enter">Enter the Story</a>
-            <a href="clash.html" class="btn-ghost" id="cta-play">Play Nyfurion Clash</a>
-            <a href="#final" class="btn-ghost" id="cta-choose">Choose Your Side</a>
-        </div>
-
-        <a href="#doors" class="scroll-hint" aria-label="Scroll right">›</a>
-    </div>
-
     <!-- ============ TRITTICO: leggi, gioca, possiedi ============ -->
     <section class="page-panel" id="doors">
         <div class="doors-head">
-            <h2 id="t-doors-heading">Read it. Play it. Own it.</h2>
-            <p id="t-doors-intro">A dark fantasy universe: a saga to read, a card game to play, a collection to own.</p>
+            <h1 class="doors-title">NYFURION X REBORN</h1>
+            <div class="doors-sub" id="t-doors-sub">A Dark Fantasy Saga</div>
+            <p id="hero-tagline">Three siblings. One throne. A kingdom set to burn.</p>
         </div>
         <div class="tri">
             <a class="tri-col" href="lore.html" style="--img:url('assets/characters/portraits/tyri-hero.jpg'); --pos:18%">
@@ -1490,7 +1473,7 @@
                     <span class="tri-cta" id="t-door1-cta">Read the saga</span>
                 </div>
             </a>
-            <a class="tri-col" href="clash.html" style="--img:url('assets/characters/portraits/faction-order-3.jpg'); --pos:35%">
+            <a class="tri-col" href="clash.html" style="--img:url('assets/home/play-wall.jpg'); --pos:50%">
                 <div class="tri-bg"></div>
                 <div class="tri-txt">
                     <span class="tri-word" id="t-door2-tag">Play</span>
@@ -1499,7 +1482,7 @@
                     <span class="tri-cta" id="t-door2-cta">Play free</span>
                 </div>
             </a>
-            <a class="tri-col" href="nfts.html" style="--img:url('nyfurion-pack-preview-001.jpg'); --pos:22%">
+            <a class="tri-col" href="nfts.html" style="--img:url('assets/home/own-3d.jpg'); --pos:22%">
                 <div class="tri-bg"></div>
                 <div class="tri-txt">
                     <span class="tri-word" id="t-door3-tag">Own</span>
@@ -1892,7 +1875,7 @@
             setHTML('hero-tagline', t.taglineHTML);
             setTxt('cta-enter', t.ctaEnter);
             setTxt('cta-play', t.ctaPlay);
-            setTxt('t-doors-eyebrow', t.doorsEyebrow); setTxt('t-doors-heading', t.doorsHeading); setTxt('t-doors-intro', t.doorsIntro);
+            setTxt('t-doors-sub', t.subtitle);
             [1, 2, 3].forEach(function(n){ ['Tag', 'Title', 'Line', 'Cta'].forEach(function(k){ setTxt('t-door' + n + '-' + k.toLowerCase(), t['door' + n + k]); }); });
             setHTML('t-creator-line', t.creatorLine);
             setTxt('cta-choose', t.ctaChoose);
