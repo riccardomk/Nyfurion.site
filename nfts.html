@@ -200,6 +200,13 @@
       gap:0;
       padding:0;
     }
+    .p-faq .scene { grid-template-columns:minmax(4vw,1fr) minmax(320px,1040px) minmax(4vw,1fr); }
+    .p-faq .scene-main { max-width:1040px; }
+    .faq-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.3rem 2.6rem; max-width:1000px; margin:1.8rem auto 0; text-align:left; }
+    .faq-grid h3 { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.3rem; color:#f3ede0; margin-bottom:0.35rem; }
+    .faq-grid p { font-size:0.92rem; line-height:1.65; color:#cfc7b8; }
+    .faq-grid a { color:var(--accent-cyan); }
+    @media(max-width:820px){ .faq-grid { grid-template-columns:1fr; gap:1.1rem; } }
     .split-act .scene-main {
       grid-column:1; justify-self:start; padding:7rem clamp(2rem,5vw,7rem) 4rem; max-width:760px;
     }
@@ -674,11 +681,12 @@
       <div class="scene">
         <div class="scene-main">
           <div class="story-stage">
-            <div class="scene-code reveal" id="story-code">Act II &middot; The Inner Circle</div>
-            <h2 class="reveal" id="story-title">A fragment is your seat at the table.</h2>
+            <div class="scene-code reveal" id="story-code">Act II &middot; What You Receive</div>
+            <h2 class="reveal" id="story-title">A fragment comes with its own archive.</h2>
             <div class="scene-rule reveal"></div>
-            <p class="lead reveal" id="story-copy">Holders enter the first circle of Nyfurion: early, visible, and close enough to help shape which ideas deserve to grow.</p>
-            <div class="signal reveal" id="story-signal"><span>Community voice</span><span>Early access</span><span>Lore participation</span></div>
+            <p class="lead reveal" id="story-copy">The image, the character sheet, the 3D card ready to print and the commercial license. Some characters also include a photo pack.</p>
+            <div class="signal reveal" id="story-signal"><span>Image</span><span>Character sheet</span><span>3D card to print</span><span>Commercial license</span></div>
+            <a href="journey.html" class="btn-ghost reveal" style="margin-top:1.4rem;display:inline-block;">Journey &mdash; see the details</a>
             <div class="story-language reveal" id="story-language">NYF &middot; AURION VEL KAIRA
               <small>Hidden language &middot; coded messages &middot; symbols inside the saga</small>
             </div>
@@ -698,7 +706,7 @@
       </div>
     </section>
 
-    <!-- 5 &middot; THE COLLECTIONS (Genesis 400 + NYF V2, switchable) -->
+    <!-- 5 &middot; THE GENESIS COLLECTION -->
     <section class="panel cinema center p-claim" data-i="4" style="--shot:url('assets/nft/v2-collection.jpg'); --pos:center; --veil:radial-gradient(ellipse 62% 58% at center, rgba(8,8,9,0.56), rgba(8,8,9,0.95));">
       <div class="scene">
         <div class="scene-main">
@@ -711,17 +719,48 @@
             <a href="journey.html" class="btn-ghost">Journey &mdash; see what you receive</a>
             <div class="floor" id="col-floor">Full commercial license &middot; Secured on Ethereum</div>
           </div>
-          <div class="cc-nav reveal" style="justify-content:center;">
-            <button type="button" class="cc-arrow" id="col-prev" aria-label="Previous">&lsaquo;</button>
-            <div class="cc-dots" id="col-dots"></div>
-            <button type="button" class="cc-arrow" id="col-next" aria-label="Next">&rsaquo;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 &middot; QUESTIONS (FAQ) -->
+    <section class="panel cinema center p-faq" data-i="5" style="--shot:url('assets/nft/v2-collection.jpg'); --pos:center; --veil:rgba(8,8,9,0.93);">
+      <div class="scene">
+        <div class="scene-main">
+          <div class="scene-code reveal">Questions &middot; Answers</div>
+          <h2 class="reveal">Before you claim.</h2>
+          <div class="faq-grid reveal">
+            <div>
+              <h3>Is a fragment an investment?</h3>
+              <p>No. A fragment is collectible digital art with usage rights. It is not a financial product, and nothing on this site is financial advice.</p>
+            </div>
+            <div>
+              <h3>What do I own?</h3>
+              <p>The NFT and a commercial license on the artwork of your fragment. The Nyfurion universe (world, lore, names, brand) stays with its creator. <a href="license.html">Read the license</a></p>
+            </div>
+            <div>
+              <h3>What do I receive?</h3>
+              <p>The image, the character sheet, the 3D card ready to print and the commercial license. Some characters also include a photo pack. <a href="journey.html">See the Journey</a></p>
+            </div>
+            <div>
+              <h3>How do I open the vault?</h3>
+              <p>Go to the Holder section, connect the wallet that holds your fragment and sign a free message. The first time only, you register on-chain, with a small network fee.</p>
+            </div>
+            <div>
+              <h3>What happens if I sell it?</h3>
+              <p>The license moves with the NFT to the new owner. Your rights end at the moment of the transfer.</p>
+            </div>
+            <div>
+              <h3>And if Nyfurion becomes a series?</h3>
+              <p>Only if an official series is produced, the license sets aside 10% of the creator's net revenues for verified holders of the characters with a main role. It is not a promise of profit. <a href="license.html">License, Section 6</a></p>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 6 &middot; CURRENT COLLABORATIONS (sponsor glass card) -->
-    <section class="panel p-finalcollab" data-i="5">
+    <!-- 7 &middot; CURRENT COLLABORATIONS (sponsor glass card) -->
+    <section class="panel p-finalcollab" data-i="6">
       <div class="cc-stage" id="cc-stage"></div>
       <div class="cc-center">
         <div class="cc-photo" id="cc-photo"></div>
@@ -776,12 +815,12 @@
     const storyDots = document.getElementById('story-dots');
     const storySlides = [
       {
-        code:'Act II &middot; The Inner Circle',
-        title:'A fragment is your seat at the table.',
-        copy:'Holders enter the first circle of Nyfurion: early, visible, and close enough to help shape which ideas deserve to grow.',
-        signal:['Community voice','Early access','Lore participation'],
+        code:'Act II &middot; What You Receive',
+        title:'A fragment comes with its own archive.',
+        copy:'The image, the character sheet, the 3D card ready to print and the commercial license. Some characters also include a photo pack.',
+        signal:['Image','Character sheet','3D card to print','Commercial license'],
         language:'NYF &middot; AURION VEL KAIRA',
-        note:'The realm recognizes those who enter early'
+        note:'Hidden language &middot; coded messages &middot; symbols inside the saga'
       },
       {
         code:'Act II &middot; The Hidden Tongue',
@@ -807,7 +846,7 @@
       storySwitch.classList.add('changing');
       setTimeout(()=>{
         const item = storySlides[storyIndex];
-        storyCode.textContent = item.code;
+        storyCode.innerHTML = item.code;
         storyTitle.textContent = item.title;
         storyCopy.textContent = item.copy;
         storySignal.innerHTML = item.signal.map(text=>`<span>${text}</span>`).join('');
@@ -879,17 +918,12 @@
       setCC(0); ccStart();
     }
 
-    // ===== THE COLLECTIONS switch: Genesis 400 <-> NYF V2 =====
+    // ===== THE GENESIS COLLECTION =====
     const COLLECTIONS=[
       { code:'The Genesis Collection', num:'400', title:'The Genesis door does not stay open forever.',
         desc:'A character, a full commercial license, and a founder place inside the first era. The first chapter of Nyfurion, sealed on-chain.',
         floor:'Full commercial license · Secured on Ethereum', btn:'Claim Your Fragment',
         link:'https://opensea.io/collection/nyfurionxreborn',
-        shot:"url('assets/nft/v2-collection.jpg')", pos:'center' },
-      { code:'NYF V2 · Live Mint', num:'100', title:'A new chapter enters the saga.',
-        desc:'One hundred new fragments expand the world of Nyfurion. New characters, new entry points, and a fresh wave for those who want in early.',
-        floor:'New fragments · Live mint now · Secured on Ethereum', btn:'Mint NYF V2',
-        link:'https://opensea.io/collection/nyfx-reborn-v2',
         shot:"url('assets/nft/v2-collection.jpg')", pos:'center' }
     ];
     const colPanel=document.querySelector('.p-claim');
