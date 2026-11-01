@@ -1,0 +1,125 @@
+{
+  "id": "fantaville",
+  "title": "Fantaville",
+  "category": {
+    "IT": "Identità di Brand · Logo",
+    "EN": "Brand Identity · Logo"
+  },
+  "year": "2026",
+  "role": {
+    "IT": "Brand Designer",
+    "EN": "Brand Designer"
+  },
+  "brief": {
+    "IT": "Il volto nuovo di Fantaville, il portale di giochi fantasy sportivi rapidi: Quick Football, Quick Basket e altri in arrivo, gratuiti e giocabili dal browser, con punti legati alle prestazioni reali degli atleti.\n\nMi è stata chiesta l'identità visiva: il marchio, i colori e il carattere. Il sito non è opera mia; il mio lavoro è il segno che lo rappresenta.",
+    "EN": "The new face of Fantaville, the portal of quick fantasy sports games: Quick Football, Quick Basket and more on the way, free and playable in the browser, with points tied to the athletes' real performances.\n\nI was asked for the visual identity: the mark, the colours and the typeface. The website isn't my work; my part is the sign that represents it."
+  },
+  "tools": [
+    "Adobe Illustrator",
+    "Adobe Photoshop"
+  ],
+  "mainImage": "./images/fantaville-cover.jpg",
+  "chapters": [
+    {
+      "k": {
+        "IT": "01 · La sfida",
+        "EN": "01 · The challenge"
+      },
+      "title": {
+        "IT": "Sport e gioco nello stesso segno",
+        "EN": "Sport and play in one sign"
+      },
+      "text": {
+        "IT": "Il marchio doveva parlare a chi segue lo sport e a chi ama giocare: energico come una partita, ma semplice da riconoscere anche in piccolo.",
+        "EN": "The mark had to speak to people who follow sport and to people who love to play: energetic like a match, yet easy to recognise even at a small size."
+      },
+      "images": [
+        "./images/fantaville-cover.jpg"
+      ]
+    },
+    {
+      "k": {
+        "IT": "02 · L'idea",
+        "EN": "02 · The idea"
+      },
+      "title": {
+        "IT": "Dalla carta alla geometria",
+        "EN": "From paper to geometry"
+      },
+      "text": {
+        "IT": "Il segno è nato da un'idea su carta. Poi l'ho ricostruito in Illustrator con cerchi e linee guida, per avere curve pulite e proporzioni controllate.",
+        "EN": "The sign started as an idea on paper. Then I rebuilt it in Illustrator with circles and guides, to get clean curves and controlled proportions."
+      },
+      "fit": "post",
+      "images": [
+        "./images/fantaville-bozza.jpg",
+        "./images/fantaville-costruzione.jpg"
+      ]
+    },
+    {
+      "k": {
+        "IT": "03 · Il segno",
+        "EN": "03 · The mark"
+      },
+      "title": {
+        "IT": "L'emblema della vittoria",
+        "EN": "The emblem of victory"
+      },
+      "text": {
+        "IT": "Due tratti curvi, uno sopra l'altro, formano la F di Fantaville. Punte affilate e curve tese: un segno veloce, fatto per chi gioca per vincere.",
+        "EN": "Two curved strokes, one above the other, form the F of Fantaville. Sharp tips and taut curves: a fast sign, made for those who play to win."
+      },
+      "fit": "post",
+      "images": [
+        "./images/fantaville-logo-verde.jpg",
+        "./images/fantaville-logo-pieno.jpg",
+        "./images/fantaville-logo-chiaro.jpg"
+      ]
+    },
+    {
+      "k": {
+        "IT": "04 · Colori e carattere",
+        "EN": "04 · Colours and type"
+      },
+      "title": {
+        "IT": "Tre colori e un carattere",
+        "EN": "Three colours and one typeface"
+      },
+      "text": {
+        "IT": "Un verde pieno (#39B54A), un verde acceso (#00FF00) e un grigio chiaro (#E6E6E6) che fa respirare il marchio. Per la scritta ho scelto un carattere squadrato, dal taglio sportivo e gaming.",
+        "EN": "A solid green (#39B54A), a bright green (#00FF00) and a light grey (#E6E6E6) that gives the mark room to breathe. For the wordmark I chose a squared typeface with a sporty, gaming feel."
+      },
+      "fit": "post",
+      "images": [
+        "./images/fantaville-palette.jpg",
+        "./images/fantaville-font.jpg"
+      ]
+    },
+    {
+      "k": {
+        "IT": "05 · Il sistema",
+        "EN": "05 · The system"
+      },
+      "title": {
+        "IT": "Un marchio che si adatta",
+        "EN": "A mark that adapts"
+      },
+      "text": {
+        "IT": "Ho preparato le versioni orizzontale e verticale, le varianti per fondi chiari e scuri e un pattern costruito ripetendo il monogramma.",
+        "EN": "I prepared the horizontal and stacked versions, variants for light and dark backgrounds and a pattern built by repeating the monogram."
+      },
+      "fit": "post",
+      "images": [
+        "./images/fantaville-sistema.jpg",
+        "./images/fantaville-pattern.jpg"
+      ]
+    },
+    {
+      "type": "outcome",
+      "text": {
+        "IT": "L'obiettivo? Vincere, e questo logo ne è l'emblema. Oggi è l'icona e il segno del portale fantaville.com.",
+        "EN": "The goal? To win, and this logo is its emblem. Today it is the icon and the sign of the fantaville.com portal."
+      }
+    }
+  ]
+}

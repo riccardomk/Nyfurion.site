@@ -440,6 +440,8 @@
   }
   @media(prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.12s!important}}
 </style>
+
+<style>.case-figs.fit-post .case-fig{aspect-ratio:4/5}.case-hero>img[src*="fantaville-cover"]{object-position:50% 36%}</style>
 </head>
 <body>
 <div class="grain"></div>
@@ -454,6 +456,7 @@
       <a href="#work" data-it="Lavori" data-en="Work">Work</a>
       <a href="#studio" data-it="Studio" data-en="Studio">Studio</a>
       <a href="#lab" data-it="Laboratorio" data-en="Lab">Lab</a>
+      <a href="nyfurion.html" data-it="Nyfurion" data-en="Nyfurion">Nyfurion</a>
       <a href="#contact" data-it="Contatti" data-en="Contact">Contact</a>
     </div>
     <div class="burger" id="burger"><span></span><span></span><span></span></div>
@@ -636,8 +639,8 @@
   function runCounters(box){box.querySelectorAll('[data-count]').forEach(function(el){var target=+el.getAttribute('data-count');var suf=el.querySelector('i')?el.querySelector('i').outerHTML:'';var n=0,step=Math.max(1,Math.ceil(target/40));(function go(){n+=step;if(n>=target)n=target;el.innerHTML=n+suf;if(n<target)requestAnimationFrame(go);})();});}
 
   /* ===== projects ===== */
-  var FILES=['di-lenarda','udn','padel-italia','rpg-yacht','fridgemind'];
-  var COVERS={'solo-sport':'./images/solosport-hero.png','padel-italia':'./images/padel-hero.jpg','rpg-yacht':'./images/rpg-yacht-4.jpg','di-lenarda':'./images/dilenarda-hero-caps.jpg','udn':'./images/udn-hero.png'};
+  var FILES=['fantaville','di-lenarda','udn','padel-italia','rpg-yacht','fridgemind'];
+  var COVERS={'fantaville':'./images/fantaville-cover.jpg','solo-sport':'./images/solosport-hero.png','padel-italia':'./images/padel-hero.jpg','rpg-yacht':'./images/rpg-yacht-4.jpg','di-lenarda':'./images/dilenarda-hero-caps.jpg','udn':'./images/udn-hero.png'};
   var PROJECTS=[];
   function loc(v){if(v==null)return'';if(typeof v==='string')return v;return v.IT||v.it||v[LANG]||v.EN||'';}
   function cover(p){return COVERS[p.id]||(p.gallery&&p.gallery[0]&&p.gallery[0].url);}
@@ -784,5 +787,6 @@
   Promise.all(FILES.map(function(f){return fetch('./projects/'+f+'.json?v='+Date.now()).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;});})).then(function(list){PROJECTS=list.filter(Boolean);renderWork();});
 })();
 </script>
+<script src="menu-app.js"></script>
 </body>
 </html>
