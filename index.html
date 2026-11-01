@@ -125,6 +125,43 @@
         #home .hero-cta-row,
         #home .scroll-hint { position: relative; z-index: 10; }
 
+
+        /* ===== TRE PORTE: leggi, gioca, possiedi ===== */
+        .horizontal-landing > #doors.page-panel {
+            background:
+                radial-gradient(ellipse 70% 55% at 50% 22%, rgba(227,11,23,0.10), transparent 62%),
+                radial-gradient(ellipse 60% 50% at 50% 100%, rgba(0,229,255,0.05), transparent 60%),
+                #080809;
+        }
+        .doors-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; width: min(1100px, calc(100vw - 3rem)); margin: 2.2rem auto 0; }
+        .door {
+            display: flex; flex-direction: column; text-decoration: none; color: inherit; text-align: left;
+            border: 1px solid rgba(255,255,255,0.09); border-radius: 8px; overflow: hidden;
+            background: linear-gradient(160deg, rgba(255,255,255,0.04), rgba(255,255,255,0.012));
+            transition: transform 0.45s cubic-bezier(0.16,1,0.3,1), border-color 0.45s, box-shadow 0.45s;
+        }
+        .door:hover { transform: translateY(-6px); border-color: rgba(227,11,23,0.55); box-shadow: 0 22px 50px rgba(0,0,0,0.55); }
+        .door-img { aspect-ratio: 4 / 3; overflow: hidden; background: #0c0c0e; }
+        .door-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.2s cubic-bezier(0.16,1,0.3,1); }
+        .door:hover .door-img img { transform: scale(1.05); }
+        .door-body { padding: 1.15rem 1.3rem 1.35rem; display: flex; flex-direction: column; gap: 0.45rem; flex: 1; }
+        .door-tag { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent-red); }
+        .door h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.65rem; line-height: 1.1; color: #f3ede0; }
+        .door p { font-size: 0.92rem; line-height: 1.6; color: #b4ada0; flex: 1; }
+        .door-cta { margin-top: 0.4rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--accent-cyan); }
+        .door-cta::after { content: " \2192"; }
+        .creator-line { margin-top: 2rem; font-size: 0.88rem; color: #9a948a; text-align: center; letter-spacing: 0.02em; }
+        .creator-line b { color: #e9e3d6; font-weight: 600; }
+        .creator-line a { color: var(--accent-cyan); text-decoration: none; border-bottom: 1px solid rgba(0,229,255,0.35); margin-left: 0.4rem; }
+        @media (max-width: 768px) {
+            .doors-grid { grid-template-columns: 1fr; gap: 1rem; margin-top: 1.4rem; }
+            .door { flex-direction: row; }
+            .door-img { aspect-ratio: auto; width: 38%; flex: 0 0 38%; }
+            .door-body { padding: 0.9rem 1rem; }
+            .door h3 { font-size: 1.3rem; }
+            .door p { font-size: 0.84rem; }
+        }
+
         /* Horizontal landing pages */
         .horizontal-landing {
             position: relative;
@@ -1404,12 +1441,49 @@
 
         <div class="hero-cta-row">
             <a href="lore.html" class="btn-primary" id="cta-enter">Enter the Story</a>
-            <a href="journey.html" class="btn-ghost" id="cta-journey">Journey &mdash; 3D experience</a>
+            <a href="clash.html" class="btn-ghost" id="cta-play">Play Nyfurion Clash</a>
             <a href="#final" class="btn-ghost" id="cta-choose">Choose Your Side</a>
         </div>
 
-        <a href="#story" class="scroll-hint" aria-label="Scroll right">›</a>
+        <a href="#doors" class="scroll-hint" aria-label="Scroll right">›</a>
     </div>
+
+    <!-- ============ TRE PORTE: cosa puoi fare a Nyfurion ============ -->
+    <section class="section-block page-panel" id="doors">
+        <div class="section-eyebrow" id="t-doors-eyebrow">Nyfurion</div>
+        <h2 class="section-heading" id="t-doors-heading">Read it. Play it. Own it.</h2>
+        <p class="section-intro" id="t-doors-intro">A dark fantasy universe: a saga to read, a card game to play, a collection to own.</p>
+        <div class="doors-grid">
+            <a class="door" href="lore.html">
+                <div class="door-img"><img src="book1-cover.png" alt="" loading="lazy"></div>
+                <div class="door-body">
+                    <span class="door-tag" id="t-door1-tag">Read</span>
+                    <h3 id="t-door1-title">The Saga</h3>
+                    <p id="t-door1-line">The kingdom, the three heirs and the war that splits them.</p>
+                    <span class="door-cta" id="t-door1-cta">Read the saga</span>
+                </div>
+            </a>
+            <a class="door" href="clash.html">
+                <div class="door-img"><img src="assets/roadmap/clash-cards.jpg" alt="" loading="lazy"></div>
+                <div class="door-body">
+                    <span class="door-tag" id="t-door2-tag">Play</span>
+                    <h3 id="t-door2-title">Nyfurion Clash</h3>
+                    <p id="t-door2-line">The card game. Free on your phone and on the web.</p>
+                    <span class="door-cta" id="t-door2-cta">Play free</span>
+                </div>
+            </a>
+            <a class="door" href="nfts.html">
+                <div class="door-img"><img src="nyfurion-pack-preview-001.jpg" alt="" loading="lazy" style="object-position:center 30%"></div>
+                <div class="door-body">
+                    <span class="door-tag" id="t-door3-tag">Own</span>
+                    <h3 id="t-door3-title">The Collection</h3>
+                    <p id="t-door3-line">400 characters, each with a commercial license and its own archive.</p>
+                    <span class="door-cta" id="t-door3-cta">Discover the collection</span>
+                </div>
+            </a>
+        </div>
+        <p class="creator-line" id="t-creator-line">An independent universe created by <b>Riccardo Duca</b>.<a href="https://nyfurion.com/portfolio/">Portfolio</a></p>
+    </section>
 
     <!-- ============ STORY (the hook) ============ -->
     <section class="section-block page-panel" id="story">
@@ -1440,7 +1514,7 @@
             <div class="heir-role" id="t-heir1-role">The Legendary Supreme</div>
             <h2 class="heir-name" id="t-heir1-name">Tyri</h2>
             <p class="heir-line" id="t-heir1-line">The chosen heir. Pure of heart, he never sought the throne, yet his father Ash named him successor, to protect the kingdom from the dark.</p>
-            <a href="characters.html#tyri" class="heir-cta">Scopri la sua storia</a>
+            <a href="characters.html#tyri" class="heir-cta">Discover the story</a>
         </div>
     </section>
 
@@ -1452,7 +1526,7 @@
             <div class="heir-role" id="t-heir2-role">The Dark Power of Evil</div>
             <h2 class="heir-name" id="t-heir2-name">Nyv</h2>
             <p class="heir-line" id="t-heir2-line">The firstborn, passed over as successor. Consumed by betrayal, he tore open time itself to build an empire of shadow, and burn the realm he believes betrayed him.</p>
-            <a href="characters.html#nyv" class="heir-cta">Scopri la sua storia</a>
+            <a href="characters.html#nyv" class="heir-cta">Discover the story</a>
         </div>
     </section>
 
@@ -1464,7 +1538,7 @@
             <div class="heir-role" id="t-heir3-role">The Queen</div>
             <h2 class="heir-name" id="t-heir3-name">Rey</h2>
             <p class="heir-line" id="t-heir3-line">The daughter who holds the last spark of primordial power. Torn between her two brothers, her choice will decide the fate of Nyfurion. And the choice... will be yours too.</p>
-            <a href="characters.html#rey" class="heir-cta">Scopri la sua storia</a>
+            <a href="characters.html#rey" class="heir-cta">Discover the story</a>
         </div>
     </section>
 
@@ -1481,7 +1555,7 @@
             </div>
             <h2 class="heir-name" id="t-fac1-name">Order</h2>
             <p class="heir-line" id="t-fac1-desc">Tyri and the Young Warriors of Peace, guided by the Masters of Discipline. They fight to protect what remains.</p>
-            <a href="contacts.html" class="heir-cta">Unisciti a questa fazione</a>
+            <a href="contacts.html" class="heir-cta">Join this side</a>
         </div>
     </section>
 
@@ -1496,7 +1570,7 @@
             </div>
             <h2 class="heir-name" id="t-fac2-name">Chaos</h2>
             <p class="heir-line" id="t-fac2-desc">Nyv and the Dark Power of Evil. Those who believe the old order must burn so a new one can rise.</p>
-            <a href="contacts.html" class="heir-cta">Unisciti a questa fazione</a>
+            <a href="contacts.html" class="heir-cta">Join this side</a>
         </div>
     </section>
 
@@ -1510,9 +1584,9 @@
                     <path d="M9.5 13.5h.01M14.5 13.5h.01"/>
                 </svg>
             </div>
-            <h2 class="heir-name"><span id="t-fac3-name">Predatori</span><span class="faction-sub" id="t-fac3-sub">Ombre</span></h2>
+            <h2 class="heir-name"><span id="t-fac3-name">Predators</span><span class="faction-sub" id="t-fac3-sub">Shadows</span></h2>
             <p class="heir-line" id="t-fac3-desc">The Shadow Predators. They serve neither light nor dark, only themselves, profiting from the fall of the realm.</p>
-            <a href="contacts.html" class="heir-cta">Unisciti a questa fazione</a>
+            <a href="contacts.html" class="heir-cta">Join this side</a>
         </div>
     </section>
 
@@ -1660,6 +1734,13 @@
                 policy: "Policy",
                 taglineHTML: "Three siblings. One throne. A kingdom set to burn.<br>A realm suspended between light and darkness, and a power able to <span class='accent'>rewrite reality itself.</span>",
                 ctaEnter: "Enter the Story",
+                ctaPlay: "Play Nyfurion Clash",
+                doorsEyebrow: "Nyfurion", doorsHeading: "Read it. Play it. Own it.",
+                doorsIntro: "A dark fantasy universe: a saga to read, a card game to play, a collection to own.",
+                door1Tag: "Read", door1Title: "The Saga", door1Line: "The kingdom, the three heirs and the war that splits them.", door1Cta: "Read the saga",
+                door2Tag: "Play", door2Title: "Nyfurion Clash", door2Line: "The card game. Free on your phone and on the web.", door2Cta: "Play free",
+                door3Tag: "Own", door3Title: "The Collection", door3Line: "400 characters, each with a commercial license and its own archive.", door3Cta: "Discover the collection",
+                creatorLine: "An independent universe created by <b>Riccardo Duca</b>.<a href='https://nyfurion.com/portfolio/'>Portfolio</a>",
                 ctaChoose: "Choose Your Side",
                 storyEyebrow: "The Saga",
                 storyHeading: "A Kingdom Born to Last Forever",
@@ -1699,6 +1780,13 @@
                 policy: "Policy",
                 taglineHTML: "Tre fratelli. Un trono. Un regno destinato a bruciare.<br>Un regno sospeso tra luce e tenebra, e un potere capace di <span class='accent'>riscrivere la realtà stessa.</span>",
                 ctaEnter: "Entra nella Storia",
+                ctaPlay: "Gioca a Nyfurion Clash",
+                doorsEyebrow: "Nyfurion", doorsHeading: "Leggilo. Giocalo. Possiedilo.",
+                doorsIntro: "Un universo dark fantasy: una saga da leggere, un gioco di carte da giocare, una collezione da possedere.",
+                door1Tag: "Leggi", door1Title: "La Saga", door1Line: "Il regno, i tre eredi e la guerra che li divide.", door1Cta: "Leggi la saga",
+                door2Tag: "Gioca", door2Title: "Nyfurion Clash", door2Line: "Il gioco di carte. Gratis sul telefono e sul web.", door2Cta: "Gioca gratis",
+                door3Tag: "Possiedi", door3Title: "La Collezione", door3Line: "400 personaggi, ognuno con licenza commerciale e il suo archivio.", door3Cta: "Scopri la collezione",
+                creatorLine: "Un universo indipendente creato da <b>Riccardo Duca</b>.<a href='https://nyfurion.com/portfolio/'>Portfolio</a>",
                 ctaChoose: "Scegli la Tua Fazione",
                 storyEyebrow: "La Saga",
                 storyHeading: "Un Regno Nato per Durare in Eterno",
@@ -1776,6 +1864,10 @@
             const t = translations[currentLang];
             setHTML('hero-tagline', t.taglineHTML);
             setTxt('cta-enter', t.ctaEnter);
+            setTxt('cta-play', t.ctaPlay);
+            setTxt('t-doors-eyebrow', t.doorsEyebrow); setTxt('t-doors-heading', t.doorsHeading); setTxt('t-doors-intro', t.doorsIntro);
+            [1, 2, 3].forEach(function(n){ ['Tag', 'Title', 'Line', 'Cta'].forEach(function(k){ setTxt('t-door' + n + '-' + k.toLowerCase(), t['door' + n + k]); }); });
+            setHTML('t-creator-line', t.creatorLine);
             setTxt('cta-choose', t.ctaChoose);
             setTxt('t-story-eyebrow', t.storyEyebrow);
             setTxt('t-story-heading', t.storyHeading);

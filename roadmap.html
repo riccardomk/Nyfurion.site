@@ -126,59 +126,105 @@
     }
     .hero p { max-width: 580px; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(1.2rem,2.4vw,1.55rem); color: #b0a99c; line-height: 1.6; }
 
-    /* TIMELINE */
-    .timeline { max-width: 880px; margin: 0 auto; padding: 2rem 1.5rem 5rem; position: relative; }
-    /* central vertical line */
+    /* TIMELINE: schede con immagine, linea a sinistra, titoletti per anno */
+    .timeline { max-width: 1020px; margin: 0 auto; padding: 1rem 1.5rem 4rem; position: relative; }
     .timeline::before {
-      content:""; position:absolute; left: 28px; top: 0; bottom: 0; width: 1px;
-      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.14) 8%, rgba(255,255,255,0.14) 92%, transparent);
+      content:""; position:absolute; left: 34px; top: 0; bottom: 0; width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.16) 4%, rgba(255,255,255,0.16) 96%, transparent);
     }
-    @media(min-width: 780px){ .timeline::before { left: 50%; transform: translateX(-0.5px); } }
-
+    .era { position: relative; padding-left: 64px; margin: 3.2rem 0 1.6rem; display: flex; align-items: baseline; gap: 1.1rem; }
+    .era:first-child { margin-top: 0.5rem; }
+    .era b { font-family: 'Cinzel', serif; font-weight: 700; font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: 0.12em; color: #f3ede0; }
+    .era span:not(.era-dot) { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent-red); }
+    .era-dot { position: absolute; left: 27px; top: 50%; width: 15px; height: 15px; margin-top: -7.5px; transform: rotate(45deg);
+      background: var(--matte-black); border: 2px solid var(--accent-red); }
     .node {
-      position: relative; padding-left: 70px; margin-bottom: 4.5rem;
-      opacity: 0;
-      /* starts rotated clockwise + small, then spins COUNTER-CLOCKWISE to straighten */
-      transform: rotate(14deg) scale(0.82);
-      transition: opacity 0.45s ease, transform 0.7s cubic-bezier(0.34,1.4,0.5,1);
-      transform-origin: center center;
+      position: relative; padding-left: 64px; margin-bottom: 1.6rem;
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.8s cubic-bezier(0.16,1,0.3,1);
     }
-    .node.visible { opacity: 1; transform: rotate(0deg) scale(1); }
-    @media(min-width: 780px){
-      .node { width: 50%; padding-left: 0; transform-origin: center center; }
-      .node.left  { left: 0; padding-right: 3.5rem; text-align: right; }
-      .node.right { left: 50%; padding-left: 3.5rem; }
-    }
-
-    /* dot on the line */
+    .node.visible { opacity: 1; transform: none; }
     .node .dot {
-      position: absolute; top: 4px; left: 21px; width: 15px; height: 15px; border-radius: 50%;
+      position: absolute; top: 50%; left: 27px; width: 15px; height: 15px; margin-top: -7.5px; border-radius: 50%;
       background: var(--matte-black); border: 2px solid #555; z-index: 2;
-    }
-    @media(min-width: 780px){
-      .node.left .dot { left: auto; right: -7.5px; }
-      .node.right .dot { left: -7.5px; }
     }
     .node.done .dot { border-color: var(--accent-cyan); box-shadow: 0 0 0 4px rgba(0,229,255,0.1); }
     .node.active .dot { border-color: var(--accent-red); box-shadow: 0 0 0 4px rgba(227,11,23,0.12); animation: pulse 2s infinite; }
     .node.future .dot { border-color: #6b6b6b; }
     @keyframes pulse { 0%,100%{box-shadow:0 0 0 4px rgba(227,11,23,0.12);} 50%{box-shadow:0 0 0 8px rgba(227,11,23,0.04);} }
-
+    .card {
+      display: grid; grid-template-columns: minmax(220px, 340px) 1fr; gap: 2rem; align-items: center;
+      padding: 1rem; border-radius: 6px; background: linear-gradient(120deg, rgba(255,255,255,0.035), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.07); transition: border-color 0.4s, transform 0.4s;
+    }
+    .node:hover .card { border-color: rgba(255,255,255,0.16); transform: translateX(4px); }
+    .node.active .card { border-color: rgba(227,11,23,0.28); }
+    .pic { aspect-ratio: 4 / 3; border-radius: 4px; overflow: hidden; background: #0c0c0e; }
+    .pic img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.2s cubic-bezier(0.16,1,0.3,1); }
+    .pic.fit img { object-fit: contain; padding: 0.6rem; }
+    .node:hover .pic img { transform: scale(1.04); }
+    .txt { padding: 0.4rem 0.6rem 0.4rem 0; }
     .ver { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: #6b6b6b; margin-bottom: 0.5rem; }
     .node h2 {
-      font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(1.5rem, 3vw, 2.1rem);
-      color: #f3ede0; line-height: 1.15; margin-bottom: 0.8rem;
+      font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(1.5rem, 2.6vw, 2rem);
+      color: #f3ede0; line-height: 1.15; margin-bottom: 0.7rem;
     }
     .status {
       display: inline-block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
-      padding: 0.3rem 0.8rem; border-radius: 40px; margin-bottom: 1rem;
+      padding: 0.3rem 0.8rem; border-radius: 40px; margin-bottom: 0.9rem;
     }
     .status.done   { color: var(--accent-cyan); border: 1px solid rgba(0,229,255,0.35); }
     .status.active { color: var(--accent-red); border: 1px solid rgba(227,11,23,0.4); }
     .status.future { color: #8a8a8a; border: 1px solid rgba(255,255,255,0.15); }
-    .node p { font-family: 'Cormorant Garamond', serif; font-size: 1.18rem; line-height: 1.7; color: #b4ada0; }
+    .node p { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; line-height: 1.65; color: #b4ada0; }
     .node .highlight { color: #f0e9da; font-style: italic; }
+    .node p a { color: var(--accent-cyan); }
+    @media (max-width: 700px) {
+      .timeline { padding: 0.5rem 1rem 3rem; }
+      .timeline::before { left: 18px; }
+      .era { padding-left: 42px; }
+      .era-dot { left: 11px; }
+      .node { padding-left: 42px; }
+      .node .dot { left: 11px; top: 1.4rem; margin-top: 0; }
+      .card { grid-template-columns: 1fr; gap: 1rem; padding: 0.8rem; }
+      .pic { aspect-ratio: 16 / 10; }
+      .txt { padding: 0 0.3rem 0.4rem; }
+    }
 
+    /* ===== ATMOSFERA: sfondo che cambia con gli anni, braci, filigrana ===== */
+    .bg-layers { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .bg-layer {
+      position: absolute; inset: -4%; background-size: cover; background-position: center;
+      opacity: 0; filter: blur(2px) saturate(0.95) brightness(0.78); transform: scale(1.06);
+      transition: opacity 1.8s ease, transform 14s ease;
+    }
+    .bg-layer.on { opacity: 0.7; transform: scale(1); }
+    .bg-layers::after {
+      content: ""; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 75% 65% at 50% 45%, rgba(8,8,9,0.1), rgba(8,8,9,0.72) 85%),
+        linear-gradient(to bottom, rgba(8,8,9,0.55), rgba(8,8,9,0.15) 30%, rgba(8,8,9,0.3) 70%, rgba(8,8,9,0.85));
+    }
+    .ember {
+      position: absolute; bottom: -12px; width: 3px; height: 3px; border-radius: 50%;
+      background: #ffb36b; box-shadow: 0 0 8px 2px rgba(255,140,60,0.55); opacity: 0;
+      animation: ember linear infinite;
+    }
+    .ember.red { background: #ff5a4d; box-shadow: 0 0 8px 2px rgba(227,11,23,0.5); }
+    @keyframes ember {
+      0% { transform: translate(0, 0); opacity: 0; }
+      10% { opacity: 0.85; }
+      80% { opacity: 0.5; }
+      100% { transform: translate(var(--dx, 30px), -105vh); opacity: 0; }
+    }
+    .hero, .timeline, .road-cta, footer { position: relative; z-index: 1; }
+    .era::after {
+      content: attr(data-year); position: absolute; right: 0; top: 50%; transform: translateY(-38%);
+      font-family: 'Cinzel', serif; font-weight: 800; font-size: clamp(4.5rem, 13vw, 10rem); letter-spacing: 0.06em;
+      color: rgba(255,255,255,0.045); pointer-events: none; line-height: 1;
+    }
+    .card { background: linear-gradient(120deg, rgba(14,14,16,0.82), rgba(10,10,12,0.66)); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+    @media (max-width: 700px) { .era::after { font-size: 3.6rem; transform: translateY(-50%); } }
     /* FINAL CTA */
     .road-cta { max-width: 640px; margin: 2rem auto 7rem; padding: 0 2rem; text-align: center; }
     .road-cta h2 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(2rem,4vw,3rem); color:#f3ede0; margin-bottom: 1.2rem; }
@@ -209,6 +255,12 @@
   </div>
 
   <div id="progress-bar"></div>
+  <div class="bg-layers" aria-hidden="true">
+    <div class="bg-layer on" style="background-image:url('roadmap-bg.png')"></div>
+    <div class="bg-layer" style="background-image:url('assets/nft/final-bg.jpg')"></div>
+    <div class="bg-layer" style="background-image:url('portal-castle.jpg')"></div>
+    <div class="bg-layer" style="background-image:url('assets/nft/claim-1.png')"></div>
+  </div>
 
   <nav id="topnav">
     <div class="nav-scroll" id="navScroll">
@@ -238,119 +290,199 @@
 
   <div class="timeline">
 
+    <div class="era" data-year="2025"><span class="era-dot"></span><b>2025</b><span>The Beginning</span></div>
+
     <!-- 1.0 -->
-    <div class="node left done">
+    <div class="node done">
       <span class="dot"></span>
-      <div class="ver">Phase 1.0 · 2025</div>
-      <span class="status done">Completed</span>
-      <h2>The First Spark</h2>
-      <p>The Nyfurion saga began with the first <span class="highlight">100 fragments</span>. Each one a unique piece of the universe, where digital art and storytelling became one, and the world made its first contact with the public.</p>
+      <div class="card">
+        <div class="pic"><img src="nyfurion-pack-preview-001.jpg" alt="" loading="lazy" style="object-position:center 30%"></div>
+        <div class="txt">
+          <div class="ver">Phase 1.0 · 2025</div>
+          <span class="status done">Completed</span>
+          <h2>The First Spark</h2>
+          <p>The Nyfurion saga began with the first <span class="highlight">100 fragments</span>. Each one a unique piece of the universe, where digital art and storytelling became one, and the world made its first contact with the public.</p>
+        </div>
+      </div>
     </div>
 
     <!-- 1.1 -->
-    <div class="node right done">
+    <div class="node done">
       <span class="dot"></span>
-      <div class="ver">Phase 1.1 · 2025</div>
-      <span class="status done">Completed</span>
-      <h2>The World Expands</h2>
-      <p>Fragments were released in waves, growing to <span class="highlight">400 unique pieces</span>. Quality and vision held firm, while the story began to live on social media through teasers, visuals and updates.</p>
+      <div class="card">
+        <div class="pic"><img src="assets/nft/final-bg.jpg" alt="" loading="lazy" style="object-position:center"></div>
+        <div class="txt">
+          <div class="ver">Phase 1.1 · 2025</div>
+          <span class="status done">Completed</span>
+          <h2>The World Expands</h2>
+          <p>Fragments were released in waves, growing to <span class="highlight">400 unique pieces</span>. Quality and vision held firm, while the story began to live on social media through teasers, visuals and updates.</p>
+        </div>
+      </div>
     </div>
 
     <!-- 1.2 -->
-    <div class="node left done">
+    <div class="node done">
       <span class="dot"></span>
-      <div class="ver">Phase 1.2 · 2025</div>
-      <span class="status done">Completed</span>
-      <h2>New Faces, New Lands</h2>
-      <p>The universe deepened with new female characters, iconic locations and the ruins of a fallen city. Every promise made to the community was kept, every fragment enriched the myth.</p>
+      <div class="card">
+        <div class="pic"><img src="portal-castle.jpg" alt="" loading="lazy" style="object-position:center 40%"></div>
+        <div class="txt">
+          <div class="ver">Phase 1.2 · 2025</div>
+          <span class="status done">Completed</span>
+          <h2>New Faces, New Lands</h2>
+          <p>The universe deepened with new female characters, iconic locations and the ruins of a fallen city. Every promise made to the community was kept, every fragment enriched the myth.</p>
+        </div>
+      </div>
     </div>
 
     <!-- 1.3 -->
-    <div class="node right active">
+    <div class="node active">
       <span class="dot"></span>
-      <div class="ver">Phase 1.3 · In progress</div>
-      <span class="status active">Ongoing</span>
-      <h2>Hidden Evolutions</h2>
-      <p>Some fragments conceal secret evolutions, revealed slowly over time. A gentle face may hide a dark soul; a minor piece may become central. This is a <span class="highlight">living lore</span>, never fully predictable.</p>
+      <div class="card">
+        <div class="pic"><img src="assets/characters/portraits/ash-evo1.jpg" alt="" loading="lazy" style="object-position:center 22%"></div>
+        <div class="txt">
+          <div class="ver">Phase 1.3 · In progress</div>
+          <span class="status active">Ongoing</span>
+          <h2>Hidden Evolutions</h2>
+          <p>Some fragments conceal secret evolutions, revealed slowly over time. A gentle face may hide a dark soul; a minor piece may become central. This is a <span class="highlight">living lore</span>, never fully predictable.</p>
+        </div>
+      </div>
     </div>
 
     <!-- 1.4 -->
-    <div class="node left done">
+    <div class="node done">
       <span class="dot"></span>
-      <div class="ver">Phase 1.4 · 2025</div>
-      <span class="status done">Completed</span>
-      <h2>The Book & The Community</h2>
-      <p>The first book opened the world to everyone, even those new to crypto. Holders can <span class="highlight">suggest their own ideas</span> for the lore.</p>
+      <div class="card">
+        <div class="pic"><img src="book1-cover.png" alt="" loading="lazy" style="object-position:center"></div>
+        <div class="txt">
+          <div class="ver">Phase 1.4 · 2025</div>
+          <span class="status done">Completed</span>
+          <h2>The Book & The Community</h2>
+          <p>The first book opened the world to everyone, even those new to crypto. Holders can <span class="highlight">suggest their own ideas</span> for the lore.</p>
+        </div>
+      </div>
     </div>
 
     <!-- 1.5 -->
-    <div class="node right done">
+    <div class="node done">
       <span class="dot"></span>
-      <div class="ver">Phase 1.5 · 2025</div>
-      <span class="status done">Completed</span>
-      <h2>The Official License</h2>
-      <p>A clear, transparent license defines what holders truly own and can create. Legal clarity, real trust, full creative freedom within the world.</p>
+      <div class="card">
+        <div class="pic"><img src="assets/nft/nft-hero.jpg" alt="" loading="lazy" style="object-position:center 30%"></div>
+        <div class="txt">
+          <div class="ver">Phase 1.5 · 2025</div>
+          <span class="status done">Completed</span>
+          <h2>The Official License</h2>
+          <p>A clear, transparent license defines what holders truly own and can create. Legal clarity, real trust, full creative freedom within the world.</p>
+        </div>
+      </div>
     </div>
 
+    <div class="era" data-year="2026"><span class="era-dot"></span><b>2026</b><span>The World Becomes Real</span></div>
+
     <!-- 2.0 -->
-    <div class="node left done">
+    <div class="node done">
       <span class="dot"></span>
-      <div class="ver">Phase 2.0 · 2026</div>
-      <span class="status done">Completed</span>
-      <h2>Nyfurion Clash · The Card Game</h2>
-      <p>The world of Nyfurion becomes playable: <span class="highlight">Nyfurion Clash</span>, the card game, on app and on the web. Build your deck, choose your house and fight real players.</p>
+      <div class="card">
+        <div class="pic"><img src="assets/roadmap/clash-cards.jpg" alt="" loading="lazy" style="object-position:center"></div>
+        <div class="txt">
+          <div class="ver">Phase 2.0 · 2026</div>
+          <span class="status done">Completed</span>
+          <h2>Nyfurion Clash · The Card Game</h2>
+          <p>The world of Nyfurion becomes playable: <span class="highlight">Nyfurion Clash</span>, the card game, on app and on the web. Build your deck, choose your house and fight real players.</p>
+        </div>
+      </div>
     </div>
 
     <!-- 2.1 -->
-    <div class="node right done">
+    <div class="node done">
       <span class="dot"></span>
-      <div class="ver">Phase 2.1 · 2026</div>
-      <span class="status done">Completed</span>
-      <h2>Printed Cards & Rulebook</h2>
-      <p>The cards leave the screen: <span class="highlight">printed cards</span> and the official rulebook, to play Nyfurion at the table.</p>
+      <div class="card">
+        <div class="pic fit"><img src="assets/libretto/en/01.webp" alt="" loading="lazy" style="object-position:center"></div>
+        <div class="txt">
+          <div class="ver">Phase 2.1 · 2026</div>
+          <span class="status done">Completed</span>
+          <h2>Printed Cards & Rulebook</h2>
+          <p>The cards leave the screen: <span class="highlight">printed cards</span> and the official rulebook, to play Nyfurion at the table.</p>
+        </div>
+      </div>
     </div>
 
     <!-- 2.2 -->
-    <div class="node left done">
+    <div class="node done">
       <span class="dot"></span>
-      <div class="ver">Phase 2.2 · 2026</div>
-      <span class="status done">Completed</span>
-      <h2>Signed Cards at Lucca Comics</h2>
-      <p>At Lucca Comics, <span class="highlight">signed cards</span> were handed out, carrying the lore and passages from the upcoming book.</p>
+      <div class="card">
+        <div class="pic"><img src="assets/roadmap/qr-card.jpg" alt="" loading="lazy" style="object-position:center"></div>
+        <div class="txt">
+          <div class="ver">Phase 2.2 · 2026</div>
+          <span class="status done">Completed</span>
+          <h2>One Line from the Book</h2>
+          <p>Printed QR cards, each one <span class="highlight">signed on the back</span> with a single line from the book in development. Handed out in person in Lucca.</p>
+        </div>
+      </div>
     </div>
 
     <!-- 2.3 -->
-    <div class="node right active">
+    <div class="node active">
       <span class="dot"></span>
-      <div class="ver">Phase 2.3 · In progress</div>
-      <span class="status active">Ongoing</span>
-      <h2>The Holder Archive</h2>
-      <p>Every fragment has its <span class="highlight">3D card ready to print</span> in the holder vault. Photo packs of the characters are being added.</p>
+      <div class="card">
+        <div class="pic fit"><img src="nyf221-front.png" alt="" loading="lazy" style="object-position:center"></div>
+        <div class="txt">
+          <div class="ver">Phase 2.3 · In progress</div>
+          <span class="status active">Ongoing</span>
+          <h2>The Holder Archive</h2>
+          <p>Every fragment has its <span class="highlight">3D card ready to print</span> in the holder vault. Photo packs of the characters are being added.</p>
+        </div>
+      </div>
     </div>
 
+    <div class="era" data-year="Beyond"><span class="era-dot"></span><b>Beyond</b><span>The Vision</span></div>
+
     <!-- 3.0 -->
-    <div class="node left future">
+    <div class="node active">
       <span class="dot"></span>
-      <div class="ver">Phase 3.0 · Long-term vision</div>
-      <span class="status future">The Big Vision</span>
-      <h2>Nyfurion Beyond · The Series</h2>
-      <p>The ultimate goal: bring Nyfurion to <span class="highlight">television and streaming</span>. If an official series is produced, the license sets aside 10% of the creator's net revenues for verified holders of the characters with a main role (<a href="license.html">License, Section 6</a>). It is not a promise of profit.</p>
+      <div class="card">
+        <div class="pic"><img src="book2-cover.png" alt="" loading="lazy" style="object-position:center 35%"></div>
+        <div class="txt">
+          <div class="ver">Phase 3.0 · In development</div>
+          <span class="status active">In development</span>
+          <h2>The War of Balance · The Book</h2>
+          <p>The saga becomes a book: <span class="highlight">Nyfurion X Reborn · The War of Balance</span>. In development.</p>
+        </div>
+      </div>
     </div>
 
     <!-- 3.1 -->
-    <div class="node right future">
+    <div class="node future">
       <span class="dot"></span>
-      <div class="ver">Phase 3.1 · Open</div>
-      <span class="status future">Active</span>
-      <h2>Alliances & Beyond</h2>
-      <p>Nyfurion opens its gates to artists, brands and creators. Holders can build real ventures, merchandise and stories from their fragments, giving the world value far beyond the digital.</p>
+      <div class="card">
+        <div class="pic"><img src="assets/nft/claim-1.png" alt="" loading="lazy" style="object-position:center"></div>
+        <div class="txt">
+          <div class="ver">Phase 3.1 · Long-term vision</div>
+          <span class="status future">The Big Vision</span>
+          <h2>Nyfurion Beyond · The Series</h2>
+          <p>The ultimate goal: bring Nyfurion to <span class="highlight">television and streaming</span>. If an official series is produced, the license sets aside 10% of the creator's net revenues for verified holders of the characters with a main role (<a href="license.html">License, Section 6</a>). It is not a promise of profit.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3.2 -->
+    <div class="node future">
+      <span class="dot"></span>
+      <div class="card">
+        <div class="pic"><img src="assets/nft/nft-momentum-1-20260607.png" alt="" loading="lazy" style="object-position:center"></div>
+        <div class="txt">
+          <div class="ver">Phase 3.2 · Open</div>
+          <span class="status future">Active</span>
+          <h2>Alliances & Beyond</h2>
+          <p>Nyfurion opens its gates to artists, brands and creators. Holders can build real ventures, merchandise and stories from their fragments, giving the world value far beyond the digital.</p>
+        </div>
+      </div>
     </div>
 
   </div>
 
   <div class="road-cta">
     <h2>The Story Is Still Being Written</h2>
-    <p>You are early. Step into the world now, and help shape what Nyfurion becomes.</p>
+    <p>You are early. Step into the world now.</p>
     <a href="lore.html" class="btn-primary">Read the Saga</a>
     <a href="index.html#choose" class="btn-ghost">Choose Your Side</a>
   </div>
@@ -408,5 +540,37 @@
     document.querySelectorAll('.node').forEach(n => obs.observe(n));
   </script>
   <script src="nav.js" defer></script>
+  <script>
+  (function(){
+    var layers = document.querySelectorAll('.bg-layer');
+    var tl = document.querySelector('.timeline');
+    if (!layers.length || !tl) return;
+    // ogni anno (e le sue tappe) ha il suo sfondo: 0 = intestazione, 1 = 2025, 2 = 2026, 3 = Beyond
+    var era = 0;
+    Array.prototype.forEach.call(tl.children, function(el){
+      if (el.classList.contains('era')) era++;
+      el.dataset.bg = String(era);
+    });
+    function show(i){ layers.forEach(function(l, k){ l.classList.toggle('on', k === i); }); }
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) show(Math.min(+e.target.dataset.bg, layers.length - 1)); });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    Array.prototype.forEach.call(tl.children, function(el){ obs.observe(el); });
+    var hero = document.querySelector('.hero');
+    if (hero) new IntersectionObserver(function(en){ if (en[0].isIntersecting) show(0); }, { rootMargin: '-45% 0px -45% 0px' }).observe(hero);
+    // braci che salgono piano
+    var box = document.querySelector('.bg-layers');
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    for (var i = 0; i < 18; i++) {
+      var e = document.createElement('span');
+      e.className = 'ember' + (i % 3 === 0 ? ' red' : '');
+      e.style.left = (Math.random() * 100) + '%';
+      e.style.setProperty('--dx', (Math.random() * 80 - 40) + 'px');
+      e.style.animationDuration = (14 + Math.random() * 16) + 's';
+      e.style.animationDelay = (-Math.random() * 30) + 's';
+      box.appendChild(e);
+    }
+  })();
+  </script>
 </body>
 </html>
