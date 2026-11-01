@@ -13,7 +13,7 @@
   <title>Nyfurion &mdash; The Fragments</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="nav.css">
   <style>
     :root { --matte-black:#080809; --deep-black:#0D0D0E; --accent-red:#E30B17; --accent-cyan:#00E5FF; --ink:#d9d4c8; }
@@ -605,6 +605,140 @@
       .p-wall .wall{ grid-template-columns:repeat(14,1fr); }
       .panel h1{ font-size:clamp(2.2rem,11vw,4rem); }
     }
+
+    /* ===== APERTURA: possiedi un frammento (stile pagine App / Clash) ===== */
+    .p-hero { padding:0; align-items:stretch; justify-content:center; text-align:left; background:#060607; isolation:isolate; }
+    .p-hero::before {
+      content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+      background:
+        radial-gradient(ellipse 42% 58% at 72% 50%, rgba(0,229,255,0.14), transparent 70%),
+        radial-gradient(ellipse 50% 60% at 4% 100%, rgba(227,11,23,0.22), transparent 70%),
+        linear-gradient(90deg, rgba(6,6,7,0.94) 0%, rgba(6,6,7,0.7) 42%, rgba(6,6,7,0.2) 100%);
+    }
+    .ph-mosaic {
+      position:absolute; inset:-14% -8%; z-index:-2; display:grid; grid-template-columns:repeat(12, 1fr); gap:12px;
+      transform:rotate(-9deg) scale(1.12); opacity:0.22; pointer-events:none;
+      -webkit-mask:radial-gradient(ellipse 58% 70% at 70% 50%, #000 0%, transparent 78%);
+              mask:radial-gradient(ellipse 58% 70% at 70% 50%, #000 0%, transparent 78%);
+      animation:phDrift 70s linear infinite alternate;
+    }
+    .ph-mosaic img { width:100%; aspect-ratio:423 / 600; object-fit:cover; border-radius:7px; display:block; }
+    @keyframes phDrift { to { transform:rotate(-9deg) scale(1.12) translateY(-7%); } }
+    .ph-in {
+      width:100%; max-width:1320px; margin:0 auto; height:100%;
+      display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); align-items:center; gap:clamp(1.5rem,4vw,4rem);
+      padding:6.5rem clamp(1.2rem,5vw,4.5rem) 3.5rem;
+    }
+    .ph-kicker {
+      display:flex; align-items:center; gap:0.8rem; margin:0 0 clamp(1.1rem,3vh,1.8rem);
+      font-family:'Space Grotesk',sans-serif; font-size:0.66rem; font-weight:700; letter-spacing:0.36em; text-transform:uppercase; color:#d9d1c1;
+    }
+    .ph-kicker::before { content:""; width:44px; height:1px; background:var(--accent-red); flex:0 0 auto; }
+    .p-hero .ph-big { font-family:'Space Grotesk',sans-serif; line-height:0.86; margin:0 0 clamp(1.3rem,3.2vh,2rem); text-shadow:0 6px 40px rgba(0,0,0,0.7); }
+    .ph-a { display:block; font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; font-size:clamp(3rem,6.6vw,6.8rem); color:#e9dfca; margin-left:-0.02em; }
+    .ph-b { display:block; font-weight:700; text-transform:uppercase; white-space:nowrap; font-size:clamp(3rem,6.4vw,6.8rem); letter-spacing:-0.055em; color:#fff; margin-left:-0.05em; }
+    .ph-b i { font-style:normal; color:var(--accent-red); }
+    .ph-lead { max-width:38ch; font-family:'Cormorant Garamond',serif; font-size:clamp(1.2rem,1.6vw,1.5rem); line-height:1.5; color:#d6cdbb; margin:0 0 clamp(1.5rem,3.4vh,2.1rem); }
+    .ph-actions { display:flex; flex-wrap:wrap; gap:0.7rem; }
+    .ph-btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:0.6rem; cursor:pointer; text-decoration:none;
+      min-height:48px; padding:0 1.45rem; border-radius:999px; font-family:'Space Grotesk',sans-serif;
+      font-size:0.66rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase;
+      border:1px solid rgba(255,255,255,0.22); background:rgba(8,8,9,0.45); color:#eee6d6;
+      backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+      transition:background 0.35s ease, border-color 0.35s ease, color 0.35s ease, transform 0.35s cubic-bezier(0.16,1,0.3,1);
+    }
+    .ph-btn:hover { border-color:#fff; color:#fff; transform:translateY(-2px); }
+    .ph-btn.red { background:var(--accent-red); border-color:var(--accent-red); color:#fff; box-shadow:0 12px 34px -10px rgba(227,11,23,0.7); }
+    .ph-btn.red:hover { background:#ff1d29; border-color:#ff1d29; }
+    .ph-facts { display:flex; flex-wrap:wrap; gap:0.6rem 1.8rem; margin-top:clamp(1.3rem,3vh,1.9rem); font-family:'Space Grotesk',sans-serif; font-size:0.6rem; letter-spacing:0.24em; text-transform:uppercase; color:#8f877a; }
+    .ph-facts b { color:#fff; font-size:1.15rem; letter-spacing:-0.01em; margin-right:0.4rem; }
+    .ph-stage { position:relative; height:clamp(440px,72vh,680px); }
+    .ph-card {
+      position:absolute; left:50%; top:50%; z-index:3; width:clamp(210px,20vw,310px); height:auto;
+      transform:translate(-50%,-50%) rotate(-3deg);
+      filter:drop-shadow(0 40px 50px rgba(0,0,0,0.85)) drop-shadow(0 0 46px rgba(0,229,255,0.28));
+      animation:phFloat 7s ease-in-out infinite alternate;
+    }
+    @keyframes phFloat { to { transform:translate(-50%, calc(-50% - 16px)) rotate(-1.5deg); } }
+    .ph-frag {
+      position:absolute; left:50%; top:50%; z-index:2; width:clamp(130px,12vw,190px); aspect-ratio:423 / 600; height:auto; object-fit:cover;
+      border-radius:12px; box-shadow:0 30px 60px -20px rgba(0,0,0,0.95), 0 0 0 1px rgba(255,255,255,0.12);
+      transition:transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    }
+    .ph-frag.f1 { transform:translate(-158%,-80%) rotate(-15deg); }
+    .ph-frag.f2 { transform:translate(-132%,6%) rotate(-7deg); }
+    .ph-frag.f3 { transform:translate(52%,-88%) rotate(12deg); }
+    .ph-frag.f4 { transform:translate(32%,4%) rotate(18deg); }
+    .ph-stage:hover .ph-frag.f1 { transform:translate(-170%,-84%) rotate(-19deg); }
+    .ph-stage:hover .ph-frag.f2 { transform:translate(-144%,10%) rotate(-10deg); }
+    .ph-stage:hover .ph-frag.f3 { transform:translate(64%,-92%) rotate(15deg); }
+    .ph-stage:hover .ph-frag.f4 { transform:translate(44%,8%) rotate(21deg); }
+    .ph-chip {
+      position:absolute; left:50%; bottom:1%; transform:translateX(-50%); z-index:4; white-space:nowrap;
+      display:inline-flex; align-items:center; gap:0.5rem; padding:0.5rem 0.9rem; border-radius:999px;
+      font-family:'Space Grotesk',sans-serif; font-size:0.58rem; font-weight:700; letter-spacing:0.24em; text-transform:uppercase;
+      color:var(--accent-cyan); background:rgba(8,8,9,0.72); border:1px solid rgba(0,229,255,0.45);
+    }
+    .ph-chip i { width:7px; height:7px; border-radius:50%; background:var(--accent-cyan); box-shadow:0 0 12px var(--accent-cyan); }
+
+    /* ===== DOMANDE: un elenco che si apre, niente riquadri ===== */
+    .p-faq2 { padding:0; align-items:stretch; justify-content:center; text-align:left; background:#070708; isolation:isolate; }
+    .fq-bg {
+      position:absolute; inset:-30px; z-index:-2; background:url('assets/nft/267.jpg') 85% 30% / cover no-repeat;
+      filter:blur(30px) brightness(0.28) saturate(1.2); transform:scale(1.1);
+    }
+    .p-faq2::after {
+      content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+      background:linear-gradient(90deg, rgba(7,7,8,0.96) 0%, rgba(7,7,8,0.78) 45%, rgba(7,7,8,0.6) 100%);
+    }
+    .fq-in {
+      width:100%; max-width:1320px; margin:0 auto; height:100%;
+      display:grid; grid-template-columns:minmax(0,0.8fr) minmax(0,1.2fr); align-items:center; gap:clamp(2rem,5vw,5rem);
+      padding:6.5rem clamp(1.2rem,5vw,4.5rem) 3.5rem;
+    }
+    .p-faq2 .fq-title { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(3rem,6vw,6rem); line-height:0.92; color:#fff; margin:0 0 1.3rem; text-shadow:0 6px 40px rgba(0,0,0,0.7); }
+    .fq-title i { font-weight:500; color:var(--accent-red); }
+    .fq-lead { font-family:'Cormorant Garamond',serif; font-size:clamp(1.15rem,1.5vw,1.4rem); line-height:1.5; color:#cfc6b4; max-width:30ch; margin:0 0 1.8rem; }
+    .fq-meta { margin-top:1.6rem; font-family:'Space Grotesk',sans-serif; font-size:0.6rem; letter-spacing:0.24em; text-transform:uppercase; color:#8f877a; }
+    .fq-list { border-top:1px solid rgba(255,255,255,0.12); font-family:'Space Grotesk',sans-serif; }
+    .fq { border-bottom:1px solid rgba(255,255,255,0.12); }
+    .fq summary {
+      list-style:none; cursor:pointer; display:grid; grid-template-columns:3.2rem minmax(0,1fr) 30px; align-items:center; gap:0.8rem;
+      padding:clamp(0.85rem,1.8vh,1.2rem) 0;
+    }
+    .fq summary::-webkit-details-marker { display:none; }
+    .fq-n { font-size:0.68rem; font-weight:700; letter-spacing:0.2em; color:#8f877a; transition:color 0.3s ease; }
+    .fq-q { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(1.25rem,1.9vw,1.75rem); line-height:1.15; color:#e9e2d3; transition:color 0.3s ease; }
+    .fq-x { position:relative; width:30px; height:30px; border-radius:50%; border:1px solid rgba(255,255,255,0.25); transition:transform 0.45s cubic-bezier(0.16,1,0.3,1), background 0.3s ease, border-color 0.3s ease; }
+    .fq-x::before, .fq-x::after { content:""; position:absolute; left:50%; top:50%; width:11px; height:1.5px; background:#fff; transform:translate(-50%,-50%); }
+    .fq-x::after { transform:translate(-50%,-50%) rotate(90deg); }
+    .fq summary:hover .fq-q { color:#fff; }
+    .fq summary:hover .fq-x { border-color:#fff; }
+    .fq[open] .fq-n { color:var(--accent-red); }
+    .fq[open] .fq-q { color:#fff; }
+    .fq[open] .fq-x { transform:rotate(45deg); background:var(--accent-red); border-color:var(--accent-red); }
+    .fq-a { padding:0 2.6rem clamp(1rem,2.2vh,1.4rem) 4rem; animation:fqApri 0.5s ease; }
+    .fq-a p { font-size:0.95rem; line-height:1.7; color:#cfc7b6; max-width:62ch; margin:0; }
+    .fq-a a { color:var(--accent-cyan); text-decoration:none; border-bottom:1px solid rgba(0,229,255,0.4); }
+    @keyframes fqApri { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:none; } }
+
+    @media(max-width:900px){
+      .p-hero, .p-faq2 { overflow-y:auto; }
+      .ph-in, .fq-in { grid-template-columns:1fr; height:auto; min-height:100%; padding:5.6rem 1.2rem 3rem; gap:1.2rem; align-content:start; }
+      .ph-stage { height:clamp(330px,52vh,460px); order:-1; }
+      .ph-card { width:clamp(150px,40vw,220px); }
+      .ph-frag { width:clamp(95px,25vw,140px); }
+      .ph-a { font-size:clamp(2.6rem,13vw,3.8rem); }
+      .ph-b { font-size:clamp(2.8rem,14vw,4rem); }
+      .ph-lead { font-size:1.1rem; }
+      .ph-actions { display:grid; grid-template-columns:1fr; }
+      .ph-mosaic { grid-template-columns:repeat(6, 1fr); }
+      .p-faq2 .fq-title { font-size:clamp(2.6rem,12vw,3.6rem); }
+      .fq-lead { margin-bottom:1.2rem; }
+      .fq summary { grid-template-columns:2.2rem minmax(0,1fr) 28px; }
+      .fq-a { padding:0 0 1rem 3rem; }
+    }
   </style>
 </head>
 <body>
@@ -630,19 +764,29 @@
 
   <div id="track">
 
-    <!-- 1 &middot; VIDEO HERO -->
-    <section class="panel p-video" data-i="0">
-      <img class="hero-shot" src="assets/nft/nft-hero.jpg" alt="" aria-hidden="true">
-      <div class="scrim"></div>
-      <div class="content">
-        <div class="eyebrow reveal">Nyfurion X Reborn &middot; Genesis Collection</div>
-        <h1 class="reveal">Own a Piece<br>of the World</h1>
-        <p class="lead reveal">Four hundred souls, sealed forever on the blockchain. Step into the realm not as a watcher, but as a <span class="hl">founder</span>.</p>
-        <div class="v-cta reveal">
-          <a href="https://opensea.io/collection/nyfurionxreborn" target="_blank" rel="noopener" class="v-enter">Enter the Collection <span class="arr">&rsaquo;</span></a>
+    <!-- 1 &middot; APERTURA: possiedi un frammento -->
+    <section class="panel p-hero" data-i="0">
+      <div class="ph-mosaic" id="ph-mosaic" aria-hidden="true"></div>
+      <div class="ph-in">
+        <div class="ph-copy">
+          <p class="ph-kicker reveal">Nyfurion X Reborn &middot; Genesis Collection</p>
+          <h1 class="ph-big reveal"><span class="ph-a">Own a</span><span class="ph-b">Fragment<i>.</i></span></h1>
+          <p class="ph-lead reveal">400 characters of the Realm, sealed on Ethereum. Each one comes with its image, its character sheet, a 3D card ready to print and a commercial license.</p>
+          <div class="ph-actions reveal">
+            <a class="ph-btn red" href="https://opensea.io/collection/nyfurionxreborn" target="_blank" rel="noopener">Enter the Collection <span aria-hidden="true">&#8599;</span></a>
+            <button type="button" class="ph-btn" id="ph-receive">What you receive <span aria-hidden="true">&rarr;</span></button>
+          </div>
+          <div class="ph-facts reveal"><span><b>400</b>fragments</span><span><b>1</b>commercial license each</span><span><b>ETH</b>on-chain</span></div>
+        </div>
+        <div class="ph-stage reveal" aria-hidden="true">
+          <img class="ph-frag f1" src="assets/nft/263.jpg" alt="" width="423" height="600">
+          <img class="ph-frag f2" src="assets/nft/200.jpg" alt="" width="423" height="600">
+          <img class="ph-frag f3" src="assets/nft/267.jpg" alt="" width="423" height="600">
+          <img class="ph-frag f4" src="assets/nft/300.jpg" alt="" width="423" height="600">
+          <img class="ph-card" src="assets/nft/hero-card-221.webp" alt="" width="707" height="1137">
+          <span class="ph-chip"><i></i>#221 &middot; 3D card to print</span>
         </div>
       </div>
-      <div class="v-hint reveal" aria-hidden="true"><span class="ln"></span> Scorri <span class="ln r"></span></div>
     </section>
 
     <!-- 2 &middot; THE WALL (left: looping 400 &middot; right: text) -->
@@ -723,38 +867,42 @@
       </div>
     </section>
 
-    <!-- 6 &middot; QUESTIONS (FAQ) -->
-    <section class="panel cinema center p-faq" data-i="5" style="--shot:url('assets/nft/v2-collection.jpg'); --pos:center; --veil:rgba(8,8,9,0.93);">
-      <div class="scene">
-        <div class="scene-main">
-          <div class="scene-code reveal">Questions &middot; Answers</div>
-          <h2 class="reveal">Before you claim.</h2>
-          <div class="faq-grid reveal">
-            <div>
-              <h3>Is a fragment an investment?</h3>
-              <p>No. A fragment is collectible digital art with usage rights. It is not a financial product, and nothing on this site is financial advice.</p>
-            </div>
-            <div>
-              <h3>What do I own?</h3>
-              <p>The NFT and a commercial license on the artwork of your fragment. The Nyfurion universe (world, lore, names, brand) stays with its creator. <a href="license.html">Read the license</a></p>
-            </div>
-            <div>
-              <h3>What do I receive?</h3>
-              <p>The image, the character sheet, the 3D card ready to print and the commercial license. Some characters also include a photo pack. <a href="journey.html">See the Journey</a></p>
-            </div>
-            <div>
-              <h3>How do I open the vault?</h3>
-              <p>Go to the Holder section, connect the wallet that holds your fragment and sign a free message. The first time only, you register on-chain, with a small network fee.</p>
-            </div>
-            <div>
-              <h3>What happens if I sell it?</h3>
-              <p>The license moves with the NFT to the new owner. Your rights end at the moment of the transfer.</p>
-            </div>
-            <div>
-              <h3>And if Nyfurion becomes a series?</h3>
-              <p>Only if an official series is produced, the license sets aside 10% of the creator's net revenues for verified holders of the characters with a main role. It is not a promise of profit. <a href="license.html">License, Section 6</a></p>
-            </div>
-          </div>
+    <!-- 6 &middot; DOMANDE: un elenco che si apre -->
+    <section class="panel p-faq2" data-i="5">
+      <div class="fq-bg" aria-hidden="true"></div>
+      <div class="fq-in">
+        <div class="fq-side">
+          <p class="ph-kicker reveal">Questions &middot; Answers</p>
+          <h2 class="fq-title reveal">Before you <i>claim.</i></h2>
+          <p class="fq-lead reveal">Six straight answers about what a fragment is, and what it is not.</p>
+          <a class="ph-btn reveal" href="license.html">Read the full license <span aria-hidden="true">&rarr;</span></a>
+          <p class="fq-meta reveal">Commercial license &middot; Ethereum &middot; Holder Archive</p>
+        </div>
+        <div class="fq-list reveal">
+            <details class="fq" open>
+              <summary><span class="fq-n">01</span><span class="fq-q">Is a fragment an investment?</span><span class="fq-x" aria-hidden="true"></span></summary>
+              <div class="fq-a"><p>No. A fragment is collectible digital art with usage rights. It is not a financial product, and nothing on this site is financial advice.</p></div>
+            </details>
+            <details class="fq">
+              <summary><span class="fq-n">02</span><span class="fq-q">What do I own?</span><span class="fq-x" aria-hidden="true"></span></summary>
+              <div class="fq-a"><p>The NFT and a commercial license on the artwork of your fragment. The Nyfurion universe (world, lore, names, brand) stays with its creator. <a href="license.html">Read the license</a></p></div>
+            </details>
+            <details class="fq">
+              <summary><span class="fq-n">03</span><span class="fq-q">What do I receive?</span><span class="fq-x" aria-hidden="true"></span></summary>
+              <div class="fq-a"><p>The image, the character sheet, the 3D card ready to print and the commercial license. Some characters also include a photo pack. <a href="journey.html">See the Journey</a></p></div>
+            </details>
+            <details class="fq">
+              <summary><span class="fq-n">04</span><span class="fq-q">How do I open the vault?</span><span class="fq-x" aria-hidden="true"></span></summary>
+              <div class="fq-a"><p>Go to the Holder section, connect the wallet that holds your fragment and sign a free message. The first time only, you register on-chain, with a small network fee.</p></div>
+            </details>
+            <details class="fq">
+              <summary><span class="fq-n">05</span><span class="fq-q">What happens if I sell it?</span><span class="fq-x" aria-hidden="true"></span></summary>
+              <div class="fq-a"><p>The license moves with the NFT to the new owner. Your rights end at the moment of the transfer.</p></div>
+            </details>
+            <details class="fq">
+              <summary><span class="fq-n">06</span><span class="fq-q">And if Nyfurion becomes a series?</span><span class="fq-x" aria-hidden="true"></span></summary>
+              <div class="fq-a"><p>Only if an official series is produced, the license sets aside 10% of the creator's net revenues for verified holders of the characters with a main role. It is not a promise of profit. <a href="license.html">License, Section 6</a></p></div>
+            </details>
         </div>
       </div>
     </section>
@@ -1004,6 +1152,22 @@
       if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); goTo(cur-1); }
     });
 
+  </script>
+  <script>
+    /* Apertura: il mosaico dei frammenti dietro, e "What you receive" porta al pannello di cosa ricevi. */
+    (function () {
+      const m = document.getElementById('ph-mosaic');
+      if (m) {
+        const visti = new Set();
+        while (visti.size < 72) visti.add(1 + Math.floor(Math.random() * 400));
+        visti.forEach((n) => { const i = document.createElement('img'); i.src = 'assets/nft/' + n + '.jpg'; i.alt = ''; i.loading = 'lazy'; m.appendChild(i); });
+      }
+      const b = document.getElementById('ph-receive');
+      if (b) b.addEventListener('click', () => { if (typeof goTo === 'function') goTo(3); });
+      /* Domande: se ne apre una alla volta. */
+      const tutte = document.querySelectorAll('.fq');
+      tutte.forEach((d) => d.addEventListener('toggle', () => { if (d.open) tutte.forEach((o) => { if (o !== d) o.open = false; }); }));
+    })();
   </script>
   <script src="nav.js" defer></script>
 </body>
