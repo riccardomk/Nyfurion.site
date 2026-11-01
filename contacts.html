@@ -313,6 +313,7 @@
       color:#e9e3d6; text-decoration:none; letter-spacing:0.2em; transition:border-color .3s, color .3s; }
     .sig-link:hover { border-color:var(--accent-red); color:#fff; }
     .panel .panel-head { margin-top:1.3rem; }
+    .panel .chain { margin-top:1rem; }
     .tile.hot { border-color:rgba(0,229,255,0.38); background:linear-gradient(160deg, rgba(0,229,255,0.09), rgba(255,255,255,0.02)); }
     .tile.hot .tile-label { color:var(--accent-cyan); }
     .tile.hot .tile-ic svg { color:var(--accent-cyan); }
@@ -431,6 +432,20 @@
           </span>
         </a>
       </div>
+
+      <div class="chain">
+        <div class="chain-head">
+          <span class="chain-label" data-i18n="contract">Smart Contract &middot; Ethereum</span>
+          <a class="chain-verify" href="https://etherscan.io/address/0x37176275788cfe00b355ff74575753d2e2e50203" target="_blank" rel="noopener">
+            <span data-i18n="verify">Verify on-chain</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </a>
+        </div>
+        <div class="chain-row">
+          <code id="addr">0x37176275788cfe00b355ff74575753d2e2e50203</code>
+          <button class="copy-btn" id="copyBtn" type="button" data-i18n="copy">Copy</button>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -444,6 +459,24 @@
 
   <script>
     var isIT = (navigator.language || 'en').toLowerCase().indexOf('it') === 0;
+
+    // copia il contratto
+    var copyBtn = document.getElementById('copyBtn');
+    var addr = document.getElementById('addr').textContent.trim();
+    copyBtn.addEventListener('click', async function () {
+      try { await navigator.clipboard.writeText(addr); }
+      catch (e) {
+        var t = document.createElement('textarea');
+        t.value = addr; document.body.appendChild(t); t.select();
+        document.execCommand('copy'); t.remove();
+      }
+      copyBtn.textContent = isIT ? 'Copiato' : 'Copied';
+      copyBtn.classList.add('done');
+      setTimeout(function () {
+        copyBtn.textContent = isIT ? 'Copia' : 'Copy';
+        copyBtn.classList.remove('done');
+      }, 1800);
+    });
 
     // lingua automatica IT / EN
     var IT = {
@@ -462,7 +495,10 @@
       holderlabel: 'Archivio Holder',
       holdervalue: 'Per chi ha un frammento',
       foot: '&copy; 2026 Nyfurion X Reborn',
-      home: 'Torna alla Home'
+      home: 'Torna alla Home',
+      contract: 'Smart Contract &middot; Ethereum',
+      copy: 'Copia',
+      verify: 'Verifica on-chain'
     };
 
     if (isIT) {
