@@ -126,40 +126,67 @@
         #home .scroll-hint { position: relative; z-index: 10; }
 
 
-        /* ===== TRE PORTE: leggi, gioca, possiedi ===== */
-        .horizontal-landing > #doors.page-panel {
+        /* ===== TRITTICO: leggi, gioca, possiedi (tre colonne a tutta altezza) ===== */
+        .horizontal-landing > #doors.page-panel { position: relative; overflow: hidden; background: #050506; padding: 0; }
+        .doors-head {
+            position: absolute; top: clamp(5.2rem, 11vh, 7.2rem); left: 50%; transform: translateX(-50%);
+            z-index: 4; width: min(900px, 90vw); text-align: center; pointer-events: none;
+        }
+        .doors-head h2 {
+            font-family: 'Space Grotesk', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+            font-size: clamp(1.5rem, 3.2vw, 2.6rem); color: #f4efe6; text-shadow: 0 4px 30px rgba(0,0,0,0.9); margin-bottom: 0.6rem;
+        }
+        .doors-head p { font-size: clamp(0.9rem, 1.4vw, 1.05rem); color: #d6cfc2; text-shadow: 0 2px 18px rgba(0,0,0,0.95); }
+        .tri { display: flex; width: 100%; height: 100%; }
+        .tri-col {
+            position: relative; flex: 1 1 0; overflow: hidden; text-decoration: none; color: #fff;
+            transition: flex-grow 0.9s cubic-bezier(0.16,1,0.3,1); border-right: 1px solid rgba(255,255,255,0.07);
+        }
+        .tri-col:last-child { border-right: none; }
+        .tri:hover .tri-col { flex-grow: 0.8; }
+        .tri .tri-col:hover { flex-grow: 1.55; }
+        .tri-bg {
+            position: absolute; inset: 0; background: var(--img) center var(--pos, center) / cover no-repeat;
+            filter: brightness(0.5) saturate(0.9); transform: scale(1.06);
+            transition: filter 0.9s ease, transform 1.6s cubic-bezier(0.16,1,0.3,1);
+        }
+        .tri-col:hover .tri-bg { filter: brightness(0.85) saturate(1.05); transform: scale(1); }
+        .tri:hover .tri-col:not(:hover) .tri-bg { filter: brightness(0.28) saturate(0.7); }
+        .tri-col::after {
+            content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
             background:
-                radial-gradient(ellipse 70% 55% at 50% 22%, rgba(227,11,23,0.10), transparent 62%),
-                radial-gradient(ellipse 60% 50% at 50% 100%, rgba(0,229,255,0.05), transparent 60%),
-                #080809;
+                linear-gradient(to top, rgba(5,5,6,0.96) 0%, rgba(5,5,6,0.6) 32%, rgba(5,5,6,0) 60%),
+                linear-gradient(to bottom, rgba(5,5,6,0.88) 0%, rgba(5,5,6,0) 32%);
         }
-        .doors-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; width: min(1100px, calc(100vw - 3rem)); margin: 2.2rem auto 0; }
-        .door {
-            display: flex; flex-direction: column; text-decoration: none; color: inherit; text-align: left;
-            border: 1px solid rgba(255,255,255,0.09); border-radius: 8px; overflow: hidden;
-            background: linear-gradient(160deg, rgba(255,255,255,0.04), rgba(255,255,255,0.012));
-            transition: transform 0.45s cubic-bezier(0.16,1,0.3,1), border-color 0.45s, box-shadow 0.45s;
+        .tri-txt { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 0 clamp(1.2rem, 3vw, 2.8rem) clamp(4.6rem, 10vh, 6.6rem); }
+        .tri-word {
+            display: block; font-family: 'Space Grotesk', sans-serif; font-weight: 700; text-transform: uppercase;
+            font-size: clamp(2.8rem, 6.4vw, 6rem); line-height: 0.9; letter-spacing: 0.02em; color: #f4efe6;
+            text-shadow: 0 6px 40px rgba(0,0,0,0.8); margin-bottom: 0.7rem;
         }
-        .door:hover { transform: translateY(-6px); border-color: rgba(227,11,23,0.55); box-shadow: 0 22px 50px rgba(0,0,0,0.55); }
-        .door-img { aspect-ratio: 4 / 3; overflow: hidden; background: #0c0c0e; }
-        .door-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.2s cubic-bezier(0.16,1,0.3,1); }
-        .door:hover .door-img img { transform: scale(1.05); }
-        .door-body { padding: 1.15rem 1.3rem 1.35rem; display: flex; flex-direction: column; gap: 0.45rem; flex: 1; }
-        .door-tag { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent-red); }
-        .door h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.65rem; line-height: 1.1; color: #f3ede0; }
-        .door p { font-size: 0.92rem; line-height: 1.6; color: #b4ada0; flex: 1; }
-        .door-cta { margin-top: 0.4rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--accent-cyan); }
-        .door-cta::after { content: " \2192"; }
-        .creator-line { margin-top: 2rem; font-size: 0.88rem; color: #9a948a; text-align: center; letter-spacing: 0.02em; }
-        .creator-line b { color: #e9e3d6; font-weight: 600; }
-        .creator-line a { color: var(--accent-cyan); text-decoration: none; border-bottom: 1px solid rgba(0,229,255,0.35); margin-left: 0.4rem; }
+        .tri-title { display: block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.34em; text-transform: uppercase; color: var(--accent-red); margin-bottom: 0.5rem; }
+        .tri-txt p { max-width: 30ch; font-size: 0.95rem; line-height: 1.55; color: #d9d2c5; margin-bottom: 0.9rem; }
+        .tri-cta { display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.26em; text-transform: uppercase; color: var(--accent-cyan); }
+        .tri-cta::after { content: " \2192"; display: inline-block; transition: transform 0.4s; }
+        .tri-col:hover .tri-cta::after { transform: translateX(6px); }
+        .creator-line {
+            position: absolute; bottom: 1.3rem; left: 50%; transform: translateX(-50%); z-index: 4; margin: 0;
+            white-space: nowrap; font-size: 0.82rem; color: #a8a196; letter-spacing: 0.02em;
+        }
+        .creator-line b { color: #ede7da; font-weight: 600; }
+        .creator-line a { color: var(--accent-cyan); text-decoration: none; border-bottom: 1px solid rgba(0,229,255,0.35); margin-left: 0.5rem; }
         @media (max-width: 768px) {
-            .doors-grid { grid-template-columns: 1fr; gap: 1rem; margin-top: 1.4rem; }
-            .door { flex-direction: row; }
-            .door-img { aspect-ratio: auto; width: 38%; flex: 0 0 38%; }
-            .door-body { padding: 0.9rem 1rem; }
-            .door h3 { font-size: 1.3rem; }
-            .door p { font-size: 0.84rem; }
+            .horizontal-landing > #doors.page-panel { display: flex; flex-direction: column; overflow-y: auto; }
+            .doors-head { position: relative; top: auto; left: auto; transform: none; width: auto; padding: 7.4rem 1.4rem 1.2rem; }
+            .tri { flex-direction: column; height: auto; flex: 1 0 auto; }
+            .tri-col { flex: 0 0 auto; min-height: 31vh; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+            .tri:hover .tri-col, .tri .tri-col:hover { flex-grow: 0; }
+            .tri-bg { filter: brightness(0.6) saturate(0.95); }
+            .tri-col::after { background: linear-gradient(to top, rgba(5,5,6,0.97) 0%, rgba(5,5,6,0.82) 42%, rgba(5,5,6,0.1) 80%); }
+            .tri-txt { padding: 0 1.3rem 1.1rem; }
+            .tri-word { font-size: 2.6rem; margin-bottom: 0.4rem; }
+            .tri-txt p { font-size: 0.86rem; margin-bottom: 0.5rem; }
+            .creator-line { position: relative; bottom: auto; left: auto; transform: none; white-space: normal; text-align: center; padding: 1rem 1.4rem 1.6rem; }
         }
 
         /* Horizontal landing pages */
@@ -1448,37 +1475,38 @@
         <a href="#doors" class="scroll-hint" aria-label="Scroll right">›</a>
     </div>
 
-    <!-- ============ TRE PORTE: cosa puoi fare a Nyfurion ============ -->
-    <section class="section-block page-panel" id="doors">
-        <div class="section-eyebrow" id="t-doors-eyebrow">Nyfurion</div>
-        <h2 class="section-heading" id="t-doors-heading">Read it. Play it. Own it.</h2>
-        <p class="section-intro" id="t-doors-intro">A dark fantasy universe: a saga to read, a card game to play, a collection to own.</p>
-        <div class="doors-grid">
-            <a class="door" href="lore.html">
-                <div class="door-img"><img src="book1-cover.png" alt="" loading="lazy"></div>
-                <div class="door-body">
-                    <span class="door-tag" id="t-door1-tag">Read</span>
-                    <h3 id="t-door1-title">The Saga</h3>
+    <!-- ============ TRITTICO: leggi, gioca, possiedi ============ -->
+    <section class="page-panel" id="doors">
+        <div class="doors-head">
+            <h2 id="t-doors-heading">Read it. Play it. Own it.</h2>
+            <p id="t-doors-intro">A dark fantasy universe: a saga to read, a card game to play, a collection to own.</p>
+        </div>
+        <div class="tri">
+            <a class="tri-col" href="lore.html" style="--img:url('assets/characters/portraits/tyri-hero.jpg'); --pos:18%">
+                <div class="tri-bg"></div>
+                <div class="tri-txt">
+                    <span class="tri-word" id="t-door1-tag">Read</span>
+                    <span class="tri-title" id="t-door1-title">The Saga</span>
                     <p id="t-door1-line">The kingdom, the three heirs and the war that splits them.</p>
-                    <span class="door-cta" id="t-door1-cta">Read the saga</span>
+                    <span class="tri-cta" id="t-door1-cta">Read the saga</span>
                 </div>
             </a>
-            <a class="door" href="clash.html">
-                <div class="door-img"><img src="assets/roadmap/clash-cards.jpg" alt="" loading="lazy"></div>
-                <div class="door-body">
-                    <span class="door-tag" id="t-door2-tag">Play</span>
-                    <h3 id="t-door2-title">Nyfurion Clash</h3>
+            <a class="tri-col" href="clash.html" style="--img:url('assets/home/play.jpg'); --pos:24%">
+                <div class="tri-bg"></div>
+                <div class="tri-txt">
+                    <span class="tri-word" id="t-door2-tag">Play</span>
+                    <span class="tri-title" id="t-door2-title">Nyfurion Clash</span>
                     <p id="t-door2-line">The card game. Free on your phone and on the web.</p>
-                    <span class="door-cta" id="t-door2-cta">Play free</span>
+                    <span class="tri-cta" id="t-door2-cta">Play free</span>
                 </div>
             </a>
-            <a class="door" href="nfts.html">
-                <div class="door-img"><img src="nyfurion-pack-preview-001.jpg" alt="" loading="lazy" style="object-position:center 30%"></div>
-                <div class="door-body">
-                    <span class="door-tag" id="t-door3-tag">Own</span>
-                    <h3 id="t-door3-title">The Collection</h3>
+            <a class="tri-col" href="nfts.html" style="--img:url('nyfurion-pack-preview-001.jpg'); --pos:22%">
+                <div class="tri-bg"></div>
+                <div class="tri-txt">
+                    <span class="tri-word" id="t-door3-tag">Own</span>
+                    <span class="tri-title" id="t-door3-title">The Collection</span>
                     <p id="t-door3-line">400 characters, each with a commercial license and its own archive.</p>
-                    <span class="door-cta" id="t-door3-cta">Discover the collection</span>
+                    <span class="tri-cta" id="t-door3-cta">Discover the collection</span>
                 </div>
             </a>
         </div>
