@@ -13,7 +13,7 @@
   <title>Nyfurion — Characters & Evolutions</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="nav.css">
   <style>
     :root {
@@ -255,6 +255,64 @@
       }
       .cs-evo { margin-top:0; }
     }
+
+    /* ===== Apertura: la stirpe, quattro colonne come la home ===== */
+    .bl { padding:0 !important; display:block !important; text-align:left !important; background:#050506; }
+    .bl::before { display:none; }
+    .bl-head {
+      position:absolute; top:clamp(5.4rem,11vh,7.4rem); left:50%; transform:translateX(-50%); z-index:4;
+      width:min(980px,92vw); text-align:center; pointer-events:none;
+    }
+    .bl-kicker { display:inline-flex; align-items:center; gap:0.8rem; font-family:'Space Grotesk',sans-serif; font-size:0.66rem; font-weight:700; letter-spacing:0.36em; text-transform:uppercase; color:#e6dfd2; text-shadow:0 2px 16px rgba(0,0,0,0.9); margin-bottom:0.9rem; }
+    .bl-kicker::before, .bl-kicker::after { content:""; width:34px; height:1px; background:var(--accent-red); }
+    .bl-title { font-family:'Space Grotesk',sans-serif; font-weight:700; text-transform:uppercase; font-size:clamp(2.2rem,4.6vw,4.4rem); line-height:0.92; letter-spacing:-0.02em; color:#f4efe6; text-shadow:0 8px 50px rgba(0,0,0,0.85); margin:0 0 0.7rem; }
+    .bl-title i { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; text-transform:none; letter-spacing:0; color:#e9dfca; }
+    .bl-lead { font-family:'Cormorant Garamond',serif; font-size:clamp(1.1rem,1.5vw,1.35rem); color:#ddd5c6; text-shadow:0 2px 18px rgba(0,0,0,0.95); }
+    .bl-cols { display:flex; width:100%; height:100%; }
+    .bl-col {
+      position:relative; flex:1 1 0; min-width:0; overflow:hidden; text-decoration:none; color:#fff; isolation:isolate;
+      border-right:1px solid rgba(255,255,255,0.07); transition:flex-grow 0.9s cubic-bezier(0.16,1,0.3,1);
+    }
+    .bl-col:last-child { border-right:none; }
+    .bl-cols:hover .bl-col { flex-grow:0.82; }
+    .bl-cols .bl-col:hover { flex-grow:1.5; }
+    .bl-bg {
+      position:absolute; inset:0; z-index:-2; background:var(--img) center var(--pos, 20%) / cover no-repeat;
+      filter:brightness(0.55) saturate(0.95); transform:scale(1.06);
+      transition:filter 0.9s ease, transform 1.6s cubic-bezier(0.16,1,0.3,1);
+    }
+    .bl-col:hover .bl-bg { filter:brightness(0.9) saturate(1.05); transform:scale(1); }
+    .bl-cols:hover .bl-col:not(:hover) .bl-bg { filter:brightness(0.28) saturate(0.6); }
+    .bl-col::after {
+      content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+      background:
+        linear-gradient(to top, rgba(5,5,6,0.97) 0%, rgba(5,5,6,0.6) 30%, rgba(5,5,6,0) 58%),
+        linear-gradient(to bottom, rgba(5,5,6,0.9) 0%, rgba(5,5,6,0) 34%);
+    }
+    .bl-txt { position:absolute; left:0; right:0; bottom:0; padding:0 clamp(1.1rem,2.4vw,2.4rem) clamp(2.2rem,6vh,4rem); }
+    .bl-name { display:block; font-family:'Space Grotesk',sans-serif; font-weight:700; text-transform:uppercase; font-size:clamp(2.6rem,5.4vw,5.6rem); line-height:0.9; letter-spacing:0.01em; color:#f4efe6; text-shadow:0 6px 40px rgba(0,0,0,0.85); margin-bottom:0.65rem; }
+    .bl-role { display:block; font-family:'Space Grotesk',sans-serif; font-size:0.66rem; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent-red); margin-bottom:0.45rem; }
+    .bl-line { display:block; font-family:'Space Grotesk',sans-serif; font-size:0.84rem; line-height:1.5; color:#d9d2c5; margin-bottom:0.9rem; }
+    .bl-line.order { color:#cfe9ff; } .bl-line.chaos { color:#ff8a7d; } .bl-line.queen { color:#e6cdff; }
+    .bl-cta { display:inline-block; font-family:'Space Grotesk',sans-serif; font-size:0.66rem; font-weight:700; letter-spacing:0.26em; text-transform:uppercase; color:var(--accent-cyan); }
+    .bl-cta::after { content:" \2192"; display:inline-block; transition:transform 0.4s; }
+    .bl-col:hover .bl-cta::after { transform:translateX(6px); }
+    .bl-foot { position:absolute; left:50%; bottom:1.1rem; transform:translateX(-50%); z-index:4; white-space:nowrap; font-family:'Space Grotesk',sans-serif; font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.55); pointer-events:none; }
+    @media (max-width:820px){
+      .bl-head { top:4.9rem; }
+      .bl-title { font-size:clamp(1.8rem,8.6vw,2.6rem); }
+      .bl-title i { display:block; margin-top:0.15rem; }
+      .bl-lead { font-size:1rem; }
+      .bl-cols { flex-wrap:wrap; padding-top:clamp(12.5rem,30vh,15rem); }
+      .bl-col { flex:0 0 50%; height:calc((100vh - clamp(12.5rem,30vh,15rem)) / 2); border-top:1px solid rgba(255,255,255,0.07); }
+      .bl-col:nth-child(2) { border-right:none; }
+      .bl-cols:hover .bl-col, .bl-cols .bl-col:hover { flex-grow:0; }
+      .bl-name { font-size:clamp(1.7rem,9vw,2.4rem); margin-bottom:0.35rem; }
+      .bl-role { font-size:0.52rem; letter-spacing:0.18em; }
+      .bl-line { display:none; }
+      .bl-txt { padding:0 0.9rem 1rem; }
+      .bl-foot { display:none; }
+    }
   </style>
 </head>
 <body>
@@ -280,25 +338,52 @@
 
   <main class="cine" id="cine">
 
-    <!-- INTRO / MANIFESTO -->
-    <section class="panel intro" id="intro">
-      <video class="intro-video" autoplay muted loop playsinline preload="auto" poster="assets/video/intro-frame.png">
-        <source src="assets/video/characters-intro-8.mp4" type="video/mp4">
-      </video>
-      <div class="intro-scrim" aria-hidden="true"></div>
-      <canvas id="intro-embers" aria-hidden="true"></canvas>
-      <div class="content">
-        <div class="eyebrow">Before the Legend</div>
-        <h1>Genesis Is Forever</h1>
-        <p class="manifesto">
-          Every legend has a first breath. In Nyfurion, that breath is the Genesis, the face a soul wore
-          before the world learned its name. Every evolution, every scar, every crown that follows is born from it.
-          Hold a Genesis and you hold <span class="gold">the origin of a legend</span> the saga will spend its life becoming.
-          The world will change. The story will grow.
-          <strong>The beginning belongs to you, and the beginning never happens twice.</strong>
-        </p>
-        <div class="hint">Meet the bloodline <span>›</span></div>
+    <!-- APERTURA: la stirpe, quattro colonne come la home -->
+    <section class="panel intro bl" id="intro">
+      <div class="bl-head">
+        <div class="bl-kicker">The Bloodline</div>
+        <h1 class="bl-title">Four souls. <i>One war.</i></h1>
+        <p class="bl-lead">The king, his heirs and the queen at the heart of the saga. Choose one and step into its story.</p>
       </div>
+      <div class="bl-cols">
+        <a class="bl-col" href="#ash" style="--img:url('assets/characters/portraits/ash-evo1.jpg'); --pos:28%">
+          <span class="bl-bg"></span>
+          <span class="bl-txt">
+            <span class="bl-name">Ash</span>
+            <span class="bl-role">The First True King</span>
+            <span class="bl-line order">Founder of the Realm &middot; Father of the Three</span>
+            <span class="bl-cta">Meet Ash</span>
+          </span>
+        </a>
+        <a class="bl-col" href="#tyri" style="--img:url('assets/characters/portraits/tyri-hero.jpg'); --pos:18%">
+          <span class="bl-bg"></span>
+          <span class="bl-txt">
+            <span class="bl-name">Tyri</span>
+            <span class="bl-role">The Legendary Supreme</span>
+            <span class="bl-line order">Leader of Order</span>
+            <span class="bl-cta">Meet Tyri</span>
+          </span>
+        </a>
+        <a class="bl-col" href="#nyv" style="--img:url('assets/characters/portraits/nyv-hero.jpg'); --pos:18%">
+          <span class="bl-bg"></span>
+          <span class="bl-txt">
+            <span class="bl-name">Nyv</span>
+            <span class="bl-role">The Dark Power of Evil</span>
+            <span class="bl-line chaos">Lord of Chaos</span>
+            <span class="bl-cta">Meet Nyv</span>
+          </span>
+        </a>
+        <a class="bl-col" href="#rey" style="--img:url('assets/characters/portraits/rey-hero.jpg'); --pos:20%">
+          <span class="bl-bg"></span>
+          <span class="bl-txt">
+            <span class="bl-name">Rey</span>
+            <span class="bl-role">The Queen</span>
+            <span class="bl-line queen">The Deciding Spark</span>
+            <span class="bl-cta">Meet Rey</span>
+          </span>
+        </a>
+      </div>
+      <div class="bl-foot">Genesis is forever &middot; the beginning never happens twice</div>
     </section>
 
     <!-- ASH -->

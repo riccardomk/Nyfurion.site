@@ -739,6 +739,79 @@
       .fq summary { grid-template-columns:2.2rem minmax(0,1fr) 28px; }
       .fq-a { padding:0 0 1rem 3rem; }
     }
+
+    /* ===== SOGLIA: Only 400, il numero pieno di frammenti ===== */
+    .p-claim2 { padding:0; align-items:stretch; justify-content:center; text-align:left; background:#060607; isolation:isolate; }
+    .p-claim2::before {
+      content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+      background:
+        radial-gradient(ellipse 46% 60% at 28% 52%, rgba(227,11,23,0.16), transparent 70%),
+        radial-gradient(ellipse 40% 50% at 82% 40%, rgba(0,229,255,0.08), transparent 70%);
+    }
+    .cl-in {
+      width:100%; max-width:1320px; margin:0 auto; height:100%;
+      display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); align-items:center; gap:clamp(1.5rem,4vw,4rem);
+      padding:6.5rem clamp(1.2rem,5vw,4.5rem) 3.5rem;
+    }
+    .cl-numbox { position:relative; display:flex; flex-direction:column; align-items:flex-start; }
+    .cl-only { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; font-size:clamp(2.4rem,4.6vw,4.6rem); line-height:1; color:#e9dfca; margin:0 0 -0.12em 0.08em; }
+    .cl-num {
+      display:block; font-family:'Space Grotesk',sans-serif; font-weight:700; letter-spacing:-0.07em; line-height:0.8;
+      font-size:clamp(9rem,25vw,25rem); margin-left:-0.06em;
+      background:url('assets/nft/mosaic-400.jpg') 0 0 / 120% auto repeat;
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      -webkit-text-stroke:1px rgba(255,255,255,0.18);
+      filter:drop-shadow(0 20px 60px rgba(227,11,23,0.25));
+      animation:clDrift 40s linear infinite alternate;
+    }
+    @keyframes clDrift { to { background-position:100% 100%; } }
+    .cl-cap { margin-top:1.1rem; font-family:'Space Grotesk',sans-serif; font-size:0.62rem; font-weight:700; letter-spacing:0.32em; text-transform:uppercase; color:#8f877a; }
+    .cl-cap b { color:var(--accent-red); }
+    .p-claim2 .cl-title { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(2.3rem,4vw,3.9rem); line-height:1; color:#fff; margin:0 0 1.2rem; text-shadow:0 6px 40px rgba(0,0,0,0.7); }
+    .cl-title i { font-weight:500; color:var(--accent-red); }
+    .cl-lead { font-family:'Cormorant Garamond',serif; font-size:clamp(1.15rem,1.5vw,1.4rem); line-height:1.55; color:#d6cdbb; max-width:40ch; margin:0 0 1.9rem; }
+    @media(max-width:900px){
+      .p-claim2 { overflow-y:auto; }
+      .cl-in { grid-template-columns:1fr; height:auto; min-height:100%; padding:5.6rem 1.2rem 3rem; gap:1.4rem; align-content:start; }
+      .cl-num { font-size:clamp(7rem,40vw,11rem); }
+      .cl-only { font-size:2.2rem; }
+      .p-claim2 .cl-title { font-size:clamp(2rem,9vw,2.6rem); }
+    }
+
+    /* ===== ATTI I e II: immagine a tutto schermo, testo grande a sinistra (stile pagine nuove) ===== */
+    .p-act { padding:0; align-items:stretch; justify-content:center; text-align:left; background:#050506; isolation:isolate; }
+    .p-act::before { display:none; }
+    .p-act::after, .p-act.story-switch::after {
+      content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+      background:linear-gradient(90deg, rgba(5,5,6,0.97) 0%, rgba(5,5,6,0.88) 32%, rgba(5,5,6,0.3) 64%, rgba(5,5,6,0.5) 100%),
+                 linear-gradient(to top, rgba(5,5,6,0.85) 0%, rgba(5,5,6,0) 30%);
+    }
+    .p-act .ac-media, .p-act .story-visual { position:absolute; top:0; right:0; bottom:0; left:28%; z-index:0; width:auto; height:auto; overflow:hidden; background:#050506; grid-column:auto; justify-self:auto; }
+    .p-act .story-visual::after { display:none; }
+    .p-act .ac-media img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 40%; }
+    .p-act .ac-media .ac-loop.a { animation:actLoopA 9s ease-in-out infinite; }
+    .p-act .ac-media .ac-loop.b { animation:actLoopB 9s ease-in-out infinite; }
+    .p-act .story-visual img { object-position:center 22%; }
+    .ac-num { position:absolute; right:clamp(1.2rem,4vw,4rem); bottom:-0.1em; z-index:2; pointer-events:none; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(8rem,20vw,20rem); line-height:1; letter-spacing:-0.07em; color:transparent; -webkit-text-stroke:1.5px rgba(255,255,255,0.2); }
+    .ac-in { position:relative; z-index:3; width:100%; max-width:1320px; margin:0 auto; height:100%; display:flex; align-items:center; padding:6.5rem clamp(1.2rem,5vw,4.5rem) 3.5rem; }
+    .ac-copy { max-width:620px; }
+    .p-act .ac-title { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(2.6rem,5vw,5rem); line-height:0.95; color:#fff; margin:0 0 1.3rem; text-shadow:0 6px 40px rgba(0,0,0,0.75); text-align:left; }
+    .ac-title i { font-weight:500; color:var(--accent-red); }
+    .ac-lead { font-family:'Cormorant Garamond',serif; font-size:clamp(1.2rem,1.6vw,1.45rem); line-height:1.55; color:#d6cdbb; max-width:44ch; margin:0 0 1.6rem; text-shadow:0 2px 20px rgba(0,0,0,0.9); }
+    .ac-pills { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0 0 1.6rem; }
+    .ac-pills span { display:inline-flex; align-items:center; gap:0.5rem; padding:0.5rem 0.9rem; border-radius:999px; border:1px solid rgba(255,255,255,0.22); background:rgba(8,8,9,0.5); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); font-family:'Space Grotesk',sans-serif; font-size:0.6rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:#e6decd; }
+    .ac-pills span::before { content:""; width:6px; height:6px; border-radius:50%; background:var(--accent-red); box-shadow:0 0 10px rgba(227,11,23,0.7); }
+    .p-act .story-language { margin-top:1.5rem; }
+    .ac-nav { display:flex; align-items:center; gap:1.2rem; margin-top:1.6rem; }
+    @media(max-width:900px){
+      .p-act { overflow-y:auto; }
+      .p-act .ac-media, .p-act .story-visual { left:0; bottom:auto; height:46vh; }
+      .p-act::after, .p-act.story-switch::after { background:linear-gradient(to top, rgba(5,5,6,1) 0%, rgba(5,5,6,0.96) 50%, rgba(5,5,6,0.2) 78%, rgba(5,5,6,0.4) 100%); }
+      .ac-in { align-items:flex-end; height:auto; min-height:100%; padding:38vh 1.2rem 3rem; }
+      .ac-num { top:4.6rem; bottom:auto; right:0.6rem; font-size:clamp(5rem,30vw,8rem); -webkit-text-stroke:1px rgba(255,255,255,0.16); }
+      .p-act .ac-title { font-size:clamp(2.2rem,10vw,3rem); }
+      .ac-lead { font-size:1.1rem; }
+    }
   </style>
 </head>
 <body>
@@ -802,67 +875,67 @@
       </div>
     </section>
 
-    <!-- 3 &middot; ACT I: DESIRE -->
-    <section class="panel cinema split-act p-own" data-i="2">
-      <div class="scene">
-        <div class="scene-main">
-          <div class="scene-code reveal">Act I &middot; The Spark</div>
-          <h2 class="reveal">A face people can remember.</h2>
-          <div class="scene-rule reveal"></div>
-          <p class="lead reveal">You are not buying a file. You are claiming a character with a look, a name, a story, and the right to build something around it. A fragment can become your mascot, your drop, your content, your product, your signature.</p>
-          <div class="signal reveal"><span>Commercial license</span><span>Usable character IP</span><span>Business seed</span></div>
+    <!-- 3 &middot; ATTO I: la scintilla -->
+    <section class="panel p-act" data-i="2">
+      <div class="ac-media" aria-hidden="true">
+        <img class="ac-loop a" src="assets/nft/nft-act1-loop-1.png" alt="">
+        <img class="ac-loop b" src="assets/nft/nft-act1-loop-2.png" alt="">
+      </div>
+      <span class="ac-num" aria-hidden="true">01</span>
+      <div class="ac-in">
+        <div class="ac-copy">
+          <p class="ph-kicker reveal">Act I &middot; The Spark</p>
+          <h2 class="ac-title reveal">A face people can <i>remember.</i></h2>
+          <p class="ac-lead reveal">You are not buying a file. You are claiming a character with a look, a name, a story, and the right to build something around it. A fragment can become your mascot, your drop, your content, your product, your signature.</p>
+          <div class="ac-pills reveal"><span>Commercial license</span><span>Usable character IP</span><span>Business seed</span></div>
         </div>
-        <div class="scene-visual reveal" aria-hidden="true">
-          <img class="loop-a" src="assets/nft/nft-act1-loop-1.png" alt="">
-          <img class="loop-b" src="assets/nft/nft-act1-loop-2.png" alt="">
-        </div>
-        <div class="scene-index">01</div>
       </div>
     </section>
 
-    <!-- 4 &middot; ACT II: BELONGING -->
-    <section class="panel cinema story-switch p-story" data-i="3">
-      <div class="scene">
-        <div class="scene-main">
-          <div class="story-stage">
-            <div class="scene-code reveal" id="story-code">Act II &middot; What You Receive</div>
-            <h2 class="reveal" id="story-title">A fragment comes with its own archive.</h2>
-            <div class="scene-rule reveal"></div>
-            <p class="lead reveal" id="story-copy">The image, the character sheet, the 3D card ready to print and the commercial license. Some characters also include a photo pack.</p>
-            <div class="signal reveal" id="story-signal"><span>Image</span><span>Character sheet</span><span>3D card to print</span><span>Commercial license</span></div>
-            <a href="journey.html" class="btn-ghost reveal" style="margin-top:1.4rem;display:inline-block;">Journey &mdash; see the details</a>
-            <div class="story-language reveal" id="story-language">NYF &middot; AURION VEL KAIRA
-              <small>Hidden language &middot; coded messages &middot; symbols inside the saga</small>
-            </div>
+    <!-- 4 &middot; ATTO II: cosa ricevi (tre slide) -->
+    <section class="panel p-act story-switch p-story" data-i="3">
+      <div class="story-visual" aria-hidden="true">
+        <img class="active" src="assets/characters/portraits/story-1.png" alt="">
+        <img src="assets/characters/portraits/story-2.png" alt="">
+        <img src="assets/characters/portraits/story-3.png" alt="">
+      </div>
+      <span class="ac-num" aria-hidden="true">02</span>
+      <div class="ac-in">
+        <div class="ac-copy story-stage">
+          <p class="ph-kicker reveal" id="story-code">Act II &middot; What You Receive</p>
+          <h2 class="ac-title reveal" id="story-title">A fragment comes with its own archive.</h2>
+          <p class="ac-lead reveal" id="story-copy">The image, the character sheet, the 3D card ready to print and the commercial license. Some characters also include a photo pack.</p>
+          <div class="ac-pills reveal" id="story-signal"><span>Image</span><span>Character sheet</span><span>3D card to print</span><span>Commercial license</span></div>
+          <div class="ph-actions reveal"><a class="ph-btn" href="journey.html">Journey &mdash; see the details <span aria-hidden="true">&rarr;</span></a></div>
+          <div class="story-language reveal" id="story-language">NYF &middot; AURION VEL KAIRA
+            <small>Hidden language &middot; coded messages &middot; symbols inside the saga</small>
           </div>
-          <div class="story-nav reveal">
+          <div class="ac-nav reveal">
             <button type="button" class="story-arrow" id="story-prev" aria-label="Previous">&lsaquo;</button>
             <div class="story-dots" id="story-dots" aria-label="Story switch"></div>
             <button type="button" class="story-arrow" id="story-next" aria-label="Next">&rsaquo;</button>
           </div>
         </div>
-        <div class="story-visual reveal" aria-hidden="true">
-          <img class="active" src="assets/characters/portraits/story-1.png" alt="">
-          <img src="assets/characters/portraits/story-2.png" alt="">
-          <img src="assets/characters/portraits/story-3.png" alt="">
-        </div>
-        <div class="scene-index">02</div>
       </div>
     </section>
 
-    <!-- 5 &middot; THE GENESIS COLLECTION -->
-    <section class="panel cinema center p-claim" data-i="4" style="--shot:url('assets/nft/v2-collection.jpg'); --pos:center; --veil:radial-gradient(ellipse 62% 58% at center, rgba(8,8,9,0.56), rgba(8,8,9,0.95));">
-      <div class="scene">
-        <div class="scene-main">
-          <div class="scene-code reveal" id="col-code">The Threshold</div>
-          <div class="bignum reveal" id="col-num">Only <b>400</b></div>
-          <h2 class="reveal" id="col-title">The Genesis door does not stay open forever.</h2>
-          <p class="lead reveal" id="col-desc">A character, a full commercial license, and a founder place inside the first era. The first chapter of Nyfurion, sealed on-chain.</p>
-          <div class="claim-actions reveal">
-            <a href="https://opensea.io/collection/nyfurionxreborn" target="_blank" rel="noopener" class="btn-primary" id="col-link">Claim Your Fragment</a>
-            <a href="journey.html" class="btn-ghost">Journey &mdash; see what you receive</a>
-            <div class="floor" id="col-floor">Full commercial license &middot; Secured on Ethereum</div>
+    <!-- 5 &middot; SOGLIA: Only 400 -->
+    <section class="panel p-claim2" data-i="4">
+      <div class="cl-in">
+        <div class="cl-numbox reveal" aria-hidden="true">
+          <span class="cl-only">Only</span>
+          <span class="cl-num">400</span>
+          <span class="cl-cap"><b>&#9679;</b> Genesis collection &middot; each one unique</span>
+        </div>
+        <div class="cl-copy">
+          <p class="ph-kicker reveal">The Threshold</p>
+          <h2 class="cl-title reveal">The Genesis door does not stay <i>open forever.</i></h2>
+          <p class="cl-lead reveal">A character, a full commercial license, and a founder place inside the first era. The first chapter of Nyfurion, sealed on-chain.</p>
+          <div class="ph-actions reveal">
+            <a class="ph-btn red" href="https://opensea.io/collection/nyfurionxreborn" target="_blank" rel="noopener">Claim your fragment <span aria-hidden="true">&#8599;</span></a>
+            <a class="ph-btn" href="journey.html">Journey &mdash; what you receive <span aria-hidden="true">&rarr;</span></a>
           </div>
+          <div class="ph-facts reveal"><span><b>400</b>fragments</span><span>Full commercial license</span><span>Secured on Ethereum</span></div>
         </div>
       </div>
     </section>
