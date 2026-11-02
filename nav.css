@@ -81,3 +81,17 @@
 @media (max-width:340px){
   #topnav .nav-track { gap:0.95rem; }
 }
+/* the First Book: right after Home, with a gold star */
+#topnav a.nav-book { gap:0.42rem; color:#f0e2bd; }
+#topnav a.nav-book:hover, #topnav a.nav-book.active { color:#fff; }
+#topnav a.nav-book::after { background:linear-gradient(90deg, #f3d98f, #c9a24e); }
+#topnav .nav-star {
+  width:12px; height:12px; flex:0 0 auto; color:#ebc35e; overflow:visible;
+  filter:drop-shadow(0 0 3px rgba(235,195,94,0.6)); animation:navStar 3.4s ease-in-out infinite;
+}
+@keyframes navStar {
+  0%,100% { transform:scale(1); filter:drop-shadow(0 0 2px rgba(235,195,94,0.5)); }
+  50% { transform:scale(1.14); filter:drop-shadow(0 0 7px rgba(255,214,120,0.95)); }
+}
+@media (prefers-reduced-motion:reduce){ #topnav .nav-star { animation:none; } }
+@media (max-width:560px){ #topnav .nav-star { width:11px; height:11px; } }

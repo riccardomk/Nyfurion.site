@@ -1422,7 +1422,7 @@
         }
 
         /* ===== SCEGLI DA CHE PARTE STARE: tre colonne come il trittico, stemmi veri dei casati ===== */
-        .horizontal-landing > #final.side-panel { position:relative; overflow:hidden; background:#050506; padding:0; display:block; }
+        .horizontal-landing > #final.side-panel { position:relative; overflow:hidden; background:#050506; padding:0; display:grid; grid-template-columns:minmax(0,1fr); grid-template-rows:minmax(0,1fr) auto; }
         .sd-head { position:absolute; top:clamp(5.2rem,10.5vh,7rem); left:50%; transform:translateX(-50%); z-index:5; width:min(940px,92vw); text-align:center; pointer-events:none; }
         .sd-kicker { display:inline-flex; align-items:center; gap:0.8rem; font-family:'Space Grotesk',sans-serif; font-size:0.66rem; font-weight:700; letter-spacing:0.38em; text-transform:uppercase; color:var(--accent-red); text-shadow:0 2px 16px rgba(0,0,0,0.9); margin-bottom:0.8rem; }
         .sd-kicker::before, .sd-kicker::after { content:""; width:34px; height:1px; background:var(--accent-red); }
@@ -1446,14 +1446,14 @@
             background: radial-gradient(ellipse 60% 34% at 50% 46%, var(--glow), transparent 70%),
                         linear-gradient(to top, rgba(5,5,6,0.98) 0%, rgba(5,5,6,0.66) 34%, rgba(5,5,6,0) 60%),
                         linear-gradient(to bottom, rgba(5,5,6,0.92) 0%, rgba(5,5,6,0) 36%); }
-        .sd-emblem { position:absolute; left:50%; top:44%; transform:translate(-50%,-50%); width:clamp(110px,10.5vw,170px); aspect-ratio:1; display:grid; place-items:center; transition:transform 0.9s cubic-bezier(0.16,1,0.3,1); }
+        .sd-emblem { position:absolute; left:50%; top:47%; transform:translate(-50%,-50%); width:clamp(110px,10.5vw,170px); aspect-ratio:1; display:grid; place-items:center; transition:transform 0.9s cubic-bezier(0.16,1,0.3,1); }
         .sd-emblem img { width:100%; height:auto; filter:drop-shadow(0 10px 24px rgba(0,0,0,0.9)) drop-shadow(0 0 26px var(--c)); }
         .sd-col:hover .sd-emblem { transform:translate(-50%,-56%) scale(1.08); }
         .sd-emblem.none { border:1px dashed rgba(255,255,255,0.32); border-radius:50%; width:clamp(90px,8vw,130px); }
         .sd-emblem.none span { font-family:'Space Grotesk',sans-serif; font-size:0.5rem; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.55); text-align:center; line-height:1.6; }
         .sd-emblem.gold { width:clamp(144px,13.7vw,222px); }
         .sd-emblem.gold img { filter:drop-shadow(0 10px 24px rgba(0,0,0,0.9)) drop-shadow(0 0 30px rgba(217,180,92,0.5)); }
-        .sd-txt { position:absolute; left:0; right:0; bottom:0; padding:0 clamp(1.2rem,2.6vw,2.6rem) clamp(5.6rem,12vh,7rem); }
+        .sd-txt { position:absolute; left:0; right:0; bottom:0; padding:0 clamp(1.2rem,2.6vw,2.6rem) clamp(1.6rem,4.5vh,2.6rem); }
         .sd-house { display:block; font-family:'Space Grotesk',sans-serif; font-size:0.62rem; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:var(--c); margin-bottom:0.55rem; }
         .sd-name { display:block; font-family:'Space Grotesk',sans-serif; font-weight:700; text-transform:uppercase; font-size:clamp(2.6rem,5.2vw,5.4rem); line-height:0.9; letter-spacing:0.01em; color:#f4efe6; text-shadow:0 6px 40px rgba(0,0,0,0.85); margin-bottom:0.65rem; }
         .sd-line { display:block; font-family:'Space Grotesk',sans-serif; font-size:0.86rem; line-height:1.55; color:#d9d2c5; max-width:36ch; margin-bottom:0.95rem; }
@@ -1471,7 +1471,7 @@
         .sd-col.order  { --c:#00e5ff; --glow:rgba(0,229,255,0.16); }
         .sd-col.chaos  { --c:#ff4a52; --glow:rgba(227,11,23,0.2); }
         .sd-col.shadow { --c:#c2c7cf; --glow:rgba(170,176,186,0.12); }
-        .sd-bottom { position:absolute; left:0; right:0; bottom:0; z-index:6; display:flex; align-items:center; justify-content:space-between; gap:1.2rem; padding:0.9rem clamp(9.5rem,11vw,11.5rem) 0.9rem clamp(1.2rem,3vw,2.6rem); background:linear-gradient(to top, rgba(5,5,6,0.92), rgba(5,5,6,0.55)); border-top:1px solid rgba(255,255,255,0.08); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
+        .sd-bottom { position:relative; z-index:6; display:flex; align-items:center; justify-content:space-between; gap:1.2rem; padding:0.9rem clamp(9.5rem,11vw,11.5rem) 0.9rem clamp(1.2rem,3vw,2.6rem); background:linear-gradient(to top, rgba(5,5,6,0.92), rgba(5,5,6,0.55)); border-top:1px solid rgba(255,255,255,0.08); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
         .sd-houses { display:flex; align-items:center; gap:1rem; flex-wrap:wrap; text-decoration:none; }
         .sd-houses > span { font-family:'Space Grotesk',sans-serif; font-size:0.58rem; font-weight:700; letter-spacing:0.28em; text-transform:uppercase; color:#9a927f; }
         .sd-house-mini { display:inline-flex; align-items:center; gap:0.45rem; font-family:'Space Grotesk',sans-serif; font-size:0.62rem; font-weight:700; letter-spacing:0.18em; color:#e6decd; }
@@ -1479,7 +1479,11 @@
         .sd-houses:hover .sd-house-mini { color:#fff; }
         #final .sd-bottom .war-box { width:auto; min-width:min(420px,40vw); margin:0; }
         #final .sd-bottom .war-foot { justify-content:flex-end; margin-top:0.55rem; }
-        #final .sd-bottom .war-share { position:absolute; right:clamp(1.2rem,3vw,2.6rem); bottom:calc(100% + 0.8rem); }
+        #final .sd-head .war-share { pointer-events:auto; display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:0.55rem 0.9rem; margin-top:0.35rem; }
+        #final .sd-head .war-share[hidden] { display:none; }
+        #final .sd-head .war-share-label { margin:0; color:#d9d1c1; text-shadow:0 2px 14px rgba(0,0,0,0.95); }
+        #final .sd-head .war-share .sh { background:rgba(8,8,9,0.62); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
+        #final .sd-head .war-share .sh-native { background:var(--accent-red); }
         @media (max-width:768px) {
             .horizontal-landing > #final.side-panel { display:grid; grid-template-columns:minmax(0,1fr); grid-template-rows:auto minmax(0,1fr) auto; overflow:hidden; height:100vh; height:100svh; }
             #final .sd-head, #final .sd-cols, #final .sd-bottom { min-width:0; max-width:100%; }
@@ -1509,8 +1513,14 @@
             .sd-house-mini img { height:18px; }
             #final .sd-bottom .war-box { min-width:0; width:100%; }
             #final .sd-bottom .war-foot { justify-content:space-between; margin-top:0.4rem; }
-            #final .sd-bottom .war-share { position:absolute; left:1.2rem; right:1.2rem; bottom:calc(100% + 0.5rem); }
+            #final .sd-head .war-share { gap:0.35rem 0.45rem; margin-top:0.15rem; }
+            #final .sd-head .war-share-label { flex-basis:100%; font-size:0.5rem; letter-spacing:0.22em; }
+            #final .sd-head .war-share .sh { padding:0.45rem 0.85rem; font-size:0.54rem; }
+            #final .war-share:has(#sh-native:not([hidden])) .sh:not(#sh-native):not(#sh-copy) { display:none; }
+            #final .sd-col.cf { container-type:size; }
         }
+        /* telefoni molto bassi: se la colonna e' stretta in altezza, via la riga del casato (resta nella fila in fondo) */
+        @container (max-height:96px) { #final .sd-house { display:none; } }
 
         /* stemmi veri nei pannelli delle fazioni */
         .faction-emblem { width:auto; height:auto; border:none; border-radius:0; background:none; margin-bottom:1.2rem; display:inline-flex; }
@@ -1531,6 +1541,7 @@
       <div class="nav-scroll" id="navScroll">
         <div class="nav-track">
           <a href="index.html" class="nav-home">Home</a>
+          <a href="book.html" class="nav-book">Book<svg class="nav-star" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.4l2.95 6.27 6.85.8-5.07 4.7 1.36 6.77L12 17.52l-6.09 3.42 1.36-6.77L2.2 9.47l6.85-.8z"/></svg></a>
           <a href="lore.html">Lore</a>
           <a href="characters.html">Characters</a>
           <a href="roadmap.html">Roadmap</a>
@@ -1693,6 +1704,17 @@
             <div class="sd-kicker" id="t-final-eyebrow">The War Has Begun</div>
             <h2 class="sd-title" id="t-sd-title">Choose your <i>side.</i></h2>
             <p class="sd-lead" id="t-choose-eyebrow">Two houses raise a banner, one pack hunts alone. Where do you stand?</p>
+            <div class="war-share" id="war-share" hidden>
+                <span class="war-share-label" id="war-share-label">Invite others to take a side</span>
+                <div class="war-share-row">
+                    <button type="button" class="sh sh-native" id="sh-native" hidden>Share</button>
+                    <a class="sh" id="sh-x" target="_blank" rel="noopener">X</a>
+                    <a class="sh" id="sh-wa" target="_blank" rel="noopener">WhatsApp</a>
+                    <a class="sh" id="sh-tg" target="_blank" rel="noopener">Telegram</a>
+                    <button type="button" class="sh sh-ig" id="sh-ig">Instagram</button>
+                    <button type="button" class="sh" id="sh-copy">Copy link</button>
+                </div>
+            </div>
         </div>
         <div class="sd-cols">
             <a href="#faction-order" class="cf order sd-col" style="--img:url('assets/characters/portraits/faction-order-2.jpg'); --pos:18%">
@@ -1733,17 +1755,6 @@
                 <div class="war-foot">
                     <span class="war-status" id="war-status"></span>
                     <button type="button" class="war-wallet" id="war-wallet">Connect Wallet</button>
-                </div>
-                <div class="war-share" id="war-share" hidden>
-                    <span class="war-share-label" id="war-share-label">Invite others to take a side</span>
-                    <div class="war-share-row">
-                        <button type="button" class="sh sh-native" id="sh-native" hidden>Share</button>
-                        <a class="sh" id="sh-x" target="_blank" rel="noopener">X</a>
-                        <a class="sh" id="sh-wa" target="_blank" rel="noopener">WhatsApp</a>
-                        <a class="sh" id="sh-tg" target="_blank" rel="noopener">Telegram</a>
-                        <button type="button" class="sh sh-ig" id="sh-ig">Instagram</button>
-                        <button type="button" class="sh" id="sh-copy">Copy link</button>
-                    </div>
                 </div>
             </div>
         </div>
