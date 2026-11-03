@@ -808,12 +808,19 @@
 
     <!-- Step 4: Files / claim (dopo selezione) -->
     <div id="step-files">
-      <div id="step-files-title"></div>
-      <div id="status-box"></div>
-      <div id="btn-row">
-        <button class="btn btn-outline" id="btn-back">← Back</button>
-        <button class="btn btn-outline" id="btn-claim" style="display:none">Claim On-Chain</button>
-        <button class="btn btn-primary" id="btn-room" style="display:none">Enter Villa Prime</button>
+      <div class="uv">
+        <figure class="uv-art"><img id="uv-img" alt=""><span class="uv-shine" aria-hidden="true"></span></figure>
+        <div class="uv-txt">
+          <p class="uv-kicker"><i aria-hidden="true"></i>Vault unlocked</p>
+          <h2 class="uv-title" id="step-files-title"><span>Nyfurion X</span><b id="uv-num"></b></h2>
+          <p class="uv-sub">The official artwork, the files and the commercial license of this fragment are yours. Step inside your Villa Prime.</p>
+          <div id="status-box"></div>
+          <div id="btn-row">
+            <button class="btn btn-primary" id="btn-room" style="display:none">Enter Villa Prime</button>
+            <button class="btn btn-outline" id="btn-claim" style="display:none">Claim On-Chain</button>
+            <button class="btn btn-outline" id="btn-back">← All fragments</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -864,6 +871,46 @@
       box-shadow:0 0 8px rgba(212,175,55,0.6);
       z-index:60; pointer-events:none;
     }
+
+    /* ═══ frammento sbloccato: senza riquadro, l'immagine ufficiale e il numero ═══ */
+    #main-card.unlocked { max-width: min(980px, 100%); background: none; border-color: transparent; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; padding: 8px 0 64px; }
+    #main-card.unlocked::before { display: none; }
+    /* nel caveau aperto il sigillo si fa piccolo e i 3 passi (gia' fatti) spariscono: tutto resta in una schermata */
+    body:has(#main-card.unlocked) .lk-stage { width: min(30vw, 14vh, 120px) !important; }
+    body:has(#main-card.unlocked) .lk-steps { display: none; }
+    body:has(#main-card.unlocked) #wallet-badge { margin-top: 4px; }
+    .uv { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: center; text-align: left; }
+    .uv-art { position: relative; margin: 0; aspect-ratio: 2 / 3; width: min(300px, calc(min(47vh, 450px) * 2 / 3)); border-radius: 6px; overflow: hidden; background: radial-gradient(ellipse at 50% 40%, rgba(212,175,55,0.14), rgba(8,8,10,0.9) 70%);
+      box-shadow: 0 0 0 1px rgba(212,175,55,0.55), 0 0 0 7px rgba(212,175,55,0.06), 0 40px 80px -30px rgba(0,0,0,0.95), 0 0 90px -10px rgba(212,175,55,0.35); animation: uvIn 0.9s cubic-bezier(0.16,1,0.3,1) backwards; }
+    .uv-art img { display: block; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.04); transition: opacity 0.7s ease, transform 1.4s cubic-bezier(0.16,1,0.3,1); }
+    .uv-art img.in { opacity: 1; transform: none; }
+    .uv-shine { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, transparent 35%, rgba(255,240,200,0.22) 48%, transparent 60%); transform: translateX(-120%); animation: uvShine 2.4s 0.5s ease forwards; }
+    @keyframes uvIn { from { opacity: 0; transform: translateY(18px) scale(0.97); } }
+    @keyframes uvShine { to { transform: translateX(120%); } }
+    .uv-txt { animation: uvIn 0.9s 0.12s cubic-bezier(0.16,1,0.3,1) backwards; }
+    .uv-kicker { display: flex; align-items: center; gap: 12px; margin: 0 0 clamp(10px, 2vh, 18px); font-family: 'Space Grotesk', sans-serif; font-size: 0.64rem; font-weight: 700; letter-spacing: 0.36em; text-transform: uppercase; color: #e8cf8a; }
+    .uv-kicker i { width: 34px; height: 1px; background: linear-gradient(90deg, #d4af37, rgba(212,175,55,0)); box-shadow: 0 0 10px rgba(212,175,55,0.7); }
+    #step-files-title.uv-title { margin: 0 0 clamp(10px, 2vh, 18px); text-transform: none; letter-spacing: 0; line-height: 0.95; }
+    .uv-title span { display: block; font-family: 'Space Grotesk', sans-serif; font-size: clamp(0.8rem, 1.1vw, 0.95rem); font-weight: 600; letter-spacing: 0.42em; text-transform: uppercase; color: #cfc6b4; margin-bottom: 10px; }
+    .uv-title b { display: block; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(3.2rem, min(8vw, 11vh), 7rem); letter-spacing: -0.01em;
+      background: linear-gradient(105deg, #a8862a, #f6e39a 45%, #c9a24e 70%, #f2dc92); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.7)); }
+    .uv-sub { max-width: 440px; margin: 0 0 clamp(16px, 3vh, 26px); font-family: 'Cormorant Garamond', serif; font-size: clamp(1.1rem, 1.5vw, 1.3rem); line-height: 1.5; color: #ddd3bf; }
+    .uv #btn-row { margin-top: 0; gap: 14px; align-items: center; }
+    .uv #btn-room { border: none; border-radius: 999px; padding: 18px 40px; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.24em; color: #16120a; background: linear-gradient(180deg, #f2dc92, #c9a24e);
+      box-shadow: 0 0 0 1px rgba(255,236,170,0.45), 0 18px 44px -14px rgba(212,175,55,0.8), 0 0 40px rgba(212,175,55,0.25); }
+    .uv #btn-room:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(255,236,170,0.7), 0 22px 50px -14px rgba(212,175,55,0.9), 0 0 60px rgba(212,175,55,0.4); }
+    .uv #btn-back, .uv #btn-claim { border: none; background: none; padding: 12px 6px; font-size: 0.68rem; letter-spacing: 0.22em; color: #a39b8a; }
+    .uv #btn-back:hover, .uv #btn-claim:hover { color: #f3eadb; background: none; }
+    .uv #status-box { margin: 0 0 20px; padding: 0 0 0 14px; border: 0; border-left: 2px solid currentColor; border-radius: 0; background: none; font-size: 0.86rem; }
+    @media (max-width: 760px) {
+      .uv { grid-template-columns: 1fr; gap: 26px; text-align: center; justify-items: center; }
+      .uv-art { width: min(48vw, 190px); }
+      .uv-kicker { justify-content: center; }
+      .uv-kicker::after { content: ''; width: 34px; height: 1px; background: linear-gradient(270deg, #d4af37, rgba(212,175,55,0)); }
+      .uv-sub { margin-left: auto; margin-right: auto; }
+      .uv #btn-row { flex-direction: column; width: 100%; }
+      .uv #btn-room { width: 100%; max-width: 340px; }
+    }
   </style>
   <div id="vault-room">
     <div id="vr-title">NYFURION VILLA PRIME — <b id="vr-token"></b></div>
@@ -896,6 +943,24 @@
     let PREVIEWS = {};
     fetch('previews.json').then(r => r.json()).then(m => { PREVIEWS = m; }).catch(() => {});
     const previewUrl = (id) => PREVIEWS[String(id)] ? `https://cdn.nyfurion.com/ipfs/${PREVIEWS[String(id)]}` : null;
+    // miniatura leggera della STESSA immagine ufficiale (fatta dal CID di previews.json), ~30 KB invece di ~1,8 MB
+    const thumbUrl = (id) => `assets/nft/official/${Number(id)}.webp`;
+    function fallbackToCdn(img, id) {
+      img.onerror = null;
+      const go = () => { const u = previewUrl(id); if (u) img.src = u; };
+      if (Object.keys(PREVIEWS).length) go(); else fetch('previews.json').then(r => r.json()).then(m => { PREVIEWS = m; go(); }).catch(() => {});
+    }
+    // schermata sbloccata: subito la miniatura, poi l'originale a piena risoluzione quando e' arrivato
+    function showUnlockedArt(id) {
+      const img = document.getElementById('uv-img');
+      img.classList.remove('in');
+      img.onload = () => img.classList.add('in');
+      img.onerror = () => fallbackToCdn(img, id);
+      img.src = thumbUrl(id);
+      img.alt = `Nyfurion X #${id}`;
+      const u = previewUrl(id);
+      if (u) { const hi = new Image(); hi.onload = () => { if (activeTokenId === id) img.src = u; }; hi.src = u; }
+    }
 
     // ─── State ────────────────────────────────────────────────────────────────
     let provider     = null;
@@ -1109,8 +1174,9 @@
         // SEMPRE l'immagine UFFICIALE del token (la stessa della carta nella stanza):
         // le immagini del sito in assets/nft NON sono numerate come i token
         const u = previewUrl(id);
-        card.innerHTML = (u ? `<img class="tc-img" src="${u}" alt="Nyfurion X #${id}" loading="lazy" decoding="async">` : '<span class="tc-img"></span>')
+        card.innerHTML = `<img class="tc-img" src="${thumbUrl(id)}" alt="Nyfurion X #${id}" loading="lazy" decoding="async">`
           + `<span class="tc-meta"><span class="tc-num">#${String(id).padStart(3, '0')}</span><span class="tc-open">Open</span></span>`;
+        card.querySelector('.tc-img').onerror = function () { fallbackToCdn(this, id); };
         card.addEventListener('click', () => selectToken(id));
         tokenGridEl.appendChild(card);
       }
@@ -1191,9 +1257,11 @@
         }
 
         // Possiedi il token = archivio sbloccato. Nessun claim, nessuna transazione.
-        stepFilesTitle.textContent = `Nyfurion X #${tokenId}`;
+        document.getElementById('uv-num').textContent = '#' + String(tokenId).padStart(3, '0');
+        showUnlockedArt(tokenId);
+        mainCard.classList.add('unlocked');
         stepFiles.style.display = 'block';
-        showStatus('Archive unlocked.', 'success');
+        hideStatus();
         btnClaim.style.display = 'none';
         await loadFiles(tokenId);
 
@@ -1206,6 +1274,7 @@
 
     // ─── Back → torna alla selezione token ────────────────────────────────────
     btnBack.addEventListener('click', async () => {
+      mainCard.classList.remove('unlocked');
       stepFiles.style.display = 'none';
       fileGrid.style.display  = 'none';
       fileGrid.innerHTML      = '';
@@ -1352,6 +1421,7 @@
       deniedMsg.textContent      = msg;
       deniedBlock.style.display  = 'block';
       mainCard.classList.add('card--denied');
+      mainCard.classList.remove('unlocked');
     }
 
     // ─── UI helpers ───────────────────────────────────────────────────────────
@@ -1379,6 +1449,7 @@
       deniedBlock.style.display   = 'none';
       mainCard.classList.remove('card--denied');
       mainCard.classList.remove('gallery');
+      mainCard.classList.remove('unlocked');
       walletBadge.style.display   = 'none';
       fileGrid.style.display      = 'none';
       fileGrid.innerHTML          = '';
