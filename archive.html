@@ -8,7 +8,7 @@
     <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png" />
     <link rel="apple-touch-icon" href="favicon-180.png" />
   <title>Nyfurion Holder Archive</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -251,60 +251,45 @@
       margin: 0 auto;
     }
 
-    /* ── Token selection ── */
+    /* ── I tuoi frammenti: una parete di ritratti a tutta larghezza, niente riquadri ── */
     #step-tokens { display: none; }
-    #step-tokens .tokens-label {
-      font-size: 0.72rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 14px;
+    #main-card.gallery { max-width: min(1400px, 100%); background: none; border-color: transparent; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; padding: 8px 0 0; }
+    #main-card.gallery::before { display: none; }
+    .tk-head { text-align: center; margin-bottom: 22px; }
+    .tk-kicker { font-family: 'Space Grotesk', sans-serif; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.36em; text-transform: uppercase; color: var(--energy); margin-bottom: 10px; }
+    .tk-title { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(1.9rem, 3.6vw, 2.8rem); line-height: 1.05; color: #efe4c8; text-shadow: 0 4px 30px rgba(0,0,0,0.8); }
+    .tk-title b { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.9em; letter-spacing: -0.02em; color: var(--gold); }
+    .tk-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 22px; margin-top: 16px; }
+    .tk-find { display: inline-flex; align-items: center; gap: 6px; padding: 6px 4px; border-bottom: 1px solid rgba(212,175,55,0.45); }
+    .tk-find span { font-family: 'Space Grotesk', sans-serif; font-weight: 600; color: var(--gold); }
+    .tk-find input { width: 9.5em; background: none; border: none; outline: none; color: #ECE6D8; font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; letter-spacing: 0.06em; }
+    .tk-find input::placeholder { color: #7d7666; }
+    .tk-ranges { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 16px; }
+    .tk-ranges button {
+      padding: 6px 0; background: none; border: none; border-bottom: 1px solid transparent; cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif; font-size: 0.66rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #8f877a;
     }
-    .token-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(122px, 1fr));
-      gap: 12px;
-      max-height: 58vh;
-      overflow-y: auto;
-      padding: 4px 8px 4px 2px;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(212,175,55,0.45) transparent;
+    .tk-ranges button.on, .tk-ranges button:hover { color: #f3e6c4; border-bottom-color: var(--gold); }
+    .token-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 6px; }
+    .token-card { position: relative; display: block; padding: 0; border: none; border-radius: 4px; overflow: hidden; aspect-ratio: 2 / 3; background: #0d0c10; cursor: pointer; transition: box-shadow 0.35s ease; }
+    .token-card[hidden] { display: none !important; }
+    .token-grid.few { grid-template-columns: repeat(auto-fit, minmax(150px, 210px)); justify-content: center; gap: 10px; }
+    .token-card .tc-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.92); transition: transform 0.9s cubic-bezier(0.16,1,0.3,1), filter 0.5s ease; }
+    .token-card::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to top, rgba(5,5,6,0.9) 0%, rgba(5,5,6,0) 38%); }
+    .token-card .tc-meta { position: absolute; left: 10px; right: 10px; bottom: 9px; z-index: 1; display: flex; align-items: baseline; justify-content: space-between; }
+    .token-card .tc-num { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.02em; color: #f3e6c4; text-shadow: 0 2px 10px rgba(0,0,0,0.9); }
+    .token-card .tc-open { font-family: 'Space Grotesk', sans-serif; font-size: 0.56rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); opacity: 0; transform: translateX(-6px); transition: opacity 0.35s ease, transform 0.35s ease; }
+    .token-card:hover, .token-card:focus-visible { z-index: 2; box-shadow: 0 0 0 1px rgba(212,175,55,0.75), 0 18px 40px -12px rgba(212,175,55,0.45); outline: none; }
+    .token-card:hover .tc-img, .token-card:focus-visible .tc-img { transform: scale(1.07); filter: brightness(1.05); }
+    .token-card:hover .tc-open, .token-card:focus-visible .tc-open { opacity: 1; transform: none; }
+    .tk-empty { margin-top: 18px; text-align: center; font-size: 0.85rem; color: var(--muted); }
+    @media (max-width: 640px) {
+      .token-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+      .token-grid.few { grid-template-columns: repeat(auto-fit, minmax(96px, 120px)); gap: 6px; }
+      .token-card .tc-num { font-size: 0.82rem; }
+      .token-card .tc-meta { left: 7px; bottom: 6px; }
+      .tk-title { font-size: 1.8rem; }
     }
-    .token-card {
-      background: rgba(10,9,12,0.78);
-      border: 1px solid rgba(212,175,55,0.28);
-      border-radius: 10px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.22s, border-color 0.22s, box-shadow 0.22s;
-    }
-    .token-card:hover {
-      border-color: var(--gold);
-      transform: translateY(-3px);
-      box-shadow: 0 12px 30px rgba(212,175,55,0.25);
-    }
-    .token-card .tc-img {
-      display: block;
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      background: #11101a;
-    }
-    .token-card .tc-meta {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      padding: 7px 10px 8px;
-      border-top: 1px solid rgba(212,175,55,0.18);
-    }
-    .token-card .tc-num {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--gold);
-    }
-    .token-card .tc-label { font-size: 0.58rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
-    #main-card.gallery { max-width: 920px; }
 
     /* ── Step files ── */
     #step-files { display: none; }
@@ -585,7 +570,8 @@
     .lk-runes { font-family: 'Space Grotesk', sans-serif; font-size: 10.5px; font-weight: 500; letter-spacing: 2px; fill: rgba(232,205,130,0.78); }
     .lk-scan { opacity: 0; transition: opacity 0.4s ease; }
     .lk-pin { transition: transform 0.9s cubic-bezier(0.7,0,0.2,1) 0.1s, opacity 0.5s ease; }
-    .lk-half { transition: transform 1.25s cubic-bezier(0.7,0,0.2,1) 0.35s; }
+    .lk-half { transform-box: view-box; transform-origin: 200px 200px; transition: transform 1.3s cubic-bezier(0.7,0,0.2,1) 0.3s, opacity 0.9s ease 0.7s; }
+    .lk-logo-open { opacity: 0; transform-box: view-box; transform-origin: 200px 200px; transform: scale(0.6); transition: opacity 0.9s ease 1.3s, transform 1.2s cubic-bezier(0.2,0.8,0.2,1) 1.3s; filter: drop-shadow(0 0 1.5px rgba(30,18,0,0.95)) drop-shadow(0 2px 6px rgba(30,18,0,0.6)) drop-shadow(0 0 14px rgba(255,248,225,0.55)); }
     .lk-emblem { filter: drop-shadow(0 0 5px rgba(255,255,255,0.25)); animation: lkBreath 4.5s ease-in-out infinite; }
     @keyframes lkBreath { 50% { filter: drop-shadow(0 0 12px rgba(255,244,214,0.6)); } }
     .lk-core { opacity: 0; transition: opacity 0.9s ease; }
@@ -605,12 +591,16 @@
     body.lk-connected .lk-pin, body.lk-open .lk-pin { transform: translateY(36px); }
     body.lk-connected .lk-seam { opacity: 1; }
     body.lk-connected .lk-core { opacity: 0.5; }
-    body.lk-connected .lk-stage { width: min(46vw, 30vh, 270px); }
+    body.lk-connected .lk-stage { width: min(40vw, 23vh, 230px); }
     /* 3. firma verificata: il sigillo si spalanca e la luce esce */
-    body.lk-open .lk-half.l { transform: translateX(-112px); }
-    body.lk-open .lk-half.r { transform: translateX(112px); }
+    body.lk-open .lk-half.l { transform: rotate(-110deg) scale(0.25); opacity: 0; }
+    body.lk-open .lk-half.r { transform: rotate(110deg) scale(0.25); opacity: 0; }
+    body.lk-open .lk-logo-open { opacity: 1; transform: scale(1); }
+    body.lk-open .lk-ring-b { filter: drop-shadow(0 0 10px rgba(246,227,154,0.75)); }
+    body.lk-open .lk-core { animation: lkPortal 3.5s ease-in-out 2s infinite; }
+    @keyframes lkPortal { 50% { opacity: 0.72; } }
     body.lk-open .lk-pin { opacity: 0; }
-    body.lk-open .lk-core { opacity: 1; }
+    body.lk-open .lk-core { opacity: 0.95; }
     body.lk-open .lk-flare { opacity: 1; transform: scale(1); }
     body.lk-open .lk-stage { width: min(40vw, 24vh, 220px); transition-delay: 1.6s; }
     /* nessun frammento nel wallet: si richiude, rosso */
@@ -662,6 +652,40 @@
       .btn-hero { letter-spacing: 0.22em; text-indent: 0.22em; padding: 18px 26px; }
       #step-connect { margin-top: 20px; }
     }
+
+    /* ═══ la firma senza riquadro, sotto il sigillo ═══ */
+    body.lk-connected #main-card { background: none; border-color: transparent; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; padding-top: 4px; }
+    body.lk-connected #main-card::before { display: none; }
+    #step-sign { padding: 6px 4px 8px; }
+    #step-sign .ss-eyebrow { margin-bottom: 12px; font-size: 0.62rem; letter-spacing: 0.36em; }
+    #step-sign .ss-title { margin-bottom: 14px; text-transform: none; letter-spacing: 0; }
+    #step-sign .ss-title span {
+      display: block; font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500;
+      font-size: clamp(2rem, 3.6vw, 2.8rem); line-height: 1.05; color: #efe4c8; text-shadow: 0 4px 30px rgba(0,0,0,0.8);
+    }
+    #step-sign .ss-title b {
+      display: block; margin-top: 0.45rem; font-family: 'Space Grotesk', sans-serif; font-size: clamp(0.9rem, 1.4vw, 1.08rem);
+      font-weight: 600; letter-spacing: 0.34em; text-indent: 0.34em; text-transform: uppercase;
+      background: linear-gradient(105deg, #a8862a, #f6e39a 50%, #a8862a); -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: transparent;
+    }
+    #step-sign .ss-sub { font-size: 0.88rem; color: #c9c1af; line-height: 1.7; margin-bottom: 24px; max-width: 470px; }
+    #step-sign .ss-sub span { display: block; margin-top: 0.3rem; font-size: 0.74rem; color: #8f877a; }
+    #btn-sign {
+      border: none; border-radius: 999px; padding: 18px 46px; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.24em;
+      text-transform: uppercase; color: #16120a; background: linear-gradient(180deg, #f2dc92, #c9a24e);
+      box-shadow: 0 0 0 1px rgba(255,236,170,0.45), 0 18px 44px -14px rgba(212,175,55,0.8), 0 0 40px rgba(212,175,55,0.25);
+    }
+    #btn-sign:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(255,236,170,0.7), 0 22px 50px -14px rgba(212,175,55,0.9), 0 0 60px rgba(212,175,55,0.4); }
+    .ss-cancel-row { margin-top: 16px; }
+    /* l'indirizzo collegato: un'etichetta col pallino verde */
+    #wallet-badge {
+      width: max-content; max-width: 100%; margin: 12px auto 10px; padding: 7px 15px 7px 13px; border-radius: 999px;
+      border: 1px solid rgba(212,175,55,0.3); background: rgba(8,8,9,0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      font-family: 'Space Grotesk', sans-serif; font-size: 0.64rem; letter-spacing: 0.18em; text-transform: uppercase; color: #a39b8a;
+    }
+    #wallet-badge::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 9px; vertical-align: 1px; background: #39ff9c; box-shadow: 0 0 10px rgba(57,255,156,0.8); }
+    #wallet-badge span { font-family: 'Space Grotesk', monospace; letter-spacing: 0.08em; text-transform: none; }
   </style>
 </head>
 <body>
@@ -687,7 +711,7 @@
             <stop offset="0" stop-color="#2b2113"/><stop offset="0.6" stop-color="#120e09"/><stop offset="1" stop-color="#060504"/>
           </radialGradient>
           <radialGradient id="lkCore" cx="0.5" cy="0.5" r="0.5">
-            <stop offset="0" stop-color="#fffaf0"/><stop offset="0.28" stop-color="#f8dc8c"/><stop offset="0.62" stop-color="rgba(212,175,55,0.45)"/><stop offset="1" stop-color="rgba(212,175,55,0)"/>
+            <stop offset="0" stop-color="#f6dc96"/><stop offset="0.32" stop-color="#e2b95a"/><stop offset="0.64" stop-color="rgba(212,175,55,0.38)"/><stop offset="1" stop-color="rgba(212,175,55,0)"/>
           </radialGradient>
           <linearGradient id="lkScan" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0" stop-color="rgba(0,229,255,0)"/><stop offset="1" stop-color="rgba(0,229,255,0.95)"/>
@@ -722,6 +746,7 @@
           <image class="lk-emblem" href="assets/holder/nyf-logo.png" x="123" y="115" width="154" height="170"/>
         </g>
         <line class="lk-seam" x1="200" y1="80" x2="200" y2="320" stroke="#fff3c4" stroke-width="2.4"/>
+        <image class="lk-logo-open" href="assets/holder/nyf-logo.png" x="141" y="135" width="118" height="130"/>
       </svg>
         <div class="lk-flare" aria-hidden="true"></div>
       </div>
@@ -748,13 +773,13 @@
 
     <!-- Step 2: Firma — parte SOLO da un click, così il popup del wallet può sempre aprirsi -->
     <div id="step-sign" style="display:none;">
-      <div class="ss-eyebrow">Identity Check</div>
-      <h3 class="ss-title">One signature. <b>Zero cost.</b></h3>
+      <div class="ss-eyebrow">Step 2 of 3 &middot; Identity</div>
+      <h3 class="ss-title"><span>The seal is ready.</span><b>Sign to open it</b></h3>
       <p class="ss-sub">
-        A free signature proves you own this wallet.<br>
-        Una firma gratuita dimostra che il wallet è tuo — nessuna transazione, nessuna spesa.
+        A free signature proves this wallet is yours. No transaction, no fees.
+        <span>Una firma gratuita: nessuna transazione, nessuna spesa.</span>
       </p>
-      <button class="btn btn-primary" id="btn-sign">Sign to Enter</button>
+      <button class="btn btn-primary" id="btn-sign">Sign &amp; open the vault</button>
       <div id="sign-hint"></div>
       <div class="ss-cancel-row">
         <a href="#" id="btn-sign-cancel">&lsaquo; disconnect</a>
@@ -769,8 +794,16 @@
 
     <!-- Step 3: Token selection (se il wallet ha più token) -->
     <div id="step-tokens">
-      <div class="tokens-label">Your Nyfurion X — select a token to access its archive</div>
+      <div class="tk-head">
+        <div class="tk-kicker">Your vault &middot; choose a fragment</div>
+        <h2 class="tk-title"><b id="tk-count">0</b> <i>fragments</i> in your wallet</h2>
+        <div class="tk-tools">
+          <label class="tk-find"><span>#</span><input id="tk-find" type="text" inputmode="numeric" placeholder="Find a number" autocomplete="off"></label>
+          <div class="tk-ranges" id="tk-ranges"></div>
+        </div>
+      </div>
       <div class="token-grid" id="token-grid"></div>
+      <p class="tk-empty" id="tk-empty" hidden>No fragment with this number in your wallet.</p>
     </div>
 
     <!-- Step 4: Files / claim (dopo selezione) -->
@@ -953,7 +986,7 @@
       const btnCancel = document.getElementById('btn-sign-cancel');
       stepSign.style.display = 'block';
       signHint.textContent = '';
-      setButtonLoading(btnSign, false, 'Sign to Enter');
+      setButtonLoading(btnSign, false, 'Sign & open the vault');
 
       return new Promise((resolve) => {
         const cleanup = () => {
@@ -977,7 +1010,7 @@
                 const d = await nonceRes.json().catch(() => ({}));
                 signHint.textContent = `Server error (${nonceRes.status})${d.error ? ': ' + d.error : ''} — press to retry. · Errore del server, ripremi per riprovare.`;
               }
-              setButtonLoading(btnSign, false, 'Sign to Enter');
+              setButtonLoading(btnSign, false, 'Sign & open the vault');
               return;
             }
             const { nonce, message } = await nonceRes.json();
@@ -1000,7 +1033,7 @@
                 const d = await verifyRes.json().catch(() => ({}));
                 signHint.textContent = `Verification failed (${verifyRes.status})${d.error ? ': ' + d.error : ''} — press to retry. · Verifica fallita, ripremi per riprovare.`;
               }
-              setButtonLoading(btnSign, false, 'Sign to Enter');
+              setButtonLoading(btnSign, false, 'Sign & open the vault');
               return;
             }
             const data = await verifyRes.json();
@@ -1018,7 +1051,7 @@
             } else {
               signHint.textContent = 'Network error — check your connection and press again. · Errore di rete: controlla la connessione e ripremi.';
             }
-            setButtonLoading(btnSign, false, 'Sign to Enter');
+            setButtonLoading(btnSign, false, 'Sign & open the vault');
           }
         };
       });
@@ -1067,19 +1100,65 @@
     // ─── Render token selection grid ──────────────────────────────────────────
     function renderTokenGrid(tokens) {
       tokenGridEl.innerHTML = '';
-      for (const id of tokens) {
-        const card = document.createElement('div');
+      const ids = tokens.map(Number).sort((a, b) => a - b);
+      for (const id of ids) {
+        const card = document.createElement('button');
+        card.type = 'button';
         card.className = 'token-card';
+        card.dataset.id = id;
+        // l'immagine del sito (veloce); se manca, quella ufficiale dal CDN
         const u = previewUrl(id);
-        const img = u
-          ? `<img class="tc-img" src="${u}" alt="Nyfurion X #${id}" loading="lazy" decoding="async">`
-          : '<div class="tc-img"></div>';
-        card.innerHTML = `${img}<div class="tc-meta"><span class="tc-num">#${id}</span><span class="tc-label">Nyfurion X</span></div>`;
+        card.innerHTML = `<img class="tc-img" src="assets/nft/${id}.jpg" alt="Nyfurion X #${id}" loading="lazy" decoding="async"${u ? ` onerror="this.onerror=null;this.src='${u}'"` : ''}>`
+          + `<span class="tc-meta"><span class="tc-num">#${String(id).padStart(3, '0')}</span><span class="tc-open">Open</span></span>`;
         card.addEventListener('click', () => selectToken(id));
         tokenGridEl.appendChild(card);
       }
+      setupTokenTools(ids);
       mainCard.classList.add('gallery');
       stepTokens.style.display = 'block';
+    }
+
+    // totale, ricerca per numero e fasce da 100 (solo quando i frammenti sono tanti)
+    function setupTokenTools(ids) {
+      document.getElementById('tk-count').textContent = ids.length;
+      tokenGridEl.classList.toggle('few', ids.length <= 8);
+      const find = document.getElementById('tk-find');
+      const ranges = document.getElementById('tk-ranges');
+      const empty = document.getElementById('tk-empty');
+      const cards = Array.from(tokenGridEl.children);
+      let range = null;
+      const apply = () => {
+        const q = find.value.replace(/\D/g, '');
+        let shown = 0;
+        cards.forEach((c) => {
+          const id = +c.dataset.id;
+          const ok = (!q || String(id).includes(q) || String(id).padStart(3, '0').includes(q)) && (!range || (id >= range[0] && id <= range[1]));
+          c.hidden = !ok;
+          if (ok) shown++;
+        });
+        empty.hidden = shown > 0;
+      };
+      ranges.innerHTML = '';
+      if (ids.length > 24) {
+        const fasce = [[null, 'All']];
+        for (let a = 1; a <= 400; a += 100) if (ids.some((i) => i >= a && i < a + 100)) fasce.push([[a, a + 99], a + '–' + (a + 99)]);
+        fasce.forEach(([r, t], k) => {
+          const b = document.createElement('button');
+          b.type = 'button'; b.textContent = t;
+          if (k === 0) b.classList.add('on');
+          b.addEventListener('click', () => {
+            range = r;
+            ranges.querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === b));
+            apply();
+          });
+          ranges.appendChild(b);
+        });
+      }
+      find.value = '';
+      find.oninput = apply;
+      find.onkeydown = (e) => { if (e.key === 'Enter') { const v = +find.value.replace(/\D/g, ''); if (ids.includes(v)) selectToken(v); } };
+      find.closest('.tk-find').style.display = ids.length > 12 ? '' : 'none';
+      apply();
     }
 
     // ─── Seleziona token → check-access → mostra file o claim ────────────────
