@@ -1106,9 +1106,10 @@
         card.type = 'button';
         card.className = 'token-card';
         card.dataset.id = id;
-        // l'immagine del sito (veloce); se manca, quella ufficiale dal CDN
+        // SEMPRE l'immagine UFFICIALE del token (la stessa della carta nella stanza):
+        // le immagini del sito in assets/nft NON sono numerate come i token
         const u = previewUrl(id);
-        card.innerHTML = `<img class="tc-img" src="assets/nft/${id}.jpg" alt="Nyfurion X #${id}" loading="lazy" decoding="async"${u ? ` onerror="this.onerror=null;this.src='${u}'"` : ''}>`
+        card.innerHTML = (u ? `<img class="tc-img" src="${u}" alt="Nyfurion X #${id}" loading="lazy" decoding="async">` : '<span class="tc-img"></span>')
           + `<span class="tc-meta"><span class="tc-num">#${String(id).padStart(3, '0')}</span><span class="tc-open">Open</span></span>`;
         card.addEventListener('click', () => selectToken(id));
         tokenGridEl.appendChild(card);
