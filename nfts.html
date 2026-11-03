@@ -653,6 +653,11 @@
     .ph-btn.red:hover { background:#ff1d29; border-color:#ff1d29; }
     .ph-facts { display:flex; flex-wrap:wrap; gap:0.6rem 1.8rem; margin-top:clamp(1.3rem,3vh,1.9rem); font-family:'Space Grotesk',sans-serif; font-size:0.6rem; letter-spacing:0.24em; text-transform:uppercase; color:#8f877a; }
     .ph-facts b { color:#fff; font-size:1.15rem; letter-spacing:-0.01em; margin-right:0.4rem; }
+    /* quali personaggi hanno gia' il pack foto (si aggiorna con aggiorna_pack.py) */
+    .ph-pack { display:flex; flex-wrap:wrap; align-items:center; gap:0.5rem 0.9rem; margin:clamp(1rem,2.4vh,1.4rem) 0 0; font-family:'Space Grotesk',sans-serif; }
+    .ph-pack-k { display:inline-flex; align-items:center; gap:0.55rem; font-size:0.62rem; font-weight:700; letter-spacing:0.24em; text-transform:uppercase; color:#d9b45c; }
+    .ph-pack-k::before { content:''; width:7px; height:7px; border-radius:50%; background:#d9b45c; box-shadow:0 0 10px rgba(217,180,92,0.8); }
+    .ph-pack-n { font-size:1.05rem; font-weight:700; letter-spacing:0.02em; color:#fff; }
     .ph-stage { position:relative; height:clamp(440px,72vh,680px); }
     .ph-card {
       position:absolute; left:50%; top:50%; z-index:3; width:clamp(210px,20vw,310px); height:auto;
@@ -902,6 +907,7 @@
             <button type="button" class="ph-btn" id="ph-receive">What you receive <span aria-hidden="true">&rarr;</span></button>
           </div>
           <div class="ph-facts reveal"><span><b>400</b>fragments</span><span><b>1</b>commercial license each</span><span><b>ETH</b>on-chain</span></div>
+          <p class="ph-pack reveal"><span class="ph-pack-k">Photo pack already in the vault</span><span class="ph-pack-n">#001–#020 &amp; #329</span></p>
         </div>
         <div class="ph-stage reveal" aria-hidden="true">
           <img class="ph-frag f1" src="assets/nft/263.jpg" alt="" width="423" height="600">
