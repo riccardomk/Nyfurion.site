@@ -658,6 +658,26 @@
     .ph-pack-k { display:inline-flex; align-items:center; gap:0.55rem; font-size:0.62rem; font-weight:700; letter-spacing:0.24em; text-transform:uppercase; color:#d9b45c; }
     .ph-pack-k::before { content:''; width:7px; height:7px; border-radius:50%; background:#d9b45c; box-shadow:0 0 10px rgba(217,180,92,0.8); }
     .ph-pack-n { font-size:1.05rem; font-weight:700; letter-spacing:0.02em; color:#fff; }
+    @media (max-height:860px) and (min-width:901px) {
+      .ph-in { padding-top:5.4rem; padding-bottom:2.6rem; }
+      .ph-a, .ph-b { font-size:clamp(2.6rem,5.2vw,5.2rem); }
+      .p-hero .ph-big { margin-bottom:1rem; }
+      .ph-lead { font-size:clamp(1.05rem,1.3vw,1.25rem); margin-bottom:1.1rem; }
+      .ph-facts { margin-top:0.9rem; }
+      .ph-refs { margin-top:0.8rem !important; padding-top:0.6rem !important; }
+      .ph-refs-r { padding:0.3rem 0; }
+      .ph-stage { height:clamp(400px,66vh,600px); }
+    }
+    .ph-refs { margin-top:clamp(1rem,2.4vh,1.5rem); padding-top:clamp(0.8rem,2vh,1.1rem); border-top:1px solid rgba(217,180,92,0.25); max-width:600px; }
+    .ph-refs-k { display:flex; align-items:center; gap:0.55rem; margin:0 0 0.35rem; font-family:'Space Grotesk',sans-serif; font-size:0.62rem; font-weight:700; letter-spacing:0.24em; text-transform:uppercase; color:#d9b45c; }
+    .ph-refs-k::before { content:''; width:7px; height:7px; border-radius:50%; background:#d9b45c; box-shadow:0 0 10px rgba(217,180,92,0.8); }
+    .ph-refs-r { display:flex; flex-wrap:wrap; align-items:center; gap:0.3rem 0.8rem; padding:0.45rem 0; font-family:'Space Grotesk',sans-serif; }
+    .ph-refs-r + .ph-refs-r { border-top:1px solid rgba(255,255,255,0.08); }
+    .ph-refs-r b { font-size:1rem; font-weight:700; color:#cfc6b4; min-width:11.5rem; }
+    .ph-refs-r.full b { font-size:clamp(1.3rem,1.9vw,1.7rem); color:#fff; letter-spacing:-0.01em; }
+    .ph-refs-r .tag { padding:0.28rem 0.65rem; border-radius:999px; font-size:0.56rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:#d9b45c; border:1px solid rgba(217,180,92,0.55); }
+    .ph-refs-r.full .tag { color:#0b0907; background:#f3eadb; border-color:#f3eadb; }
+    .ph-refs-r em { font-style:normal; font-size:0.74rem; color:#9a927f; }
     .ph-stage { position:relative; height:clamp(440px,72vh,680px); }
     .ph-card {
       position:absolute; left:50%; top:50%; z-index:3; width:clamp(210px,20vw,310px); height:auto;
@@ -805,45 +825,7 @@
     .sp-use { position:absolute; left:0; right:0; bottom:0; padding:0 clamp(0.9rem,1.6vw,1.6rem) 3.7rem; font-family:'Space Grotesk',sans-serif; }
     .sp-use small { display:block; font-size:0.58rem; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent-red); margin-bottom:0.35rem; }
     .sp-use b { display:block; font-weight:700; text-transform:uppercase; font-size:clamp(1.3rem,2.1vw,2.3rem); line-height:0.95; color:#f4efe6; text-shadow:0 4px 24px rgba(0,0,0,0.8); }
-    .sp-use em { display:block; margin-top:0.45rem; font-style:normal; font-size:0.56rem; font-weight:700; letter-spacing:0.2em; color:#9a927f; }
-
-    /* ===== ATTO II · DENTRO UN FRAMMENTO: indice a sinistra, immagine vera a destra, mai una sopra l'altra ===== */
-    .p-inside { padding:0; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); grid-template-rows:minmax(0,1fr); align-items:stretch; justify-content:stretch; text-align:left; background:#050506; }
-    .in-text { display:flex; flex-direction:column; justify-content:center; min-width:0; padding:clamp(5.4rem,11vh,6.6rem) clamp(1.5rem,4vw,4rem) clamp(2.8rem,6vh,3.8rem) clamp(1.2rem,5vw,4.5rem); }
-    .in-list { list-style:none; margin:0 0 clamp(1.2rem,3vh,1.8rem); padding:0; border-top:1px solid rgba(255,255,255,0.09); }
-    .in-item { position:relative; border-bottom:1px solid rgba(255,255,255,0.09); }
-    .in-btn { display:flex; align-items:baseline; gap:1rem; width:100%; padding:clamp(0.7rem,1.7vh,1rem) 0; background:none; border:0; cursor:pointer; text-align:left; color:#8f877a; transition:color 0.35s ease; }
-    .in-btn b { font-family:'Space Grotesk',sans-serif; font-size:0.62rem; font-weight:700; letter-spacing:0.2em; color:#6b6456; transition:color 0.35s ease; }
-    .in-btn span { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(1.45rem,2.2vw,2.1rem); line-height:1.05; }
-    .in-btn:hover { color:#e9dfca; }
-    .in-item.on .in-btn { color:#fff; }
-    .in-item.on .in-btn b { color:var(--accent-red); }
-    .in-body { display:grid; grid-template-rows:0fr; transition:grid-template-rows 0.6s cubic-bezier(0.16,1,0.3,1); }
-    .in-item.on .in-body { grid-template-rows:1fr; }
-    .in-body > div { overflow:hidden; min-height:0; }
-    .in-body h3 { font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; font-size:clamp(1.25rem,1.7vw,1.6rem); line-height:1.2; color:#e9dfca; margin:0 0 0.6rem; }
-    .in-body p { font-family:'Cormorant Garamond',serif; font-size:clamp(1.05rem,1.25vw,1.22rem); line-height:1.5; color:#cfc6b4; max-width:48ch; margin:0 0 0.9rem; }
-    .in-body p.in-tags { margin:0 0 0.8rem; max-width:none; font-family:'Space Grotesk',sans-serif; font-size:0.58rem; font-weight:700; letter-spacing:0.22em; line-height:1.7; color:#e6decd; }
-    .in-body .in-code { font-family:'Space Grotesk',sans-serif; font-size:0.68rem; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent-cyan); margin:0 0 1.1rem; }
-    .in-code small { display:block; margin-top:0.3rem; font-size:0.54rem; letter-spacing:0.22em; color:#8f877a; }
-    .in-line { position:absolute; left:0; bottom:-1px; height:1px; width:0; background:var(--accent-red); }
-    .in-item.on.auto .in-line { animation:inLine var(--in-ms,9000ms) linear forwards; }
-    @keyframes inLine { to { width:100%; } }
-    .in-media { position:relative; overflow:hidden; background:#060607; border-left:1px solid rgba(255,255,255,0.06); }
-    .in-shot { position:absolute; inset:0; opacity:0; transform:scale(1.04); transition:opacity 0.9s ease, transform 1.4s cubic-bezier(0.16,1,0.3,1); }
-    .in-shot.on { opacity:1; transform:scale(1); }
-    img.in-shot { width:100%; height:100%; object-fit:cover; }
-    img.in-shot.tongue { object-position:center 80%; }
-    img.in-shot.myth { object-position:center 20%; }
-    /* "cosa ricevi": l'immagine e la carta 3D del #221, le cose vere */
-    .in-arch { display:flex; align-items:center; justify-content:center; gap:clamp(1rem,2.6vw,2.6rem); padding:5rem 1.5rem 2.5rem;
-      background:radial-gradient(ellipse 60% 55% at 50% 50%, rgba(227,11,23,0.15), transparent 70%), radial-gradient(ellipse 40% 40% at 72% 62%, rgba(0,229,255,0.08), transparent 70%), #060607; }
-    .in-arch figure { margin:0; display:flex; flex-direction:column; align-items:center; gap:0.9rem; min-width:0; }
-    .in-arch img { display:block; height:clamp(240px,52vh,480px); width:auto; max-width:100%; }
-    .in-arch .art img { border-radius:12px; transform:rotate(-4deg); box-shadow:0 50px 90px -40px rgba(0,0,0,0.95), 0 0 0 1px rgba(255,255,255,0.12); }
-    .in-arch .card img { transform:rotate(3deg); filter:drop-shadow(0 30px 40px rgba(0,0,0,0.85)) drop-shadow(0 0 30px rgba(0,229,255,0.18)); }
-    .in-arch figcaption { font-family:'Space Grotesk',sans-serif; font-size:0.58rem; font-weight:700; letter-spacing:0.24em; text-transform:uppercase; color:#d9d1c1; white-space:nowrap; }
-    .in-arch figcaption b { color:var(--accent-red); }
+    .sp-use em { display:block; margin-top:0.45rem; font-style:normal; font-size:0.74rem; font-weight:500; letter-spacing:0.02em; color:#cfc6b4; }
 
     @media(max-width:900px){
       .p-spark { height:100vh; height:100svh; overflow-y:auto; padding-bottom:2.9rem; }
@@ -861,12 +843,95 @@
       .sp-use small { margin-bottom:0.2rem; font-size:0.5rem; }
       .sp-use b { font-size:clamp(1.15rem,5.4vw,1.5rem); }
       .sp-use em { margin-top:0.25rem; }
-      .p-inside { grid-template-columns:minmax(0,1fr); grid-template-rows:auto auto; align-content:start; height:100vh; height:100svh; overflow-y:auto; }
-      .in-media { order:-1; height:40vh; min-height:260px; border-left:none; border-bottom:1px solid rgba(255,255,255,0.06); }
-      .in-arch { padding:4rem 1rem 1.2rem; }
-      .in-arch img { height:min(26vh,210px); }
-      .in-text { justify-content:flex-start; padding:1.2rem 1.2rem 4.4rem; }
-      .in-btn span { font-size:1.45rem; }
+    }
+
+    /* ===== WHAT YOU RECEIVE: colonne a tutta altezza come il trittico della home, file veri del #017 ===== */
+    .p-vault, .p-inside { padding:0; display:grid; grid-template-columns:minmax(0,1fr); grid-template-rows:auto minmax(0,1fr) auto; align-items:stretch; justify-content:stretch; background:#050506; isolation:isolate; }
+    .vk-head { text-align:center; padding:clamp(4.8rem,9.5vh,6rem) 1.2rem clamp(0.8rem,2vh,1.2rem); }
+    .vk-head .ph-kicker { justify-content:center; margin-bottom:0.5rem; }
+    .vk-title { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(2.1rem,3.4vw,3.4rem); line-height:0.95; color:#fff; margin:0; font-variant-numeric:lining-nums; }
+    .vk-title i { font-weight:500; color:#d9b45c; }
+    .vk-cols { display:flex; min-height:0; border-top:1px solid rgba(255,255,255,0.08); border-bottom:1px solid rgba(255,255,255,0.08); }
+    .vk-col { position:relative; flex:1 1 0; min-width:0; overflow:hidden; isolation:isolate; border-right:1px solid rgba(255,255,255,0.07); transition:flex-grow 0.9s cubic-bezier(0.16,1,0.3,1); }
+    .vk-col:last-child { border-right:none; }
+    .vk-col.card { flex-grow:1.25; }
+    .vk-cols:hover .vk-col { flex-grow:0.9; }
+    .vk-cols .vk-col:hover { flex-grow:1.45; }
+    .vk-col::after { content:""; position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(to top, rgba(5,5,6,0.97) 0%, rgba(5,5,6,0.7) 22%, rgba(5,5,6,0) 46%); }
+    .vk-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(0.85); transform:scale(1.03); transition:transform 1.4s cubic-bezier(0.16,1,0.3,1), filter 0.8s ease; }
+    .vk-col:hover .vk-bg { transform:scale(1); filter:brightness(1); }
+    .vk-stage { position:absolute; inset:0; display:flex; align-items:flex-start; justify-content:center; padding-top:4%;
+      background:radial-gradient(ellipse 60% 50% at 50% 40%, rgba(0,229,255,0.16), rgba(217,180,92,0.06) 45%, transparent 72%), #060607; }
+    .vk-card { height:66%; width:auto; filter:drop-shadow(0 34px 44px rgba(0,0,0,0.85)) drop-shadow(0 0 40px rgba(0,229,255,0.25)); animation:vkFloat 7s ease-in-out infinite alternate; }
+    @keyframes vkFloat { from { transform:rotate(-3deg) translateY(0); } to { transform:rotate(-1.5deg) translateY(-12px); } }
+    .vk-photos { position:absolute; inset:0; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:repeat(3, 1fr); gap:2px; background:#050506; }
+    .vk-photos img { width:100%; height:100%; object-fit:cover; object-position:center 30%; display:block; filter:brightness(0.9); }
+    .vk-txt { position:absolute; left:0; right:0; bottom:0; z-index:2; padding:0 clamp(0.9rem,1.4vw,1.4rem) clamp(1rem,2.4vh,1.5rem); font-family:'Space Grotesk',sans-serif; text-align:left; }
+    .vk-who { display:block; font-size:0.56rem; font-weight:700; letter-spacing:0.24em; text-transform:uppercase; color:#9a927f; margin-bottom:0.35rem; }
+    .vk-col.gold .vk-who { color:#e8cf8a; }
+    .vk-col.card .vk-who { color:var(--accent-cyan); }
+    .vk-name { display:block; font-size:clamp(1.05rem,1.55vw,1.6rem); font-weight:700; text-transform:uppercase; line-height:1; letter-spacing:0.01em; color:#f4efe6; margin-bottom:0.35rem; text-shadow:0 4px 24px rgba(0,0,0,0.85); }
+    .vk-det { display:block; font-size:0.7rem; line-height:1.4; color:#bdb5a3; }
+    .vk-foot { display:flex; flex-wrap:wrap; justify-content:center; gap:0.4rem 2rem; margin:0; padding:clamp(0.8rem,2vh,1.1rem) 1.2rem clamp(3.4rem,7vh,4.2rem); font-family:'Space Grotesk',sans-serif; font-size:0.66rem; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:#cfc6b4; }
+    .vk-foot b { color:#fff; } .vk-foot .c { color:var(--accent-cyan); }
+    .vk-who.cyan { color:var(--accent-cyan); }
+    .ia-cols .vk-det { max-width:46ch; font-size:0.86rem; line-height:1.55; color:#d6cdbb; }
+    .ia-cols .vk-name { font-size:clamp(1.4rem,2.2vw,2.2rem); }
+    .ia-cols .vk-txt { padding:0 clamp(1.2rem,3vw,3rem) clamp(1.4rem,3vh,2.2rem); }
+    .p-inside .vk-foot { padding-top:clamp(0.9rem,2vh,1.2rem); }
+    @media(max-width:900px){
+      .p-vault, .p-inside { overflow-y:auto; grid-template-rows:auto auto auto; }
+      .vk-cols { flex-direction:column; min-height:auto; }
+      .vk-col { min-height:150px; border-right:none; border-top:1px solid rgba(255,255,255,0.07); }
+      .vk-col.card { min-height:230px; }
+      .vk-cols:hover .vk-col, .vk-cols .vk-col:hover { flex-grow:1; }
+      .vk-col::after { background:linear-gradient(90deg, rgba(5,5,6,0.96) 0%, rgba(5,5,6,0.8) 45%, rgba(5,5,6,0.15) 100%); }
+      .vk-bg, .vk-photos, .vk-stage { left:38%; }
+      .vk-stage { align-items:center; padding-top:0; }
+      .vk-card { height:84%; }
+      .vk-txt { top:0; right:auto; width:58%; display:flex; flex-direction:column; justify-content:center; padding:0 0 0 1.1rem; }
+      .vk-name { font-size:1.15rem; }
+      .vk-foot { flex-direction:column; align-items:center; text-align:center; padding-bottom:4rem; }
+      .ia-cols .vk-col { min-height:310px; }
+      .ia-cols .vk-txt { width:66%; }
+      .ia-cols .vk-det { font-size:0.78rem; line-height:1.5; }
+      .ia-cols .vk-name { font-size:1.25rem; }
+    }
+
+    /* ===== WHAT YOU RECEIVE: ogni file vero del caveau del #017, uno per uno ===== */
+    .vg { display:flex; flex-direction:column; justify-content:center; gap:clamp(0.9rem,2.4vh,1.6rem); width:100%; max-width:1500px; margin:0 auto; padding:0 clamp(1rem,3vw,3rem); min-height:0; }
+    .vg-k { margin:0 0 0.6rem; font-family:'Space Grotesk',sans-serif; font-size:0.6rem; font-weight:700; letter-spacing:0.26em; text-transform:uppercase; color:#8f877a; text-align:left; }
+    .vg-k.gold { color:#e8cf8a; }
+    .vg-k b { color:#fff; letter-spacing:0.06em; margin:0 0.5rem; }
+    .vg-k span { color:#9a927f; letter-spacing:0.14em; }
+    .vg-row1 { display:grid; grid-template-columns:repeat(5, minmax(0,1fr)) minmax(0,1.6fr); gap:clamp(0.6rem,1vw,1rem); }
+    .vg-t { margin:0; min-width:0; }
+    .vg-i { height:clamp(150px,27vh,280px); border-radius:10px; overflow:hidden; display:flex; align-items:center; justify-content:center;
+      background:radial-gradient(ellipse at 50% 40%, rgba(255,255,255,0.06), rgba(255,255,255,0.015) 70%); box-shadow:0 0 0 1px rgba(255,255,255,0.08); }
+    .vg-i img { width:100%; height:100%; display:block; transition:transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+    .vg-t:hover .vg-i img { transform:scale(1.04); }
+    .vg-t.glow .vg-i { background:radial-gradient(ellipse at 50% 45%, rgba(0,229,255,0.2), rgba(0,229,255,0.03) 70%); }
+    .vg-t.glow .vg-i img, .vg-t:nth-child(2) .vg-i img { width:auto; height:90%; filter:drop-shadow(0 14px 22px rgba(0,0,0,0.8)); }
+    .vg-t figcaption { display:flex; flex-direction:column; gap:0.15rem; padding-top:0.55rem; text-align:left; font-family:'Space Grotesk',sans-serif; }
+    .vg-t figcaption b { font-size:0.78rem; font-weight:700; color:#f3eadb; letter-spacing:0.02em; }
+    .vg-t figcaption span { font-size:0.62rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:#8f877a; }
+    .vg-row2 { display:grid; grid-template-columns:repeat(10, minmax(0,1fr)) minmax(0,1.5fr); gap:clamp(0.35rem,0.6vw,0.6rem); align-items:end; }
+    .vg-p { margin:0; min-width:0; }
+    .vg-p img { display:block; width:100%; height:clamp(90px,17vh,170px); object-fit:cover; object-position:center 25%; border-radius:7px; box-shadow:0 0 0 1px rgba(217,180,92,0.3); }
+    .vg-p.board img { object-fit:cover; object-position:center top; }
+    .vg-p figcaption { padding-top:0.4rem; font-family:'Space Grotesk',sans-serif; font-size:0.56rem; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:#cfc6b4; text-align:left; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    @media (max-height:820px) and (min-width:901px) {
+      .vg-i { height:24vh; } .vg-p img { height:14vh; }
+      .vg { gap:0.7rem; } .p-vault .vk-head { padding-top:4.6rem; padding-bottom:0.5rem; }
+    }
+    @media(max-width:900px){
+      .vg { padding:0 1rem; min-height:auto; }
+      .vg-row1 { grid-template-columns:repeat(2, minmax(0,1fr)); }
+      .vg-i { height:clamp(150px,24vh,200px); }
+      .vg-row2 { grid-template-columns:repeat(4, minmax(0,1fr)); }
+      .vg-p.board { grid-column:span 2; }
+      .vg-p img { height:clamp(100px,18vh,140px); }
+      .vg-k span { display:block; margin-top:0.3rem; }
     }
   </style>
 </head>
@@ -907,7 +972,11 @@
             <button type="button" class="ph-btn" id="ph-receive">What you receive <span aria-hidden="true">&rarr;</span></button>
           </div>
           <div class="ph-facts reveal"><span><b>400</b>fragments</span><span><b>1</b>commercial license each</span><span><b>ETH</b>on-chain</span></div>
-          <p class="ph-pack reveal"><span class="ph-pack-k">Photo pack already in the vault</span><span class="ph-pack-n">#001–#020 &amp; #329</span></p>
+          <div class="ph-refs reveal">
+            <p class="ph-refs-k">References in the vault</p>
+            <div class="ph-refs-r full"><b>#001–#020 &amp; #329</b><span class="tag">Full pack</span><em>separate photos of every view</em></div>
+            <div class="ph-refs-r"><b>Other fragments</b><span class="tag">Reference sheet</span><em>full pack in progress</em></div>
+          </div>
         </div>
         <div class="ph-stage reveal" aria-hidden="true">
           <img class="ph-frag f1" src="assets/nft/263.jpg" alt="" width="423" height="600">
@@ -933,7 +1002,7 @@
       </div>
     </section>
 
-    <!-- 3 &middot; ATTO I: la scintilla. Cinque volti veri della collezione -->
+    <!-- 3 &middot; ATTO I: cosa puo' diventare un personaggio, con esempi VERI fatti da Nyfurion -->
     <section class="panel p-spark" data-i="2">
       <div class="sp-head">
         <div>
@@ -941,69 +1010,77 @@
           <h2 class="sp-title reveal">A face people can <i>remember.</i></h2>
         </div>
         <div class="reveal">
-          <p class="sp-lead">You are not buying a file. You are claiming a character with a look, a name, a story, and the right to build something around it.</p>
+          <p class="sp-lead">With the commercial license your fragment is a character you can build on. These are real things Nyfurion has already made from its own characters.</p>
           <p class="sp-tags"><span>Commercial license</span><span>Usable character IP</span><span>Business seed</span></p>
         </div>
       </div>
       <div class="sp-cols">
-        <div class="sp-col" style="--img:url('assets/nft/1.jpg'); --pos:16%"><span class="sp-bg"></span><span class="sp-use"><small>Your</small><b>Mascot</b><em>#001</em></span></div>
-        <div class="sp-col" style="--img:url('assets/nft/329.jpg'); --pos:14%"><span class="sp-bg"></span><span class="sp-use"><small>Your</small><b>Drop</b><em>#329</em></span></div>
-        <div class="sp-col" style="--img:url('assets/nft/250.jpg'); --pos:14%"><span class="sp-bg"></span><span class="sp-use"><small>Your</small><b>Content</b><em>#250</em></span></div>
-        <div class="sp-col" style="--img:url('assets/nft/99.jpg'); --pos:16%"><span class="sp-bg"></span><span class="sp-use"><small>Your</small><b>Product</b><em>#099</em></span></div>
-        <div class="sp-col" style="--img:url('assets/nft/188.jpg'); --pos:15%"><span class="sp-bg"></span><span class="sp-use"><small>Your</small><b>Signature</b><em>#188</em></span></div>
+        <div class="sp-col" style="--img:url('assets/home/play-wall.jpg'); --pos:50%"><span class="sp-bg"></span><span class="sp-use"><small>Already made</small><b>Playing cards</b><em>a real card game, Nyfurion Clash</em></span></div>
+        <div class="sp-col" style="--img:url('assets/clash/pack-YBOP.webp'); --pos:30%"><span class="sp-bg"></span><span class="sp-use"><small>Already made</small><b>Booster packs</b><em>your own drop, your own edition</em></span></div>
+        <div class="sp-col" style="--img:url('book1-cover.png'); --pos:40%"><span class="sp-bg"></span><span class="sp-use"><small>Already made</small><b>A book</b><em>covers and stories</em></span></div>
+        <div class="sp-col" style="--img:url('assets/app/intime-cards.jpg'); --pos:15%"><span class="sp-bg"></span><span class="sp-use"><small>Already made</small><b>An app</b><em>a product people use every day</em></span></div>
       </div>
     </section>
 
-    <!-- 4 &middot; ATTO II: dentro un frammento (cosa ricevi, la lingua nascosta, il mito vivo) -->
+    <!-- 4 &middot; ATTO II: il mondo dentro un frammento, a colonne come il trittico -->
     <section class="panel p-inside" data-i="3">
-      <div class="in-text">
-        <p class="ph-kicker reveal">Act II &middot; Inside a Fragment</p>
-        <ol class="in-list reveal" id="in-list">
-          <li class="in-item on" data-k="0">
-            <button type="button" class="in-btn" aria-expanded="true"><b>01</b><span>What you receive</span></button>
-            <div class="in-body"><div>
-              <h3>A fragment comes with its own archive.</h3>
-              <p>The image, the character sheet, the 3D card ready to print and the commercial license. The photo pack is already in the vault of #001–#020 and #329.</p>
-              <p class="in-tags"><span>Image</span><span>Character sheet</span><span>3D card to print</span><span>Commercial license</span></p>
-              <p class="in-code">NYF &middot; AURION VEL KAIRA<small>Hidden language &middot; coded messages &middot; symbols inside the saga</small></p>
-            </div></div>
-            <span class="in-line"></span>
-          </li>
-          <li class="in-item" data-k="1">
-            <button type="button" class="in-btn" aria-expanded="false"><b>02</b><span>The hidden tongue</span></button>
-            <div class="in-body"><div>
-              <h3>The world speaks in its own language.</h3>
-              <p>Across the series, Nyfurion carries symbols, coded phrases and encrypted messages. Holding a fragment means following the clues as the mythology opens.</p>
-              <p class="in-tags"><span>Nyfurion language</span><span>Encrypted messages</span><span>Hidden symbols</span></p>
-              <p class="in-code">KAEL &middot; VORUN &middot; NYFAR<small>A coded tongue woven through the saga</small></p>
-            </div></div>
-            <span class="in-line"></span>
-          </li>
-          <li class="in-item" data-k="2">
-            <button type="button" class="in-btn" aria-expanded="false"><b>03</b><span>The living myth</span></button>
-            <div class="in-body"><div>
-              <h3>Every reveal can become part of your story.</h3>
-              <p>Characters, signs, drops and future choices create a world that keeps moving. Your fragment gives you a place inside that movement.</p>
-              <p class="in-tags"><span>Evolving lore</span><span>Holder identity</span><span>Future reveals</span></p>
-              <p class="in-code">SYN VARA &middot; ETH NYFURION<small>A living realm for builders and believers</small></p>
-            </div></div>
-            <span class="in-line"></span>
-          </li>
-        </ol>
-        <div class="ph-actions reveal"><a class="ph-btn" href="journey.html">Journey &mdash; see the details <span aria-hidden="true">&rarr;</span></a></div>
+      <div class="vk-head">
+        <p class="ph-kicker reveal">Act II &middot; Inside a fragment</p>
+        <h2 class="vk-title reveal">A world that <i>speaks.</i></h2>
       </div>
-      <div class="in-media" aria-hidden="true">
-        <div class="in-shot in-arch on">
-          <figure class="art"><img src="assets/nft/221.jpg" alt="" width="423" height="600"><figcaption><b>#221</b> &middot; the image</figcaption></figure>
-          <figure class="card"><img src="assets/nft/hero-card-221.webp" alt="" width="707" height="1137"><figcaption>3D card to print</figcaption></figure>
+      <div class="vk-cols ia-cols">
+        <div class="vk-col">
+          <img class="vk-bg" src="assets/nft/nft-act1-loop-1.png" alt="" loading="lazy" style="object-position:center 82%">
+          <div class="vk-txt"><span class="vk-who cyan">KAEL &middot; VORUN &middot; NYFAR</span><b class="vk-name">The hidden tongue</b><span class="vk-det">Across the series, Nyfurion carries symbols, coded phrases and encrypted messages. Holding a fragment means following the clues as the mythology opens.</span></div>
         </div>
-        <img class="in-shot tongue" src="assets/nft/nft-act1-loop-1.png" alt="" loading="lazy">
-        <img class="in-shot myth" src="assets/characters/portraits/story-2.png" alt="" loading="lazy">
+        <div class="vk-col">
+          <img class="vk-bg" src="assets/characters/portraits/story-2.png" alt="" loading="lazy" style="object-position:center 22%">
+          <div class="vk-txt"><span class="vk-who cyan">SYN VARA &middot; ETH NYFURION</span><b class="vk-name">The living myth</b><span class="vk-det">Characters, signs, drops and future choices create a world that keeps moving. Your fragment gives you a place inside that movement.</span></div>
+        </div>
       </div>
+      <p class="vk-foot reveal"><a class="ph-btn" href="journey.html">Journey &mdash; see the details <span aria-hidden="true">&rarr;</span></a></p>
+    </section>
+
+    <!-- 4b &middot; IL CAVEAU DEL #017: cosa ricevi davvero, con i file veri -->
+    <section class="panel p-vault" data-i="4">
+      <div class="vk-head">
+        <p class="ph-kicker reveal">Real files &middot; the vault of #017</p>
+        <h2 class="vk-title reveal">What you <i>receive.</i></h2>
+      </div>
+      <div class="vg reveal">
+        <div class="vg-sec">
+          <p class="vg-k">In the vault of every fragment</p>
+          <div class="vg-row1">
+            <figure class="vg-t glow"><div class="vg-i"><img src="assets/nft/vault-017/card-3d.webp" alt="" loading="lazy" style="object-fit:contain"></div><figcaption><b>3D card</b><span>GLB &middot; view in AR</span></figcaption></figure>
+            <figure class="vg-t "><div class="vg-i"><img src="assets/nft/vault-017/card-stl.webp" alt="" loading="lazy" style="object-fit:contain"></div><figcaption><b>3D card to print</b><span>STL &middot; 3D printer</span></figcaption></figure>
+            <figure class="vg-t "><div class="vg-i"><img src="assets/nft/vault-017/artwork.jpg" alt="" loading="lazy" style="object-fit:cover"></div><figcaption><b>Official artwork</b><span>PNG</span></figcaption></figure>
+            <figure class="vg-t "><div class="vg-i"><img src="assets/nft/vault-017/sheet.jpg" alt="" loading="lazy" style="object-fit:cover"></div><figcaption><b>Character sheet</b><span>PNG &middot; 379 / 400</span></figcaption></figure>
+            <figure class="vg-t "><div class="vg-i"><img src="assets/nft/vault-017/license.jpg" alt="" loading="lazy" style="object-fit:cover"></div><figcaption><b>Commercial license</b><span>PDF &middot; 6 pages</span></figcaption></figure>
+            <figure class="vg-t wide"><div class="vg-i"><img src="assets/nft/vault-017/villa.jpg" alt="" loading="lazy" style="object-fit:cover"></div><figcaption><b>Villa Prime</b><span>your private 3D room</span></figcaption></figure>
+          </div>
+        </div>
+        <div class="vg-sec">
+          <p class="vg-k gold">Full reference pack <b>#001–#020 &amp; #329</b> <span>10 separate photos + the complete board</span></p>
+          <div class="vg-row2">
+            <figure class="vg-p"><img src="assets/nft/vault-017/p-01-front.jpg" alt="" loading="lazy"><figcaption>Front</figcaption></figure>
+            <figure class="vg-p"><img src="assets/nft/vault-017/p-02-side.jpg" alt="" loading="lazy"><figcaption>Side</figcaption></figure>
+            <figure class="vg-p"><img src="assets/nft/vault-017/p-03-back.jpg" alt="" loading="lazy"><figcaption>Back</figcaption></figure>
+            <figure class="vg-p"><img src="assets/nft/vault-017/p-04-face.jpg" alt="" loading="lazy"><figcaption>Face</figcaption></figure>
+            <figure class="vg-p"><img src="assets/nft/vault-017/p-05-chest.jpg" alt="" loading="lazy"><figcaption>Chest</figcaption></figure>
+            <figure class="vg-p"><img src="assets/nft/vault-017/p-06-arm-tattoo.jpg" alt="" loading="lazy"><figcaption>Arm</figcaption></figure>
+            <figure class="vg-p"><img src="assets/nft/vault-017/p-07-waist.jpg" alt="" loading="lazy"><figcaption>Waist</figcaption></figure>
+            <figure class="vg-p"><img src="assets/nft/vault-017/p-08-hands.jpg" alt="" loading="lazy"><figcaption>Hands</figcaption></figure>
+            <figure class="vg-p"><img src="assets/nft/vault-017/p-09-foot.jpg" alt="" loading="lazy"><figcaption>Feet</figcaption></figure>
+            <figure class="vg-p"><img src="assets/nft/vault-017/p-10-tail.jpg" alt="" loading="lazy"><figcaption>Tail</figcaption></figure>
+            <figure class="vg-p board"><img src="assets/nft/vault-017/board.jpg" alt="" loading="lazy"><figcaption>Complete board</figcaption></figure>
+          </div>
+        </div>
+      </div>
+      <p class="vk-foot reveal"><span class="c">Textured 3D character: only 3 of 400, a rare special case</span></p>
     </section>
 
     <!-- 5 &middot; SOGLIA: Only 400 -->
-    <section class="panel p-claim2" data-i="4">
+    <section class="panel p-claim2" data-i="5">
       <div class="cl-in">
         <div class="cl-numbox reveal" aria-hidden="true">
           <span class="cl-only">Only</span>
@@ -1024,7 +1101,7 @@
     </section>
 
     <!-- 6 &middot; DOMANDE: un elenco che si apre -->
-    <section class="panel p-faq2" data-i="5">
+    <section class="panel p-faq2" data-i="6">
       <div class="fq-bg" aria-hidden="true"></div>
       <div class="fq-in">
         <div class="fq-side">
@@ -1045,7 +1122,7 @@
             </details>
             <details class="fq">
               <summary><span class="fq-n">03</span><span class="fq-q">What do I receive?</span><span class="fq-x" aria-hidden="true"></span></summary>
-              <div class="fq-a"><p>The image, the character sheet, the 3D card ready to print and the commercial license. The photo pack is already in the vault of #001–#020 and #329. <a href="journey.html">See the Journey</a></p></div>
+              <div class="fq-a"><p>The image, the character sheet, the 3D card ready to print and the commercial license. Every view of the character is in the sheet; separate photos (photo pack) are already in the vault of #001–#020 and #329. <a href="journey.html">See the Journey</a></p></div>
             </details>
             <details class="fq">
               <summary><span class="fq-n">04</span><span class="fq-q">How do I open the vault?</span><span class="fq-x" aria-hidden="true"></span></summary>
@@ -1064,7 +1141,7 @@
     </section>
 
     <!-- 7 &middot; CURRENT COLLABORATIONS (sponsor glass card) -->
-    <section class="panel p-finalcollab" data-i="6">
+    <section class="panel p-finalcollab" data-i="7">
       <div class="cc-stage" id="cc-stage"></div>
       <div class="cc-center">
         <div class="cc-photo" id="cc-photo"></div>
@@ -1108,31 +1185,6 @@
       wall.appendChild(col);
     });
 
-    // Act II: tre voci (cosa ricevi, la lingua nascosta, il mito vivo), ognuna con la sua immagine vera.
-    // Scorrono da sole solo finche' nessuno tocca; un tocco le ferma sulla voce scelta.
-    (function(){
-      const list = document.getElementById('in-list');
-      if(!list) return;
-      const panel = list.closest('.panel');
-      const items = Array.from(list.querySelectorAll('.in-item'));
-      const shots = Array.from(panel.querySelectorAll('.in-shot'));
-      const MS = 9000;
-      let cur = 0, manual = false;
-      list.style.setProperty('--in-ms', MS + 'ms');
-      function line(){
-        items.forEach((it)=>it.classList.remove('auto'));
-        if(!manual){ void list.offsetWidth; items[cur].classList.add('auto'); }
-      }
-      function set(i){
-        cur = (i + items.length) % items.length;
-        items.forEach((it, k)=>{ const on = k === cur; it.classList.toggle('on', on); it.querySelector('.in-btn').setAttribute('aria-expanded', on ? 'true' : 'false'); });
-        shots.forEach((sh, k)=>sh.classList.toggle('on', k === cur));
-        line();
-      }
-      items.forEach((it, k)=>it.querySelector('.in-btn').addEventListener('click', ()=>{ manual = true; set(k); }));
-      set(0);
-      setInterval(()=>{ if(manual) return; if(panel.classList.contains('active')) set(cur + 1); else line(); }, MS);
-    })();
 
     // ===== SPONSORS / COLLABORATIONS carousel (image left + text right) =====
     // EDIT here to add real sponsors: image, title, tag, description, link
@@ -1275,7 +1327,7 @@
         visti.forEach((n) => { const i = document.createElement('img'); i.src = 'assets/nft/' + n + '.jpg'; i.alt = ''; i.loading = 'lazy'; m.appendChild(i); });
       }
       const b = document.getElementById('ph-receive');
-      if (b) b.addEventListener('click', () => { if (typeof goTo === 'function') goTo(3); });
+      if (b) b.addEventListener('click', () => { if (typeof goTo === 'function') goTo(4); });
       /* Domande: se ne apre una alla volta. */
       const tutte = document.querySelectorAll('.fq');
       tutte.forEach((d) => d.addEventListener('toggle', () => { if (d.open) tutte.forEach((o) => { if (o !== d) o.open = false; }); }));
