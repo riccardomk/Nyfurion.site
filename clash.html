@@ -570,6 +570,26 @@
       </article>
     </div>
     <p class="quad-hint" data-i18n="quadHint">Swipe to see all four &rarr;</p>
+
+    <!-- Lo stesso gioco nel browser del computer: schermate vere della versione web -->
+    <style>
+      .su-web { margin-top: clamp(48px, 7vw, 96px); }
+      .su-web h3 { margin: 0 0 22px; font-size: clamp(24px, 3vw, 38px); font-weight: 700; letter-spacing: -.02em; }
+      .su-web-griglia { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 2vw, 28px); }
+      .su-web figure { margin: 0; }
+      .su-web img { display: block; width: 100%; height: auto; border-radius: 6px; }
+      .su-web figcaption { margin-top: 10px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; opacity: .65; }
+      @media (max-width: 720px) { .su-web-griglia { grid-template-columns: 1fr; } }
+    </style>
+    <div class="su-web">
+      <h3>On a computer: the same game, with more room.</h3>
+      <div class="su-web-griglia">
+        <figure><img src="assets/clash/web-gioca.jpg" alt="Nyfurion Clash on the web: the Play screen" loading="lazy" width="1600" height="900"><figcaption>Play</figcaption></figure>
+        <figure><img src="assets/clash/web-tavolo.jpg" alt="Nyfurion Clash on the web: the game board" loading="lazy" width="1600" height="900"><figcaption>The board</figcaption></figure>
+        <figure><img src="assets/clash/web-mazzo.jpg" alt="Nyfurion Clash on the web: deck and cards side by side" loading="lazy" width="1600" height="900"><figcaption>Your deck</figcaption></figure>
+        <figure><img src="assets/clash/web-bustine.jpg" alt="Nyfurion Clash on the web: the packs" loading="lazy" width="1600" height="900"><figcaption>Packs</figcaption></figure>
+      </div>
+    </div>
   </section>
 
   <!-- 5. I PREMI -->
