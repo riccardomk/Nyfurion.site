@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "updatedAt": "2026-11-27T10:11:56Z",
+  "updatedAt": "2026-11-27T10:43:56Z",
   "notice": null,
   "game": {
     "kicker": {
@@ -263,7 +263,7 @@
     {
       "id": "nyfurion-clash-1-12-novembre-2026",
       "image": "https://nyfurion.com/clash-icona.png?v=2",
-      "date": "2026-11-27T10:11:56Z",
+      "date": "2026-11-27T10:43:56Z",
       "category": "gioco",
       "tag": {
         "en": "Update",
@@ -272,16 +272,21 @@
       },
       "pinned": true,
       "title": {
-        "en": "Nyfurion Clash 1.12 is out",
-        "it": "Nyfurion Clash 1.12 è online",
-        "de": "Nyfurion Clash 1.12 ist da"
+        "en": "Nyfurion Clash 1.12.2 is out",
+        "it": "Nyfurion Clash 1.12.2 è online",
+        "de": "Nyfurion Clash 1.12.2 ist da"
       },
       "summary": {
-        "en": "The Gold pack, quick opening, players online on the radar and the Kingdom's new logo.",
-        "it": "La Bustina d'Oro, l'apertura veloce, i giocatori online sul radar e il nuovo logo del Regno.",
-        "de": "Das Gold-Päckchen, schnelles Öffnen, Spieler online auf dem Radar und das neue Logo des Reichs."
+        "en": "Google sign-in fixed on every Android phone, the Gold pack, quick opening, players online on the radar and the new logo.",
+        "it": "Accesso con Google sistemato su tutti i telefoni Android, la Bustina d'Oro, l'apertura veloce, i giocatori online sul radar e il nuovo logo.",
+        "de": "Google-Anmeldung auf jedem Android-Handy repariert, das Gold-Päckchen, schnelles Öffnen, Spieler online auf dem Radar und das neue Logo."
       },
       "body": [
+        {
+          "en": "Signing in with Google now works on every Android phone, including those where the system account picker would not open.",
+          "it": "L'accesso con Google ora funziona su tutti i telefoni Android, anche su quelli dove la finestra di sistema per scegliere l'account non si apriva.",
+          "de": "Die Anmeldung mit Google funktioniert jetzt auf jedem Android-Handy, auch dort, wo sich die Kontoauswahl des Systems nicht öffnete."
+        },
         {
           "en": "The Gold pack has arrived: it draws from all four houses, and MT 10 cards come out five times more often.",
           "it": "Arriva la Bustina d'Oro: pesca da tutti e quattro i casati e le carte MT 10 escono cinque volte più spesso.",
