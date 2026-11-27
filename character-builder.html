@@ -6,23 +6,23 @@
   <title>Nyfurion Lounge Builder</title>
   <style>
     :root {
-      --bg: #07090d;
-      --panel: rgba(17, 20, 28, 0.82);
-      --panel-strong: rgba(15, 18, 25, 0.92);
-      --line: rgba(255,255,255,0.08);
-      --text: #f5f7fb;
-      --muted: #9ba5b7;
-      --accent: #8266ff;
-      --accent-2: #34c8ff;
+      --bg: #232427;
+      --panel: rgba(35, 36, 39, 0.82);
+      --panel-strong: rgba(35, 36, 39, 0.92);
+      --line: rgba(237, 237, 237, 0.08);
+      --text: #EDEDED;
+      --muted: #A9A9AA;
+      --accent: #3D2470;
+      --accent-2: #006D7B;
       --shadow: 0 18px 50px rgba(0,0,0,0.35);
       --radius: 24px;
       --scene-top: #1d2b50;
-      --scene-bottom: #0d1119;
+      --scene-bottom: #232427;
       --ambient: rgba(135, 166, 255, 0.22);
       --window-glow: rgba(165, 196, 255, 0.3);
       --floor-reflection: rgba(132, 170, 255, 0.08);
-      --lamp: rgba(255, 219, 164, 0.18);
-      --character-glow: rgba(130, 102, 255, 0.3);
+      --lamp: rgba(227, 207, 166, 0.18);
+      --character-glow: rgba(61, 36, 112, 0.3);
       --cam-x: -10deg;
       --cam-y: 0deg;
       --cam-z: 0px;
@@ -32,12 +32,12 @@
     html, body { height: 100%; }
     body {
       margin: 0;
-      font-family: Inter, Arial, sans-serif;
+      font-family: 'Satoshi', sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(130,102,255,0.18), transparent 24%),
-        radial-gradient(circle at top right, rgba(52,200,255,0.12), transparent 22%),
-        linear-gradient(180deg, #080a0f, #05070b 60%);
+        radial-gradient(circle at top left, rgba(61, 36, 112, 0.18), transparent 24%),
+        radial-gradient(circle at top right, rgba(0, 109, 123, 0.12), transparent 22%),
+        linear-gradient(180deg, #232427, #232427 60%);
       overflow: hidden;
     }
 
@@ -56,7 +56,7 @@
       align-items: center;
       padding: 16px 20px;
       border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      background: linear-gradient(180deg, rgba(237, 237, 237, 0.04), rgba(237, 237, 237, 0.02));
       border-radius: 24px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(18px);
@@ -87,7 +87,7 @@
     .option-btn,
     .save-btn {
       border: 1px solid var(--line);
-      background: rgba(255,255,255,0.04);
+      background: rgba(237, 237, 237, 0.04);
       color: var(--text);
       border-radius: 16px;
       padding: 11px 14px;
@@ -102,9 +102,9 @@
     .save-btn:hover,
     .pill.active,
     .option-btn.active {
-      border-color: rgba(130,102,255,0.5);
-      background: linear-gradient(180deg, rgba(130,102,255,0.18), rgba(52,200,255,0.1));
-      box-shadow: 0 0 0 1px rgba(130,102,255,0.18) inset, 0 12px 28px rgba(130,102,255,0.16);
+      border-color: rgba(61, 36, 112, 0.5);
+      background: linear-gradient(180deg, rgba(61, 36, 112, 0.18), rgba(0, 109, 123, 0.1));
+      box-shadow: 0 0 0 1px rgba(61, 36, 112, 0.18) inset, 0 12px 28px rgba(61, 36, 112, 0.16);
     }
 
     .main-layout {
@@ -130,7 +130,7 @@
     .panel {
       min-height: 0;
       border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(17,20,28,0.9), rgba(11,14,20,0.88));
+      background: linear-gradient(180deg, rgba(35, 36, 39, 0.9), rgba(35, 36, 39, 0.88));
       border-radius: 26px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(18px);
@@ -146,17 +146,17 @@
       width: 32px;
       height: 32px;
       border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.08);
-      color: #edf2ff;
+      border: 1px solid rgba(237, 237, 237, 0.1);
+      background: rgba(237, 237, 237, 0.08);
+      color: #EDEDED;
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
     }
 
     .panel-toggle:hover {
-      border-color: rgba(130,102,255,0.45);
-      box-shadow: 0 0 0 1px rgba(130,102,255,0.18) inset;
+      border-color: rgba(61, 36, 112, 0.45);
+      box-shadow: 0 0 0 1px rgba(61, 36, 112, 0.18) inset;
     }
 
     .panel-compact-label {
@@ -166,7 +166,7 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       font-size: 12px;
-      color: #e0e8fa;
+      color: #EDEDED;
       text-align: center;
       height: 100%;
       width: 100%;
@@ -196,15 +196,15 @@
       font-size: 13px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: #d5ddf1;
+      color: #EDEDED;
     }
 
     .group {
       margin-bottom: 18px;
       padding: 16px;
       border-radius: 20px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.05);
+      background: rgba(237, 237, 237, 0.03);
+      border: 1px solid rgba(237, 237, 237, 0.05);
     }
 
     .group h3 {
@@ -230,7 +230,7 @@
       overflow: hidden;
       border-radius: 30px;
       border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      background: linear-gradient(180deg, rgba(237, 237, 237, 0.04), rgba(237, 237, 237, 0.02));
       box-shadow: var(--shadow);
       min-height: 0;
       perspective: 1400px;
@@ -265,7 +265,7 @@
       right: 10%;
       top: -18%;
       height: 30%;
-      background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.02));
+      background: linear-gradient(180deg, rgba(237, 237, 237, 0.14), rgba(237, 237, 237, 0.02));
       transform: translateZ(-70px) rotateX(88deg);
       border-radius: 20px;
     }
@@ -274,7 +274,7 @@
       top: 8%;
       bottom: 22%;
       width: 16%;
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.01));
+      background: linear-gradient(180deg, rgba(237, 237, 237, 0.08), rgba(237, 237, 237, 0.01));
     }
 
     .room-side.left {
@@ -301,9 +301,9 @@
       position: absolute;
       inset: 0 0 28% 0;
       background:
-        linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015)),
-        repeating-linear-gradient(90deg, rgba(255,255,255,0.012) 0 2px, transparent 2px 150px);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+        linear-gradient(180deg, rgba(237, 237, 237, 0.03), rgba(237, 237, 237, 0.015)),
+        repeating-linear-gradient(90deg, rgba(237, 237, 237, 0.012) 0 2px, transparent 2px 150px);
+      border-bottom: 1px solid rgba(237, 237, 237, 0.05);
     }
 
     .ceiling-light {
@@ -314,7 +314,7 @@
       width: 420px;
       height: 210px;
       border-radius: 50%;
-      background: radial-gradient(circle at center, rgba(255,255,255,0.14), transparent 60%);
+      background: radial-gradient(circle at center, rgba(237, 237, 237, 0.14), transparent 60%);
       filter: blur(14px);
       opacity: 0.55;
       pointer-events: none;
@@ -326,9 +326,9 @@
       width: 220px;
       height: 240px;
       border-radius: 30px;
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(237, 237, 237, 0.08);
       background:
-        linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.03)),
+        linear-gradient(180deg, rgba(237, 237, 237, 0.1), rgba(237, 237, 237, 0.03)),
         radial-gradient(circle at center, var(--window-glow), transparent 70%);
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03), 0 18px 45px rgba(0,0,0,0.22);
       overflow: hidden;
@@ -342,7 +342,7 @@
     .window::after {
       content: "";
       position: absolute;
-      background: rgba(255,255,255,0.08);
+      background: rgba(237, 237, 237, 0.08);
     }
 
     .window::before {
@@ -365,7 +365,7 @@
       width: 220px;
       height: 12px;
       border-radius: 999px;
-      background: linear-gradient(180deg, rgba(88,56,32,0.9), rgba(50,28,15,0.95));
+      background: linear-gradient(180deg, rgba(201, 163, 101, 0.9), rgba(35, 36, 39, 0.95));
       box-shadow: 0 10px 30px rgba(0,0,0,0.24);
     }
 
@@ -383,8 +383,8 @@
       width: 32px;
       height: 54px;
       border-radius: 14px 14px 10px 10px;
-      background: linear-gradient(180deg, rgba(108,196,255,0.95), rgba(56,96,160,0.9));
-      box-shadow: 0 0 18px rgba(108,196,255,0.16);
+      background: linear-gradient(180deg, rgba(0, 109, 123, 0.95), rgba(56,96,160,0.9));
+      box-shadow: 0 0 18px rgba(0, 109, 123, 0.16);
     }
 
     .deco.small { width: 24px; height: 38px; }
@@ -397,7 +397,7 @@
       width: 74px;
       height: 118px;
       border-radius: 0 0 20px 20px;
-      background: linear-gradient(180deg, rgba(90,62,38,0.95), rgba(45,28,15,0.95));
+      background: linear-gradient(180deg, rgba(201, 163, 101, 0.95), rgba(35, 36, 39, 0.95));
     }
 
     .plant::before {
@@ -424,8 +424,8 @@
       bottom: 0;
       height: 32%;
       background:
-        linear-gradient(180deg, rgba(12,15,22,0), rgba(8,10,14,0.16)),
-        linear-gradient(180deg, rgba(80,52,30,0.95), rgba(28,18,12,0.98));
+        linear-gradient(180deg, rgba(35, 36, 39, 0), rgba(35, 36, 39, 0.16)),
+        linear-gradient(180deg, rgba(201, 163, 101, 0.95), rgba(35, 36, 39, 0.98));
     }
 
     .floor::before {
@@ -433,7 +433,7 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(90deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 140px),
+        linear-gradient(90deg, rgba(237, 237, 237, 0.03) 0 2px, transparent 2px 140px),
         linear-gradient(180deg, transparent, rgba(0,0,0,0.2));
       opacity: 0.4;
     }
@@ -447,10 +447,10 @@
       height: 148px;
       border-radius: 50%;
       background:
-        radial-gradient(circle at center, rgba(255,255,255,0.08), transparent 65%),
-        linear-gradient(180deg, rgba(46,52,80,0.95), rgba(18,20,30,0.98));
-      border: 1px solid rgba(255,255,255,0.06);
-      box-shadow: 0 24px 40px rgba(0,0,0,0.24), inset 0 0 38px rgba(130,102,255,0.08);
+        radial-gradient(circle at center, rgba(237, 237, 237, 0.08), transparent 65%),
+        linear-gradient(180deg, rgba(61, 36, 112, 0.95), rgba(35, 36, 39, 0.98));
+      border: 1px solid rgba(237, 237, 237, 0.06);
+      box-shadow: 0 24px 40px rgba(0,0,0,0.24), inset 0 0 38px rgba(61, 36, 112, 0.08);
     }
 
     .platform {
@@ -462,10 +462,10 @@
       height: 110px;
       border-radius: 50%;
       background:
-        radial-gradient(circle at 50% 38%, rgba(255,255,255,0.08), transparent 58%),
-        linear-gradient(180deg, rgba(58,66,96,0.95), rgba(18,20,30,0.98));
-      box-shadow: 0 18px 40px rgba(0,0,0,0.25), inset 0 0 40px rgba(130,102,255,0.12);
-      border: 1px solid rgba(255,255,255,0.08);
+        radial-gradient(circle at 50% 38%, rgba(237, 237, 237, 0.08), transparent 58%),
+        linear-gradient(180deg, rgba(61, 36, 112, 0.95), rgba(35, 36, 39, 0.98));
+      box-shadow: 0 18px 40px rgba(0,0,0,0.25), inset 0 0 40px rgba(61, 36, 112, 0.12);
+      border: 1px solid rgba(237, 237, 237, 0.08);
       z-index: 4;
     }
 
@@ -478,7 +478,7 @@
       width: 240px;
       height: 26px;
       border-radius: 999px;
-      background: radial-gradient(circle at center, rgba(255,255,255,0.12), transparent 70%);
+      background: radial-gradient(circle at center, rgba(237, 237, 237, 0.12), transparent 70%);
     }
 
     .character-anchor {
@@ -538,7 +538,7 @@
       width: 128px;
       height: 182px;
       border-radius: 42px 42px 24px 24px;
-      background: linear-gradient(180deg, #33415f, #181f31);
+      background: linear-gradient(180deg, #33415f, #242528);
     }
 
     .body {
@@ -547,7 +547,7 @@
       height: 244px;
       border-radius: 80px 80px 34px 34px;
       background: linear-gradient(180deg, #57688c, #28334f);
-      box-shadow: 0 0 34px rgba(130,102,255,0.12);
+      box-shadow: 0 0 34px rgba(61, 36, 112, 0.12);
     }
 
     .outfit {
@@ -555,8 +555,8 @@
       width: 250px;
       height: 254px;
       border-radius: 76px 76px 28px 28px;
-      background: linear-gradient(180deg, rgba(130,102,255,0.38), rgba(29,22,56,0.84));
-      border: 2px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(61, 36, 112, 0.38), rgba(22, 3, 51, 0.84));
+      border: 2px solid rgba(237, 237, 237, 0.08);
     }
 
     .shoulder.left,
@@ -565,8 +565,8 @@
       width: 72px;
       height: 72px;
       border-radius: 22px;
-      background: linear-gradient(180deg, rgba(130,102,255,0.72), rgba(28,21,56,0.95));
-      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(61, 36, 112, 0.72), rgba(22, 3, 51, 0.95));
+      border: 1px solid rgba(237, 237, 237, 0.08);
     }
 
     .shoulder.left { left: 18px; transform: none; }
@@ -578,7 +578,7 @@
       height: 184px;
       border-radius: 50% 50% 46% 46%;
       background: linear-gradient(180deg, #95a5d1, #627399);
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(237, 237, 237, 0.08);
       z-index: 3;
     }
 
@@ -597,7 +597,7 @@
       width: 78px;
       height: 86px;
       border-radius: 18px 18px 0 0;
-      background: linear-gradient(180deg, #8266ff, #3b2c8d);
+      background: linear-gradient(180deg, #3D2470, #3D2470);
     }
 
     .hair::before { left: 12px; transform: rotate(-18deg); }
@@ -617,7 +617,7 @@
       width: 26px;
       height: 12px;
       border-radius: 12px;
-      background: #9eb0ff;
+      background: #3D2470;
       box-shadow: 0 0 16px currentColor;
     }
 
@@ -625,7 +625,7 @@
       top: 164px;
       width: 44px;
       height: 12px;
-      border-bottom: 3px solid rgba(14,18,26,0.62);
+      border-bottom: 3px solid rgba(35, 36, 39, 0.62);
       border-radius: 0 0 18px 18px;
       z-index: 5;
     }
@@ -635,8 +635,8 @@
       width: 74px;
       height: 74px;
       border-radius: 20px;
-      background: linear-gradient(135deg, rgba(130,102,255,0.92), rgba(52,200,255,0.66));
-      border: 2px solid rgba(255,255,255,0.12);
+      background: linear-gradient(135deg, rgba(61, 36, 112, 0.92), rgba(0, 109, 123, 0.66));
+      border: 2px solid rgba(237, 237, 237, 0.12);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -671,8 +671,8 @@
     }
 
     .camera-btn {
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(10,13,19,0.66);
+      border: 1px solid rgba(237, 237, 237, 0.1);
+      background: rgba(35, 36, 39, 0.66);
       color: #dce7ff;
       border-radius: 12px;
       padding: 8px 10px;
@@ -682,25 +682,25 @@
     }
 
     .camera-btn:hover {
-      border-color: rgba(52,200,255,0.45);
+      border-color: rgba(0, 109, 123, 0.45);
     }
 
     .hud-box {
       pointer-events: auto;
       padding: 10px 14px;
       border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(12,15,20,0.5);
+      border: 1px solid rgba(237, 237, 237, 0.08);
+      background: rgba(35, 36, 39, 0.5);
       backdrop-filter: blur(16px);
-      color: #dce4f5;
+      color: #EDEDED;
       font-size: 13px;
     }
 
     .right-panel .summary-card {
       padding: 16px;
       border-radius: 20px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.05);
+      background: rgba(237, 237, 237, 0.03);
+      border: 1px solid rgba(237, 237, 237, 0.05);
       margin-bottom: 14px;
     }
 
@@ -720,13 +720,13 @@
       gap: 10px;
       padding: 12px 14px;
       border-radius: 14px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.05);
+      background: rgba(237, 237, 237, 0.03);
+      border: 1px solid rgba(237, 237, 237, 0.05);
       font-size: 14px;
     }
 
     .summary-item span:last-child {
-      color: #dfe7ff;
+      color: #8C7EA8;
       font-weight: 700;
       text-align: right;
     }
@@ -737,7 +737,7 @@
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
       color: white;
       border: none;
-      box-shadow: 0 16px 34px rgba(130,102,255,0.22);
+      box-shadow: 0 16px 34px rgba(61, 36, 112, 0.22);
       margin-top: 8px;
     }
 
@@ -758,8 +758,8 @@
     .stat {
       padding: 12px;
       border-radius: 14px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.05);
+      background: rgba(237, 237, 237, 0.03);
+      border: 1px solid rgba(237, 237, 237, 0.05);
     }
 
     .stat small {
@@ -778,28 +778,28 @@
     body.morning {
       --scene-top: #8ab8ff;
       --scene-bottom: #dce8ff;
-      --ambient: rgba(255, 238, 191, 0.22);
-      --window-glow: rgba(255, 248, 224, 0.42);
-      --floor-reflection: rgba(255,255,255,0.12);
-      --lamp: rgba(255, 226, 175, 0.08);
+      --ambient: rgba(227, 207, 166, 0.22);
+      --window-glow: rgba(237, 237, 237, 0.42);
+      --floor-reflection: rgba(237, 237, 237, 0.12);
+      --lamp: rgba(227, 207, 166, 0.08);
     }
 
     body.noon {
-      --scene-top: #9fd2ff;
-      --scene-bottom: #e8f5ff;
-      --ambient: rgba(170, 226, 255, 0.18);
-      --window-glow: rgba(216, 244, 255, 0.42);
-      --floor-reflection: rgba(255,255,255,0.14);
-      --lamp: rgba(255,255,255,0.03);
+      --scene-top: #006D7B;
+      --scene-bottom: #EDEDED;
+      --ambient: rgba(0, 109, 123, 0.18);
+      --window-glow: rgba(237, 237, 237, 0.42);
+      --floor-reflection: rgba(237, 237, 237, 0.14);
+      --lamp: rgba(237, 237, 237, 0.03);
     }
 
     body.evening {
       --scene-top: #23335f;
-      --scene-bottom: #0b1019;
-      --ambient: rgba(128, 103, 255, 0.22);
-      --window-glow: rgba(144, 153, 255, 0.28);
-      --floor-reflection: rgba(113, 137, 255, 0.08);
-      --lamp: rgba(255, 208, 132, 0.18);
+      --scene-bottom: #232427;
+      --ambient: rgba(61, 36, 112, 0.22);
+      --window-glow: rgba(61, 36, 112, 0.28);
+      --floor-reflection: rgba(61, 36, 112, 0.08);
+      --lamp: rgba(227, 207, 166, 0.18);
     }
 
     @media (max-width: 1280px) {
@@ -818,6 +818,8 @@
       .window.left, .window.right, .shelf.left, .shelf.right, .plant.left, .plant.right { display: none; }
     }
   </style>
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=panchang@600,700,800&f[]=satoshi@300,400,500,700,900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&display=swap">
 </head>
 <body class="evening">
   <div class="app-shell">
