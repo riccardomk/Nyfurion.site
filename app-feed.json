@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "updatedAt": "2026-10-11T16:10:29Z",
+  "updatedAt": "2026-11-27T10:11:56Z",
   "notice": null,
   "game": {
     "kicker": {
@@ -260,6 +260,70 @@
     }
   ],
   "items": [
+    {
+      "id": "nyfurion-clash-1-12-novembre-2026",
+      "image": "https://nyfurion.com/clash-icona.png?v=2",
+      "date": "2026-11-27T10:11:56Z",
+      "category": "gioco",
+      "tag": {
+        "en": "Update",
+        "it": "Aggiornamento",
+        "de": "Update"
+      },
+      "pinned": true,
+      "title": {
+        "en": "Nyfurion Clash 1.12 is out",
+        "it": "Nyfurion Clash 1.12 è online",
+        "de": "Nyfurion Clash 1.12 ist da"
+      },
+      "summary": {
+        "en": "The Gold pack, quick opening, players online on the radar and the Kingdom's new logo.",
+        "it": "La Bustina d'Oro, l'apertura veloce, i giocatori online sul radar e il nuovo logo del Regno.",
+        "de": "Das Gold-Päckchen, schnelles Öffnen, Spieler online auf dem Radar und das neue Logo des Reichs."
+      },
+      "body": [
+        {
+          "en": "The Gold pack has arrived: it draws from all four houses, and MT 10 cards come out five times more often.",
+          "it": "Arriva la Bustina d'Oro: pesca da tutti e quattro i casati e le carte MT 10 escono cinque volte più spesso.",
+          "de": "Das Gold-Päckchen ist da: Es zieht aus allen vier Häusern, und MT-10-Karten kommen fünfmal häufiger."
+        },
+        {
+          "en": "You can open up to 5 packs at once and switch on quick opening to see every card right away. If there is an MT 9 or an MT 10 inside, you know it the moment you tear the pack.",
+          "it": "Puoi aprire fino a 5 bustine insieme e accendere l'apertura veloce per vedere subito tutte le carte. Se dentro c'è una MT 9 o una MT 10, lo capisci già allo strappo.",
+          "de": "Du kannst bis zu 5 Päckchen auf einmal öffnen und das schnelle Öffnen einschalten, um sofort alle Karten zu sehen. Ist eine MT 9 oder MT 10 dabei, merkst du es schon beim Aufreißen."
+        },
+        {
+          "en": "When you look for an opponent you see how many players are online right now, and who is looking for a match.",
+          "it": "Quando cerchi un avversario vedi quanti giocatori sono collegati in quel momento e chi sta cercando una partita.",
+          "de": "Wenn du einen Gegner suchst, siehst du, wie viele Spieler gerade online sind und wer eine Partie sucht."
+        },
+        {
+          "en": "Press and hold a deck to put your decks in the order you want, or to delete one without scrolling to the bottom.",
+          "it": "Tieni premuto un mazzo per mettere i tuoi mazzi nell'ordine che vuoi, o per eliminarlo senza scendere fino in fondo.",
+          "de": "Halte ein Deck gedrückt, um deine Decks beliebig zu ordnen oder eines zu löschen, ohne ganz nach unten zu scrollen."
+        },
+        {
+          "en": "The Kingdom has a new logo, and the packs are now in the bottom bar, one tap away.",
+          "it": "Il Regno ha un logo nuovo, e le Bustine adesso sono nella barra in basso, a un tocco.",
+          "de": "Das Reich hat ein neues Logo, und die Päckchen sind jetzt in der unteren Leiste, nur einen Tipp entfernt."
+        },
+        {
+          "en": "In the browser the game is already updated. On Android, download the new version from nyfurion.com/clash.",
+          "it": "Dal browser il gioco è già aggiornato. Su Android scarica la nuova versione da nyfurion.com/clash.",
+          "de": "Im Browser ist das Spiel schon aktualisiert. Unter Android lädst du die neue Version auf nyfurion.com/clash herunter."
+        }
+      ],
+      "links": [
+        {
+          "label": {
+            "en": "Play Nyfurion Clash",
+            "it": "Gioca a Nyfurion Clash",
+            "de": "Nyfurion Clash spielen"
+          },
+          "url": "https://nyfurion.com/clash"
+        }
+      ]
+    },
     {
       "id": "regolamento-aggiornato-ottobre-2026",
       "image": "https://nyfurion.com/downloads/regolamento-2026-10.webp",
