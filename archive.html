@@ -1528,24 +1528,24 @@
       const c = document.createElement('canvas'); c.width = w; c.height = h;
       const g = c.getContext('2d');
       const bg = g.createLinearGradient(0, 0, 0, h);
-      bg.addColorStop(0, '#1a1622'); bg.addColorStop(0.5, '#12101a'); bg.addColorStop(1, '#0c0a10');
+      bg.addColorStop(0, '#232427'); bg.addColorStop(0.5, '#232427'); bg.addColorStop(1, '#232427');
       g.fillStyle = bg; g.fillRect(0, 0, w, h);
       const bw = Math.max(5, w * 0.014);
-      g.strokeStyle = '#d4af37'; g.lineWidth = bw;
+      g.strokeStyle = '#C9A365'; g.lineWidth = bw;
       g.strokeRect(bw, bw, w - bw * 2, h - bw * 2);
-      g.strokeStyle = 'rgba(212,175,55,0.4)'; g.lineWidth = 1.5;
+      g.strokeStyle = 'rgba(201, 163, 101, 0.4)'; g.lineWidth = 1.5;
       g.strokeRect(bw * 2.4, bw * 2.4, w - bw * 4.8, h - bw * 4.8);
       g.textAlign = 'center';
-      g.fillStyle = '#d4af37'; g.font = '600 ' + Math.round(h * 0.08) + 'px Georgia, serif';
+      g.fillStyle = '#C9A365'; g.font = '600 ' + Math.round(h * 0.08) + 'px Georgia, serif';
       g.fillText(type.toUpperCase(), w / 2, h * 0.24);
-      g.fillStyle = '#F2ECDD'; g.font = Math.round(h * 0.15) + 'px Georgia, serif';
+      g.fillStyle = '#EDEDED'; g.font = Math.round(h * 0.15) + 'px Georgia, serif';
       const words = label.split(' '); let lines = [''];
       for (const word of words) {
         if ((lines[lines.length - 1] + ' ' + word).trim().length > 16) lines.push(word);
         else lines[lines.length - 1] = (lines[lines.length - 1] + ' ' + word).trim();
       }
       lines.slice(0, 2).forEach((ln, i) => g.fillText(ln, w / 2, h * (0.5 + i * 0.17)));
-      g.fillStyle = '#9a8f6e'; g.font = Math.round(h * 0.062) + 'px Georgia, serif';
+      g.fillStyle = '#C9A365'; g.font = Math.round(h * 0.062) + 'px Georgia, serif';
       g.fillText('C L I C K   T O   C O L L E C T', w / 2, h * 0.87);
       const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.flipY = false; return t;
     }
@@ -1559,10 +1559,10 @@
       g.textAlign = 'center';
       g.font = '700 120px Georgia, serif';
       g.lineWidth = 10; g.lineJoin = 'round';
-      g.strokeStyle = 'rgba(38,24,8,0.92)';
+      g.strokeStyle = 'rgba(35, 36, 39, 0.92)';
       g.strokeText(text, 512, 152, 960);
       const tg = g.createLinearGradient(0, 40, 0, 160);
-      tg.addColorStop(0, '#fdf0bc'); tg.addColorStop(0.5, '#e2bf58'); tg.addColorStop(1, '#96742a');
+      tg.addColorStop(0, '#E3CFA6'); tg.addColorStop(0.5, '#C9A365'); tg.addColorStop(1, '#C9A365');
       g.fillStyle = tg;
       g.fillText(text, 512, 152, 960);
       const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.flipY = false; return t;
@@ -1571,14 +1571,14 @@
     function sealTexture() {
       const c = document.createElement('canvas'); c.width = 512; c.height = 512;
       const g = c.getContext('2d');
-      g.fillStyle = '#0e0c13'; g.fillRect(0, 0, 512, 512);
-      g.strokeStyle = 'rgba(212,175,55,0.55)'; g.lineWidth = 3;
+      g.fillStyle = '#232427'; g.fillRect(0, 0, 512, 512);
+      g.strokeStyle = 'rgba(201, 163, 101, 0.55)'; g.lineWidth = 3;
       g.beginPath(); g.arc(256, 236, 130, 0, Math.PI * 2); g.stroke();
-      g.strokeStyle = 'rgba(212,175,55,0.3)'; g.lineWidth = 1.5;
+      g.strokeStyle = 'rgba(201, 163, 101, 0.3)'; g.lineWidth = 1.5;
       g.beginPath(); g.arc(256, 236, 148, 0, Math.PI * 2); g.stroke();
-      g.textAlign = 'center'; g.fillStyle = '#d4af37';
+      g.textAlign = 'center'; g.fillStyle = '#C9A365';
       g.font = '600 34px Georgia, serif'; g.fillText('NYFURION', 256, 248);
-      g.fillStyle = '#8d8576'; g.font = '20px Georgia, serif';
+      g.fillStyle = '#818283'; g.font = '20px Georgia, serif';
       g.fillText('AWAITING RELIC', 256, 420);
       const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.flipY = false; return t;
     }
@@ -1588,17 +1588,17 @@
       const c = document.createElement('canvas'); c.width = 384; c.height = 560;
       const g = c.getContext('2d');
       const bg = g.createLinearGradient(0, 0, 0, 560);
-      bg.addColorStop(0, '#141019'); bg.addColorStop(0.5, '#0e0b12'); bg.addColorStop(1, '#08070b');
+      bg.addColorStop(0, '#232427'); bg.addColorStop(0.5, '#232427'); bg.addColorStop(1, '#232427');
       g.fillStyle = bg; g.fillRect(0, 0, 384, 560);
-      g.strokeStyle = '#d4af37'; g.lineWidth = 6; g.strokeRect(12, 12, 360, 536);
-      g.strokeStyle = 'rgba(212,175,55,0.4)'; g.lineWidth = 1.5; g.strokeRect(24, 24, 336, 512);
+      g.strokeStyle = '#C9A365'; g.lineWidth = 6; g.strokeRect(12, 12, 360, 536);
+      g.strokeStyle = 'rgba(201, 163, 101, 0.4)'; g.lineWidth = 1.5; g.strokeRect(24, 24, 336, 512);
       g.textAlign = 'center';
-      g.strokeStyle = 'rgba(212,175,55,0.6)'; g.lineWidth = 2.5;
+      g.strokeStyle = 'rgba(201, 163, 101, 0.6)'; g.lineWidth = 2.5;
       g.beginPath(); g.arc(192, 214, 82, 0, Math.PI * 2); g.stroke();
-      g.fillStyle = '#d4af37'; g.font = '600 62px Georgia, serif'; g.fillText('N', 192, 236);
-      g.font = '600 24px Georgia, serif'; g.fillStyle = '#e8cd7a';
+      g.fillStyle = '#C9A365'; g.font = '600 62px Georgia, serif'; g.fillText('N', 192, 236);
+      g.font = '600 24px Georgia, serif'; g.fillStyle = '#E3CFA6';
       g.fillText('NYFURION', 192, 340); g.fillText('COLLECTOR CARD', 192, 372);
-      g.fillStyle = '#8d8576'; g.font = '18px Georgia, serif';
+      g.fillStyle = '#818283'; g.font = '18px Georgia, serif';
       g.fillText('IN ARRIVO · COMING SOON', 192, 470);
       // niente flipY=false: è applicata a un box THREE, non a UV glTF → dritta
       const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
@@ -1609,9 +1609,9 @@
       const c = document.createElement('canvas'); c.width = 256; c.height = 256;
       const g = c.getContext('2d');
       const r = g.createRadialGradient(128, 128, 8, 128, 128, 128);
-      r.addColorStop(0, 'rgba(255,224,150,0.55)');
-      r.addColorStop(0.35, 'rgba(255,205,110,0.20)');
-      r.addColorStop(1, 'rgba(255,205,110,0)');
+      r.addColorStop(0, 'rgba(227, 207, 166, 0.55)');
+      r.addColorStop(0.35, 'rgba(227, 207, 166, 0.20)');
+      r.addColorStop(1, 'rgba(227, 207, 166, 0)');
       g.fillStyle = r; g.fillRect(0, 0, 256, 256);
       const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
     }
@@ -1619,14 +1619,14 @@
     function tvTexture() {
       const c = document.createElement('canvas'); c.width = 1024; c.height = 560;
       const g = c.getContext('2d');
-      g.fillStyle = '#04050a'; g.fillRect(0, 0, 1024, 560);
+      g.fillStyle = '#232427'; g.fillRect(0, 0, 1024, 560);
       const glow = g.createRadialGradient(512, 280, 40, 512, 280, 460);
-      glow.addColorStop(0, 'rgba(212,175,55,0.22)'); glow.addColorStop(1, 'rgba(0,0,0,0)');
+      glow.addColorStop(0, 'rgba(201, 163, 101, 0.22)'); glow.addColorStop(1, 'rgba(0,0,0,0)');
       g.fillStyle = glow; g.fillRect(0, 0, 1024, 560);
       g.textAlign = 'center';
-      g.fillStyle = '#d4af37'; g.font = '600 96px Georgia, serif';
+      g.fillStyle = '#C9A365'; g.font = '600 96px Georgia, serif';
       g.fillText('N Y F U R I O N', 512, 268);
-      g.fillStyle = '#8d8576'; g.font = '30px Georgia, serif';
+      g.fillStyle = '#818283'; g.font = '30px Georgia, serif';
       g.fillText('X   R E B O R N', 512, 330);
       const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.flipY = false; return t;
     }
@@ -1634,7 +1634,7 @@
     function waterTexture() {
       const c = document.createElement('canvas'); c.width = 256; c.height = 256;
       const g = c.getContext('2d');
-      g.fillStyle = '#0d2c34'; g.fillRect(0, 0, 256, 256);
+      g.fillStyle = '#006D7B'; g.fillRect(0, 0, 256, 256);
       for (let i = 0; i < 260; i++) {
         const x = Math.random() * 256, y = Math.random() * 256, r = 6 + Math.random() * 26;
         g.strokeStyle = 'rgba(140,220,235,' + (0.03 + Math.random() * 0.06) + ')';
@@ -1690,9 +1690,9 @@
         const x = Math.random() * 128, y = Math.random() * 512, l = 40 + Math.random() * 170;
         const a = 0.08 + Math.random() * 0.3;
         const grad = g.createLinearGradient(0, y, 0, y + l);
-        grad.addColorStop(0, 'rgba(235,245,252,0)');
+        grad.addColorStop(0, 'rgba(237, 237, 237, 0)');
         grad.addColorStop(0.5, 'rgba(235,245,252,' + a + ')');
-        grad.addColorStop(1, 'rgba(235,245,252,0)');
+        grad.addColorStop(1, 'rgba(237, 237, 237, 0)');
         g.fillStyle = grad;
         g.fillRect(x, y, 1.6 + Math.random() * 2, l);
       }
@@ -1705,8 +1705,8 @@
       const c = document.createElement('canvas'); c.width = 2048; c.height = 1024;
       const g = c.getContext('2d');
       const grad = g.createLinearGradient(0, 0, 0, 1024);
-      grad.addColorStop(0, '#04050c'); grad.addColorStop(0.5, '#0a0d1e');
-      grad.addColorStop(0.8, '#17203c'); grad.addColorStop(1, '#0c0f1c');
+      grad.addColorStop(0, '#232427'); grad.addColorStop(0.5, '#232427');
+      grad.addColorStop(0.8, '#160333'); grad.addColorStop(1, '#232427');
       g.fillStyle = grad; g.fillRect(0, 0, 2048, 1024);
       for (let i = 0; i < 520; i++) {
         g.fillStyle = 'rgba(255,255,255,' + (0.15 + Math.random() * 0.6) + ')';
@@ -1719,7 +1719,7 @@
       halo.addColorStop(0.4, 'rgba(190,205,245,0.10)');
       halo.addColorStop(1, 'rgba(0,0,0,0)');
       g.fillStyle = halo; g.fillRect(0, 0, 2048, 1024);
-      g.fillStyle = '#e8edfa';
+      g.fillStyle = '#EDEDED';
       g.beginPath(); g.arc(mx, my, 42, 0, Math.PI * 2); g.fill();
       const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
     }
@@ -1793,7 +1793,7 @@
         const ec = document.createElement('canvas'); ec.width = 64; ec.height = 32;
         const eg = ec.getContext('2d');
         const gr = eg.createLinearGradient(0, 0, 0, 32);
-        gr.addColorStop(0, '#453319'); gr.addColorStop(0.5, '#1a1109'); gr.addColorStop(1, '#060403');
+        gr.addColorStop(0, '#C9A365'); gr.addColorStop(0.5, '#232427'); gr.addColorStop(1, '#232427');
         eg.fillStyle = gr; eg.fillRect(0, 0, 64, 32);
         const et = new THREE.CanvasTexture(ec);
         et.mapping = THREE.EquirectangularReflectionMapping;
@@ -2382,7 +2382,7 @@
         const northWall = pick(['Exhibit_04', 'Exhibit_05']);
         const southWall = pick(['Exhibit_06', 'Exhibit_07']);
 
-        // le foto di referenza riconosciute dal NOME della vista, non dal numero: vale per il #329
+        // le foto di referenza riconosciute dal NOME della vista, non dal numero: vale per il #3D2470
         // (ref-02-front, ref-16-complete-board...) e per i personaggi nuovi (ref-01-front, ref-08-hands...)
         const V = (re) => imgs.find(f => re.test(f.key.split('/').pop()));
         const vista = {
@@ -2660,13 +2660,13 @@
           return;
           const c = document.createElement('canvas'); c.width = 256; c.height = 1024;
           const g = c.getContext('2d');
-          g.fillStyle = '#38111a'; g.fillRect(0, 0, 256, 1024);
+          g.fillStyle = '#C9A365'; g.fillRect(0, 0, 256, 1024);
           for (let i = 0; i < 2200; i++) {
             g.fillStyle = 'rgba(' + (34 + Math.random() * 42) + ',10,18,' + (0.14 + Math.random() * 0.2) + ')';
             g.fillRect(Math.random() * 256, Math.random() * 1024, 2, 2);
           }
-          g.fillStyle = '#b8942e'; g.fillRect(8, 0, 5, 1024); g.fillRect(243, 0, 5, 1024);
-          g.strokeStyle = 'rgba(212,175,55,0.4)'; g.lineWidth = 2;
+          g.fillStyle = '#C9A365'; g.fillRect(8, 0, 5, 1024); g.fillRect(243, 0, 5, 1024);
+          g.strokeStyle = 'rgba(201, 163, 101, 0.4)'; g.lineWidth = 2;
           for (let y = 70; y < 1024; y += 150) {
             g.beginPath(); g.moveTo(128, y - 34); g.lineTo(160, y); g.lineTo(128, y + 34); g.lineTo(96, y); g.closePath(); g.stroke();
           }
@@ -3037,13 +3037,13 @@
           const comingPlate = () => {
             const c = document.createElement('canvas'); c.width = 512; c.height = 168;
             const g = c.getContext('2d');
-            g.fillStyle = '#0c0906'; g.fillRect(0, 0, 512, 168);
-            g.strokeStyle = '#c9a544'; g.lineWidth = 4; g.strokeRect(6, 6, 500, 156);
-            g.strokeStyle = 'rgba(212,175,55,0.4)'; g.lineWidth = 1.5; g.strokeRect(16, 16, 480, 136);
+            g.fillStyle = '#232427'; g.fillRect(0, 0, 512, 168);
+            g.strokeStyle = '#C9A365'; g.lineWidth = 4; g.strokeRect(6, 6, 500, 156);
+            g.strokeStyle = 'rgba(201, 163, 101, 0.4)'; g.lineWidth = 1.5; g.strokeRect(16, 16, 480, 136);
             g.textAlign = 'center';
-            g.fillStyle = '#e8cd7a'; g.font = '600 44px Georgia, serif';
+            g.fillStyle = '#E3CFA6'; g.font = '600 44px Georgia, serif';
             g.fillText('3D CHARACTER · #' + tokenId, 256, 72);
-            g.fillStyle = '#9a8d6d'; g.font = '600 34px Georgia, serif';
+            g.fillStyle = '#C9A365'; g.font = '600 34px Georgia, serif';
             g.fillText('C O M I N G   S O O N', 256, 128);
             const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
           };
@@ -3580,7 +3580,7 @@
       // nodi
       for (const n of nodes) {
         ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = n.gold ? 'rgba(212,175,55,0.85)' : 'rgba(0,229,255,0.7)';
+        ctx.fillStyle = n.gold ? 'rgba(201, 163, 101, 0.85)' : 'rgba(0, 109, 123, 0.7)';
         ctx.fill();
       }
     }

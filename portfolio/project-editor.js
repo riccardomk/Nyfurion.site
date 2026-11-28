@@ -62,34 +62,34 @@
     `;
 
     overlay.innerHTML = `
-      <div style="max-width: 900px; margin: 0 auto; background: #1a1a1c; padding: 30px; border-radius: 16px; color: #F2F2F2;">
+      <div style="max-width: 900px; margin: 0 auto; background: #232427; padding: 30px; border-radius: 16px; color: #EDEDED;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-          <h2 style="margin: 0; color: #E30B17; font-size: 28px;">📝 EDITOR PROGETTO: ${currentProject.title}</h2>
-          <button id="close-editor" style="background: #E30B17; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold;">✕ CHIUDI (Shift+L)</button>
+          <h2 style="margin: 0; color: #C9A365; font-size: 28px;">📝 EDITOR PROGETTO: ${currentProject.title}</h2>
+          <button id="close-editor" style="background: #C9A365; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold;">✕ CHIUDI (Shift+L)</button>
         </div>
 
-        <div style="background: #080809; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
-          <h3 style="color: #00E5FF; margin-bottom: 15px;">🖼️ IMMAGINE PRINCIPALE (Hero/Landing)</h3>
-          <label style="display: block; margin-bottom: 8px; color: #999;">Path immagine:</label>
+        <div style="background: #232427; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+          <h3 style="color: #5CA6AF; margin-bottom: 15px;">🖼️ IMMAGINE PRINCIPALE (Hero/Landing)</h3>
+          <label style="display: block; margin-bottom: 8px; color: #99999A;">Path immagine:</label>
           <input type="text" id="main-image-input" value="${currentProject.mainImage || ''}" 
-            style="width: 100%; padding: 12px; background: #1a1a1c; border: 2px solid #333; border-radius: 8px; color: white; font-size: 14px; margin-bottom: 12px;">
-          <button id="upload-main-btn" style="background: #00E5FF; color: black; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;">📁 Carica File</button>
+            style="width: 100%; padding: 12px; background: #232427; border: 2px solid #323336; border-radius: 8px; color: white; font-size: 14px; margin-bottom: 12px;">
+          <button id="upload-main-btn" style="background: #006D7B; color: black; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold;">📁 Carica File</button>
           <input type="file" id="main-image-file" accept="image/*" style="display: none;">
         </div>
 
-        <div style="background: #080809; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
-          <h3 style="color: #00E5FF; margin-bottom: 15px;">🎨 GALLERIA IMMAGINI</h3>
+        <div style="background: #232427; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+          <h3 style="color: #5CA6AF; margin-bottom: 15px;">🎨 GALLERIA IMMAGINI</h3>
           <div id="gallery-editor"></div>
-          <button id="add-gallery-item" style="background: #00E5FF; color: black; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 12px;">➕ Aggiungi Immagine</button>
+          <button id="add-gallery-item" style="background: #006D7B; color: black; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 12px;">➕ Aggiungi Immagine</button>
         </div>
 
         <div style="display: flex; gap: 12px; margin-top: 30px;">
-          <button id="save-changes" style="flex: 1; background: #00E5FF; color: black; border: none; padding: 16px; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold;">💾 SALVA MODIFICHE</button>
-          <button id="download-json" style="flex: 1; background: #E30B17; color: white; border: none; padding: 16px; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold;">📥 SCARICA JSON</button>
+          <button id="save-changes" style="flex: 1; background: #006D7B; color: black; border: none; padding: 16px; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold;">💾 SALVA MODIFICHE</button>
+          <button id="download-json" style="flex: 1; background: #C9A365; color: white; border: none; padding: 16px; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold;">📥 SCARICA JSON</button>
         </div>
 
-        <div style="margin-top: 20px; padding: 15px; background: rgba(0,229,255,0.1); border-radius: 8px; border-left: 4px solid #00E5FF;">
-          <p style="margin: 0; color: #00E5FF; font-size: 14px;">
+        <div style="margin-top: 20px; padding: 15px; background: rgba(0, 109, 123, 0.1); border-radius: 8px; border-left: 4px solid #006D7B;">
+          <p style="margin: 0; color: #5CA6AF; font-size: 14px;">
             💡 <strong>TIP:</strong> Le modifiche vengono salvate in memoria. Clicca "SCARICA JSON" per ottenere il file aggiornato da sostituire in <code>portfolio/projects/${currentProject.id}.json</code>
           </p>
         </div>
@@ -125,16 +125,16 @@
 
     currentProject.gallery.forEach((item, index) => {
       const itemDiv = document.createElement('div');
-      itemDiv.style.cssText = 'background: #1a1a1c; padding: 15px; border-radius: 8px; margin-bottom: 12px; border: 2px solid #333;';
+      itemDiv.style.cssText = 'background: #232427; padding: 15px; border-radius: 8px; margin-bottom: 12px; border: 2px solid #323336;';
       itemDiv.innerHTML = `
         <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 10px;">
-          <span style="background: #E30B17; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 12px;">IMG ${index + 1}</span>
+          <span style="background: #C9A365; color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 12px;">IMG ${index + 1}</span>
           <input type="text" class="gallery-url" data-index="${index}" value="${item.url || ''}" placeholder="Path immagine" 
-            style="flex: 1; padding: 10px; background: #080809; border: 1px solid #444; border-radius: 6px; color: white;">
-          <button class="remove-gallery" data-index="${index}" style="background: #E30B17; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">🗑️</button>
+            style="flex: 1; padding: 10px; background: #232427; border: 1px solid #434447; border-radius: 6px; color: white;">
+          <button class="remove-gallery" data-index="${index}" style="background: #C9A365; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">🗑️</button>
         </div>
         <input type="text" class="gallery-label" data-index="${index}" value="${item.label || ''}" placeholder="Didascalia (opzionale)" 
-          style="width: 100%; padding: 10px; background: #080809; border: 1px solid #444; border-radius: 6px; color: white;">
+          style="width: 100%; padding: 10px; background: #232427; border: 1px solid #434447; border-radius: 6px; color: white;">
       `;
       container.appendChild(itemDiv);
     });
